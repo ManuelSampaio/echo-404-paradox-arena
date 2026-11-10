@@ -6,72 +6,133 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#050711">
-  <title>ECHO//404 — Paradox Arena</title>
+  <meta name="description"
+        content="ECHO//404 — Um puzzle temporal onde o teu passado é a tua arma.">
+
+  <title>ECHO//404 — Paradox Evolution v0.6</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-  <main class="game">
+<body>
+  <main class="app">
+
+    <!-- CABEÇALHO -->
     <header class="game-header">
-      <div class="version">SYSTEM BUILD // 0.2</div>
-      <h1>ECHO<span>//404</span></h1>
-      <p class="subtitle">P A R A D O X &nbsp; A R E N A</p>
-      <p class="tagline">O TEU PASSADO É A TUA ARMA</p>
+      <div class="version">
+        SYSTEM BUILD // 0.6
+      </div>
+
+      <h1 class="logo">
+        ECHO<span>//404</span>
+      </h1>
+
+      <p class="subtitle">
+        PARADOX EVOLUTION
+      </p>
+
+      <p class="tagline">
+        O TEU PASSADO É A TUA ARMA
+      </p>
     </header>
 
+    <!-- SELECÇÃO DE NÍVEIS -->
+    <section class="menu">
+      <div class="menu-heading">
+        <h2>SELECCIONAR NÍVEL</h2>
+        <span id="progress">0 / 10 CONCLUÍDOS</span>
+      </div>
+
+      <div id="levelGrid" class="level-grid"></div>
+
+      <p id="levelName">
+        NÍVEL 1 — O Primeiro Eco
+      </p>
+    </section>
+
+    <!-- INDICADORES -->
     <section class="hud">
       <div class="stat">
-        <span class="stat-label">CICLO</span>
+        <span>CICLO</span>
         <strong id="cycle">1/6</strong>
       </div>
 
       <div class="stat">
-        <span class="stat-label">TEMPO</span>
+        <span>TEMPO</span>
         <strong id="timer">10.0</strong>
       </div>
 
       <div class="stat">
-        <span class="stat-label">ECOS</span>
+        <span>ECOS</span>
         <strong id="ghosts">0</strong>
       </div>
 
       <div class="stat">
-        <span class="stat-label">PONTUAÇÃO</span>
+        <span>PONTUAÇÃO</span>
         <strong id="score">0</strong>
+      </div>
+
+      <div class="stat">
+        <span>RECORDE</span>
+        <strong id="best">0</strong>
       </div>
     </section>
 
+    <!-- BARRA DE TEMPO -->
     <div class="timer-track">
       <div id="timerBar"></div>
     </div>
 
-    <div class="arena-wrapper">
-      <canvas id="gameCanvas"
-              width="800"
-              height="500">
+    <!-- ARENA -->
+    <section class="arena-wrapper">
+      <canvas
+        id="gameCanvas"
+        width="800"
+        height="500"
+        aria-label="Arena de jogo ECHO 404">
       </canvas>
 
+      <!-- RESULTADO -->
       <div id="overlay" class="overlay hidden">
-        <div class="overlay-panel">
-          <p class="overlay-tag">SIMULATION RESULT</p>
-          <h2 id="overlayTitle">SIMULAÇÃO TERMINADA</h2>
+        <div class="result-panel">
+          <p class="result-label">
+            SIMULATION RESULT
+          </p>
+
+          <h2 id="overlayTitle">
+            PARADOXO RESOLVIDO
+          </h2>
+
           <p id="overlayMessage"></p>
-          <strong id="finalScore">0 PONTOS</strong>
-          <button id="playAgainBtn">
-            JOGAR NOVAMENTE
-          </button>
+
+          <strong id="finalScore">
+            0 PONTOS
+          </strong>
+
+          <div class="result-actions">
+            <button id="playAgainBtn">
+              JOGAR NOVAMENTE
+            </button>
+
+            <button id="nextBtn">
+              PRÓXIMO NÍVEL
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <section class="status-panel">
-      <span class="status-dot"></span>
+    <!-- ESTADO DO JOGO -->
+    <div class="status-panel">
+      <span class="status-indicator"></span>
+
       <p id="status">
         Sistema pronto. Inicia a simulação.
       </p>
-    </section>
+    </div>
 
-    <div class="actions">
+    <!-- BOTÕES -->
+    <section class="controls">
       <button id="startBtn">
         INICIAR SIMULAÇÃO
       </button>
@@ -79,54 +140,94 @@
       <button id="restartBtn" class="secondary">
         REINICIAR
       </button>
-    </div>
 
+      <button id="shiftBtn" class="secondary">
+        PARADOX SHIFT [E]
+      </button>
+
+      <button id="soundBtn" class="secondary">
+        SOM: ON
+      </button>
+    </section>
+
+    <!-- INSTRUÇÕES -->
     <section class="instructions">
       <h3>PROTOCOLO DE SOBREVIVÊNCIA</h3>
 
       <div class="instruction-grid">
-        <div>
+        <div class="instruction">
           <span class="symbol cyan">■</span>
-          <span>Tu — controla o presente</span>
+          <span>Jogador — controla o presente</span>
         </div>
 
-        <div>
+        <div class="instruction">
           <span class="symbol purple">■</span>
-          <span>Eco — repete o passado</span>
+          <span>Eco — reproduz o passado</span>
         </div>
 
-        <div>
+        <div class="instruction">
           <span class="symbol yellow">●</span>
-          <span>Placa — activa a porta</span>
+          <span>Placa — activa portas temporais</span>
         </div>
 
-        <div>
+        <div class="instruction">
           <span class="symbol red">■</span>
           <span>Porta — bloqueia o caminho</span>
         </div>
 
-        <div>
+        <div class="instruction">
           <span class="symbol green">■</span>
-          <span>Portal — objectivo final</span>
+          <span>Portal verde — saída do nível</span>
         </div>
 
-        <div>
+        <div class="instruction">
+          <span class="symbol blue">◉</span>
+          <span>Portal azul — teletransporte</span>
+        </div>
+
+        <div class="instruction">
           <span class="symbol red">⚡</span>
           <span>Laser — perigo temporal</span>
+        </div>
+
+        <div class="instruction">
+          <span class="symbol purple">◆</span>
+          <span>Paradox Shift — altera um eco</span>
         </div>
       </div>
     </section>
 
+    <!-- CONTROLOS -->
+    <section class="keyboard-help">
+      <h3>CONTROLOS</h3>
+
+      <div class="keyboard-grid">
+        <p>W A S D / SETAS — MOVIMENTO</p>
+        <p>E — PARADOX SHIFT</p>
+        <p>R — REINICIAR</p>
+        <p>ESPAÇO — INICIAR</p>
+      </div>
+    </section>
+
+    <!-- RODAPÉ -->
     <footer>
-      WASD / SETAS — MOVIMENTO
-      <span>|</span>
-      R — REINICIAR
-      <span>|</span>
-      ESPAÇO — INICIAR
-      <p>ECHO//404 © 2026 — PARADOX ARENA</p>
+      <p>
+        ECHO//404 — PARADOX EVOLUTION
+      </p>
+
+      <p>
+        VERSION 0.6 | BUILT WITH HTML5 CANVAS
+      </p>
     </footer>
+
   </main>
 
+  <!-- SISTEMAS DO JOGO -->
+  <script src="levels.js"></script>
+  <script src="storage.js"></script>
+  <script src="audio.js"></script>
+
+  <!-- MOTOR PRINCIPAL -->
   <script src="game.js"></script>
 </body>
 </html>
