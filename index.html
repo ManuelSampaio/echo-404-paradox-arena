@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050711">
+  <title>ECHO//404 — Paradox Arena</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="game">
+    <header class="game-header">
+      <div class="version">SYSTEM BUILD // 0.2</div>
+      <h1>ECHO<span>//404</span></h1>
+      <p class="subtitle">P A R A D O X &nbsp; A R E N A</p>
+      <p class="tagline">O TEU PASSADO É A TUA ARMA</p>
+    </header>
+
+    <section class="hud">
+      <div class="stat">
+        <span class="stat-label">CICLO</span>
+        <strong id="cycle">1/6</strong>
+      </div>
+
+      <div class="stat">
+        <span class="stat-label">TEMPO</span>
+        <strong id="timer">10.0</strong>
+      </div>
+
+      <div class="stat">
+        <span class="stat-label">ECOS</span>
+        <strong id="ghosts">0</strong>
+      </div>
+
+      <div class="stat">
+        <span class="stat-label">PONTUAÇÃO</span>
+        <strong id="score">0</strong>
+      </div>
+    </section>
+
+    <div class="timer-track">
+      <div id="timerBar"></div>
+    </div>
+
+    <div class="arena-wrapper">
+      <canvas id="gameCanvas"
+              width="800"
+              height="500">
+      </canvas>
+
+      <div id="overlay" class="overlay hidden">
+        <div class="overlay-panel">
+          <p class="overlay-tag">SIMULATION RESULT</p>
+          <h2 id="overlayTitle">SIMULAÇÃO TERMINADA</h2>
+          <p id="overlayMessage"></p>
+          <strong id="finalScore">0 PONTOS</strong>
+          <button id="playAgainBtn">
+            JOGAR NOVAMENTE
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <section class="status-panel">
+      <span class="status-dot"></span>
+      <p id="status">
+        Sistema pronto. Inicia a simulação.
+      </p>
+    </section>
+
+    <div class="actions">
+      <button id="startBtn">
+        INICIAR SIMULAÇÃO
+      </button>
+
+      <button id="restartBtn" class="secondary">
+        REINICIAR
+      </button>
+    </div>
+
+    <section class="instructions">
+      <h3>PROTOCOLO DE SOBREVIVÊNCIA</h3>
+
+      <div class="instruction-grid">
+        <div>
+          <span class="symbol cyan">■</span>
+          <span>Tu — controla o presente</span>
+        </div>
+
+        <div>
+          <span class="symbol purple">■</span>
+          <span>Eco — repete o passado</span>
+        </div>
+
+        <div>
+          <span class="symbol yellow">●</span>
+          <span>Placa — activa a porta</span>
+        </div>
+
+        <div>
+          <span class="symbol red">■</span>
+          <span>Porta — bloqueia o caminho</span>
+        </div>
+
+        <div>
+          <span class="symbol green">■</span>
+          <span>Portal — objectivo final</span>
+        </div>
+
+        <div>
+          <span class="symbol red">⚡</span>
+          <span>Laser — perigo temporal</span>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      WASD / SETAS — MOVIMENTO
+      <span>|</span>
+      R — REINICIAR
+      <span>|</span>
+      ESPAÇO — INICIAR
+      <p>ECHO//404 © 2026 — PARADOX ARENA</p>
+    </footer>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
