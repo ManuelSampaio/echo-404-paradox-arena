@@ -2,26 +2,29 @@
 "use strict";
 
 /*
-============================================
+==================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION 0.6.1 MOBILE EDITION
+ VERSION 0.7 — THE AWAKENING
  FILE: levels.js
 
- Sistema de níveis e configuração da arena
+ LEVEL DESIGN & DEVELOPMENT
+ MANUEL SAMPAIO01
 
- 10 NÍVEIS
+ 10 PROGRESSIVE LEVELS
  DESKTOP + MOBILE
-============================================
+==================================================
 */
 
 // ==========================================
-// 1. CONFIGURAÇÕES GLOBAIS
+// 1. CONFIGURAÇÃO GLOBAL DA ARENA
 // ==========================================
 
 const GAME_WORLD = {
   width: 800,
   height: 500,
 
+  // O game.js v0.7 aplica os tempos
+  // específicos de cada nível.
   cycleDuration: 10,
   maxCycles: 6,
 
@@ -37,7 +40,6 @@ const GAME_WORLD = {
     h: 70
   },
 
-  // Paredes que dividem os dois sectores.
   walls: [
     {
       x: 380,
@@ -53,7 +55,6 @@ const GAME_WORLD = {
     }
   ],
 
-  // Porta temporal central.
   door: {
     x: 380,
     y: 195,
@@ -63,7 +64,94 @@ const GAME_WORLD = {
 };
 
 // ==========================================
-// 2. CONFIGURAÇÃO DOS NÍVEIS
+// 2. CONFIGURAÇÕES DE DIFICULDADE
+// ==========================================
+
+const LEVEL_DIFFICULTY = [
+  {
+    time: 10,
+    label: "INICIANTE",
+    rank: 1
+  },
+  {
+    time: 9,
+    label: "INICIANTE+",
+    rank: 2
+  },
+  {
+    time: 8,
+    label: "INTERMÉDIO",
+    rank: 3
+  },
+  {
+    time: 7,
+    label: "INTERMÉDIO+",
+    rank: 4
+  },
+  {
+    time: 6,
+    label: "AVANÇADO",
+    rank: 5
+  },
+  {
+    time: 5.5,
+    label: "AVANÇADO+",
+    rank: 6
+  },
+  {
+    time: 5,
+    label: "EXPERT",
+    rank: 7
+  },
+  {
+    time: 4.5,
+    label: "EXPERT+",
+    rank: 8
+  },
+  {
+    time: 4,
+    label: "PARADOX",
+    rank: 9
+  },
+  {
+    time: 3.5,
+    label: "PARADOX MASTER",
+    rank: 10
+  }
+];
+
+// ==========================================
+// 3. CONSTRUTORES DE ELEMENTOS
+// ==========================================
+
+function createPlate(x, y) {
+  return { x, y };
+}
+
+function createLaser(x, period, on, offset = 0) {
+  return {
+    x,
+    period,
+    on,
+    offset
+  };
+}
+
+function createPortal(ax, ay, bx, by) {
+  return {
+    a: {
+      x: ax,
+      y: ay
+    },
+    b: {
+      x: bx,
+      y: by
+    }
+  };
+}
+
+// ==========================================
+// 4. OS DEZ NÍVEIS
 // ==========================================
 
 const GAME_LEVELS = [
@@ -75,26 +163,18 @@ const GAME_LEVELS = [
   {
     id: 1,
     name: "O Primeiro Eco",
-
     difficulty: "INICIANTE",
 
     hint:
-      "Deixa um eco na placa para abrir a porta.",
+      "Aprende a gravar um eco. Activa a placa, " +
+      "espera pelo próximo ciclo e atravessa.",
 
     plates: [
-      {
-        x: 115,
-        y: 100
-      }
+      createPlate(115, 250)
     ],
 
     lasers: [
-      {
-        x: 510,
-        period: 3,
-        on: 1.3,
-        offset: 0
-      }
+      createLaser(540, 3.5, 1.1, 0)
     ],
 
     portals: []
@@ -107,32 +187,19 @@ const GAME_LEVELS = [
   {
     id: 2,
     name: "Dois Caminhos",
-
-    difficulty: "INICIANTE",
+    difficulty: "INICIANTE+",
 
     hint:
-      "Sincroniza os teus ecos e evita dois lasers.",
+      "Deixa um eco na placa e encontra a " +
+      "janela certa entre os dois lasers.",
 
     plates: [
-      {
-        x: 115,
-        y: 100
-      }
+      createPlate(145, 220)
     ],
 
     lasers: [
-      {
-        x: 510,
-        period: 3,
-        on: 1.5,
-        offset: 0
-      },
-      {
-        x: 625,
-        period: 4,
-        on: 1.8,
-        offset: 2
-      }
+      createLaser(515, 3.2, 1.3, 0),
+      createLaser(640, 3.7, 1.4, 1.8)
     ],
 
     portals: []
@@ -145,36 +212,20 @@ const GAME_LEVELS = [
   {
     id: 3,
     name: "Memória Dupla",
-
     difficulty: "INTERMÉDIO",
 
     hint:
-      "Dois ecos devem activar duas placas ao mesmo tempo.",
+      "Dois ecos, duas placas. Sincroniza as " +
+      "posições antes de avançar.",
 
     plates: [
-      {
-        x: 115,
-        y: 100
-      },
-      {
-        x: 115,
-        y: 390
-      }
+      createPlate(120, 170),
+      createPlate(120, 330)
     ],
 
     lasers: [
-      {
-        x: 510,
-        period: 3,
-        on: 1.5,
-        offset: 0
-      },
-      {
-        x: 625,
-        period: 3.5,
-        on: 1.5,
-        offset: 1
-      }
+      createLaser(520, 3.0, 1.2, 0),
+      createLaser(645, 3.4, 1.3, 1.5)
     ],
 
     portals: []
@@ -187,40 +238,26 @@ const GAME_LEVELS = [
   {
     id: 4,
     name: "Salto Quântico",
-
-    difficulty: "INTERMÉDIO",
+    difficulty: "INTERMÉDIO+",
 
     hint:
-      "Utiliza o portal azul para atravessar a arena.",
+      "Activa a placa e utiliza o portal " +
+      "para ultrapassar os lasers.",
 
     plates: [
-      {
-        x: 115,
-        y: 100
-      }
+      createPlate(145, 250)
     ],
 
     lasers: [
-      {
-        x: 560,
-        period: 2.7,
-        on: 1.4,
-        offset: 0
-      }
+      createLaser(535, 2.8, 1.25, 0),
+      createLaser(625, 3.3, 1.35, 1.4)
     ],
 
     portals: [
-      {
-        a: {
-          x: 450,
-          y: 100
-        },
-
-        b: {
-          x: 690,
-          y: 390
-        }
-      }
+      createPortal(
+        445, 250,
+        690, 250
+      )
     ]
   },
 
@@ -231,40 +268,22 @@ const GAME_LEVELS = [
   {
     id: 5,
     name: "O Terceiro Fantasma",
-
     difficulty: "AVANÇADO",
 
     hint:
-      "Três placas exigem três posições simultâneas.",
+      "Três placas precisam de três " +
+      "posições sincronizadas. Planeia " +
+      "os ciclos com precisão.",
 
     plates: [
-      {
-        x: 115,
-        y: 100
-      },
-      {
-        x: 115,
-        y: 250
-      },
-      {
-        x: 115,
-        y: 390
-      }
+      createPlate(115, 150),
+      createPlate(165, 250),
+      createPlate(115, 350)
     ],
 
     lasers: [
-      {
-        x: 510,
-        period: 3,
-        on: 1.4,
-        offset: 0
-      },
-      {
-        x: 625,
-        period: 3,
-        on: 1.4,
-        offset: 1.5
-      }
+      createLaser(525, 2.8, 1.2, 0),
+      createLaser(635, 3.1, 1.25, 1.5)
     ],
 
     portals: []
@@ -277,42 +296,21 @@ const GAME_LEVELS = [
   {
     id: 6,
     name: "Interferência",
-
-    difficulty: "AVANÇADO",
+    difficulty: "AVANÇADO+",
 
     hint:
-      "Encontra a janela temporal entre três lasers rápidos.",
+      "Sincroniza dois ecos e atravessa " +
+      "três lasers de alta frequência.",
 
     plates: [
-      {
-        x: 115,
-        y: 100
-      },
-      {
-        x: 115,
-        y: 390
-      }
+      createPlate(135, 185),
+      createPlate(135, 315)
     ],
 
     lasers: [
-      {
-        x: 480,
-        period: 2.2,
-        on: 1.1,
-        offset: 0
-      },
-      {
-        x: 570,
-        period: 2.6,
-        on: 1.2,
-        offset: 1
-      },
-      {
-        x: 660,
-        period: 3,
-        on: 1.4,
-        offset: 2
-      }
+      createLaser(475, 2.4, 1.05, 0),
+      createLaser(565, 2.7, 1.15, 1.2),
+      createLaser(655, 3.0, 1.2, 2.0)
     ],
 
     portals: []
@@ -325,50 +323,28 @@ const GAME_LEVELS = [
   {
     id: 7,
     name: "Horizonte Partido",
-
-    difficulty: "AVANÇADO",
+    difficulty: "EXPERT",
 
     hint:
-      "Combina ecos sincronizados com teletransporte.",
+      "Dois ecos abrem a porta. " +
+      "O portal oferece um atalho, " +
+      "mas exige timing perfeito.",
 
     plates: [
-      {
-        x: 115,
-        y: 100
-      },
-      {
-        x: 115,
-        y: 390
-      }
+      createPlate(130, 185),
+      createPlate(130, 315)
     ],
 
     lasers: [
-      {
-        x: 530,
-        period: 2.5,
-        on: 1.2,
-        offset: 0
-      },
-      {
-        x: 640,
-        period: 3,
-        on: 1.5,
-        offset: 1
-      }
+      createLaser(520, 2.4, 1.1, 0),
+      createLaser(635, 2.8, 1.2, 1.2)
     ],
 
     portals: [
-      {
-        a: {
-          x: 445,
-          y: 390
-        },
-
-        b: {
-          x: 690,
-          y: 100
-        }
-      }
+      createPortal(
+        445, 250,
+        690, 250
+      )
     ]
   },
 
@@ -379,49 +355,30 @@ const GAME_LEVELS = [
   {
     id: 8,
     name: "Três Paradoxos",
-
-    difficulty: "EXPERT",
+    difficulty: "EXPERT+",
 
     hint:
-      "Três placas, três lasers e apenas seis ciclos.",
+      "Três ecos sincronizados, três lasers " +
+      "e apenas 4,5 segundos por ciclo.",
 
     plates: [
-      {
-        x: 115,
-        y: 100
-      },
-      {
-        x: 115,
-        y: 250
-      },
-      {
-        x: 115,
-        y: 390
-      }
+      createPlate(110, 185),
+      createPlate(160, 250),
+      createPlate(110, 315)
     ],
 
     lasers: [
-      {
-        x: 480,
-        period: 2.1,
-        on: 1,
-        offset: 0
-      },
-      {
-        x: 560,
-        period: 2.5,
-        on: 1.2,
-        offset: 1
-      },
-      {
-        x: 650,
-        period: 2.8,
-        on: 1.4,
-        offset: 2
-      }
+      createLaser(475, 2.3, 1.05, 0),
+      createLaser(565, 2.6, 1.15, 1.1),
+      createLaser(650, 2.9, 1.2, 2.0)
     ],
 
-    portals: []
+    portals: [
+      createPortal(
+        440, 250,
+        690, 250
+      )
+    ]
   },
 
   // ========================================
@@ -431,60 +388,30 @@ const GAME_LEVELS = [
   {
     id: 9,
     name: "Colapso Temporal",
-
-    difficulty: "EXPERT",
+    difficulty: "PARADOX",
 
     hint:
-      "Mantém os ecos sincronizados e domina o portal.",
+      "Quatro segundos. Três placas. " +
+      "Cada movimento precisa de " +
+      "ser calculado.",
 
     plates: [
-      {
-        x: 115,
-        y: 100
-      },
-      {
-        x: 115,
-        y: 250
-      },
-      {
-        x: 115,
-        y: 390
-      }
+      createPlate(115, 190),
+      createPlate(165, 250),
+      createPlate(115, 310)
     ],
 
     lasers: [
-      {
-        x: 470,
-        period: 2,
-        on: 1,
-        offset: 0
-      },
-      {
-        x: 550,
-        period: 2.3,
-        on: 1.1,
-        offset: 1
-      },
-      {
-        x: 630,
-        period: 2.6,
-        on: 1.3,
-        offset: 2
-      }
+      createLaser(470, 2.15, 1.0, 0),
+      createLaser(550, 2.45, 1.1, 1.0),
+      createLaser(630, 2.75, 1.2, 1.8)
     ],
 
     portals: [
-      {
-        a: {
-          x: 450,
-          y: 100
-        },
-
-        b: {
-          x: 700,
-          y: 390
-        }
-      }
+      createPortal(
+        435, 250,
+        690, 250
+      )
     ]
   },
 
@@ -495,77 +422,77 @@ const GAME_LEVELS = [
   {
     id: 10,
     name: "ECHO//404",
-
     difficulty: "PARADOX MASTER",
 
     hint:
-      "O desafio final. Domina todos os teus ecos.",
+      "O despertar final. Três placas, " +
+      "quatro lasers e 3,5 segundos. " +
+      "Não existe margem para hesitar.",
 
     plates: [
-      {
-        x: 115,
-        y: 100
-      },
-      {
-        x: 115,
-        y: 250
-      },
-      {
-        x: 115,
-        y: 390
-      }
+      createPlate(105, 190),
+      createPlate(150, 250),
+      createPlate(105, 310)
     ],
 
     lasers: [
-      {
-        x: 470,
-        period: 1.9,
-        on: 0.9,
-        offset: 0
-      },
-      {
-        x: 540,
-        period: 2.2,
-        on: 1.1,
-        offset: 1
-      },
-      {
-        x: 610,
-        period: 2.5,
-        on: 1.2,
-        offset: 2
-      },
-      {
-        x: 680,
-        period: 2.8,
-        on: 1.3,
-        offset: 1.5
-      }
+      createLaser(465, 2.05, 0.95, 0),
+      createLaser(540, 2.3, 1.05, 0.8),
+      createLaser(610, 2.55, 1.15, 1.6),
+      createLaser(680, 2.85, 1.25, 2.2)
     ],
 
     portals: [
-      {
-        a: {
-          x: 450,
-          y: 100
-        },
-
-        b: {
-          x: 700,
-          y: 390
-        }
-      }
+      createPortal(
+        435, 250,
+        695, 250
+      )
     ]
   }
 ];
 
 // ==========================================
-// 3. VALIDAÇÃO DAS CONFIGURAÇÕES
+// 5. METADADOS DOS NÍVEIS
+// ==========================================
+
+GAME_LEVELS.forEach((level, index) => {
+  const config = LEVEL_DIFFICULTY[index];
+
+  level.timeLimit = config.time;
+  level.rank = config.rank;
+  level.difficulty = config.label;
+
+  level.objectives = {
+    plates: level.plates.length,
+    lasers: level.lasers.length,
+    portals: level.portals.length
+  };
+});
+
+// ==========================================
+// 6. VALIDAÇÃO
 // ==========================================
 
 function validateGameLevels() {
   const errors = [];
   const warnings = [];
+
+  const isValidPoint = point => (
+    point &&
+    Number.isFinite(point.x) &&
+    Number.isFinite(point.y) &&
+    point.x >= 0 &&
+    point.x <= GAME_WORLD.width &&
+    point.y >= 0 &&
+    point.y <= GAME_WORLD.height
+  );
+
+  const isInsideRect = (point, rect) => (
+    point.x >= rect.x &&
+    point.x <= rect.x + rect.w &&
+    point.y >= rect.y &&
+    point.y <= rect.y + rect.h
+  );
 
   if (
     !Number.isFinite(GAME_WORLD.width) ||
@@ -573,36 +500,41 @@ function validateGameLevels() {
     GAME_WORLD.width <= 0 ||
     GAME_WORLD.height <= 0
   ) {
-    errors.push("Dimensões da arena inválidas.");
+    errors.push(
+      "Dimensões da arena inválidas."
+    );
   }
 
   if (
     !Number.isFinite(GAME_WORLD.cycleDuration) ||
     GAME_WORLD.cycleDuration <= 0
   ) {
-    errors.push("Duração dos ciclos inválida.");
+    errors.push(
+      "Duração global dos ciclos inválida."
+    );
   }
 
   if (
     !Number.isInteger(GAME_WORLD.maxCycles) ||
     GAME_WORLD.maxCycles <= 0
   ) {
-    errors.push("Número máximo de ciclos inválido.");
+    errors.push(
+      "Número máximo de ciclos inválido."
+    );
   }
 
-  if (!Array.isArray(GAME_LEVELS)) {
-    errors.push("Lista de níveis inválida.");
+  if (
+    !Array.isArray(GAME_LEVELS) ||
+    GAME_LEVELS.length === 0
+  ) {
+    errors.push(
+      "A lista de níveis está vazia."
+    );
   } else {
     const ids = new Set();
 
     GAME_LEVELS.forEach((level, index) => {
-      const number = index + 1;
-      const prefix = `Nível ${number}`;
-
-      if (!level || typeof level !== "object") {
-        errors.push(`${prefix}: configuração inválida.`);
-        return;
-      }
+      const prefix = `Nível ${index + 1}`;
 
       if (!Number.isInteger(level.id)) {
         errors.push(`${prefix}: ID inválido.`);
@@ -620,72 +552,105 @@ function validateGameLevels() {
       }
 
       if (
-        typeof level.difficulty !== "string" ||
-        !level.difficulty.trim()
-      ) {
-        warnings.push(`${prefix}: dificuldade não definida.`);
-      }
-
-      if (
         typeof level.hint !== "string" ||
         !level.hint.trim()
       ) {
-        warnings.push(`${prefix}: dica não definida.`);
+        warnings.push(
+          `${prefix}: dica não definida.`
+        );
       }
 
-      if (!Array.isArray(level.plates)) {
-        errors.push(`${prefix}: placas inválidas.`);
+      if (
+        !Number.isFinite(level.timeLimit) ||
+        level.timeLimit <= 0
+      ) {
+        errors.push(
+          `${prefix}: tempo inválido.`
+        );
+      }
+
+      if (
+        !Array.isArray(level.plates) ||
+        level.plates.length === 0
+      ) {
+        errors.push(
+          `${prefix}: placas inválidas.`
+        );
       } else {
-        level.plates.forEach((plate, plateIndex) => {
-          if (
-            !plate ||
-            !Number.isFinite(plate.x) ||
-            !Number.isFinite(plate.y)
-          ) {
+        level.plates.forEach((plate, i) => {
+          if (!isValidPoint(plate)) {
             errors.push(
-              `${prefix}: placa ${plateIndex + 1} inválida.`
+              `${prefix}: placa ${i + 1} inválida.`
+            );
+          }
+
+          if (
+            isValidPoint(plate) &&
+            isInsideRect(
+              plate,
+              GAME_WORLD.door
+            )
+          ) {
+            warnings.push(
+              `${prefix}: placa ${i + 1} ` +
+              "sobreposta à porta."
             );
           }
         });
       }
 
       if (!Array.isArray(level.lasers)) {
-        errors.push(`${prefix}: lasers inválidos.`);
+        errors.push(
+          `${prefix}: lasers inválidos.`
+        );
       } else {
-        level.lasers.forEach((laser, laserIndex) => {
-          if (
-            !laser ||
-            !Number.isFinite(laser.x) ||
-            !Number.isFinite(laser.period) ||
-            !Number.isFinite(laser.on) ||
-            !Number.isFinite(laser.offset) ||
-            laser.period <= 0 ||
-            laser.on < 0 ||
-            laser.on > laser.period
-          ) {
+        level.lasers.forEach((laser, i) => {
+          const valid = (
+            Number.isFinite(laser.x) &&
+            Number.isFinite(laser.period) &&
+            Number.isFinite(laser.on) &&
+            Number.isFinite(laser.offset) &&
+            laser.period > 0 &&
+            laser.on >= 0 &&
+            laser.on <= laser.period &&
+            laser.x > 0 &&
+            laser.x < GAME_WORLD.width
+          );
+
+          if (!valid) {
             errors.push(
-              `${prefix}: laser ${laserIndex + 1} inválido.`
+              `${prefix}: laser ${i + 1} inválido.`
             );
           }
         });
       }
 
       if (!Array.isArray(level.portals)) {
-        errors.push(`${prefix}: portais inválidos.`);
+        errors.push(
+          `${prefix}: portais inválidos.`
+        );
       } else {
-        level.portals.forEach((portal, portalIndex) => {
-          const validPoint = point =>
-            point &&
-            Number.isFinite(point.x) &&
-            Number.isFinite(point.y);
-
+        level.portals.forEach((portal, i) => {
           if (
-            !portal ||
-            !validPoint(portal.a) ||
-            !validPoint(portal.b)
+            !isValidPoint(portal.a) ||
+            !isValidPoint(portal.b)
           ) {
             errors.push(
-              `${prefix}: portal ${portalIndex + 1} inválido.`
+              `${prefix}: portal ${i + 1} inválido.`
+            );
+          }
+
+          if (
+            isValidPoint(portal.a) &&
+            isValidPoint(portal.b) &&
+            Math.hypot(
+              portal.a.x - portal.b.x,
+              portal.a.y - portal.b.y
+            ) < 50
+          ) {
+            warnings.push(
+              `${prefix}: portal ${i + 1} ` +
+              "tem pontos demasiado próximos."
             );
           }
         });
@@ -693,30 +658,61 @@ function validateGameLevels() {
     });
   }
 
-  warnings.forEach(message => console.warn(message));
-  errors.forEach(message => console.error(message));
+  warnings.forEach(message => {
+    console.warn(
+      `[ECHO//404 WARNING] ${message}`
+    );
+  });
+
+  errors.forEach(message => {
+    console.error(
+      `[ECHO//404 ERROR] ${message}`
+    );
+  });
 
   if (errors.length > 0) {
     console.error(
-      `ECHO//404: ${errors.length} erro(s) de configuração.`
+      `ECHO//404: ${errors.length} ` +
+      "erro(s) encontrados."
     );
 
     return false;
   }
 
   console.log(
-    `ECHO//404: ${GAME_LEVELS.length} níveis carregados.`
-  );
-
-  console.log(
-    "ECHO//404 v0.6.1 — LEVEL SYSTEM READY"
+    `ECHO//404: ${GAME_LEVELS.length} ` +
+    "níveis validados."
   );
 
   return true;
 }
 
 // ==========================================
-// 4. INICIALIZAÇÃO
+// 7. INICIALIZAÇÃO
 // ==========================================
 
 validateGameLevels();
+
+console.log(
+  "=================================="
+);
+
+console.log(
+  "ECHO//404 — THE AWAKENING v0.7"
+);
+
+console.log(
+  "10 PROGRESSIVE LEVELS READY"
+);
+
+console.log(
+  "DESKTOP + MOBILE"
+);
+
+console.log(
+  "LEVEL DESIGN BY MANUEL SAMPAIO01"
+);
+
+console.log(
+  "=================================="
+);

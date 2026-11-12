@@ -4,11 +4,14 @@
 /*
 ==================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION: 0.6.1 MOBILE EDITION
+ VERSION 0.7 — THE AWAKENING
  FILE: audio.js
 
- SISTEMA DE ÁUDIO FUTURISTA
- Web Audio API — Sem ficheiros externos
+ FUTURISTIC AUDIO ENGINE
+ WEB AUDIO API — NO EXTERNAL FILES
+
+ CREATED & DEVELOPED BY
+ MANUEL SAMPAIO01
 
  DESKTOP + ANDROID + iOS
 ==================================================
@@ -16,22 +19,36 @@
 
 const GameAudio = {
 
-  // ==========================================
-  // 1. CONFIGURAÇÕES
-  // ==========================================
+  // ========================================
+  // 1. ESTADO E CONFIGURAÇÕES
+  // ========================================
 
   context: null,
   masterGain: null,
 
   enabled: GameStorage.getSound(),
 
-  volume: 0.35,
-
+  volume: 0.32,
   initialized: false,
 
-  // ==========================================
-  // 2. INICIALIZAR ÁUDIO
-  // ==========================================
+  lastPlayed: Object.create(null),
+
+  // Evita sons excessivos quando vários
+  // eventos acontecem no mesmo instante.
+  cooldowns: {
+    click: 35,
+    tick: 120,
+    plate: 120,
+    door: 250,
+    laser: 250,
+    glitch: 160,
+    warning: 350,
+    echoMessage: 150
+  },
+
+  // ========================================
+  // 2. INICIALIZAÇÃO
+  // ========================================
 
   init() {
     if (!this.enabled) {
@@ -47,16 +64,20 @@ const GameAudio = {
         console.warn(
           "ECHO//404: Web Audio API indisponível."
         );
-
         return false;
       }
 
-      if (!this.context || this.context.state === "closed") {
+      if (
+        !this.context ||
+        this.context.state === "closed"
+      ) {
         this.context = new AudioContextClass();
 
-        this.masterGain = this.context.createGain();
+        this.masterGain =
+          this.context.createGain();
 
-        this.masterGain.gain.value = this.volume;
+        this.masterGain.gain.value =
+          this.volume;
 
         this.masterGain.connect(
           this.context.destination
@@ -65,14 +86,10 @@ const GameAudio = {
         this.initialized = true;
       }
 
-      // Alguns dispositivos móveis suspendem
-      // automaticamente o contexto de áudio.
       if (this.context.state === "suspended") {
-        this.context.resume().catch(error => {
-          console.warn(
-            "ECHO//404: não foi possível activar o áudio.",
-            error
-          );
+        this.context.resume().catch(() => {
+          // Alguns browsers móveis só permitem
+          // retomar após um gesto do utilizador.
         });
       }
 
@@ -88,9 +105,9 @@ const GameAudio = {
     }
   },
 
-  // ==========================================
-  // 3. GERADOR DE TONS
-  // ==========================================
+  // ========================================
+  // 3. OSCILADOR
+  // ========================================
 
   tone(
     frequency = 440,
@@ -106,39 +123,60 @@ const GameAudio = {
 
     const ac = this.context;
 
-    if (!ac || ac.state === "closed") {
+    if (
+      !ac ||
+      ac.state !== "running"
+    ) {
       return;
     }
-
-    const oscillator = ac.createOscillator();
-    const gain = ac.createGain();
 
     const startTime =
       ac.currentTime + Math.max(0, delay);
 
+    const safeDuration = Math.max(
+      0.02,
+      duration
+    );
+
     const endTime =
-      startTime + Math.max(0.02, duration);
+      startTime + safeDuration;
+
+    const oscillator =
+      ac.createOscillator();
+
+    const gain =
+      ac.createGain();
+
+    const safeFrequency = Math.max(
+      1,
+      frequency
+    );
+
+    const safeVolume = Math.max(
+      0.0001,
+      volume
+    );
 
     oscillator.type = type;
 
     oscillator.frequency.setValueAtTime(
-      Math.max(1, frequency),
+      safeFrequency,
       startTime
     );
 
     if (
-      endFrequency !== null &&
+      Number.isFinite(endFrequency) &&
       endFrequency > 0
     ) {
       oscillator.frequency.exponentialRampToValueAtTime(
-        Math.max(1, endFrequency),
+        endFrequency,
         endTime
       );
     }
 
-    const attackEnd = Math.min(
-      startTime + 0.01,
-      startTime + (endTime - startTime) / 2
+    const attackTime = Math.min(
+      0.012,
+      safeDuration / 3
     );
 
     gain.gain.setValueAtTime(
@@ -147,8 +185,8 @@ const GameAudio = {
     );
 
     gain.gain.exponentialRampToValueAtTime(
-      Math.max(0.0001, volume),
-      attackEnd
+      safeVolume,
+      startTime + attackTime
     );
 
     gain.gain.exponentialRampToValueAtTime(
@@ -157,7 +195,10 @@ const GameAudio = {
     );
 
     oscillator.connect(gain);
-    gain.connect(this.masterGain);
+
+    gain.connect(
+      this.masterGain
+    );
 
     oscillator.start(startTime);
     oscillator.stop(endTime + 0.01);
@@ -168,14 +209,15 @@ const GameAudio = {
     };
   },
 
-  // ==========================================
+  // ========================================
   // 4. RUÍDO DIGITAL
-  // ==========================================
+  // ========================================
 
   noise(
     duration = 0.15,
-    volume = 0.12,
-    delay = 0
+    volume = 0.10,
+    delay = 0,
+    filterFrequency = 1800
   ) {
     if (!this.enabled || !this.init()) {
       return;
@@ -183,20 +225,25 @@ const GameAudio = {
 
     const ac = this.context;
 
-    if (!ac || ac.state === "closed") {
+    if (
+      !ac ||
+      ac.state !== "running"
+    ) {
       return;
     }
-
-    const sampleRate = ac.sampleRate;
 
     const safeDuration = Math.max(
       0.01,
       duration
     );
 
+    const sampleRate = ac.sampleRate;
+
     const frameCount = Math.max(
       1,
-      Math.floor(sampleRate * safeDuration)
+      Math.floor(
+        sampleRate * safeDuration
+      )
     );
 
     const buffer = ac.createBuffer(
@@ -205,27 +252,42 @@ const GameAudio = {
       sampleRate
     );
 
-    const channel = buffer.getChannelData(0);
+    const data =
+      buffer.getChannelData(0);
 
     for (let i = 0; i < frameCount; i++) {
-      channel[i] =
-        (Math.random() * 2 - 1) *
-        (1 - i / frameCount);
+      const fade =
+        1 - i / frameCount;
+
+      data[i] =
+        (Math.random() * 2 - 1) * fade;
     }
 
-    const source = ac.createBufferSource();
-    const gain = ac.createGain();
-    const filter = ac.createBiquadFilter();
+    const source =
+      ac.createBufferSource();
+
+    const filter =
+      ac.createBiquadFilter();
+
+    const gain =
+      ac.createGain();
 
     filter.type = "lowpass";
-    filter.frequency.value = 1800;
+
+    filter.frequency.value =
+      Math.max(100, filterFrequency);
+
+    gain.gain.value =
+      Math.max(0, volume);
 
     source.buffer = buffer;
-    gain.gain.value = Math.max(0, volume);
 
     source.connect(filter);
     filter.connect(gain);
-    gain.connect(this.masterGain);
+
+    gain.connect(
+      this.masterGain
+    );
 
     const startTime =
       ac.currentTime + Math.max(0, delay);
@@ -239,9 +301,9 @@ const GameAudio = {
     };
   },
 
-  // ==========================================
-  // 5. SEQUÊNCIA MUSICAL
-  // ==========================================
+  // ========================================
+  // 5. SEQUÊNCIA DE NOTAS
+  // ========================================
 
   sequence(
     notes,
@@ -249,12 +311,18 @@ const GameAudio = {
     type = "sine",
     volume = 0.12
   ) {
-    if (!this.enabled || !Array.isArray(notes)) {
+    if (
+      !this.enabled ||
+      !Array.isArray(notes)
+    ) {
       return;
     }
 
     notes.forEach((frequency, index) => {
-      if (frequency > 0) {
+      if (
+        Number.isFinite(frequency) &&
+        frequency > 0
+      ) {
         this.tone(
           frequency,
           interval * 0.85,
@@ -266,29 +334,38 @@ const GameAudio = {
     });
   },
 
-  // ==========================================
+  // ========================================
   // 6. INICIAR SIMULAÇÃO
-  // ==========================================
+  // ========================================
 
   start() {
     this.sequence(
       [220, 330, 440, 660],
       0.09,
       "square",
-      0.10
+      0.09
+    );
+
+    this.tone(
+      110,
+      0.45,
+      "sine",
+      0.12,
+      0,
+      220
     );
   },
 
-  // ==========================================
-  // 7. CRIAR FANTASMA TEMPORAL
-  // ==========================================
+  // ========================================
+  // 7. CRIAR ECO TEMPORAL
+  // ========================================
 
   echo() {
     this.tone(
       540,
       0.25,
       "sine",
-      0.14,
+      0.13,
       0,
       180
     );
@@ -303,9 +380,9 @@ const GameAudio = {
     );
   },
 
-  // ==========================================
+  // ========================================
   // 8. ACTIVAR PLACA
-  // ==========================================
+  // ========================================
 
   plate() {
     this.sequence(
@@ -316,16 +393,16 @@ const GameAudio = {
     );
   },
 
-  // ==========================================
+  // ========================================
   // 9. ABRIR PORTA
-  // ==========================================
+  // ========================================
 
   door() {
     this.tone(
       160,
       0.35,
       "sawtooth",
-      0.12,
+      0.11,
       0,
       540
     );
@@ -339,36 +416,38 @@ const GameAudio = {
     );
   },
 
-  // ==========================================
-  // 10. LASER / DANOS
-  // ==========================================
+  // ========================================
+  // 10. LASER / MORTE
+  // ========================================
 
   laser() {
     this.tone(
       700,
       0.35,
       "sawtooth",
-      0.16,
+      0.15,
       0,
       80
     );
 
     this.noise(
       0.25,
-      0.12
+      0.11,
+      0,
+      1200
     );
   },
 
-  // ==========================================
+  // ========================================
   // 11. TELETRANSPORTE
-  // ==========================================
+  // ========================================
 
   portal() {
     this.tone(
       200,
       0.40,
       "sine",
-      0.15,
+      0.14,
       0,
       1200
     );
@@ -383,16 +462,16 @@ const GameAudio = {
     );
   },
 
-  // ==========================================
+  // ========================================
   // 12. PARADOX SHIFT
-  // ==========================================
+  // ========================================
 
   shift() {
     this.tone(
       900,
       0.45,
       "sawtooth",
-      0.13,
+      0.12,
       0,
       120
     );
@@ -413,9 +492,9 @@ const GameAudio = {
     );
   },
 
-  // ==========================================
+  // ========================================
   // 13. VITÓRIA
-  // ==========================================
+  // ========================================
 
   win() {
     this.sequence(
@@ -428,7 +507,7 @@ const GameAudio = {
       ],
       0.14,
       "triangle",
-      0.15
+      0.14
     );
 
     this.tone(
@@ -440,9 +519,9 @@ const GameAudio = {
     );
   },
 
-  // ==========================================
+  // ========================================
   // 14. DERROTA
-  // ==========================================
+  // ========================================
 
   fail() {
     this.sequence(
@@ -456,11 +535,20 @@ const GameAudio = {
       "sawtooth",
       0.10
     );
+
+    this.tone(
+      95,
+      0.70,
+      "sine",
+      0.12,
+      0.35,
+      45
+    );
   },
 
-  // ==========================================
+  // ========================================
   // 15. ERRO / ACÇÃO BLOQUEADA
-  // ==========================================
+  // ========================================
 
   error() {
     this.tone(
@@ -471,9 +559,9 @@ const GameAudio = {
     );
   },
 
-  // ==========================================
-  // 16. CLIQUE NOS BOTÕES
-  // ==========================================
+  // ========================================
+  // 16. CLIQUE
+  // ========================================
 
   click() {
     this.tone(
@@ -484,9 +572,9 @@ const GameAudio = {
     );
   },
 
-  // ==========================================
+  // ========================================
   // 17. CONTAGEM REGRESSIVA
-  // ==========================================
+  // ========================================
 
   tick() {
     this.tone(
@@ -497,9 +585,242 @@ const GameAudio = {
     );
   },
 
-  // ==========================================
-  // 18. REPRODUÇÃO POR NOME
-  // ==========================================
+  // ========================================
+  // 18. INTRODUÇÃO CINEMATOGRÁFICA
+  // ========================================
+
+  awakening() {
+    // Pulso inicial.
+    this.tone(
+      55,
+      1.25,
+      "sine",
+      0.14,
+      0,
+      110
+    );
+
+    // Sequência de activação.
+    this.sequence(
+      [
+        130.81,
+        164.81,
+        196,
+        261.63,
+        392
+      ],
+      0.22,
+      "triangle",
+      0.085
+    );
+
+    // Textura digital.
+    this.noise(
+      0.24,
+      0.045,
+      0.45,
+      950
+    );
+
+    // Final ascendente.
+    this.tone(
+      440,
+      0.75,
+      "sine",
+      0.09,
+      1.05,
+      880
+    );
+  },
+
+  // ========================================
+  // 19. TRANSIÇÃO CINEMATOGRÁFICA
+  // ========================================
+
+  transition() {
+    this.tone(
+      320,
+      0.24,
+      "triangle",
+      0.07,
+      0,
+      780
+    );
+
+    this.noise(
+      0.10,
+      0.035,
+      0.03,
+      2400
+    );
+  },
+
+  // ========================================
+  // 20. GLITCH DIGITAL
+  // ========================================
+
+  glitch() {
+    this.noise(
+      0.09,
+      0.075,
+      0,
+      3200
+    );
+
+    this.tone(
+      1200,
+      0.055,
+      "square",
+      0.035,
+      0,
+      220
+    );
+
+    this.tone(
+      370,
+      0.065,
+      "sawtooth",
+      0.035,
+      0.07,
+      920
+    );
+  },
+
+  // ========================================
+  // 21. MENSAGEM DA IA ECHO
+  // ========================================
+
+  echoMessage() {
+    this.tone(
+      740,
+      0.075,
+      "sine",
+      0.055
+    );
+
+    this.tone(
+      990,
+      0.11,
+      "triangle",
+      0.045,
+      0.09
+    );
+  },
+
+  // ========================================
+  // 22. ALERTA DE TEMPO CRÍTICO
+  // ========================================
+
+  warning() {
+    this.tone(
+      660,
+      0.12,
+      "square",
+      0.085
+    );
+
+    this.tone(
+      440,
+      0.15,
+      "square",
+      0.075,
+      0.15
+    );
+  },
+
+  // ========================================
+  // 23. MEDALHA DE BRONZE
+  // ========================================
+
+  bronze() {
+    this.sequence(
+      [261.63, 329.63, 392],
+      0.15,
+      "triangle",
+      0.09
+    );
+  },
+
+  // ========================================
+  // 24. MEDALHA DE PRATA
+  // ========================================
+
+  silver() {
+    this.sequence(
+      [
+        329.63,
+        440,
+        554.37,
+        659.25
+      ],
+      0.13,
+      "triangle",
+      0.10
+    );
+  },
+
+  // ========================================
+  // 25. MEDALHA DE OURO
+  // ========================================
+
+  gold() {
+    this.sequence(
+      [
+        392,
+        493.88,
+        587.33,
+        783.99,
+        987.77,
+        1174.66
+      ],
+      0.12,
+      "triangle",
+      0.12
+    );
+
+    this.tone(
+      1174.66,
+      0.55,
+      "sine",
+      0.10,
+      0.70
+    );
+  },
+
+  // ========================================
+  // 26. TUTORIAL
+  // ========================================
+
+  tutorial() {
+    this.sequence(
+      [523.25, 659.25],
+      0.09,
+      "sine",
+      0.055
+    );
+  },
+
+  // ========================================
+  // 27. TUTORIAL CONCLUÍDO
+  // ========================================
+
+  tutorialComplete() {
+    this.sequence(
+      [
+        523.25,
+        659.25,
+        783.99,
+        1046.5
+      ],
+      0.11,
+      "triangle",
+      0.09
+    );
+  },
+
+  // ========================================
+  // 28. REPRODUZIR SOM PELO NOME
+  // ========================================
 
   play(name) {
     if (!this.enabled) {
@@ -518,27 +839,63 @@ const GameAudio = {
       fail: () => this.fail(),
       error: () => this.error(),
       click: () => this.click(),
-      tick: () => this.tick()
+      tick: () => this.tick(),
+
+      awakening: () => this.awakening(),
+      intro: () => this.awakening(),
+      transition: () => this.transition(),
+      glitch: () => this.glitch(),
+      echoMessage: () => this.echoMessage(),
+      message: () => this.echoMessage(),
+      warning: () => this.warning(),
+      critical: () => this.warning(),
+
+      bronze: () => this.bronze(),
+      silver: () => this.silver(),
+      gold: () => this.gold(),
+
+      tutorial: () => this.tutorial(),
+      tutorialComplete: () =>
+        this.tutorialComplete()
     };
 
     if (
-      Object.prototype.hasOwnProperty.call(
+      !Object.prototype.hasOwnProperty.call(
         sounds,
         name
       )
     ) {
-      sounds[name]();
+      return;
     }
+
+    const cooldown =
+      this.cooldowns[name] || 0;
+
+    const now = performance.now();
+
+    if (
+      cooldown > 0 &&
+      now - (this.lastPlayed[name] || 0) <
+        cooldown
+    ) {
+      return;
+    }
+
+    this.lastPlayed[name] = now;
+
+    sounds[name]();
   },
 
-  // ==========================================
-  // 19. ACTIVAR / DESACTIVAR SOM
-  // ==========================================
+  // ========================================
+  // 29. ACTIVAR / DESACTIVAR SOM
+  // ========================================
 
   toggle() {
     this.enabled = !this.enabled;
 
-    GameStorage.setSound(this.enabled);
+    GameStorage.setSound(
+      this.enabled
+    );
 
     if (this.enabled) {
       this.init();
@@ -548,9 +905,9 @@ const GameAudio = {
     return this.enabled;
   },
 
-  // ==========================================
-  // 20. DEFINIR VOLUME
-  // ==========================================
+  // ========================================
+  // 30. DEFINIR VOLUME
+  // ========================================
 
   setVolume(value) {
     const number = Number(value);
@@ -564,38 +921,39 @@ const GameAudio = {
       Math.min(1, number)
     );
 
-    if (this.masterGain && this.context) {
+    if (
+      this.masterGain &&
+      this.context &&
+      this.context.state !== "closed"
+    ) {
       this.masterGain.gain.setTargetAtTime(
         this.volume,
         this.context.currentTime,
-        0.02
+        0.025
       );
     }
 
     return this.volume;
   },
 
-  // ==========================================
-  // 21. SUSPENDER ÁUDIO
-  // ==========================================
+  // ========================================
+  // 31. SUSPENDER ÁUDIO
+  // ========================================
 
   pause() {
     if (
       this.context &&
       this.context.state === "running"
     ) {
-      this.context.suspend().catch(error => {
-        console.warn(
-          "ECHO//404: não foi possível suspender áudio.",
-          error
-        );
+      this.context.suspend().catch(() => {
+        // Suspensão opcional.
       });
     }
   },
 
-  // ==========================================
-  // 22. RETOMAR ÁUDIO
-  // ==========================================
+  // ========================================
+  // 32. RETOMAR ÁUDIO
+  // ========================================
 
   resume() {
     if (!this.enabled) {
@@ -605,9 +963,9 @@ const GameAudio = {
     this.init();
   },
 
-  // ==========================================
-  // 23. DIAGNÓSTICO
-  // ==========================================
+  // ========================================
+  // 33. DIAGNÓSTICO
+  // ========================================
 
   debug() {
     console.log(
@@ -615,6 +973,7 @@ const GameAudio = {
     );
 
     console.table({
+      version: "0.7 THE AWAKENING",
       enabled: this.enabled,
       initialized: this.initialized,
       volume: this.volume,
@@ -625,48 +984,121 @@ const GameAudio = {
 };
 
 // ==========================================
-// 24. COMPATIBILIDADE MOBILE
+// 34. COMPATIBILIDADE MOBILE
 // ==========================================
 
-// Em dispositivos móveis, o áudio deve ser
-// activado através de uma interacção do utilizador.
-// Não reproduzimos sons automaticamente ao carregar.
+// O áudio só é desbloqueado após
+// uma interacção do utilizador.
 
 function unlockGameAudio() {
-  if (!GameAudio.enabled) {
-    return;
+  if (GameAudio.enabled) {
+    GameAudio.init();
   }
-
-  GameAudio.init();
 }
 
-// Primeira interacção por toque.
 document.addEventListener(
   "pointerdown",
   unlockGameAudio,
-  { once: true, passive: true }
+  {
+    once: true,
+    passive: true
+  }
 );
 
-// Primeira interacção por teclado.
 document.addEventListener(
   "keydown",
   unlockGameAudio,
-  { once: true }
+  {
+    once: true
+  }
 );
 
-// Quando o utilizador regressa à página,
-// tenta retomar o áudio, caso esteja activo.
+// ==========================================
+// 35. VISIBILIDADE DA PÁGINA
+// ==========================================
+
 document.addEventListener(
   "visibilitychange",
   () => {
-    if (!document.hidden && GameAudio.enabled) {
+    if (document.hidden) {
+      GameAudio.pause();
+    } else if (GameAudio.enabled) {
+      // A retoma pode depender de uma
+      // nova interacção no telemóvel.
       GameAudio.resume();
     }
   }
 );
 
 // ==========================================
-// 25. INICIALIZAÇÃO
+// 36. EVENTOS DO GAME.JS V0.7
+// ==========================================
+
+// Estes eventos complementam o sistema
+// de áudio já existente no game.js.
+// Evitamos duplicar sons de vitória,
+// derrota, lasers, portais e shifts.
+
+window.addEventListener(
+  "echo404:timecritical",
+  () => {
+    GameAudio.play("warning");
+  }
+);
+
+window.addEventListener(
+  "echo404:levelselected",
+  () => {
+    GameAudio.play("transition");
+  }
+);
+
+// Sons das medalhas são reproduzidos
+// após o som principal de vitória.
+window.addEventListener(
+  "echo404:win",
+  event => {
+    const medal =
+      event.detail?.medal;
+
+    if (
+      medal === "gold" ||
+      medal === "silver" ||
+      medal === "bronze"
+    ) {
+      // Agenda apenas a medalha.
+// O motor Web Audio permite programar
+// o som após o evento.
+      const delay = 0.85;
+
+      const notes = {
+        bronze: [261.63, 329.63, 392],
+        silver: [
+          329.63, 440, 554.37, 659.25
+        ],
+        gold: [
+          392, 493.88, 587.33,
+          783.99, 987.77
+        ]
+      };
+
+      notes[medal].forEach(
+        (frequency, index) => {
+          GameAudio.tone(
+            frequency,
+            0.12,
+            "triangle",
+            0.085,
+            delay + index * 0.12
+          );
+        }
+      );
+    }
+  }
+);
+
+// ==========================================
+// 37. INICIALIZAÇÃO
 // ==========================================
 
 console.log(
@@ -674,15 +1106,19 @@ console.log(
 );
 
 console.log(
-  "ECHO//404 — PARADOX EVOLUTION"
+  "ECHO//404 — THE AWAKENING v0.7"
 );
 
 console.log(
-  "AUDIO SYSTEM v0.6.1 MOBILE READY"
+  "FUTURISTIC AUDIO ENGINE READY"
 );
 
 console.log(
-  "WEB AUDIO API // DESKTOP + MOBILE"
+  "DESKTOP + ANDROID + iOS"
+);
+
+console.log(
+  "CREATED BY MANUEL SAMPAIO01"
 );
 
 console.log(

@@ -1,20 +1,20 @@
 
 /*
-==================================================
+====================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION 0.6.1 — MOBILE EDITION
- FILE: style.css
+ VERSION 0.7 — THE AWAKENING
+ CREATED & DEVELOPED BY MANUEL SAMPAIO01
 
  FULL RESPONSIVE DESIGN
  DESKTOP + TABLET + MOBILE
-==================================================
+====================================================
 */
 
-/* ==========================================
-   1. FONTES E VARIÁVEIS
-========================================== */
-
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap");
+
+/* ==========================================
+   1. CORES E FONTES
+========================================== */
 
 :root {
   --bg: #050711;
@@ -27,6 +27,7 @@
   --purple: #aa78ff;
   --red: #ff3868;
   --yellow: #ffd166;
+  --blue: #579aff;
 
   --white: #e9f6ff;
   --muted: #8095b3;
@@ -41,7 +42,7 @@
 }
 
 /* ==========================================
-   2. RESET
+   2. RESET GLOBAL
 ========================================== */
 
 * {
@@ -100,9 +101,14 @@ body::before {
   z-index: -1;
 }
 
+body.awakening-intro-open {
+  overflow: hidden;
+}
+
 button {
   font: inherit;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button:disabled {
@@ -115,7 +121,8 @@ button:focus-visible {
   outline-offset: 3px;
 }
 
-[hidden] {
+[hidden],
+.hidden {
   display: none !important;
 }
 
@@ -133,8 +140,6 @@ main {
   margin-right: auto;
 }
 
-.container,
-.game-container,
 .app {
   position: relative;
 }
@@ -143,8 +148,7 @@ main {
    4. CABEÇALHO
 ========================================== */
 
-.game-header,
-header {
+.game-header {
   text-align: center;
   margin-bottom: 30px;
 }
@@ -152,6 +156,7 @@ header {
 .version {
   display: inline-block;
   margin-bottom: 18px;
+
   color: var(--cyan);
   font-family: var(--font-mono);
   font-size: 11px;
@@ -159,8 +164,7 @@ header {
   text-transform: uppercase;
 }
 
-.logo,
-h1 {
+.logo {
   margin-bottom: 10px;
 
   font-family: var(--font-game);
@@ -174,6 +178,14 @@ h1 {
   text-shadow:
     0 0 12px rgba(0, 245, 255, 0.6),
     0 0 40px rgba(0, 245, 255, 0.25);
+}
+
+.logo span {
+  color: var(--purple);
+
+  text-shadow:
+    0 0 14px rgba(170, 120, 255, 0.5),
+    0 0 35px rgba(170, 120, 255, 0.2);
 }
 
 .subtitle {
@@ -212,9 +224,18 @@ h1 {
     inset 0 0 18px rgba(0, 245, 255, 0.02);
 }
 
+.menu-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
 .menu h2,
 .level-menu h2 {
-  margin-bottom: 15px;
+  margin: 0;
 
   color: var(--cyan);
   font-family: var(--font-game);
@@ -223,11 +244,9 @@ h1 {
   text-transform: uppercase;
 }
 
+#progress,
 .progress,
-.progress-text,
-#progress {
-  margin-bottom: 14px;
-
+.progress-text {
   color: var(--green);
   font-family: var(--font-mono);
   font-size: 12px;
@@ -296,20 +315,72 @@ h1 {
   color: #50617b;
 }
 
-.level-info,
-#levelName {
+#levelName,
+.level-info {
+  display: block;
   color: var(--white);
   font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.8;
 }
 
-#levelName {
+/* ==========================================
+   6. MEDALHAS CONQUISTADAS
+========================================== */
+
+.awakening-medal-summary {
+  margin-top: 18px;
+  padding: 14px;
+
+  background: rgba(0, 245, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+}
+
+.awakening-medal-result {
   display: block;
+  margin: 14px auto;
+  padding: 13px;
+
+  border: 1px solid var(--yellow);
+  border-radius: 7px;
+
+  background: rgba(255, 209, 102, 0.08);
+  color: var(--yellow);
+
+  font-family: var(--font-game);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-align: center;
+
+  animation: awakeningMedalReveal 0.5s ease both;
+}
+
+.awakening-medal-result.hidden {
+  display: none !important;
+}
+
+.awakening-medal-result[data-medal="silver"] {
+  border-color: #a9c2d9;
+  background: rgba(169, 194, 217, 0.08);
+  color: #d6e5f2;
+}
+
+.awakening-medal-result[data-medal="bronze"] {
+  border-color: #cd895c;
+  background: rgba(205, 137, 92, 0.08);
+  color: #e7a87b;
 }
 
 /* ==========================================
-   6. HUD
+   7. HUD
 ========================================== */
 
 .hud {
@@ -330,8 +401,7 @@ h1 {
   text-align: center;
 }
 
-.stat span,
-.stat-label {
+.stat span {
   display: block;
   margin-bottom: 7px;
 
@@ -342,8 +412,7 @@ h1 {
   text-transform: uppercase;
 }
 
-.stat strong,
-.stat-value {
+.stat strong {
   display: block;
 
   color: var(--cyan);
@@ -362,7 +431,7 @@ h1 {
 }
 
 /* ==========================================
-   7. BARRA DO TEMPO
+   8. BARRA DE TEMPO
 ========================================== */
 
 .timer-track {
@@ -376,8 +445,8 @@ h1 {
   overflow: hidden;
 }
 
-.timer-bar,
-#timerBar {
+#timerBar,
+.timer-bar {
   width: 100%;
   height: 100%;
 
@@ -388,12 +457,11 @@ h1 {
   );
 
   box-shadow: 0 0 14px rgba(0, 245, 255, 0.45);
-
   transition: width 0.1s linear;
 }
 
 /* ==========================================
-   8. ARENA
+   9. ARENA
 ========================================== */
 
 .arena-wrapper,
@@ -427,7 +495,7 @@ canvas {
 }
 
 /* ==========================================
-   9. PAINEL DE ESTADO
+   10. ESTADO DO JOGO
 ========================================== */
 
 .status-panel {
@@ -440,12 +508,25 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
 
   background: rgba(13, 21, 43, 0.95);
   border: 1px solid var(--border);
   border-radius: 8px;
 
   text-align: center;
+}
+
+.status-indicator {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+
+  background: var(--green);
+  border-radius: 50%;
+
+  box-shadow: 0 0 12px rgba(0, 255, 157, 0.5);
+  animation: awakeningBlink 2s infinite;
 }
 
 #status {
@@ -456,7 +537,7 @@ canvas {
 }
 
 /* ==========================================
-   10. BOTÕES PRINCIPAIS
+   11. BOTÕES PRINCIPAIS
 ========================================== */
 
 .controls,
@@ -474,10 +555,6 @@ canvas {
 .controls button,
 .game-controls button,
 .action-buttons button,
-#startBtn,
-#restartBtn,
-#shiftBtn,
-#soundBtn,
 #playAgainBtn,
 #nextBtn {
   min-height: 44px;
@@ -502,12 +579,6 @@ canvas {
 }
 
 .controls button:hover:not(:disabled),
-.game-controls button:hover:not(:disabled),
-.action-buttons button:hover:not(:disabled),
-#startBtn:hover:not(:disabled),
-#restartBtn:hover:not(:disabled),
-#shiftBtn:hover:not(:disabled),
-#soundBtn:hover:not(:disabled),
 #playAgainBtn:hover:not(:disabled),
 #nextBtn:hover:not(:disabled) {
   background: rgba(0, 245, 255, 0.18);
@@ -539,8 +610,14 @@ canvas {
   color: var(--yellow);
 }
 
+#awakeningReplayBtn {
+  background: rgba(170, 120, 255, 0.08);
+  border-color: var(--purple);
+  color: var(--purple);
+}
+
 /* ==========================================
-   11. OVERLAY E RESULTADOS
+   12. RESULTADO DO NÍVEL
 ========================================== */
 
 .overlay,
@@ -556,7 +633,6 @@ canvas {
 
   background: rgba(3, 6, 17, 0.88);
   backdrop-filter: blur(8px);
-
   z-index: 20;
 }
 
@@ -578,12 +654,12 @@ canvas {
   border-radius: 12px;
 
   box-shadow: 0 0 40px rgba(0, 245, 255, 0.18);
-
   text-align: center;
 }
 
 .result-label {
   margin-bottom: 12px;
+
   color: var(--purple);
   font-family: var(--font-mono);
   font-size: 11px;
@@ -592,6 +668,7 @@ canvas {
 
 #overlayTitle {
   margin-bottom: 14px;
+
   color: var(--cyan);
   font-family: var(--font-game);
   font-size: 22px;
@@ -600,13 +677,16 @@ canvas {
 
 #overlayMessage {
   margin-bottom: 18px;
+
   color: var(--white);
   font-size: 15px;
   line-height: 1.6;
 }
 
 #finalScore {
+  display: block;
   margin-bottom: 20px;
+
   color: var(--green);
   font-family: var(--font-game);
   font-size: 25px;
@@ -620,12 +700,11 @@ canvas {
 }
 
 /* ==========================================
-   12. INSTRUÇÕES
+   13. INSTRUÇÕES E CONTROLOS
 ========================================== */
 
 .instructions,
-.help-panel,
-.game-help {
+.keyboard-help {
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
@@ -635,60 +714,82 @@ canvas {
   border-radius: 8px;
 }
 
-.instructions h2,
 .instructions h3,
-.help-panel h2,
-.game-help h2 {
-  margin-bottom: 12px;
+.keyboard-help h3 {
+  margin-bottom: 16px;
+
   color: var(--cyan);
   font-family: var(--font-game);
   font-size: 13px;
+  letter-spacing: 1px;
 }
 
-.instructions p,
-.help-panel p,
-.game-help p {
-  margin-bottom: 8px;
-  color: var(--muted);
+.instruction-grid,
+.keyboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.instruction {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  min-width: 0;
+  padding: 10px;
+
+  background: rgba(20, 33, 58, 0.55);
+  border: 1px solid rgba(36, 53, 81, 0.7);
+  border-radius: 6px;
+
+  color: var(--white);
   font-size: 14px;
+}
+
+.symbol {
+  font-size: 19px;
+  flex-shrink: 0;
+}
+
+.symbol.cyan {
+  color: var(--cyan);
+}
+
+.symbol.purple {
+  color: var(--purple);
+}
+
+.symbol.yellow {
+  color: var(--yellow);
+}
+
+.symbol.red {
+  color: var(--red);
+}
+
+.symbol.green {
+  color: var(--green);
+}
+
+.symbol.blue {
+  color: var(--blue);
+}
+
+.keyboard-grid p {
+  padding: 10px 12px;
+
+  background: rgba(20, 33, 58, 0.5);
+  border-radius: 5px;
+
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
   line-height: 1.7;
 }
 
-kbd {
-  display: inline-block;
-  min-width: 24px;
-  padding: 3px 6px;
-
-  background: #14263c;
-  border: 1px solid var(--cyan);
-  border-radius: 4px;
-
-  color: var(--cyan);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  text-align: center;
-}
-
 /* ==========================================
-   13. RODAPÉ
-========================================== */
-
-footer,
-.game-footer {
-  margin: 30px auto 0;
-  padding: 18px 12px;
-
-  border-top: 1px solid var(--border);
-
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 1px;
-  text-align: center;
-}
-
-/* ==========================================
-   14. CONTROLOS MOBILE
+   14. MOBILE CONTROLS
 ========================================== */
 
 .mobile-controls {
@@ -763,10 +864,8 @@ footer,
 
 .mobile-dpad {
   display: grid;
-
   grid-template-columns: repeat(3, 56px);
   grid-template-rows: repeat(3, 56px);
-
   gap: 5px;
 
   touch-action: none;
@@ -872,13 +971,12 @@ footer,
   height: 112px;
   padding: 10px;
 
-  background:
-    radial-gradient(
-      circle,
-      #30204f 0%,
-      #19152f 65%,
-      #0d1022 100%
-    );
+  background: radial-gradient(
+    circle,
+    #30204f 0%,
+    #19152f 65%,
+    #0d1022 100%
+  );
 
   color: #eadcff;
 
@@ -908,14 +1006,11 @@ footer,
 }
 
 .mobile-shift-btn:active:not(:disabled),
-.mobile-shift-btn.pressed,
-#mobileShiftBtn:active:not(:disabled) {
+.mobile-shift-btn.pressed {
   background: var(--purple);
   color: #050711;
 
-  box-shadow:
-    0 0 30px rgba(170, 120, 255, 0.65);
-
+  box-shadow: 0 0 30px rgba(170, 120, 255, 0.65);
   transform: scale(0.95);
 }
 
@@ -946,8 +1041,7 @@ footer,
   touch-action: manipulation;
 }
 
-.mobile-restart-btn:active,
-#mobileRestartBtn:active {
+.mobile-restart-btn:active {
   background: rgba(255, 56, 104, 0.15);
 }
 
@@ -967,7 +1061,654 @@ footer,
 }
 
 /* ==========================================
-   18. TABLETS
+   18. INTRODUÇÃO CINEMATOGRÁFICA
+========================================== */
+
+.awakening-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 38%,
+      rgba(0, 245, 255, 0.09),
+      transparent 55%
+    ),
+    #030610;
+
+  color: var(--white);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.awakening-intro.hidden {
+  display: none !important;
+}
+
+.awakening-intro::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 3px,
+    rgba(0, 245, 255, 0.025) 4px
+  );
+
+  pointer-events: none;
+}
+
+.awakening-screen {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  margin: auto;
+  padding: 26px;
+
+  background: rgba(8, 15, 31, 0.97);
+  border: 1px solid #24445a;
+  border-radius: 14px;
+
+  box-shadow:
+    0 0 60px rgba(0, 245, 255, 0.08),
+    inset 0 0 40px rgba(0, 245, 255, 0.02);
+
+  animation: awakeningScreenEnter 0.6s ease both;
+}
+
+.awakening-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--cyan);
+}
+
+.awakening-signal {
+  color: var(--red);
+  animation: awakeningBlink 1.6s infinite;
+}
+
+/* ==========================================
+   19. NÚCLEO TEMPORAL
+========================================== */
+
+.awakening-core {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 15px auto 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.awakening-ring {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.awakening-ring-outer {
+  width: 160px;
+  height: 160px;
+
+  border: 2px dashed var(--cyan);
+
+  box-shadow: 0 0 25px rgba(0, 245, 255, 0.2);
+  animation: awakeningRotate 14s linear infinite;
+}
+
+.awakening-ring-inner {
+  width: 115px;
+  height: 115px;
+
+  border: 2px solid var(--purple);
+  border-left-color: transparent;
+  border-right-color: transparent;
+
+  animation: awakeningRotate 7s linear infinite reverse;
+}
+
+.awakening-eye {
+  font-size: 62px;
+  color: var(--cyan);
+
+  text-shadow:
+    0 0 20px rgba(0, 245, 255, 0.6),
+    0 0 50px rgba(0, 245, 255, 0.25);
+
+  animation: awakeningPulse 2s ease-in-out infinite;
+}
+
+/* ==========================================
+   20. TERMINAL DA HISTÓRIA
+========================================== */
+
+.awakening-terminal {
+  min-height: 235px;
+  padding: 22px;
+
+  background: #080f20;
+  border: 1px solid #21435a;
+  border-radius: 9px;
+}
+
+.awakening-terminal-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+
+  margin-bottom: 18px;
+
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--green);
+}
+
+#awakeningTitle {
+  margin-bottom: 18px;
+
+  font-family: var(--font-game);
+  font-size: clamp(15px, 4vw, 22px);
+  line-height: 1.4;
+  letter-spacing: 1px;
+  color: var(--cyan);
+}
+
+.awakening-typed {
+  min-height: 100px;
+
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.9;
+  color: #c8d9ec;
+}
+
+.awakening-progress {
+  display: flex;
+  gap: 7px;
+  margin-top: 18px;
+}
+
+.awakening-dot {
+  width: 28px;
+  height: 4px;
+
+  background: #243551;
+  border-radius: 3px;
+
+  transition: background 0.2s ease;
+}
+
+.awakening-dot.active {
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan);
+}
+
+.awakening-dot.completed {
+  background: var(--green);
+}
+
+/* ==========================================
+   21. BOTÕES DA INTRODUÇÃO
+========================================== */
+
+.awakening-actions {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.awakening-btn {
+  min-height: 46px;
+  padding: 12px 16px;
+
+  border-radius: 6px;
+
+  font-family: var(--font-game);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.awakening-btn-ghost {
+  background: transparent;
+  border: 1px solid #43516b;
+  color: #9eacc2;
+}
+
+.awakening-btn-primary {
+  background: rgba(0, 245, 255, 0.12);
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+}
+
+.awakening-btn-primary:hover {
+  background: var(--cyan);
+  color: #050711;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+}
+
+.awakening-btn-ghost:hover {
+  border-color: var(--white);
+  color: var(--white);
+}
+
+.awakening-footer {
+  margin-top: 22px;
+
+  color: #60728c;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+/* ==========================================
+   22. EFEITO DE GLITCH
+========================================== */
+
+.awakening-glitch {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+
+  opacity: 0;
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 14px,
+      rgba(0, 245, 255, 0.13) 15px,
+      transparent 17px
+    );
+
+  mix-blend-mode: screen;
+}
+
+.awakening-glitch.active {
+  animation: awakeningGlitch 0.38s steps(4) both;
+}
+
+/* ==========================================
+   23. IA ECHO — MENSAGENS
+========================================== */
+
+.echo-message {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 1500;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+
+  width: min(390px, calc(100vw - 30px));
+  padding: 16px;
+
+  background: rgba(9, 17, 34, 0.97);
+  border: 1px solid var(--purple);
+  border-radius: 10px;
+
+  box-shadow: 0 0 30px rgba(170, 120, 255, 0.2);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transform: translateY(25px);
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    visibility 0.3s ease;
+}
+
+.echo-message.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.echo-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 42px;
+  height: 42px;
+
+  background: rgba(170, 120, 255, 0.13);
+  border: 1px solid var(--purple);
+  border-radius: 50%;
+
+  color: var(--purple);
+  font-size: 24px;
+}
+
+.echo-message-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.echo-message-content strong {
+  display: block;
+  margin-bottom: 7px;
+
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--purple);
+}
+
+.echo-message-content p {
+  color: #d7e4f4;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.echo-message-close {
+  padding: 0 4px;
+
+  background: transparent;
+  border: none;
+
+  color: var(--muted);
+  font-size: 24px;
+}
+
+.echo-message-close:hover {
+  color: var(--white);
+}
+
+/* ==========================================
+   24. TUTORIAL INTERACTIVO
+========================================== */
+
+.awakening-tutorial {
+  position: fixed;
+  left: 50%;
+  top: 18px;
+  z-index: 1200;
+
+  width: min(520px, calc(100vw - 24px));
+  padding: 18px;
+
+  background: rgba(7, 16, 32, 0.97);
+  border: 1px solid var(--green);
+  border-radius: 10px;
+
+  box-shadow: 0 0 30px rgba(0, 255, 157, 0.15);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transform: translate(-50%, -20px);
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    visibility 0.25s ease;
+}
+
+.awakening-tutorial.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.tutorial-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 12px;
+
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+#tutorialText {
+  margin-bottom: 16px;
+
+  color: var(--white);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.tutorial-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.tutorial-actions button {
+  min-height: 38px;
+  padding: 8px 12px;
+
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+
+  color: var(--muted);
+  font-family: var(--font-game);
+  font-size: 9px;
+}
+
+#tutorialNext {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+#tutorialNext:hover {
+  background: rgba(0, 255, 157, 0.12);
+}
+
+/* ==========================================
+   25. RODAPÉ E ASSINATURA DO CRIADOR
+========================================== */
+
+footer,
+.game-footer {
+  max-width: 800px;
+  margin: 40px auto 0;
+  padding: 28px 12px;
+
+  border-top: 1px solid var(--border);
+
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.footer-game-title {
+  color: var(--cyan);
+  font-family: var(--font-game);
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.footer-version {
+  color: var(--purple);
+  margin-bottom: 8px;
+}
+
+.footer-technology {
+  color: var(--muted);
+  margin-bottom: 25px;
+}
+
+.creator-signature {
+  position: relative;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 24px 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0, 245, 255, 0.06),
+      rgba(170, 120, 255, 0.07)
+    );
+
+  border: 1px solid rgba(0, 245, 255, 0.28);
+  border-radius: 10px;
+
+  box-shadow:
+    0 0 30px rgba(0, 245, 255, 0.05),
+    inset 0 0 20px rgba(0, 245, 255, 0.02);
+}
+
+.creator-signature p:first-child {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.creator-signature strong {
+  display: block;
+  margin-bottom: 15px;
+
+  color: var(--cyan);
+  font-family: var(--font-game);
+  font-size: clamp(14px, 3vw, 21px);
+  font-weight: 800;
+  letter-spacing: 2px;
+
+  text-shadow:
+    0 0 12px rgba(0, 245, 255, 0.55),
+    0 0 28px rgba(0, 245, 255, 0.18);
+}
+
+.creator-signature p:last-child {
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+/* ==========================================
+   26. ANIMAÇÕES
+========================================== */
+
+@keyframes awakeningRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes awakeningPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(0.94);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes awakeningBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes awakeningGlitch {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  20% {
+    opacity: 0.8;
+    transform: translateX(-7px);
+  }
+
+  40% {
+    opacity: 0.25;
+    transform: translateX(8px);
+  }
+
+  65% {
+    opacity: 0.7;
+    transform: translateX(-3px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+}
+
+@keyframes awakeningMedalReveal {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes awakeningScreenEnter {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==========================================
+   27. TABLETS
 ========================================== */
 
 @media (max-width: 900px) {
@@ -990,7 +1731,7 @@ footer,
 }
 
 /* ==========================================
-   19. DISPOSITIVOS TÁCTEIS
+   28. DISPOSITIVOS TÁCTEIS
 ========================================== */
 
 @media (pointer: coarse) {
@@ -1008,7 +1749,7 @@ footer,
 }
 
 /* ==========================================
-   20. ECRÃS ATÉ 700PX
+   29. ECRÃS ATÉ 700PX
 ========================================== */
 
 @media (max-width: 700px) {
@@ -1016,13 +1757,11 @@ footer,
     display: block;
   }
 
-  .game-header,
-  header {
+  .game-header {
     margin-bottom: 22px;
   }
 
-  .menu,
-  .level-menu {
+  .menu {
     padding: 16px 12px;
   }
 
@@ -1080,10 +1819,118 @@ footer,
   .controls button {
     min-height: 44px;
   }
+
+  .instruction-grid,
+  .keyboard-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ==========================================
-   21. TELEMÓVEIS ATÉ 480PX
+   30. TELEMÓVEIS ATÉ 600PX
+========================================== */
+
+@media (max-width: 600px) {
+  .awakening-intro {
+    padding: 10px;
+  }
+
+  .awakening-screen {
+    padding: 16px 13px;
+  }
+
+  .awakening-core {
+    width: 120px;
+    height: 120px;
+    margin: 8px auto 14px;
+  }
+
+  .awakening-ring-outer {
+    width: 112px;
+    height: 112px;
+  }
+
+  .awakening-ring-inner {
+    width: 78px;
+    height: 78px;
+  }
+
+  .awakening-eye {
+    font-size: 40px;
+  }
+
+  .awakening-topline {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .awakening-terminal {
+    min-height: 200px;
+    padding: 15px;
+  }
+
+  .awakening-terminal-label {
+    font-size: 8px;
+  }
+
+  .awakening-typed {
+    min-height: 115px;
+    font-size: 12px;
+    line-height: 1.65;
+  }
+
+  .awakening-actions {
+    gap: 8px;
+  }
+
+  .awakening-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 8px;
+    font-size: 8px;
+    letter-spacing: 0;
+  }
+
+  .awakening-tutorial {
+    top: max(8px, env(safe-area-inset-top));
+    padding: 13px;
+  }
+
+  .tutorial-heading {
+    font-size: 9px;
+  }
+
+  #tutorialText {
+    font-size: 13px;
+  }
+
+  .echo-message {
+    right: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    padding: 12px;
+  }
+
+  .echo-message-content p {
+    font-size: 12px;
+  }
+
+  .echo-avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+  }
+
+  .awakening-medal-summary {
+    font-size: 10px;
+  }
+
+  .awakening-medal-result {
+    font-size: 10px;
+  }
+}
+
+/* ==========================================
+   31. TELEMÓVEIS ATÉ 480PX
 ========================================== */
 
 @media (max-width: 480px) {
@@ -1100,8 +1947,7 @@ footer,
     letter-spacing: 2px;
   }
 
-  .logo,
-  h1 {
+  .logo {
     font-size: clamp(30px, 10vw, 46px);
     letter-spacing: 1px;
   }
@@ -1215,10 +2061,19 @@ footer,
     padding: 10px 9px;
     font-size: 9px;
   }
+
+  .creator-signature {
+    padding: 20px 10px;
+  }
+
+  .creator-signature strong {
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
 }
 
 /* ==========================================
-   22. TELEMÓVEIS MUITO ESTREITOS
+   32. TELEMÓVEIS ESTREITOS
 ========================================== */
 
 @media (max-width: 350px) {
@@ -1247,10 +2102,18 @@ footer,
   .mobile-controls {
     padding: 10px 5px;
   }
+
+  .awakening-topline {
+    font-size: 7px;
+  }
+
+  .awakening-terminal-label {
+    font-size: 7px;
+  }
 }
 
 /* ==========================================
-   23. MODO HORIZONTAL MOBILE
+   33. MODO HORIZONTAL MOBILE
 ========================================== */
 
 @media (orientation: landscape)
@@ -1319,7 +2182,41 @@ footer,
 }
 
 /* ==========================================
-   24. ACESSIBILIDADE
+   34. ECRÃS COM POUCA ALTURA
+========================================== */
+
+@media (max-height: 650px) {
+  .awakening-core {
+    width: 85px;
+    height: 85px;
+    margin: 5px auto 10px;
+  }
+
+  .awakening-ring-outer {
+    width: 80px;
+    height: 80px;
+  }
+
+  .awakening-ring-inner {
+    width: 55px;
+    height: 55px;
+  }
+
+  .awakening-eye {
+    font-size: 30px;
+  }
+
+  .awakening-terminal {
+    min-height: 0;
+  }
+
+  .awakening-typed {
+    min-height: 0;
+  }
+}
+
+/* ==========================================
+   35. ACESSIBILIDADE
 ========================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1327,12 +2224,21 @@ footer,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }
 
-/* ==========================================
-   END OF STYLESHEET
-   ECHO//404 v0.6.1 MOBILE EDITION
-========================================== */
+/*
+====================================================
+ END OF STYLESHEET
+
+ ECHO//404 — THE AWAKENING v0.7
+
+ CREATED & DEVELOPED BY
+ MANUEL SAMPAIO01
+
+ © 2026 MANUEL SAMPAIO01
+====================================================
+*/

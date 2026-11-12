@@ -4,11 +4,14 @@
 /*
 ==================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION: 0.6.1 MOBILE EDITION
+ VERSION 0.7 — THE AWAKENING
  FILE: game.js
 
- MOTOR PRINCIPAL
+ CREATED & DEVELOPED BY MANUEL SAMPAIO01
+
  DESKTOP + MOBILE
+ DIFFICULTY EVOLUTION
+ TEMPORAL EVENTS + MEDALS
 ==================================================
 */
 
@@ -26,46 +29,37 @@ const UI = {
   score: document.getElementById("score"),
   best: document.getElementById("best"),
   timerBar: document.getElementById("timerBar"),
-
   status: document.getElementById("status"),
   levelGrid: document.getElementById("levelGrid"),
   progress: document.getElementById("progress"),
   levelName: document.getElementById("levelName"),
-
   overlay: document.getElementById("overlay"),
   overlayTitle: document.getElementById("overlayTitle"),
   overlayMessage: document.getElementById("overlayMessage"),
   finalScore: document.getElementById("finalScore"),
-
+  medalResult: document.getElementById("awakeningMedalResult"),
+  medalSummary: document.getElementById("awakeningMedalSummary"),
   startBtn: document.getElementById("startBtn"),
   restartBtn: document.getElementById("restartBtn"),
   shiftBtn: document.getElementById("shiftBtn"),
   soundBtn: document.getElementById("soundBtn"),
-
   playAgainBtn: document.getElementById("playAgainBtn"),
   nextBtn: document.getElementById("nextBtn"),
-
-  mobileControls: document.getElementById("mobileControls"),
   mobileShiftBtn: document.getElementById("mobileShiftBtn"),
   mobileRestartBtn: document.getElementById("mobileRestartBtn"),
-
   moveUp: document.getElementById("moveUp"),
   moveDown: document.getElementById("moveDown"),
   moveLeft: document.getElementById("moveLeft"),
   moveRight: document.getElementById("moveRight")
 };
 
-// ==========================================
-// 2. CONSTANTES
-// ==========================================
-
 const WORLD = GAME_WORLD;
-
 const WIDTH = WORLD.width;
 const HEIGHT = WORLD.height;
-
-const CYCLE_DURATION = WORLD.cycleDuration;
 const MAX_CYCLES = WORLD.maxCycles;
+
+canvas.width = WIDTH;
+canvas.height = HEIGHT;
 
 const COLORS = {
   cyan: "#00f5ff",
@@ -81,19 +75,95 @@ const PLAYER_SIZE = 20;
 const PLAYER_SPEED = 230;
 const PLATE_RADIUS = 27;
 
-// Mantém a resolução lógica original.
-canvas.width = WIDTH;
-canvas.height = HEIGHT;
-
 // ==========================================
-// 3. SISTEMA DE CONTROLOS
+// 2. DIFICULDADE PROGRESSIVA
 // ==========================================
 
-// Teclas físicas do computador.
+const DIFFICULTY = {
+  cycleSeconds: [
+    10, 9, 8, 7, 6,
+    5.5, 5, 4.5, 4, 3.5
+  ],
+
+  // A partir do nível 2, os lasers
+  // aceleram progressivamente.
+  laserSpeedMultiplier: [
+    1, 1.08, 1.16, 1.25, 1.35,
+    1.48, 1.62, 1.78, 1.95, 2.15
+  ],
+
+  // Pequena aceleração adicional
+  // dentro do próprio nível.
+  cycleLaserAcceleration: 0.035,
+
+  // Penalização crescente por morte.
+  deathPenaltyBase: 150,
+  deathPenaltyPerLevel: 35,
+
+  // Pontuação por nível.
+  levelBonus: 250,
+
+  // Tempo crítico: últimos 25%.
+  criticalFraction: 0.25
+};
+
+function getCycleDuration(index = levelIndex) {
+  const configured = DIFFICULTY.cycleSeconds[index];
+
+  return Number.isFinite(configured)
+    ? configured
+    : Math.max(3.5, WORLD.cycleDuration || 10);
+}
+
+function getLaserMultiplier() {
+  const base =
+    DIFFICULTY.laserSpeedMultiplier[levelIndex] || 1;
+
+  return base * (
+    1 +
+    (cycle - 1) *
+    DIFFICULTY.cycleLaserAcceleration
+  );
+}
+
+function getDeathPenalty() {
+  return (
+    DIFFICULTY.deathPenaltyBase +
+    levelIndex * DIFFICULTY.deathPenaltyPerLevel
+  );
+}
+
+// ==========================================
+// 3. EVENTOS PARA AWAKENING.JS
+// ==========================================
+
+function emitGameEvent(name, details = {}) {
+  const payload = {
+    levelIndex,
+    levelNumber: levelIndex + 1,
+    cycle,
+    maxCycles: MAX_CYCLES,
+    elapsed,
+    cycleDuration: getCycleDuration(),
+    score,
+    deaths,
+    shifts,
+    ghosts: recordings.length,
+    ...details
+  };
+
+  window.dispatchEvent(
+    new CustomEvent(`echo404:${name}`, {
+      detail: payload
+    })
+  );
+}
+
+// ==========================================
+// 4. CONTROLOS
+// ==========================================
+
 const keys = new Set();
-
-// Direcções virtuais do telemóvel.
-// Cada pointerId representa um dedo.
 const mobilePointers = new Map();
 
 const mobileDirections = {
@@ -117,9 +187,8 @@ function isDirectionPressed(direction) {
     right: ["d", "arrowright"]
   };
 
-  const keyboardPressed = keyboardMap[direction].some(
-    key => keys.has(key)
-  );
+  const keyboardPressed = keyboardMap[direction]
+    .some(key => keys.has(key));
 
   const touchPressed = Array.from(
     mobilePointers.values()
@@ -134,11 +203,11 @@ function refreshMobileButtons() {
 
     if (!button) continue;
 
-    const active = Array.from(
+    const pressed = Array.from(
       mobilePointers.values()
     ).includes(direction);
 
-    button.classList.toggle("pressed", active);
+    button.classList.toggle("pressed", pressed);
   }
 }
 
@@ -153,18 +222,16 @@ function clearAllMovement() {
 }
 
 // ==========================================
-// 4. ESTADO DO JOGO
+// 5. ESTADO DO JOGO
 // ==========================================
 
 let levelIndex = 0;
 let level = GAME_LEVELS[0];
 
 let player = null;
-
 let recordings = [];
 let ghosts = [];
 let currentRecording = [];
-
 let particles = [];
 
 let cycle = 1;
@@ -187,9 +254,16 @@ let portalCooldown = 0;
 let lastFrame = 0;
 let animationId = null;
 let lastTickSecond = null;
+let criticalWarningShown = false;
+let totalActiveTime = 0;
+
+let medalCache = {};
+
+const MEDAL_STORAGE_KEY =
+  "echo404_awakening_medals_v07";
 
 // ==========================================
-// 5. FUNÇÕES AUXILIARES
+// 6. AUXILIARES
 // ==========================================
 
 function clamp(value, min, max) {
@@ -197,10 +271,7 @@ function clamp(value, min, max) {
 }
 
 function distance(a, b) {
-  return Math.hypot(
-    a.x - b.x,
-    a.y - b.y
-  );
+  return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
 function intersects(a, b) {
@@ -222,22 +293,33 @@ function playerRect(x, y) {
 }
 
 function setStatus(message) {
-  UI.status.textContent = message;
+  if (UI.status) {
+    UI.status.textContent = message;
+  }
 }
 
 function formatScore(value) {
-  return Math.floor(value || 0).toLocaleString("pt-PT");
+  return Math.floor(value || 0)
+    .toLocaleString("pt-PT");
+}
+
+function playSound(name) {
+  if (
+    typeof GameAudio !== "undefined" &&
+    typeof GameAudio.play === "function"
+  ) {
+    GameAudio.play(name);
+  }
 }
 
 // ==========================================
-// 6. PARTÍCULAS
+// 7. PARTÍCULAS
 // ==========================================
 
 function emitParticles(x, y, color, amount = 15) {
   for (let i = 0; i < amount; i++) {
     const angle = Math.random() * Math.PI * 2;
     const speed = 30 + Math.random() * 120;
-
     const life = 0.3 + Math.random() * 0.6;
 
     particles.push({
@@ -270,7 +352,130 @@ function updateParticles(dt) {
 }
 
 // ==========================================
-// 7. MENU DE NÍVEIS
+// 8. MEDALHAS
+// ==========================================
+
+const MEDALS = {
+  bronze: {
+    name: "BRONZE",
+    icon: "🥉",
+    rank: 1
+  },
+  silver: {
+    name: "PRATA",
+    icon: "🥈",
+    rank: 2
+  },
+  gold: {
+    name: "OURO",
+    icon: "🥇",
+    rank: 3
+  }
+};
+
+function loadMedals() {
+  try {
+    const raw = localStorage.getItem(
+      MEDAL_STORAGE_KEY
+    );
+
+    const parsed = raw ? JSON.parse(raw) : {};
+
+    return parsed &&
+      typeof parsed === "object" &&
+      !Array.isArray(parsed)
+      ? parsed
+      : {};
+  } catch (error) {
+    return {};
+  }
+}
+
+function saveMedals() {
+  try {
+    localStorage.setItem(
+      MEDAL_STORAGE_KEY,
+      JSON.stringify(medalCache)
+    );
+  } catch (error) {
+    console.warn("Não foi possível guardar medalhas.");
+  }
+}
+
+function calculateMedal() {
+  // Ouro exige eficiência e sobrevivência.
+  if (
+    deaths === 0 &&
+    cycle <= 3 &&
+    shifts <= 2
+  ) {
+    return "gold";
+  }
+
+  // Prata permite algumas falhas.
+  if (
+    deaths <= 2 &&
+    cycle <= 5
+  ) {
+    return "silver";
+  }
+
+  return "bronze";
+}
+
+function registerMedal(type) {
+  const key = String(levelIndex);
+  const previous = medalCache[key];
+
+  if (
+    !previous ||
+    MEDALS[type].rank > MEDALS[previous].rank
+  ) {
+    medalCache[key] = type;
+    saveMedals();
+  }
+
+  updateMedalSummary();
+}
+
+function updateMedalSummary() {
+  if (!UI.medalSummary) return;
+
+  const counts = {
+    gold: 0,
+    silver: 0,
+    bronze: 0
+  };
+
+  Object.values(medalCache).forEach(type => {
+    if (counts[type] !== undefined) {
+      counts[type]++;
+    }
+  });
+
+  UI.medalSummary.textContent =
+    `🥇 ${counts.gold} OURO · ` +
+    `🥈 ${counts.silver} PRATA · ` +
+    `🥉 ${counts.bronze} BRONZE`;
+}
+
+function showMedal(type) {
+  if (!UI.medalResult) return;
+
+  const medal = MEDALS[type];
+
+  UI.medalResult.dataset.medal = type;
+
+  UI.medalResult.textContent =
+    `${medal.icon} MEDALHA DE ${medal.name}`;
+
+  UI.medalResult.classList.remove("hidden");
+}
+
+medalCache = loadMedals();
+
+// ==========================================
+// 9. MENU DE NÍVEIS
 // ==========================================
 
 function buildLevelMenu() {
@@ -281,11 +486,16 @@ function buildLevelMenu() {
   GAME_LEVELS.forEach((item, index) => {
     const button = document.createElement("button");
 
-    const completed = Boolean(data.completed[index]);
+    const completed = Boolean(
+      data.completed[index]
+    );
+
     const unlocked = index + 1 <= data.unlocked;
 
+    const medal = medalCache[String(index)];
+
     button.textContent = completed
-      ? "✓" + (index + 1)
+      ? `✓${index + 1}`
       : String(index + 1);
 
     button.disabled = !unlocked;
@@ -295,41 +505,58 @@ function buildLevelMenu() {
       index === levelIndex
     );
 
+    button.classList.toggle(
+      "completed",
+      completed
+    );
+
+    const medalText = medal
+      ? ` | Medalha: ${MEDALS[medal].name}`
+      : "";
+
     button.title = unlocked
-      ? item.name
+      ? `${item.name}${medalText}`
       : "Nível bloqueado";
 
     button.addEventListener("click", () => {
       selectLevel(index);
-      GameAudio.play("click");
+      playSound("click");
     });
 
     UI.levelGrid.appendChild(button);
   });
 
-  const completedCount =
-    data.completed.filter(Boolean).length;
+  const completedCount = data.completed
+    .filter(Boolean).length;
 
   UI.progress.textContent =
-    `${completedCount} / ${GAME_LEVELS.length} CONCLUÍDOS`;
+    `${completedCount} / ` +
+    `${GAME_LEVELS.length} CONCLUÍDOS`;
 
   UI.levelName.textContent =
     `NÍVEL ${levelIndex + 1} — ${level.name} | ` +
-    `${level.difficulty} | ${level.hint}`;
+    `${level.difficulty} | ` +
+    `${getCycleDuration()}s POR CICLO | ` +
+    `${level.hint}`;
 
   UI.best.textContent = formatScore(
     data.bestScores[levelIndex]
   );
+
+  updateMedalSummary();
 }
 
 function selectLevel(index) {
-  if (index < 0 || index >= GAME_LEVELS.length) {
+  if (
+    index < 0 ||
+    index >= GAME_LEVELS.length
+  ) {
     return;
   }
 
   if (!GameStorage.isUnlocked(index)) {
     setStatus("NÍVEL BLOQUEADO.");
-    GameAudio.play("error");
+    playSound("error");
     return;
   }
 
@@ -338,10 +565,14 @@ function selectLevel(index) {
 
   resetGame();
   buildLevelMenu();
+
+  emitGameEvent("levelselected", {
+    levelName: level.name
+  });
 }
 
 // ==========================================
-// 8. REINICIAR JOGO
+// 10. REINICIAR
 // ==========================================
 
 function resetGame() {
@@ -373,6 +604,7 @@ function resetGame() {
   cycle = 1;
   elapsed = 0;
   worldTime = 0;
+  totalActiveTime = 0;
 
   score = 0;
   deaths = 0;
@@ -389,36 +621,63 @@ function resetGame() {
 
   lastFrame = 0;
   lastTickSecond = null;
+  criticalWarningShown = false;
 
   UI.overlay.classList.add("hidden");
+
+  if (UI.medalResult) {
+    UI.medalResult.classList.add("hidden");
+  }
 
   UI.startBtn.textContent = "INICIAR SIMULAÇÃO";
 
   setStatus(level.hint);
-
   updateHUD();
   draw();
 }
 
 // ==========================================
-// 9. INICIAR SIMULAÇÃO
+// 11. INICIAR
 // ==========================================
 
 function startGame() {
+  // Não permite iniciar por trás
+  // da introdução cinematográfica.
+  const intro = document.getElementById(
+    "awakeningIntro"
+  );
+
+  if (
+    intro &&
+    !intro.classList.contains("hidden")
+  ) {
+    return;
+  }
+
   resetGame();
 
   running = true;
 
   GameStorage.registerAttempt();
 
-  GameAudio.init();
-  GameAudio.play("start");
+  if (typeof GameAudio.init === "function") {
+    GameAudio.init();
+  }
 
-  UI.startBtn.textContent = "REINICIAR SIMULAÇÃO";
+  playSound("start");
+
+  UI.startBtn.textContent =
+    "REINICIAR SIMULAÇÃO";
 
   setStatus(
-    `NÍVEL ${levelIndex + 1}: ${level.hint}`
+    `NÍVEL ${levelIndex + 1}: ` +
+    `${getCycleDuration()} SEGUNDOS POR CICLO. ` +
+    `${level.hint}`
   );
+
+  emitGameEvent("start", {
+    levelName: level.name
+  });
 
   updateHUD();
 
@@ -426,19 +685,23 @@ function startGame() {
 }
 
 // ==========================================
-// 10. ACTUALIZAR HUD
+// 12. HUD
 // ==========================================
 
 function updateHUD() {
-  UI.cycle.textContent = `${cycle}/${MAX_CYCLES}`;
+  const duration = getCycleDuration();
 
-  UI.timer.textContent = Math.max(
+  const remaining = Math.max(
     0,
-    CYCLE_DURATION - elapsed
-  ).toFixed(1);
+    duration - elapsed
+  );
+
+  UI.cycle.textContent =
+    `${cycle}/${MAX_CYCLES}`;
+
+  UI.timer.textContent = remaining.toFixed(1);
 
   UI.ghosts.textContent = recordings.length;
-
   UI.score.textContent = formatScore(score);
 
   UI.best.textContent = formatScore(
@@ -446,7 +709,7 @@ function updateHUD() {
   );
 
   const percentage = clamp(
-    ((CYCLE_DURATION - elapsed) / CYCLE_DURATION) * 100,
+    remaining / duration * 100,
     0,
     100
   );
@@ -454,7 +717,7 @@ function updateHUD() {
   UI.timerBar.style.width = `${percentage}%`;
 
   UI.timerBar.style.background =
-    CYCLE_DURATION - elapsed < 2.5
+    remaining <= duration * DIFFICULTY.criticalFraction
       ? COLORS.red
       : COLORS.cyan;
 
@@ -471,19 +734,19 @@ function updateHUD() {
 }
 
 // ==========================================
-// 11. GRAVAÇÃO DOS MOVIMENTOS
+// 13. GRAVAÇÃO DO JOGADOR
 // ==========================================
 
 function recordPlayer() {
   currentRecording.push({
-    t: Math.min(elapsed, CYCLE_DURATION),
+    t: Math.min(elapsed, getCycleDuration()),
     x: player.x,
     y: player.y
   });
 }
 
 // ==========================================
-// 12. INTERPOLAÇÃO DOS FANTASMAS
+// 14. INTERPOLAÇÃO DOS ECOS
 // ==========================================
 
 function positionAt(frames, time) {
@@ -539,10 +802,6 @@ function positionAt(frames, time) {
   };
 }
 
-// ==========================================
-// 13. ACTUALIZAR FANTASMAS
-// ==========================================
-
 function updateGhosts() {
   ghosts = recordings.map(
     frames => positionAt(frames, elapsed)
@@ -550,17 +809,17 @@ function updateGhosts() {
 }
 
 // ==========================================
-// 14. PARADOX SHIFT
+// 15. PARADOX SHIFT
 // ==========================================
 
 function paradoxShift() {
-  if (!running) {
-    return;
-  }
+  if (!running) return;
 
-  if (shiftUsed || recordings.length === 0) {
-    GameAudio.play("error");
-
+  if (
+    shiftUsed ||
+    recordings.length === 0
+  ) {
+    playSound("error");
     setStatus("PARADOX SHIFT INDISPONÍVEL.");
     return;
   }
@@ -568,14 +827,15 @@ function paradoxShift() {
   const index = recordings.length - 1;
   const frames = recordings[index];
 
-  const position = positionAt(frames, elapsed);
+  const position = positionAt(
+    frames,
+    elapsed
+  );
 
-  // Preserva o passado do último fantasma.
   const past = frames.filter(
     frame => frame.t < elapsed
   );
 
-  // Congela o fantasma na posição actual.
   past.push({
     t: elapsed,
     x: position.x,
@@ -583,7 +843,7 @@ function paradoxShift() {
   });
 
   past.push({
-    t: CYCLE_DURATION,
+    t: getCycleDuration(),
     x: position.x,
     y: position.y
   });
@@ -605,40 +865,46 @@ function paradoxShift() {
     40
   );
 
-  GameAudio.play("shift");
+  playSound("shift");
 
   setStatus(
     "PARADOX SHIFT: FUTURO DO ECO ALTERADO!"
   );
 
+  emitGameEvent("shift", {
+    position
+  });
+
   updateHUD();
 }
 
 // ==========================================
-// 15. PLACAS TEMPORAIS
+// 16. PLACAS E PORTA
 // ==========================================
 
 function isPlateActive(plate) {
-  if (distance(player, plate) < PLATE_RADIUS) {
+  if (
+    distance(player, plate) < PLATE_RADIUS
+  ) {
     return true;
   }
 
   return ghosts.some(
-    ghost => distance(ghost, plate) < PLATE_RADIUS
+    ghost =>
+      distance(ghost, plate) < PLATE_RADIUS
   );
 }
-
-// ==========================================
-// 16. PORTA TEMPORAL
-// ==========================================
 
 function updateDoor() {
   doorOpen = level.plates.every(
     plate => isPlateActive(plate)
   );
 
-  if (doorOpen && !previousDoorState) {
-    GameAudio.play("door");
+  if (
+    doorOpen &&
+    !previousDoorState
+  ) {
+    playSound("door");
 
     emitParticles(
       WORLD.door.x + WORLD.door.w / 2,
@@ -648,6 +914,15 @@ function updateDoor() {
     );
 
     setStatus("PORTA TEMPORAL ABERTA!");
+
+    emitGameEvent("dooropen");
+  }
+
+  if (
+    !doorOpen &&
+    previousDoorState
+  ) {
+    emitGameEvent("doorclosed");
   }
 
   previousDoorState = doorOpen;
@@ -666,7 +941,10 @@ function isBlocked(x, y) {
     }
   }
 
-  if (!doorOpen && intersects(rect, WORLD.door)) {
+  if (
+    !doorOpen &&
+    intersects(rect, WORLD.door)
+  ) {
     return true;
   }
 
@@ -674,38 +952,27 @@ function isBlocked(x, y) {
 }
 
 // ==========================================
-// 18. MOVIMENTO DESKTOP + MOBILE
+// 18. MOVIMENTO
 // ==========================================
 
 function updatePlayer(dt) {
   let dx = 0;
   let dy = 0;
 
-  if (isDirectionPressed("up")) {
-    dy--;
-  }
-
-  if (isDirectionPressed("down")) {
-    dy++;
-  }
-
-  if (isDirectionPressed("left")) {
-    dx--;
-  }
-
-  if (isDirectionPressed("right")) {
-    dx++;
-  }
+  if (isDirectionPressed("up")) dy--;
+  if (isDirectionPressed("down")) dy++;
+  if (isDirectionPressed("left")) dx--;
+  if (isDirectionPressed("right")) dx++;
 
   const length = Math.hypot(dx, dy);
 
-  if (length === 0) {
-    return;
-  }
+  if (length === 0) return;
 
-  // Normaliza a velocidade diagonal.
   dx /= length;
   dy /= length;
+
+  const oldX = player.x;
+  const oldY = player.y;
 
   const nextX = clamp(
     player.x + dx * player.speed * dt,
@@ -726,10 +993,22 @@ function updatePlayer(dt) {
   if (!isBlocked(player.x, nextY)) {
     player.y = nextY;
   }
+
+  if (
+    oldX !== player.x ||
+    oldY !== player.y
+  ) {
+    // Evento único de movimento para
+    // o tutorial, sem disparar a cada frame.
+    if (!startGame.movementNotified) {
+      startGame.movementNotified = true;
+      emitGameEvent("firstmove");
+    }
+  }
 }
 
 // ==========================================
-// 19. TELETRANSPORTES
+// 19. PORTAIS
 // ==========================================
 
 function updatePortals(dt) {
@@ -738,55 +1017,72 @@ function updatePortals(dt) {
     portalCooldown - dt
   );
 
-  if (portalCooldown > 0) {
-    return;
-  }
+  if (portalCooldown > 0) return;
 
   for (const portal of level.portals) {
     let destination = null;
 
-    if (distance(player, portal.a) < 19) {
+    if (
+      distance(player, portal.a) < 19
+    ) {
       destination = portal.b;
-    } else if (distance(player, portal.b) < 19) {
+    } else if (
+      distance(player, portal.b) < 19
+    ) {
       destination = portal.a;
     }
 
-    if (destination) {
-      player.x = destination.x;
-      player.y = destination.y;
+    if (!destination) continue;
 
-      portalCooldown = 1;
+    player.x = destination.x;
+    player.y = destination.y;
 
-      emitParticles(
-        player.x,
-        player.y,
-        COLORS.blue,
-        30
-      );
+    portalCooldown = 1;
 
-      GameAudio.play("portal");
+    emitParticles(
+      player.x,
+      player.y,
+      COLORS.blue,
+      30
+    );
 
-      setStatus("SALTO QUÂNTICO EXECUTADO!");
-      return;
-    }
+    playSound("portal");
+
+    setStatus("SALTO QUÂNTICO EXECUTADO!");
+
+    emitGameEvent("portal");
+
+    return;
   }
 }
 
 // ==========================================
-// 20. LASERS
+// 20. LASERS MAIS DINÂMICOS
 // ==========================================
 
-function isLaserActive(laser) {
-  const phase =
-    (worldTime + laser.offset) % laser.period;
+function getLaserPhase(laser) {
+  const period = Math.max(
+    0.2,
+    Number(laser.period) || 2
+  );
 
-  return phase < laser.on;
+  const offset = Number(laser.offset) || 0;
+
+  // Usa tempo acumulado para acelerar
+  // os lasers sem modificar levels.js.
+  const adjustedTime =
+    worldTime * getLaserMultiplier() + offset;
+
+  return adjustedTime % period;
+}
+
+function isLaserActive(laser) {
+  return getLaserPhase(laser) <
+    (Number(laser.on) || 0);
 }
 
 function isLaserHit(laser) {
-  if (!isLaserActive(laser)) {
-    return false;
-  }
+  if (!isLaserActive(laser)) return false;
 
   return (
     Math.abs(player.x - laser.x) < 15 &&
@@ -797,25 +1093,35 @@ function isLaserHit(laser) {
 
 function checkLasers() {
   for (const laser of level.lasers) {
-    if (isLaserHit(laser)) {
-      deaths++;
+    if (!isLaserHit(laser)) continue;
 
-      GameStorage.registerDeath();
+    deaths++;
 
-      score = Math.max(0, score - 150);
+    GameStorage.registerDeath();
 
-      emitParticles(
-        player.x,
-        player.y,
-        COLORS.red,
-        40
-      );
+    const penalty = getDeathPenalty();
 
-      GameAudio.play("laser");
+    score = Math.max(
+      0,
+      score - penalty
+    );
 
-      endCycle(true);
-      return true;
-    }
+    emitParticles(
+      player.x,
+      player.y,
+      COLORS.red,
+      40
+    );
+
+    playSound("laser");
+
+    emitGameEvent("death", {
+      penalty,
+      cause: "laser"
+    });
+
+    endCycle(true);
+    return true;
   }
 
   return false;
@@ -826,25 +1132,30 @@ function checkLasers() {
 // ==========================================
 
 function endCycle(died = false) {
-  if (!running) {
-    return;
-  }
+  if (!running) return;
+
+  const duration = getCycleDuration();
 
   if (died) {
     currentRecording.push({
-      t: Math.min(elapsed, CYCLE_DURATION),
+      t: Math.min(elapsed, duration),
       x: WORLD.start.x,
       y: WORLD.start.y
     });
   }
 
   currentRecording.push({
-    t: CYCLE_DURATION,
+    t: duration,
     x: died ? WORLD.start.x : player.x,
     y: died ? WORLD.start.y : player.y
   });
 
   recordings.push(currentRecording);
+
+  emitGameEvent("cycleend", {
+    died,
+    completedCycle: cycle
+  });
 
   if (cycle >= MAX_CYCLES) {
     finishGame(false);
@@ -854,7 +1165,9 @@ function endCycle(died = false) {
   cycle++;
   elapsed = 0;
   portalCooldown = 0;
+
   lastTickSecond = null;
+  criticalWarningShown = false;
 
   player.x = WORLD.start.x;
   player.y = WORLD.start.y;
@@ -875,15 +1188,21 @@ function endCycle(died = false) {
     30
   );
 
-  GameAudio.play("echo");
+  playSound("echo");
 
   setStatus(
-    `CICLO ${cycle}: ${recordings.length} ECOS ACTIVOS.`
+    `CICLO ${cycle}: ` +
+    `${recordings.length} ECOS ACTIVOS. ` +
+    `${duration}s RESTANTES.`
   );
+
+  emitGameEvent("cyclestart");
+
+  lastFrame = 0;
 }
 
 // ==========================================
-// 22. VERIFICAR SAÍDA
+// 22. SAÍDA
 // ==========================================
 
 function checkGoal() {
@@ -902,46 +1221,65 @@ function checkGoal() {
 // ==========================================
 
 function finishGame(won) {
-  if (finished) {
-    return;
-  }
+  if (finished) return;
 
   running = false;
   finished = true;
 
   clearAllMovement();
 
+  let medal = null;
+
   if (won) {
+    const duration = getCycleDuration();
+
     const cycleBonus =
       (MAX_CYCLES - cycle + 1) * 1000;
 
     const timeBonus = Math.floor(
-      (CYCLE_DURATION - elapsed) * 100
+      Math.max(0, duration - elapsed) *
+      180
     );
 
     const survivalBonus = Math.max(
       0,
-      1000 - deaths * 250
+      1500 - deaths * 400
     );
+
+    const precisionBonus = Math.max(
+      0,
+      900 - shifts * 150
+    );
+
+    const difficultyBonus =
+      levelIndex * DIFFICULTY.levelBonus;
 
     score += (
       2000 +
       cycleBonus +
       timeBonus +
-      survivalBonus
+      survivalBonus +
+      precisionBonus +
+      difficultyBonus
     );
 
     GameStorage.win(levelIndex, score);
 
-    GameAudio.play("win");
+    medal = calculateMedal();
+
+    registerMedal(medal);
+    showMedal(medal);
+
+    playSound("win");
 
     UI.overlayTitle.textContent =
       "PARADOXO RESOLVIDO";
 
     UI.overlayMessage.textContent =
       `Nível ${levelIndex + 1} concluído! ` +
-      `Ciclo ${cycle}, ${recordings.length} ecos, ` +
-      `${deaths} falhas e ${shifts} Paradox Shifts.`;
+      `Ciclo ${cycle}/${MAX_CYCLES}. ` +
+      `${deaths} mortes, ${shifts} shifts. ` +
+      `Tempo total: ${totalActiveTime.toFixed(1)}s.`;
 
     UI.nextBtn.style.display =
       levelIndex < GAME_LEVELS.length - 1
@@ -949,21 +1287,29 @@ function finishGame(won) {
         : "none";
 
     setStatus(
-      "SIMULAÇÃO CONCLUÍDA COM SUCESSO!"
+      `SIMULAÇÃO CONCLUÍDA! ` +
+      `MEDALHA DE ${MEDALS[medal].name}.`
     );
   } else {
-    GameAudio.play("fail");
+    playSound("fail");
 
     UI.overlayTitle.textContent =
       "SYSTEM FAILURE";
 
     UI.overlayMessage.textContent =
-      "Os seis ciclos terminaram. " +
-      "Reorganiza os ecos e tenta novamente.";
+      `Os ${MAX_CYCLES} ciclos terminaram. ` +
+      `O sistema exige maior precisão. ` +
+      `Reorganiza os ecos e tenta novamente.`;
 
     UI.nextBtn.style.display = "none";
 
-    setStatus("COLAPSO TEMPORAL DETECTADO.");
+    if (UI.medalResult) {
+      UI.medalResult.classList.add("hidden");
+    }
+
+    setStatus(
+      "COLAPSO TEMPORAL DETECTADO."
+    );
   }
 
   UI.finalScore.textContent =
@@ -971,14 +1317,24 @@ function finishGame(won) {
 
   UI.overlay.classList.remove("hidden");
 
-  UI.startBtn.textContent = "JOGAR NOVAMENTE";
+  UI.startBtn.textContent =
+    "JOGAR NOVAMENTE";
 
   buildLevelMenu();
   updateHUD();
+
+  emitGameEvent(
+    won ? "win" : "lose",
+    {
+      won,
+      medal,
+      totalActiveTime
+    }
+  );
 }
 
 // ==========================================
-// 24. RECTÂNGULOS NEON
+// 24. DESENHO NEON
 // ==========================================
 
 function glowRect(
@@ -1001,7 +1357,7 @@ function glowRect(
 }
 
 // ==========================================
-// 25. DESENHO DA GRELHA
+// 25. GRELHA
 // ==========================================
 
 function drawGrid() {
@@ -1069,7 +1425,7 @@ function drawWalls() {
 }
 
 // ==========================================
-// 27. PLACAS TEMPORAIS
+// 27. PLACAS
 // ==========================================
 
 function drawPlates() {
@@ -1084,7 +1440,6 @@ function drawPlates() {
 
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
-
     ctx.shadowColor = color;
     ctx.shadowBlur = 15;
     ctx.lineWidth = 3;
@@ -1142,7 +1497,6 @@ function drawLasers() {
       : "#50233a";
 
     ctx.lineWidth = active ? 5 : 2;
-
     ctx.shadowColor = COLORS.red;
     ctx.shadowBlur = active ? 20 : 0;
 
@@ -1192,7 +1546,6 @@ function drawPortals() {
 
       ctx.strokeStyle = COLORS.blue;
       ctx.lineWidth = 4;
-
       ctx.shadowColor = COLORS.blue;
       ctx.shadowBlur = 18;
 
@@ -1239,7 +1592,7 @@ function drawGoal() {
 }
 
 // ==========================================
-// 31. FANTASMAS
+// 31. ECOS
 // ==========================================
 
 function drawGhosts() {
@@ -1315,13 +1668,12 @@ function drawParticles() {
 }
 
 // ==========================================
-// 34. INFORMAÇÕES DA ARENA
+// 34. ETIQUETAS DA ARENA
 // ==========================================
 
 function drawLabels() {
   ctx.fillStyle = "#7083a4";
   ctx.font = "12px monospace";
-
   ctx.textAlign = "left";
 
   ctx.fillText(
@@ -1343,10 +1695,20 @@ function drawLabels() {
     780,
     25
   );
+
+  ctx.textAlign = "center";
+  ctx.fillStyle = COLORS.yellow;
+  ctx.font = "11px monospace";
+
+  ctx.fillText(
+    `${getCycleDuration()}s / CYCLE`,
+    WIDTH / 2,
+    HEIGHT - 12
+  );
 }
 
 // ==========================================
-// 35. RENDERIZAÇÃO PRINCIPAL
+// 35. RENDERIZAÇÃO
 // ==========================================
 
 function draw() {
@@ -1372,17 +1734,36 @@ function draw() {
 // ==========================================
 
 function updateCountdown() {
-  const remaining = Math.ceil(
-    CYCLE_DURATION - elapsed
-  );
+  const duration = getCycleDuration();
+  const remaining = duration - elapsed;
+
+  const second = Math.ceil(remaining);
 
   if (
-    remaining <= 3 &&
-    remaining > 0 &&
-    remaining !== lastTickSecond
+    second <= 3 &&
+    second > 0 &&
+    second !== lastTickSecond
   ) {
-    lastTickSecond = remaining;
-    GameAudio.play("tick");
+    lastTickSecond = second;
+    playSound("tick");
+  }
+
+  const criticalThreshold =
+    duration * DIFFICULTY.criticalFraction;
+
+  if (
+    remaining <= criticalThreshold &&
+    !criticalWarningShown
+  ) {
+    criticalWarningShown = true;
+
+    setStatus(
+      "ALERTA ECHO: TEMPO CRÍTICO!"
+    );
+
+    emitGameEvent("timecritical", {
+      remaining
+    });
   }
 }
 
@@ -1391,16 +1772,14 @@ function updateCountdown() {
 // ==========================================
 
 function gameLoop(timestamp) {
-  if (!running) {
-    return;
-  }
+  if (!running) return;
 
   if (!lastFrame) {
     lastFrame = timestamp;
   }
 
   const dt = Math.min(
-    (timestamp - lastFrame) / 1000,
+    Math.max(0, (timestamp - lastFrame) / 1000),
     0.05
   );
 
@@ -1408,6 +1787,7 @@ function gameLoop(timestamp) {
 
   elapsed += dt;
   worldTime += dt;
+  totalActiveTime += dt;
 
   updateGhosts();
   updateDoor();
@@ -1427,7 +1807,10 @@ function gameLoop(timestamp) {
     checkGoal();
   }
 
-  if (running && elapsed >= CYCLE_DURATION) {
+  if (
+    running &&
+    elapsed >= getCycleDuration()
+  ) {
     endCycle();
   }
 
@@ -1445,18 +1828,42 @@ function gameLoop(timestamp) {
 // 38. CONTROLOS DO TECLADO
 // ==========================================
 
-window.addEventListener("keydown", event => {
-  const key = event.key.toLowerCase();
+function isIntroVisible() {
+  const intro = document.getElementById(
+    "awakeningIntro"
+  );
 
-  // Evita que as setas façam scroll.
+  return Boolean(
+    intro &&
+    !intro.classList.contains("hidden")
+  );
+}
+
+function isTypingTarget(target) {
+  return Boolean(
+    target &&
+    (
+      target.matches?.(
+        "input, textarea, select, [contenteditable='true']"
+      )
+    )
+  );
+}
+
+window.addEventListener("keydown", event => {
   if (
-    movementKeys.has(key) &&
-    key.startsWith("arrow")
+    isIntroVisible() ||
+    isTypingTarget(event.target)
   ) {
-    event.preventDefault();
+    return;
   }
 
-  if (key === " ") {
+  const key = event.key.toLowerCase();
+
+  if (
+    key.startsWith("arrow") ||
+    key === " "
+  ) {
     event.preventDefault();
   }
 
@@ -1504,34 +1911,30 @@ document.addEventListener(
 );
 
 // ==========================================
-// 39. CONTROLOS TÁCTEIS
+// 39. CONTROLOS MOBILE
 // ==========================================
 
 function setupMobileControls() {
   for (const [direction, button] of
     Object.entries(mobileDirections)) {
 
-    if (!button) {
-      continue;
-    }
+    if (!button) continue;
 
-    // Impede gestos do browser nos botões.
     button.style.touchAction = "none";
 
     button.addEventListener(
       "pointerdown",
       event => {
-        if (!running) {
-          return;
-        }
+        if (!running) return;
 
         event.preventDefault();
 
         try {
-          button.setPointerCapture(event.pointerId);
+          button.setPointerCapture(
+            event.pointerId
+          );
         } catch (error) {
-          // Alguns browsers podem não permitir
-          // captura de ponteiros.
+          // Captura opcional.
         }
 
         mobilePointers.set(
@@ -1544,10 +1947,6 @@ function setupMobileControls() {
     );
 
     const releasePointer = event => {
-      if (!mobilePointers.has(event.pointerId)) {
-        return;
-      }
-
       mobilePointers.delete(event.pointerId);
       refreshMobileButtons();
     };
@@ -1573,7 +1972,6 @@ function setupMobileControls() {
     );
   }
 
-  // Botão Paradox Shift.
   if (UI.mobileShiftBtn) {
     UI.mobileShiftBtn.addEventListener(
       "click",
@@ -1581,7 +1979,6 @@ function setupMobileControls() {
     );
   }
 
-  // Botão de reiniciar.
   if (UI.mobileRestartBtn) {
     UI.mobileRestartBtn.addEventListener(
       "click",
@@ -1591,7 +1988,7 @@ function setupMobileControls() {
 }
 
 // ==========================================
-// 40. BOTÕES DO JOGO
+// 40. BOTÕES PRINCIPAIS
 // ==========================================
 
 UI.startBtn.addEventListener(
@@ -1637,7 +2034,48 @@ UI.soundBtn.addEventListener(
 );
 
 // ==========================================
-// 41. INICIALIZAÇÃO
+// 41. API PARA THE AWAKENING
+// ==========================================
+
+window.EchoGame = {
+  getState() {
+    return {
+      levelIndex,
+      levelNumber: levelIndex + 1,
+      levelName: level.name,
+      cycle,
+      maxCycles: MAX_CYCLES,
+      cycleDuration: getCycleDuration(),
+      remaining: Math.max(
+        0,
+        getCycleDuration() - elapsed
+      ),
+      running,
+      finished,
+      score,
+      deaths,
+      shifts,
+      ghosts: recordings.length,
+      doorOpen,
+      totalActiveTime,
+      player: {
+        x: player.x,
+        y: player.y
+      }
+    };
+  },
+
+  start: startGame,
+  restart: startGame,
+  shift: paradoxShift,
+  selectLevel,
+  getMedals() {
+    return { ...medalCache };
+  }
+};
+
+// ==========================================
+// 42. INICIALIZAÇÃO
 // ==========================================
 
 UI.soundBtn.textContent =
@@ -1655,11 +2093,7 @@ console.log(
 );
 
 console.log(
-  "ECHO//404 — PARADOX EVOLUTION"
-);
-
-console.log(
-  "VERSION 0.6.1 — MOBILE EDITION"
+  "ECHO//404 — THE AWAKENING v0.7"
 );
 
 console.log(
@@ -1667,7 +2101,15 @@ console.log(
 );
 
 console.log(
-  "DESKTOP + MOBILE CONTROLS READY"
+  "PROGRESSIVE DIFFICULTY ENABLED"
+);
+
+console.log(
+  "DESKTOP + MOBILE READY"
+);
+
+console.log(
+  "CREATED BY MANUEL SAMPAIO01"
 );
 
 console.log(

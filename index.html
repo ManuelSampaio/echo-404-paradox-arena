@@ -13,28 +13,211 @@
 
   <meta
     name="description"
-    content="ECHO//404 — Um puzzle temporal onde o teu passado é a tua arma. Joga no computador ou telemóvel."
+    content="ECHO//404 — The Awakening. Um puzzle temporal onde o teu passado é a tua arma. Criado por Manuel Sampaio01."
   >
 
+  <meta name="author" content="Manuel Sampaio01">
+
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+  >
 
-  <title>ECHO//404 — Paradox Evolution v0.6.1</title>
+  <title>ECHO//404 — The Awakening v0.7</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=070">
 </head>
 
 <body>
+
+  <!-- =====================================
+       INTRODUÇÃO CINEMATOGRÁFICA
+       THE AWAKENING
+  ====================================== -->
+
+  <div
+    id="awakeningIntro"
+    class="awakening-intro hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="awakeningTitle"
+    aria-hidden="true"
+  >
+
+    <div class="awakening-screen">
+
+      <div class="awakening-topline">
+        <span>ECHO//404</span>
+        <span class="awakening-signal">
+          ● SIGNAL DETECTED
+        </span>
+      </div>
+
+      <div class="awakening-core" aria-hidden="true">
+        <div class="awakening-ring awakening-ring-outer"></div>
+        <div class="awakening-ring awakening-ring-inner"></div>
+        <div class="awakening-eye">◈</div>
+      </div>
+
+      <div class="awakening-terminal">
+
+        <div class="awakening-terminal-label">
+          <span>INCOMING TRANSMISSION</span>
+          <span id="awakeningCounter">01 / 03</span>
+        </div>
+
+        <h2 id="awakeningTitle">
+          SINAL DETECTADO
+        </h2>
+
+        <p
+          id="awakeningText"
+          class="awakening-typed"
+          aria-live="polite"
+        ></p>
+
+        <div
+          class="awakening-progress"
+          aria-label="Progresso da introdução"
+        >
+          <span class="awakening-dot active"></span>
+          <span class="awakening-dot"></span>
+          <span class="awakening-dot"></span>
+        </div>
+
+      </div>
+
+      <div class="awakening-actions">
+
+        <button
+          id="awakeningSkip"
+          class="awakening-btn awakening-btn-ghost"
+          type="button"
+        >
+          SALTAR INTRODUÇÃO
+        </button>
+
+        <button
+          id="awakeningNext"
+          class="awakening-btn awakening-btn-primary"
+          type="button"
+        >
+          CONTINUAR →
+        </button>
+
+      </div>
+
+      <p class="awakening-footer">
+        TEMPORAL SYSTEM // VERSION 0.7
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- =====================================
+       EFEITOS DE GLITCH
+  ====================================== -->
+
+  <div
+    id="awakeningGlitch"
+    class="awakening-glitch"
+    aria-hidden="true"
+  ></div>
+
+  <!-- =====================================
+       ASSISTENTE TEMPORAL — IA ECHO
+  ====================================== -->
+
+  <div
+    id="echoMessage"
+    class="echo-message"
+    role="status"
+    aria-live="polite"
+  >
+
+    <div class="echo-avatar" aria-hidden="true">
+      ◈
+    </div>
+
+    <div class="echo-message-content">
+
+      <strong>
+        ECHO // ASSISTENTE TEMPORAL
+      </strong>
+
+      <p id="echoMessageText"></p>
+
+    </div>
+
+    <button
+      id="echoMessageClose"
+      class="echo-message-close"
+      type="button"
+      aria-label="Fechar mensagem"
+    >
+      ×
+    </button>
+
+  </div>
+
+  <!-- =====================================
+       TUTORIAL INTERACTIVO
+  ====================================== -->
+
+  <div
+    id="awakeningTutorial"
+    class="awakening-tutorial"
+    aria-live="polite"
+  >
+
+    <div class="tutorial-heading">
+
+      <span>
+        ◈ PROTOCOLO DE APRENDIZAGEM
+      </span>
+
+      <span id="tutorialCounter">
+        1/4
+      </span>
+
+    </div>
+
+    <p id="tutorialText"></p>
+
+    <div class="tutorial-actions">
+
+      <button
+        id="tutorialSkip"
+        type="button"
+      >
+        DISPENSAR
+      </button>
+
+      <button
+        id="tutorialNext"
+        type="button"
+      >
+        ENTENDI →
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- =====================================
+       APLICAÇÃO PRINCIPAL
+  ====================================== -->
+
   <main class="app">
 
-    <!-- =====================================
-         CABEÇALHO
-    ====================================== -->
+    <!-- CABEÇALHO -->
 
     <header class="game-header">
 
       <div class="version">
-        SYSTEM BUILD // 0.6.1 MOBILE EDITION
+        SYSTEM BUILD // 0.7 THE AWAKENING
       </div>
 
       <h1 class="logo">
@@ -58,8 +241,15 @@
     <section class="menu">
 
       <div class="menu-heading">
-        <h2>SELECCIONAR NÍVEL</h2>
-        <span id="progress">0 / 10 CONCLUÍDOS</span>
+
+        <h2>
+          SELECCIONAR NÍVEL
+        </h2>
+
+        <span id="progress">
+          0 / 10 CONCLUÍDOS
+        </span>
+
       </div>
 
       <div
@@ -72,13 +262,26 @@
         NÍVEL 1 — O Primeiro Eco
       </p>
 
+      <!-- MEDALHAS CONQUISTADAS -->
+
+      <div
+        id="awakeningMedalSummary"
+        class="awakening-medal-summary"
+        aria-label="Medalhas conquistadas"
+      >
+        🥇 0 OURO · 🥈 0 PRATA · 🥉 0 BRONZE
+      </div>
+
     </section>
 
     <!-- =====================================
          INDICADORES DO JOGO
     ====================================== -->
 
-    <section class="hud" aria-label="Indicadores do jogo">
+    <section
+      class="hud"
+      aria-label="Indicadores do jogo"
+    >
 
       <div class="stat">
         <span>CICLO</span>
@@ -120,7 +323,7 @@
     </div>
 
     <!-- =====================================
-         ARENA
+         ARENA PRINCIPAL
     ====================================== -->
 
     <section class="arena-wrapper">
@@ -134,7 +337,10 @@
 
       <!-- RESULTADO DA SIMULAÇÃO -->
 
-      <div id="overlay" class="overlay hidden">
+      <div
+        id="overlay"
+        class="overlay hidden"
+      >
 
         <div class="result-panel">
 
@@ -152,13 +358,27 @@
             0 PONTOS
           </strong>
 
+          <!-- MEDALHA DO NÍVEL -->
+
+          <div
+            id="awakeningMedalResult"
+            class="awakening-medal-result hidden"
+            aria-live="polite"
+          ></div>
+
           <div class="result-actions">
 
-            <button id="playAgainBtn" type="button">
+            <button
+              id="playAgainBtn"
+              type="button"
+            >
               JOGAR NOVAMENTE
             </button>
 
-            <button id="nextBtn" type="button">
+            <button
+              id="nextBtn"
+              type="button"
+            >
               PRÓXIMO NÍVEL
             </button>
 
@@ -182,7 +402,9 @@
 
       <div class="mobile-controls-heading">
 
-        <span>CONTROLO TÁCTIL</span>
+        <span>
+          CONTROLO TÁCTIL
+        </span>
 
         <span class="mobile-controls-status">
           MOBILE SYSTEM // READY
@@ -257,7 +479,7 @@
 
         </div>
 
-        <!-- ACÇÕES -->
+        <!-- ACÇÕES MOBILE -->
 
         <div class="mobile-action-section">
 
@@ -267,9 +489,19 @@
             type="button"
             aria-label="Activar Paradox Shift"
           >
-            <span class="shift-icon">◆</span>
-            <span>PARADOX</span>
-            <strong>SHIFT</strong>
+
+            <span class="shift-icon">
+              ◆
+            </span>
+
+            <span>
+              PARADOX
+            </span>
+
+            <strong>
+              SHIFT
+            </strong>
+
           </button>
 
           <span class="mobile-control-label">
@@ -304,7 +536,10 @@
 
       <span class="status-indicator"></span>
 
-      <p id="status" aria-live="polite">
+      <p
+        id="status"
+        aria-live="polite"
+      >
         Sistema pronto. Inicia a simulação.
       </p>
 
@@ -316,7 +551,10 @@
 
     <section class="controls">
 
-      <button id="startBtn" type="button">
+      <button
+        id="startBtn"
+        type="button"
+      >
         INICIAR SIMULAÇÃO
       </button>
 
@@ -344,15 +582,27 @@
         SOM: ON
       </button>
 
+      <!-- NOVO BOTÃO DA V0.7 -->
+
+      <button
+        id="awakeningReplayBtn"
+        class="secondary"
+        type="button"
+      >
+        ◈ REVER HISTÓRIA
+      </button>
+
     </section>
 
     <!-- =====================================
-         INSTRUÇÕES
+         PROTOCOLO DE SOBREVIVÊNCIA
     ====================================== -->
 
     <section class="instructions">
 
-      <h3>PROTOCOLO DE SOBREVIVÊNCIA</h3>
+      <h3>
+        PROTOCOLO DE SOBREVIVÊNCIA
+      </h3>
 
       <div class="instruction-grid">
 
@@ -410,39 +660,67 @@
 
       <div class="keyboard-grid">
 
-        <p>PC: W A S D / SETAS — MOVIMENTO</p>
+        <p>
+          PC: W A S D / SETAS — MOVIMENTO
+        </p>
 
-        <p>PC: E — PARADOX SHIFT</p>
+        <p>
+          PC: E — PARADOX SHIFT
+        </p>
 
-        <p>PC: R — REINICIAR</p>
+        <p>
+          PC: R — REINICIAR
+        </p>
 
-        <p>PC: ESPAÇO — INICIAR</p>
+        <p>
+          PC: ESPAÇO — INICIAR
+        </p>
 
-        <p>MOBILE: DIRECCIONAL — MOVIMENTO</p>
+        <p>
+          MOBILE: DIRECCIONAL — MOVIMENTO
+        </p>
 
-        <p>MOBILE: BOTÃO ◆ — PARADOX SHIFT</p>
+        <p>
+          MOBILE: BOTÃO ◆ — PARADOX SHIFT
+        </p>
 
       </div>
 
     </section>
 
     <!-- =====================================
-         RODAPÉ
+         CRÉDITOS DO CRIADOR
     ====================================== -->
 
-    <footer>
+    <footer class="game-footer">
 
-      <p>
+      <p class="footer-game-title">
         ECHO//404 — PARADOX EVOLUTION
       </p>
 
-      <p>
-        VERSION 0.6.1 | MOBILE EDITION
+      <p class="footer-version">
+        VERSION 0.7 | THE AWAKENING
       </p>
 
-      <p>
+      <p class="footer-technology">
         BUILT WITH HTML5 CANVAS
       </p>
+
+      <div class="creator-signature">
+
+        <p>
+          CREATED & DEVELOPED BY
+        </p>
+
+        <strong>
+          MANUEL SAMPAIO01
+        </strong>
+
+        <p>
+          © 2026 MANUEL SAMPAIO01
+        </p>
+
+      </div>
 
     </footer>
 
@@ -450,6 +728,7 @@
 
   <!-- =====================================
        SISTEMAS DO JOGO
+       ORDEM DE CARREGAMENTO
   ====================================== -->
 
   <script src="levels.js"></script>
@@ -458,6 +737,9 @@
 
   <!-- MOTOR PRINCIPAL -->
   <script src="game.js"></script>
+
+  <!-- THE AWAKENING v0.7 -->
+  <script src="awakening.js?v=070"></script>
 
 </body>
 </html>
