@@ -2,836 +2,1515 @@
 "use strict";
 
 /*
-==================================================
+========================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION 0.7 — THE AWAKENING
+ VERSION 0.8 — SYSTEM REBELLION
  FILE: storage.js
 
- SAVE SYSTEM + PROGRESS + MEDALS
- LOCALSTORAGE / DESKTOP / MOBILE
+ PERSISTENT PROGRESS
+ LEVEL UNLOCKS
+ MEDALS
+ STATISTICS
+ SOUND PREFERENCES
+ INTRO / TUTORIAL FLAGS
+ EXPORT / IMPORT
+ LEGACY SAVE COMPATIBILITY
+
+ CREATED & DEVELOPED BY MANUEL SAMPAIO01
+ © 2026 MANUEL SAMPAIO01
+========================================================
+*/
+
+const GameStorage = (() => {
+
+  // ==================================================
+  // 01. CONFIGURATION
+  // ==================================================
+
+  const VERSION = "0.8";
+
+  const TOTAL_LEVELS = 10;
+
+  /*
+    Keep the old progress key so players
+    can retain their existing saves.
+  */
+
+  const STORAGE_KEY =
+    "echo404_paradox_v06";
+
+  const MEDALS_KEY =
+    "echo404_awakening_medals_v07";
+
+  const INTRO_KEY =
+    "echo404_v08_intro_seen";
+
+  const TUTORIAL_KEY =
+    "echo404_v08_tutorial_done";
+
+  const LEGACY_INTRO_KEY =
+    "echo404_v07_intro_seen";
+
+  const LEGACY_TUTORIAL_KEY =
+    "echo404_v07_tutorial_done";
+
+  const FALLBACK_PROGRESS_KEY =
+    "echo404_v08_progress";
+
+  const MEDAL_RANK = Object.freeze({
+    bronze: 1,
+    silver: 2,
+    gold: 3
+  });
+
+  // ==================================================
+  // 02. BASIC HELPERS
+  // ==================================================
+
+  function safeNumber(
+    value,
+    fallback = 0
+  ) {
+    const number = Number(value);
+
+    return Number.isFinite(number)
+      ? number
+      : fallback;
+  }
+
+  function safeInteger(
+    value,
+    fallback = 0
+  ) {
+    const number = Number(value);
+
+    return Number.isFinite(number)
+      ? Math.trunc(number)
+      : fallback;
+  }
+
+  function clamp(
+    value,
+    min,
+    max
+  ) {
+    return Math.min(
+      max,
+      Math.max(min, value)
+    );
+  }
+
+  function isValidDate(value) {
+    return (
+      typeof value === "string" &&
+      !Number.isNaN(
+        Date.parse(value)
+      )
+    );
+  }
+
+  function nowISO() {
+    return new Date().toISOString();
+  }
+
+  function readJSON(
+    key,
+    fallback = null
+  ) {
+    try {
+      const raw =
+        localStorage.getItem(key);
+
+      return raw === null
+        ? fallback
+        : JSON.parse(raw);
+    } catch (error) {
+      console.warn(
+        "ECHO//404: Unable to read storage:",
+        key,
+        error
+      );
+
+      return fallback;
+    }
+  }
+
+  function writeJSON(
+    key,
+    value
+  ) {
+    try {
+      localStorage.setItem(
+        key,
+        JSON.stringify(value)
+      );
+
+      return true;
+    } catch (error) {
+      console.warn(
+        "ECHO//404: Unable to write storage:",
+        key,
+        error
+      );
+
+      return false;
+    }
+  }
+
+  function readFlag(key) {
+    try {
+      return (
+        localStorage.getItem(key) ===
+        "true"
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  function writeFlag(
+    key,
+    value = true
+  ) {
+    try {
+      localStorage.setItem(
+        key,
+        String(Boolean(value))
+      );
+
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // ==================================================
+  // 03. DEFAULT SAVE STRUCTURE
+  // ==================================================
+
+  function defaults() {
+    return {
+      version: VERSION,
+
+      createdAt: nowISO(),
+      updatedAt: nowISO(),
+
+      unlocked: 1,
+
+      completed: [],
+
+      bestScores: {},
+
+      medals: {},
+
+      stats: {
+        attempts: 0,
+        deaths: 0,
+        shifts: 0,
+        wins: 0,
+
+        totalScore: 0,
+        bestOverallScore: 0,
+
+        totalCycles: 0,
+        portalsUsed: 0,
+
+        lasersHit: 0,
+        platformDeaths: 0,
+        echoTrapDeaths: 0,
+
+        levelsCompleted: 0,
+
+        lastPlayedLevel: 1,
+        lastPlayedAt: null
+      },
+
+      settings: {
+        sound: true,
+        volume: 0.7,
+        controlMode: "dpad"
+      }
+    };
+  }
+
+  // ==================================================
+  // 04. LEVEL INDEX HELPERS
+  // ==================================================
+
+  /*
+    Public methods use ZERO-BASED indexes:
+
+      Level 1 -> index 0
+      Level 2 -> index 1
+      ...
+      Level 10 -> index 9
+
+    This matches game.js v0.8.
+  */
+
+  function validIndex(index) {
+    return (
+      Number.isInteger(index) &&
+      index >= 0 &&
+      index < TOTAL_LEVELS
+    );
+  }
+
+  function levelKey(index) {
+    return String(index);
+  }
+
+  function normalizeLevelIndex(
+    value
+  ) {
+    const index =
+      safeInteger(value, -1);
+
+    return validIndex(index)
+      ? index
+      : null;
+  }
+
+  // ==================================================
+  // 05. MEDAL NORMALIZATION
+  // ==================================================
+
+  function normalizeMedal(value) {
+    let medal = value;
+
+    if (
+      medal &&
+      typeof medal === "object"
+    ) {
+      medal =
+        medal.medal ??
+        medal.type ??
+        medal.rank ??
+        "";
+    }
+
+    if (
+      typeof medal !== "string"
+    ) {
+      return null;
+    }
+
+    const normalized =
+      medal.trim().toLowerCase();
+
+    return Object.prototype.hasOwnProperty.call(
+      MEDAL_RANK,
+      normalized
+    )
+      ? normalized
+      : null;
+  }
+
+  function normalizeMedals(source) {
+    const result = {};
+
+    if (
+      !source ||
+      typeof source !== "object"
+    ) {
+      return result;
+    }
+
+    const entries =
+      Array.isArray(source)
+        ? source.map(
+            (value, index) => [
+              String(index),
+              value
+            ]
+          )
+        : Object.entries(source);
+
+    entries.forEach(
+      ([key, value]) => {
+        const index =
+          Number(key);
+
+        if (!validIndex(index)) {
+          return;
+        }
+
+        const medal =
+          normalizeMedal(value);
+
+        if (!medal) {
+          return;
+        }
+
+        const existing =
+          result[levelKey(index)];
+
+        if (
+          !existing ||
+          MEDAL_RANK[medal] >
+          MEDAL_RANK[existing]
+        ) {
+          result[levelKey(index)] =
+            medal;
+        }
+      }
+    );
+
+    return result;
+  }
+
+  function mergeMedals(
+    ...sources
+  ) {
+    const merged = {};
+
+    sources.forEach(source => {
+      const normalized =
+        normalizeMedals(source);
+
+      Object.entries(
+        normalized
+      ).forEach(
+        ([key, medal]) => {
+          const existing =
+            merged[key];
+
+          if (
+            !existing ||
+            MEDAL_RANK[medal] >
+            MEDAL_RANK[existing]
+          ) {
+            merged[key] = medal;
+          }
+        }
+      );
+    });
+
+    return merged;
+  }
+
+  // ==================================================
+  // 06. NORMALIZE SAVED PROGRESS
+  // ==================================================
+
+  function normalize(source) {
+    const base = defaults();
+
+    if (
+      !source ||
+      typeof source !== "object" ||
+      Array.isArray(source)
+    ) {
+      return base;
+    }
+
+    const stats =
+      source.stats &&
+      typeof source.stats === "object"
+        ? source.stats
+        : {};
+
+    const settings =
+      source.settings &&
+      typeof source.settings === "object"
+        ? source.settings
+        : {};
+
+    const completed = [];
+
+    /*
+      Support the v0.8 representation:
+      completed = [0, 1, 2]
+
+      Legacy saves may use:
+      completedLevels = [1, 2, 3]
+    */
+
+    if (
+      Array.isArray(source.completed)
+    ) {
+      source.completed.forEach(
+        value => {
+          const index =
+            normalizeLevelIndex(value);
+
+          if (
+            index !== null &&
+            !completed.includes(index)
+          ) {
+            completed.push(index);
+          }
+        }
+      );
+    }
+
+    if (
+      Array.isArray(
+        source.completedLevels
+      )
+    ) {
+      source.completedLevels.forEach(
+        value => {
+          const index =
+            safeInteger(value, 0) - 1;
+
+          if (
+            validIndex(index) &&
+            !completed.includes(index)
+          ) {
+            completed.push(index);
+          }
+        }
+      );
+    }
+
+    completed.sort(
+      (a, b) => a - b
+    );
+
+    const bestScores = {};
+
+    const scoreSources = [
+      source.bestScores,
+      source.best,
+      source.scores
+    ];
+
+    scoreSources.forEach(
+      scoreSource => {
+        if (
+          !scoreSource ||
+          typeof scoreSource !== "object"
+        ) {
+          return;
+        }
+
+        Object.entries(
+          scoreSource
+        ).forEach(
+          ([key, value]) => {
+            const index =
+              Number(key);
+
+            if (
+              !validIndex(index)
+            ) {
+              return;
+            }
+
+            const score =
+              Math.max(
+                0,
+                safeInteger(value, 0)
+              );
+
+            const storageKey =
+              levelKey(index);
+
+            bestScores[storageKey] =
+              Math.max(
+                bestScores[
+                  storageKey
+                ] || 0,
+                score
+              );
+          }
+        );
+      }
+    );
+
+    const medals =
+      mergeMedals(
+        source.medals,
+        readJSON(
+          MEDALS_KEY,
+          {}
+        )
+      );
+
+    const unlocked =
+      clamp(
+        safeInteger(
+          source.unlocked ??
+          source.unlockedLevels ??
+          1,
+          1
+        ),
+        1,
+        TOTAL_LEVELS
+      );
+
+    const maxCompleted =
+      completed.length
+        ? Math.max(...completed) + 2
+        : 1;
+
+    const result = {
+      version: VERSION,
+
+      createdAt:
+        isValidDate(
+          source.createdAt
+        )
+          ? source.createdAt
+          : base.createdAt,
+
+      updatedAt:
+        isValidDate(
+          source.updatedAt
+        )
+          ? source.updatedAt
+          : base.updatedAt,
+
+      unlocked: clamp(
+        Math.max(
+          unlocked,
+          maxCompleted
+        ),
+        1,
+        TOTAL_LEVELS
+      ),
+
+      completed,
+
+      bestScores,
+
+      medals,
+
+      stats: {
+        attempts: Math.max(
+          0,
+          safeInteger(
+            stats.attempts
+          )
+        ),
+
+        deaths: Math.max(
+          0,
+          safeInteger(
+            stats.deaths
+          )
+        ),
+
+        shifts: Math.max(
+          0,
+          safeInteger(
+            stats.shifts
+          )
+        ),
+
+        wins: Math.max(
+          0,
+          safeInteger(
+            stats.wins
+          )
+        ),
+
+        totalScore: Math.max(
+          0,
+          safeInteger(
+            stats.totalScore
+          )
+        ),
+
+        bestOverallScore:
+          Math.max(
+            0,
+            safeInteger(
+              stats.bestOverallScore
+            )
+          ),
+
+        totalCycles: Math.max(
+          0,
+          safeInteger(
+            stats.totalCycles
+          )
+        ),
+
+        portalsUsed: Math.max(
+          0,
+          safeInteger(
+            stats.portalsUsed
+          )
+        ),
+
+        lasersHit: Math.max(
+          0,
+          safeInteger(
+            stats.lasersHit
+          )
+        ),
+
+        platformDeaths: Math.max(
+          0,
+          safeInteger(
+            stats.platformDeaths
+          )
+        ),
+
+        echoTrapDeaths: Math.max(
+          0,
+          safeInteger(
+            stats.echoTrapDeaths
+          )
+        ),
+
+        levelsCompleted:
+          completed.length,
+
+        lastPlayedLevel: clamp(
+          safeInteger(
+            stats.lastPlayedLevel,
+            1
+          ),
+          1,
+          TOTAL_LEVELS
+        ),
+
+        lastPlayedAt:
+          isValidDate(
+            stats.lastPlayedAt
+          )
+            ? stats.lastPlayedAt
+            : null
+      },
+
+      settings: {
+        sound:
+          typeof settings.sound ===
+            "boolean"
+            ? settings.sound
+            : typeof source.sound ===
+                "boolean"
+              ? source.sound
+              : true,
+
+        volume: clamp(
+          safeNumber(
+            settings.volume,
+            0.7
+          ),
+          0,
+          1
+        ),
+
+        controlMode:
+          settings.controlMode ===
+          "joystick"
+            ? "joystick"
+            : "dpad"
+      }
+    };
+
+    return result;
+  }
+
+  // ==================================================
+  // 07. LOAD AND SAVE
+  // ==================================================
+
+  function load() {
+    const raw =
+      readJSON(
+        STORAGE_KEY,
+        null
+      );
+
+    const data =
+      normalize(raw);
+
+    /*
+      Merge medals from the separate
+      medal key without deleting either
+      source.
+    */
+
+    data.medals =
+      mergeMedals(
+        data.medals,
+        readJSON(
+          MEDALS_KEY,
+          {}
+        )
+      );
+
+    return data;
+  }
+
+  function save(input) {
+    const data =
+      normalize(input);
+
+    data.version = VERSION;
+    data.updatedAt = nowISO();
+
+    /*
+      Preserve the best medal rank from
+      both storage locations.
+    */
+
+    data.medals =
+      mergeMedals(
+        data.medals,
+        readJSON(
+          MEDALS_KEY,
+          {}
+        )
+      );
+
+    const mainSaved =
+      writeJSON(
+        STORAGE_KEY,
+        data
+      );
+
+    const medalsSaved =
+      writeJSON(
+        MEDALS_KEY,
+        data.medals
+      );
+
+    return (
+      mainSaved &&
+      medalsSaved
+    );
+  }
+
+  function mutate(callback) {
+    const data = load();
+
+    callback(data);
+
+    save(data);
+
+    return data;
+  }
+
+  // ==================================================
+  // 08. LEVEL PROGRESS
+  // ==================================================
+
+  function isUnlocked(index) {
+    if (!validIndex(index)) {
+      return false;
+    }
+
+    return (
+      index <
+      load().unlocked
+    );
+  }
+
+  function isCompleted(index) {
+    if (!validIndex(index)) {
+      return false;
+    }
+
+    return load()
+      .completed.includes(index);
+  }
+
+  function getBestScore(index) {
+    if (!validIndex(index)) {
+      return 0;
+    }
+
+    const data = load();
+
+    return (
+      data.bestScores[
+        levelKey(index)
+      ] || 0
+    );
+  }
+
+  function win(
+    index,
+    score = 0
+  ) {
+    if (!validIndex(index)) {
+      return false;
+    }
+
+    const safeScore =
+      Math.max(
+        0,
+        safeInteger(score)
+      );
+
+    mutate(data => {
+      if (
+        !data.completed.includes(
+          index
+        )
+      ) {
+        data.completed.push(
+          index
+        );
+
+        data.completed.sort(
+          (a, b) => a - b
+        );
+      }
+
+      data.unlocked = Math.max(
+        data.unlocked,
+        Math.min(
+          TOTAL_LEVELS,
+          index + 2
+        )
+      );
+
+      const key =
+        levelKey(index);
+
+      data.bestScores[key] =
+        Math.max(
+          data.bestScores[key] || 0,
+          safeScore
+        );
+
+      data.stats.wins++;
+
+      data.stats.totalScore +=
+        safeScore;
+
+      data.stats.bestOverallScore =
+        Math.max(
+          data.stats.bestOverallScore,
+          safeScore
+        );
+
+      data.stats.levelsCompleted =
+        data.completed.length;
+
+      data.stats.lastPlayedLevel =
+        index + 1;
+
+      data.stats.lastPlayedAt =
+        nowISO();
+    });
+
+    return true;
+  }
+
+  // ==================================================
+  // 09. MEDALS
+  // ==================================================
+
+  function saveMedal(
+    index,
+    medal
+  ) {
+    if (!validIndex(index)) {
+      return false;
+    }
+
+    const normalized =
+      normalizeMedal(medal);
+
+    if (!normalized) {
+      return false;
+    }
+
+    mutate(data => {
+      const key =
+        levelKey(index);
+
+      const previous =
+        data.medals[key];
+
+      if (
+        !previous ||
+        MEDAL_RANK[normalized] >
+        MEDAL_RANK[previous]
+      ) {
+        data.medals[key] =
+          normalized;
+      }
+    });
+
+    return true;
+  }
+
+  function getMedal(index) {
+    if (!validIndex(index)) {
+      return null;
+    }
+
+    return (
+      load().medals[
+        levelKey(index)
+      ] || null
+    );
+  }
+
+  function getMedals() {
+    return {
+      ...load().medals
+    };
+  }
+
+  function getMedalSummary() {
+    const medals =
+      Object.values(
+        getMedals()
+      );
+
+    const summary = {
+      gold: 0,
+      silver: 0,
+      bronze: 0,
+      total: 0
+    };
+
+    medals.forEach(
+      medal => {
+        if (
+          summary[medal] !==
+          undefined
+        ) {
+          summary[medal]++;
+          summary.total++;
+        }
+      }
+    );
+
+    return summary;
+  }
+
+  // ==================================================
+  // 10. STATISTICS
+  // ==================================================
+
+  function registerAttempt(
+    index = null
+  ) {
+    mutate(data => {
+      data.stats.attempts++;
+
+      if (
+        validIndex(index)
+      ) {
+        data.stats.lastPlayedLevel =
+          index + 1;
+      }
+
+      data.stats.lastPlayedAt =
+        nowISO();
+    });
+
+    return true;
+  }
+
+  function registerDeath(
+    reason = null
+  ) {
+    mutate(data => {
+      data.stats.deaths++;
+
+      if (reason === "laser") {
+        data.stats.lasersHit++;
+      }
+
+      if (
+        reason === "platform"
+      ) {
+        data.stats.platformDeaths++;
+      }
+
+      if (
+        reason === "echo-trap"
+      ) {
+        data.stats.echoTrapDeaths++;
+      }
+
+      data.stats.lastPlayedAt =
+        nowISO();
+    });
+
+    return true;
+  }
+
+  function registerShift() {
+    mutate(data => {
+      data.stats.shifts++;
+      data.stats.lastPlayedAt =
+        nowISO();
+    });
+
+    return true;
+  }
+
+  function registerCycle() {
+    mutate(data => {
+      data.stats.totalCycles++;
+      data.stats.lastPlayedAt =
+        nowISO();
+    });
+
+    return true;
+  }
+
+  function registerPortal() {
+    mutate(data => {
+      data.stats.portalsUsed++;
+      data.stats.lastPlayedAt =
+        nowISO();
+    });
+
+    return true;
+  }
+
+  // ==================================================
+  // 11. SETTINGS
+  // ==================================================
+
+  function setSound(enabled) {
+    mutate(data => {
+      data.settings.sound =
+        Boolean(enabled);
+    });
+
+    return true;
+  }
+
+  function getSound() {
+    return load().settings.sound;
+  }
+
+  function setVolume(value) {
+    mutate(data => {
+      data.settings.volume =
+        clamp(
+          safeNumber(value, 0.7),
+          0,
+          1
+        );
+    });
+
+    return true;
+  }
+
+  function getVolume() {
+    return load().settings.volume;
+  }
+
+  function setControlMode(mode) {
+    const normalized =
+      mode === "joystick"
+        ? "joystick"
+        : "dpad";
+
+    mutate(data => {
+      data.settings.controlMode =
+        normalized;
+    });
+
+    return true;
+  }
+
+  function getControlMode() {
+    return load()
+      .settings.controlMode;
+  }
+
+  // ==================================================
+  // 12. INTRO AND TUTORIAL
+  // ==================================================
+
+  function hasSeenIntro() {
+    return (
+      readFlag(INTRO_KEY) ||
+      readFlag(
+        LEGACY_INTRO_KEY
+      )
+    );
+  }
+
+  function setIntroSeen(
+    value = true
+  ) {
+    return writeFlag(
+      INTRO_KEY,
+      value
+    );
+  }
+
+  function hasCompletedTutorial() {
+    return (
+      readFlag(TUTORIAL_KEY) ||
+      readFlag(
+        LEGACY_TUTORIAL_KEY
+      )
+    );
+  }
+
+  function setTutorialDone(
+    value = true
+  ) {
+    return writeFlag(
+      TUTORIAL_KEY,
+      value
+    );
+  }
+
+  // ==================================================
+  // 13. PROGRESS AND STATS SUMMARY
+  // ==================================================
+
+  function getProgress() {
+    const data = load();
+
+    return {
+      version: VERSION,
+
+      unlocked:
+        data.unlocked,
+
+      completed:
+        [...data.completed],
+
+      completedCount:
+        data.completed.length,
+
+      totalLevels:
+        TOTAL_LEVELS,
+
+      percentage:
+        Math.round(
+          data.completed.length /
+          TOTAL_LEVELS * 100
+        ),
+
+      medals:
+        getMedalSummary()
+    };
+  }
+
+  function getStats() {
+    const data = load();
+
+    return {
+      ...data.stats,
+
+      completedLevels:
+        data.completed.length,
+
+      unlockedLevels:
+        data.unlocked,
+
+      medals:
+        getMedalSummary(),
+
+      version: VERSION
+    };
+  }
+
+  // ==================================================
+  // 14. EXPORT / IMPORT
+  // ==================================================
+
+  function exportProgress() {
+    const data = load();
+
+    return JSON.stringify(
+      {
+        game: "ECHO//404",
+        version: VERSION,
+        exportedAt: nowISO(),
+        progress: data,
+        introSeen:
+          hasSeenIntro(),
+        tutorialDone:
+          hasCompletedTutorial()
+      },
+      null,
+      2
+    );
+  }
+
+  function importProgress(input) {
+    let parsed;
+
+    try {
+      parsed =
+        typeof input === "string"
+          ? JSON.parse(input)
+          : input;
+    } catch {
+      return {
+        success: false,
+        message:
+          "JSON inválido."
+      };
+    }
+
+    if (
+      !parsed ||
+      typeof parsed !== "object"
+    ) {
+      return {
+        success: false,
+        message:
+          "Dados inválidos."
+      };
+    }
+
+    const candidate =
+      parsed.progress &&
+      typeof parsed.progress ===
+        "object"
+        ? parsed.progress
+        : parsed;
+
+    if (
+      !candidate ||
+      typeof candidate !==
+        "object" ||
+      (
+        !Array.isArray(
+          candidate.completed
+        ) &&
+        !Array.isArray(
+          candidate.completedLevels
+        ) &&
+        typeof candidate.unlocked !==
+          "number" &&
+        typeof candidate.unlockedLevels !==
+          "number"
+      )
+    ) {
+      return {
+        success: false,
+        message:
+          "O ficheiro não contém progresso válido."
+      };
+    }
+
+    const imported =
+      normalize(candidate);
+
+    /*
+      Merge medal achievements so
+      importing an older save cannot
+      downgrade existing medals.
+    */
+
+    imported.medals =
+      mergeMedals(
+        load().medals,
+        imported.medals
+      );
+
+    const saved =
+      save(imported);
+
+    if (
+      saved &&
+      typeof parsed.introSeen ===
+        "boolean"
+    ) {
+      setIntroSeen(
+        parsed.introSeen
+      );
+    }
+
+    if (
+      saved &&
+      typeof parsed.tutorialDone ===
+        "boolean"
+    ) {
+      setTutorialDone(
+        parsed.tutorialDone
+      );
+    }
+
+    return {
+      success: saved,
+      message: saved
+        ? "Progresso importado com sucesso."
+        : "Não foi possível guardar o progresso."
+    };
+  }
+
+  // ==================================================
+  // 15. RESET PROGRESS
+  // ==================================================
+
+  function resetProgress(
+    options = {}
+  ) {
+    const preserveSettings =
+      options.preserveSettings !== false;
+
+    const preserveIntro =
+      options.preserveIntro !== false;
+
+    const current = load();
+
+    const fresh = defaults();
+
+    if (preserveSettings) {
+      fresh.settings = {
+        ...current.settings
+      };
+    }
+
+    /*
+      Remove the medal key first;
+      otherwise normalize() would
+      merge old medals back in.
+    */
+
+    try {
+      localStorage.removeItem(
+        MEDALS_KEY
+      );
+
+      localStorage.removeItem(
+        FALLBACK_PROGRESS_KEY
+      );
+
+      if (!preserveIntro) {
+        localStorage.removeItem(
+          INTRO_KEY
+        );
+
+        localStorage.removeItem(
+          TUTORIAL_KEY
+        );
+
+        localStorage.removeItem(
+          LEGACY_INTRO_KEY
+        );
+
+        localStorage.removeItem(
+          LEGACY_TUTORIAL_KEY
+        );
+      }
+    } catch {
+      // Continue with the main reset.
+    }
+
+    return save(fresh);
+  }
+
+  // ==================================================
+  // 16. DEBUG
+  // ==================================================
+
+  function debug() {
+    const data = load();
+
+    console.group(
+      "ECHO//404 STORAGE v0.8"
+    );
+
+    console.log(
+      "Progress:",
+      getProgress()
+    );
+
+    console.log(
+      "Statistics:",
+      getStats()
+    );
+
+    console.log(
+      "Medals:",
+      getMedals()
+    );
+
+    console.log(
+      "Settings:",
+      data.settings
+    );
+
+    console.log(
+      "Raw save:",
+      data
+    );
+
+    console.groupEnd();
+
+    return data;
+  }
+
+  // ==================================================
+  // 17. PUBLIC API
+  // ==================================================
+
+  return Object.freeze({
+    version: VERSION,
+
+    STORAGE_KEY,
+    MEDALS_KEY,
+
+    defaults,
+
+    safeNumber,
+    safeInteger,
+    isValidDate,
+
+    normalize,
+
+    load,
+    save,
+
+    win,
+
+    isUnlocked,
+    isCompleted,
+    getBestScore,
+
+    registerAttempt,
+    registerDeath,
+    registerShift,
+    registerCycle,
+    registerPortal,
+
+    saveMedal,
+    getMedal,
+    getMedals,
+    getMedalSummary,
+
+    setSound,
+    getSound,
+
+    setVolume,
+    getVolume,
+
+    setControlMode,
+    getControlMode,
+
+    hasSeenIntro,
+    setIntroSeen,
+
+    hasCompletedTutorial,
+    setTutorialDone,
+
+    getProgress,
+    getStats,
+
+    exportProgress,
+    importProgress,
+
+    resetProgress,
+
+    debug
+  });
+
+})();
+
+/*
+========================================================
+ ECHO//404 — SYSTEM REBELLION v0.8
 
  CREATED & DEVELOPED BY
  MANUEL SAMPAIO01
 
  © 2026 MANUEL SAMPAIO01
-==================================================
+========================================================
 */
-
-const GameStorage = {
-
-  // ========================================
-  // 1. CONFIGURAÇÕES
-  // ========================================
-
-  // Mantemos a chave original para
-  // preservar os dados da v0.6.1.
-  key: "echo404_paradox_v06",
-
-  version: "0.7",
-
-  totalLevels: 10,
-
-  // Compatibilidade com game.js v0.7.
-  medalKey: "echo404_awakening_medals_v07",
-
-  // Compatibilidade com awakening.js.
-  introKey: "echo404_v07_intro_seen",
-  tutorialKey: "echo404_v07_tutorial_done",
-
-  medalRanks: {
-    bronze: 1,
-    silver: 2,
-    gold: 3
-  },
-
-  // ========================================
-  // 2. DADOS INICIAIS
-  // ========================================
-
-  defaults() {
-    return {
-      version: this.version,
-
-      unlocked: 1,
-
-      bestScores:
-        Array(this.totalLevels).fill(0),
-
-      completed:
-        Array(this.totalLevels).fill(false),
-
-      sound: true,
-
-      medals: {},
-
-      awakening: {
-        introSeen: false,
-        tutorialDone: false
-      },
-
-      stats: {
-        totalWins: 0,
-        totalAttempts: 0,
-        totalDeaths: 0,
-        totalShifts: 0,
-        totalScore: 0
-      },
-
-      createdAt: new Date().toISOString(),
-      updatedAt: null
-    };
-  },
-
-  // ========================================
-  // 3. UTILITÁRIOS
-  // ========================================
-
-  safeNumber(value, fallback = 0) {
-    const number = Number(value);
-
-    return Number.isFinite(number)
-      ? Math.max(0, number)
-      : fallback;
-  },
-
-  safeInteger(value, fallback = 0) {
-    return Math.floor(
-      this.safeNumber(value, fallback)
-    );
-  },
-
-  isValidDate(value) {
-    return (
-      typeof value === "string" &&
-      value.trim().length > 0 &&
-      !Number.isNaN(Date.parse(value))
-    );
-  },
-
-  validLevel(index) {
-    return (
-      Number.isInteger(index) &&
-      index >= 0 &&
-      index < this.totalLevels
-    );
-  },
-
-  safeRead(key) {
-    try {
-      return localStorage.getItem(key);
-    } catch (error) {
-      console.warn(
-        "ECHO//404: leitura indisponível.",
-        error
-      );
-      return null;
-    }
-  },
-
-  safeWrite(key, value) {
-    try {
-      localStorage.setItem(key, value);
-      return true;
-    } catch (error) {
-      console.warn(
-        "ECHO//404: gravação indisponível.",
-        error
-      );
-      return false;
-    }
-  },
-
-  safeRemove(key) {
-    try {
-      localStorage.removeItem(key);
-      return true;
-    } catch (error) {
-      console.warn(
-        "ECHO//404: remoção indisponível.",
-        error
-      );
-      return false;
-    }
-  },
-
-  // ========================================
-  // 4. NORMALIZAR MEDALHAS
-  // ========================================
-
-  normalizeMedals(value) {
-    const result = {};
-
-    if (
-      !value ||
-      typeof value !== "object" ||
-      Array.isArray(value)
-    ) {
-      return result;
-    }
-
-    for (
-      let index = 0;
-      index < this.totalLevels;
-      index++
-    ) {
-      const key = String(index);
-      const medal = value[key];
-
-      if (
-        Object.prototype.hasOwnProperty.call(
-          this.medalRanks,
-          medal
-        )
-      ) {
-        result[key] = medal;
-      }
-    }
-
-    return result;
-  },
-
-  mergeMedals(first, second) {
-    const a = this.normalizeMedals(first);
-    const b = this.normalizeMedals(second);
-
-    const merged = { ...a };
-
-    for (const [key, medal] of Object.entries(b)) {
-      const previous = merged[key];
-
-      if (
-        !previous ||
-        this.medalRanks[medal] >
-          this.medalRanks[previous]
-      ) {
-        merged[key] = medal;
-      }
-    }
-
-    return merged;
-  },
-
-  // ========================================
-  // 5. NORMALIZAR PROGRESSO
-  // ========================================
-
-  normalize(saved) {
-    const fallback = this.defaults();
-
-    if (
-      !saved ||
-      typeof saved !== "object" ||
-      Array.isArray(saved)
-    ) {
-      return fallback;
-    }
-
-    const scores = Array.isArray(
-      saved.bestScores
-    ) ? saved.bestScores : [];
-
-    const completed = Array.isArray(
-      saved.completed
-    ) ? saved.completed : [];
-
-    const stats = (
-      saved.stats &&
-      typeof saved.stats === "object" &&
-      !Array.isArray(saved.stats)
-    ) ? saved.stats : {};
-
-    const awakening = (
-      saved.awakening &&
-      typeof saved.awakening === "object" &&
-      !Array.isArray(saved.awakening)
-    ) ? saved.awakening : {};
-
-    const normalizedScores = Array.from(
-      { length: this.totalLevels },
-      (_, index) =>
-        this.safeInteger(scores[index])
-    );
-
-    const normalizedCompleted = Array.from(
-      { length: this.totalLevels },
-      (_, index) =>
-        completed[index] === true
-    );
-
-    let unlocked = Math.max(
-      1,
-      Math.min(
-        this.totalLevels,
-        this.safeInteger(saved.unlocked, 1)
-      )
-    );
-
-    normalizedCompleted.forEach(
-      (done, index) => {
-        if (done) {
-          unlocked = Math.max(
-            unlocked,
-            Math.min(
-              this.totalLevels,
-              index + 2
-            )
-          );
-        }
-      }
-    );
-
-    return {
-      version: this.version,
-
-      unlocked,
-
-      bestScores: normalizedScores,
-      completed: normalizedCompleted,
-
-      sound: saved.sound !== false,
-
-      medals:
-        this.normalizeMedals(saved.medals),
-
-      awakening: {
-        introSeen:
-          awakening.introSeen === true,
-
-        tutorialDone:
-          awakening.tutorialDone === true
-      },
-
-      stats: {
-        totalWins:
-          this.safeInteger(stats.totalWins),
-
-        totalAttempts:
-          this.safeInteger(stats.totalAttempts),
-
-        totalDeaths:
-          this.safeInteger(stats.totalDeaths),
-
-        totalShifts:
-          this.safeInteger(stats.totalShifts),
-
-        totalScore:
-          this.safeInteger(stats.totalScore)
-      },
-
-      createdAt:
-        this.isValidDate(saved.createdAt)
-          ? saved.createdAt
-          : fallback.createdAt,
-
-      updatedAt:
-        this.isValidDate(saved.updatedAt)
-          ? saved.updatedAt
-          : null
-    };
-  },
-
-  // ========================================
-  // 6. CARREGAR PROGRESSO
-  // ========================================
-
-  load() {
-    try {
-      const raw = this.safeRead(this.key);
-
-      const saved = raw
-        ? JSON.parse(raw)
-        : this.defaults();
-
-      const data = this.normalize(saved);
-
-      // Reúne medalhas guardadas pelo
-      // game.js v0.7 e pelo storage.js.
-      const externalMedalsRaw =
-        this.safeRead(this.medalKey);
-
-      if (externalMedalsRaw) {
-        try {
-          data.medals = this.mergeMedals(
-            data.medals,
-            JSON.parse(externalMedalsRaw)
-          );
-        } catch (error) {
-          console.warn(
-            "ECHO//404: medalhas inválidas.",
-            error
-          );
-        }
-      }
-
-      // Reconhece as preferências do
-      // awakening.js, se existirem.
-      const introRaw =
-        this.safeRead(this.introKey);
-
-      const tutorialRaw =
-        this.safeRead(this.tutorialKey);
-
-      if (introRaw === "true") {
-        data.awakening.introSeen = true;
-      }
-
-      if (tutorialRaw === "true") {
-        data.awakening.tutorialDone = true;
-      }
-
-      return data;
-
-    } catch (error) {
-      console.warn(
-        "ECHO//404: erro ao carregar progresso.",
-        error
-      );
-
-      return this.defaults();
-    }
-  },
-
-  // ========================================
-  // 7. GUARDAR PROGRESSO
-  // ========================================
-
-  save(data) {
-    const normalized = this.normalize(data);
-
-    const payload = {
-      ...normalized,
-      version: this.version,
-      updatedAt: new Date().toISOString()
-    };
-
-    const success = this.safeWrite(
-      this.key,
-      JSON.stringify(payload)
-    );
-
-    if (!success) {
-      return false;
-    }
-
-    // Mantém as chaves utilizadas
-    // pelos outros ficheiros.
-    this.safeWrite(
-      this.medalKey,
-      JSON.stringify(payload.medals)
-    );
-
-    this.safeWrite(
-      this.introKey,
-      String(payload.awakening.introSeen)
-    );
-
-    this.safeWrite(
-      this.tutorialKey,
-      String(payload.awakening.tutorialDone)
-    );
-
-    return true;
-  },
-
-  // ========================================
-  // 8. REGISTAR VITÓRIA
-  // ========================================
-
-  win(levelIndex, score) {
-    const data = this.load();
-
-    if (!this.validLevel(levelIndex)) {
-      console.warn(
-        "ECHO//404: nível inválido.",
-        levelIndex
-      );
-
-      return data;
-    }
-
-    const finalScore =
-      this.safeInteger(score);
-
-    data.completed[levelIndex] = true;
-
-    data.bestScores[levelIndex] = Math.max(
-      data.bestScores[levelIndex],
-      finalScore
-    );
-
-    data.unlocked = Math.max(
-      data.unlocked,
-      Math.min(
-        this.totalLevels,
-        levelIndex + 2
-      )
-    );
-
-    data.stats.totalWins += 1;
-    data.stats.totalScore += finalScore;
-
-    this.save(data);
-
-    return data;
-  },
-
-  // ========================================
-  // 9. RECORDES E DESBLOQUEIOS
-  // ========================================
-
-  getBestScore(levelIndex) {
-    if (!this.validLevel(levelIndex)) {
-      return 0;
-    }
-
-    return this.load()
-      .bestScores[levelIndex];
-  },
-
-  isUnlocked(levelIndex) {
-    if (!this.validLevel(levelIndex)) {
-      return false;
-    }
-
-    return levelIndex <
-      this.load().unlocked;
-  },
-
-  isCompleted(levelIndex) {
-    if (!this.validLevel(levelIndex)) {
-      return false;
-    }
-
-    return this.load()
-      .completed[levelIndex] === true;
-  },
-
-  // ========================================
-  // 10. ESTATÍSTICAS
-  // ========================================
-
-  registerAttempt() {
-    const data = this.load();
-    data.stats.totalAttempts += 1;
-    return this.save(data);
-  },
-
-  registerDeath() {
-    const data = this.load();
-    data.stats.totalDeaths += 1;
-    return this.save(data);
-  },
-
-  registerShift() {
-    const data = this.load();
-    data.stats.totalShifts += 1;
-    return this.save(data);
-  },
-
-  getStats() {
-    return this.load().stats;
-  },
-
-  // ========================================
-  // 11. CONFIGURAÇÕES DE SOM
-  // ========================================
-
-  setSound(enabled) {
-    const data = this.load();
-
-    data.sound = Boolean(enabled);
-
-    this.save(data);
-
-    return data.sound;
-  },
-
-  getSound() {
-    return this.load().sound;
-  },
-
-  // ========================================
-  // 12. GUARDAR MEDALHA
-  // ========================================
-
-  saveMedal(levelIndex, medal) {
-    if (
-      !this.validLevel(levelIndex) ||
-      !Object.prototype.hasOwnProperty.call(
-        this.medalRanks,
-        medal
-      )
-    ) {
-      return false;
-    }
-
-    const data = this.load();
-    const key = String(levelIndex);
-    const previous = data.medals[key];
-
-    if (
-      !previous ||
-      this.medalRanks[medal] >
-        this.medalRanks[previous]
-    ) {
-      data.medals[key] = medal;
-    }
-
-    return this.save(data);
-  },
-
-  getMedal(levelIndex) {
-    if (!this.validLevel(levelIndex)) {
-      return null;
-    }
-
-    return this.load()
-      .medals[String(levelIndex)] || null;
-  },
-
-  getMedals() {
-    return {
-      ...this.load().medals
-    };
-  },
-
-  getMedalSummary() {
-    const medals = Object.values(
-      this.getMedals()
-    );
-
-    return {
-      gold: medals.filter(
-        medal => medal === "gold"
-      ).length,
-
-      silver: medals.filter(
-        medal => medal === "silver"
-      ).length,
-
-      bronze: medals.filter(
-        medal => medal === "bronze"
-      ).length
-    };
-  },
-
-  // ========================================
-  // 13. INTRODUÇÃO CINEMATOGRÁFICA
-  // ========================================
-
-  hasSeenIntro() {
-    return this.load()
-      .awakening.introSeen;
-  },
-
-  setIntroSeen(seen = true) {
-    const data = this.load();
-
-    data.awakening.introSeen =
-      Boolean(seen);
-
-    return this.save(data);
-  },
-
-  // ========================================
-  // 14. TUTORIAL
-  // ========================================
-
-  hasCompletedTutorial() {
-    return this.load()
-      .awakening.tutorialDone;
-  },
-
-  setTutorialDone(done = true) {
-    const data = this.load();
-
-    data.awakening.tutorialDone =
-      Boolean(done);
-
-    return this.save(data);
-  },
-
-  // ========================================
-  // 15. PROGRESSO GERAL
-  // ========================================
-
-  getProgress() {
-    const data = this.load();
-
-    const completedCount =
-      data.completed.filter(Boolean).length;
-
-    const percentage = Math.round(
-      completedCount /
-      this.totalLevels * 100
-    );
-
-    const totalBestScore =
-      data.bestScores.reduce(
-        (total, value) => total + value,
-        0
-      );
-
-    return {
-      completed: completedCount,
-      total: this.totalLevels,
-      percentage,
-      unlocked: data.unlocked,
-      totalBestScore,
-      medals: this.getMedalSummary()
-    };
-  },
-
-  // ========================================
-  // 16. EXPORTAR PROGRESSO
-  // ========================================
-
-  exportProgress() {
-    return JSON.stringify(
-      this.load(),
-      null,
-      2
-    );
-  },
-
-  // ========================================
-  // 17. IMPORTAR PROGRESSO
-  // ========================================
-
-  importProgress(json) {
-    try {
-      const parsed =
-        typeof json === "string"
-          ? JSON.parse(json)
-          : json;
-
-      if (
-        !parsed ||
-        typeof parsed !== "object" ||
-        Array.isArray(parsed) ||
-        !Array.isArray(parsed.bestScores) ||
-        !Array.isArray(parsed.completed)
-      ) {
-        console.warn(
-          "ECHO//404: progresso inválido."
-        );
-
-        return false;
-      }
-
-      if (
-        parsed.bestScores.length !==
-          this.totalLevels ||
-        parsed.completed.length !==
-          this.totalLevels
-      ) {
-        console.warn(
-          "ECHO//404: níveis incompatíveis."
-        );
-
-        return false;
-      }
-
-      const data = this.normalize(parsed);
-
-      return this.save(data);
-
-    } catch (error) {
-      console.warn(
-        "ECHO//404: importação falhou.",
-        error
-      );
-
-      return false;
-    }
-  },
-
-  // ========================================
-  // 18. REINICIAR PROGRESSO
-  // ========================================
-
-  resetProgress() {
-    const keys = [
-      this.key,
-      this.medalKey,
-      this.introKey,
-      this.tutorialKey
-    ];
-
-    let success = true;
-
-    keys.forEach(key => {
-      if (!this.safeRemove(key)) {
-        success = false;
-      }
-    });
-
-    if (success) {
-      console.log(
-        "ECHO//404: progresso reiniciado."
-      );
-    }
-
-    return success;
-  },
-
-  // ========================================
-  // 19. DIAGNÓSTICO
-  // ========================================
-
-  debug() {
-    console.log(
-      "========== ECHO//404 STORAGE =========="
-    );
-
-    console.table(
-      this.getProgress()
-    );
-
-    console.table(
-      this.getStats()
-    );
-
-    console.table(
-      this.getMedalSummary()
-    );
-
-    console.log(
-      "Versão:",
-      this.version
-    );
-
-    console.log(
-      "Dados completos:",
-      this.load()
-    );
-  }
-};
-
-// ==========================================
-// 20. INICIALIZAÇÃO
-// ==========================================
-
-console.log(
-  "=================================="
-);
-
-console.log(
-  "ECHO//404 — THE AWAKENING v0.7"
-);
-
-console.log(
-  "PROGRESS + MEDALS + INTRO READY"
-);
-
-console.log(
-  "LOCALSTORAGE // DESKTOP + MOBILE"
-);
-
-console.log(
-  "CREATED BY MANUEL SAMPAIO01"
-);
-
-console.log(
-  "=================================="
-);

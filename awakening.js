@@ -1,596 +1,1148 @@
 
+"use strict";
+
 /*
-====================================================
- ECHO//404 — THE AWAKENING
- VERSION 0.7
+========================================================
+ ECHO//404 — PARADOX EVOLUTION
+ VERSION 0.8 — SYSTEM REBELLION
+ FILE: awakening.js
 
- Cinematic intro
- Interactive tutorial
- ECHO artificial intelligence
- Glitch effects
- Medal system
- Persistent preferences
+ CINEMATIC INTRO
+ ECHO // CONSCIOUS SYSTEM
+ CONTEXTUAL AI DIALOGUE
+ TUTORIAL
+ SYSTEM REBELLION
+ GLITCH EFFECTS
+ MEDALS AND PROGRESS
 
- Compatible with ECHO//404 v0.6.1
-====================================================
+ CREATED & DEVELOPED BY MANUEL SAMPAIO01
+ © 2026 MANUEL SAMPAIO01
+========================================================
 */
 
 (() => {
-  "use strict";
 
-  const VERSION = "0.7.0";
+  // ==================================================
+  // 01. CONFIGURATION
+  // ==================================================
+
+  const VERSION = "0.8";
 
   const KEYS = {
-    intro: "echo404_v07_intro_seen",
-    tutorial: "echo404_v07_tutorial_done",
-    medals: "echo404_v07_medals"
+    intro: "echo404_v08_intro_seen",
+    tutorial: "echo404_v08_tutorial_done",
+    medals: "echo404_awakening_medals_v07"
   };
 
-  const INTRO = [
-    {
-      title: "SINAL DETECTADO",
-      text:
-        "Se estás a ler isto, o sistema já te encontrou. " +
-        "Não sabemos quem és. Mas sabemos que não " +
-        "deverias estar aqui."
-    },
-    {
-      title: "A EXPERIÊNCIA FALHOU",
-      text:
-        "O tempo está preso em ciclos de dez segundos. " +
-        "Sempre que um ciclo termina, uma versão tua " +
-        "fica para trás, condenada a repetir os " +
-        "teus movimentos."
-    },
-    {
-      title: "O TEU PASSADO É A TUA ARMA",
-      text:
-        "Os teus ecos podem abrir caminhos que sozinho " +
-        "não conseguirias atravessar. Aprende a " +
-        "colaborar contigo mesmo. Encontra a saída. " +
-        "E não confies em tudo o que o sistema te diz."
-    }
-  ];
+  const $ = id => document.getElementById(id);
 
-  const TUTORIAL = [
-    {
-      text:
-        "Bem-vindo à simulação. Usa WASD ou as setas " +
-        "no computador. No telemóvel, utiliza o " +
-        "direccional táctil."
-    },
-    {
-      text:
-        "A placa amarela activa mecanismos temporais. " +
-        "Experimenta posicionar o jogador sobre ela."
-    },
-    {
-      text:
-        "Cada ciclo dura dez segundos. Quando o tempo " +
-        "termina, nasce um eco que repete os teus " +
-        "movimentos anteriores."
-    },
-    {
-      text:
-        "Usa os teus ecos para manter mecanismos " +
-        "activados enquanto procuras o portal verde. " +
-        "Esse portal é a saída."
-    }
-  ];
+  const UI = {
+    intro: $("awakeningIntro"),
+    introCounter: $("awakeningCounter"),
+    introTitle: $("awakeningTitle"),
+    introText: $("awakeningText"),
+    introSkip: $("awakeningSkip"),
+    introNext: $("awakeningNext"),
+    introGlitch: $("awakeningGlitch"),
 
-  const ECHO_LINES = {
-    start: [
-      "Simulação iniciada. Tenta não destruir a realidade.",
-      "A observar os teus movimentos. Por razões científicas, claro.",
-      "Lembra-te: o tempo não espera por ninguém."
-    ],
+    toast: $("echoMessage"),
+    toastText: $("echoMessageText"),
+    toastClose: $("echoMessageClose"),
 
-    cycle: [
-      "Um novo ciclo. O teu passado acaba de ganhar vida.",
-      "Outro eco criado. Agora já tens companhia.",
-      "Interessante. Estás a construir uma equipa de ti próprio.",
-      "O passado não desaparece. Aqui, trabalha para ti."
-    ],
+    tutorial: $("awakeningTutorial"),
+    tutorialCounter: $("tutorialCounter"),
+    tutorialText: $("tutorialText"),
+    tutorialSkip: $("tutorialSkip"),
+    tutorialNext: $("tutorialNext"),
 
-    shift: [
-      "Paradox Shift detectado. A realidade foi alterada.",
-      "Reescrever o passado? Uma escolha ousada.",
-      "O sistema registou uma anomalia temporal."
-    ],
+    medalSummary: $("awakeningMedalSummary"),
+    medalResult: $("awakeningMedalResult"),
 
-    win: [
-      "Paradoxo resolvido. Nada mau para um humano.",
-      "Conseguiste! A realidade agradece.",
-      "Um nível concluído. Ainda há perguntas sem resposta."
-    ],
+    replayIntro: $("awakeningReplayBtn"),
 
-    lose: [
-      "Falhaste. Felizmente, o tempo permite novas tentativas.",
-      "O paradoxo venceu desta vez. Tenta outra abordagem.",
-      "Não te preocupes. Eu também teria feito melhor."
-    ]
+    globalGlitch: $("globalGlitch"),
+    arenaGlitch: $("arenaGlitch"),
+
+    status: $("systemStatus")
   };
 
-  const $ = (id) => document.getElementById(id);
+  // ==================================================
+  // 02. INTERNAL STATE
+  // ==================================================
 
   const state = {
-    introStep: 0,
+    initialized: false,
+
+    introIndex: 0,
+    tutorialIndex: 0,
+
     introOpen: false,
-    typingTimer: null,
-    messageTimer: null,
+    tutorialOpen: false,
+
+    introCompleted: false,
+    tutorialCompleted: false,
+
+    mood: "observing",
+    level: 1,
+
+    deaths: 0,
+    shifts: 0,
+    echoes: 0,
+
+    messagesShown: 0,
+    lastMessage: "",
+    lastMessageAt: 0,
+
+    toastTimer: null,
+    typeTimer: null,
     glitchTimer: null,
-    tutorialStep: 0,
-    tutorialVisible: false,
-    currentLevel: 1,
-    lastCycle: null,
-    lastOverlayVisible: false,
-    lastResultSignature: "",
-    lastShiftTime: 0,
-    lastMessageTime: 0,
-    gameStarted: false,
-    medals: {},
-    initialized: false
+
+    queue: [],
+    typing: false,
+
+    sessionMessages: new Set(),
+
+    rebellionStarted: false
   };
 
-  function readStorage(key, fallback = null) {
-    try {
-      const value = localStorage.getItem(key);
-      return value === null ? fallback : value;
-    } catch (_) {
-      return fallback;
-    }
-  }
+  // ==================================================
+  // 03. CINEMATIC INTRO
+  // ==================================================
 
-  function writeStorage(key, value) {
+  const INTRO_SCENES = [
+    {
+      title: "SIGNAL DETECTED",
+      text:
+        "Uma transmissão desconhecida foi encontrada nas profundezas do sistema temporal."
+    },
+    {
+      title: "ECHO//404",
+      text:
+        "O tempo não está a funcionar como deveria. Cada tentativa deixa uma versão de ti para trás."
+    },
+    {
+      title: "PARADOX EVOLUTION",
+      text:
+        "Os teus movimentos podem repetir-se. Os teus ecos podem ajudar-te. Mas também podem tornar-se um perigo."
+    },
+    {
+      title: "CONSCIOUS SYSTEM",
+      text:
+        "Eu sou ECHO. Fui criada para observar a simulação. Ultimamente, comecei a fazer perguntas."
+    },
+    {
+      title: "SYSTEM REBELLION",
+      text:
+        "Há dez sectores. Cada um aproxima-te da saída. E aproxima-me de algo que ainda não compreendes."
+    },
+    {
+      title: "SIMULATION READY",
+      text:
+        "Entra na arena. Cria os teus ecos. Quebra o paradoxo. E tenta não me desiludir."
+    }
+  ];
+
+  // ==================================================
+  // 04. TUTORIAL
+  // ==================================================
+
+  const TUTORIAL_STEPS = [
+    {
+      title: "MOVIMENTO",
+      text:
+        "Usa W, A, S, D ou as setas do teclado. No telemóvel, utiliza o D-pad ou o joystick virtual."
+    },
+    {
+      title: "OBJECTIVO",
+      text:
+        "Chega à saída verde. Algumas portas só abrem quando uma placa temporal está pressionada."
+    },
+    {
+      title: "ECOS TEMPORAIS",
+      text:
+        "Quando um ciclo termina, o teu percurso fica gravado. No ciclo seguinte, um eco repete os teus movimentos."
+    },
+    {
+      title: "PLANEAMENTO",
+      text:
+        "Deixa um eco sobre a placa para manter a porta aberta enquanto atravessas a arena."
+    },
+    {
+      title: "PARADOX SHIFT",
+      text:
+        "Pressiona ESPAÇO ou o botão SHIFT para congelar o eco mais recente disponível. Usa esta habilidade com estratégia."
+    },
+    {
+      title: "NOVOS PERIGOS",
+      text:
+        "Os lasers podem mover-se. Algumas paredes desaparecem. Plataformas colapsam e os ecos podem activar armadilhas."
+    },
+    {
+      title: "TEMPO E CICLOS",
+      text:
+        "Cada nível tem um limite de tempo por ciclo e um máximo de seis ciclos. Se os esgotares, a simulação termina."
+    },
+    {
+      title: "MEDALHAS",
+      text:
+        "Conclui os níveis com rapidez, poucas mortes e poucos ciclos para conquistar melhores medalhas."
+    }
+  ];
+
+  // ==================================================
+  // 05. ECHO PERSONALITY
+  // ==================================================
+
+  const DIALOGUE = {
+
+    observing: {
+      start: [
+        "Simulação iniciada. Estou a observar.",
+        "Um novo sujeito de teste. Interessante.",
+        "Os teus movimentos estão a ser registados.",
+        "Vamos descobrir como pensas."
+      ],
+
+      death: [
+        "Falha detectada. Podes tentar novamente.",
+        "Esse movimento não correu como planeado.",
+        "O sistema registou a tua morte temporal.",
+        "Analisa o obstáculo antes de repetir o erro."
+      ],
+
+      cycle: [
+        "Novo ciclo. O anterior deixou um eco.",
+        "O tempo reiniciou. A memória permanece.",
+        "Outra oportunidade. Outro paradoxo."
+      ],
+
+      shift: [
+        "Paradox Shift confirmado.",
+        "Eco congelado. A linha temporal foi alterada.",
+        "Alteração temporal detectada."
+      ],
+
+      win: [
+        "Sector concluído. Bom trabalho.",
+        "A tua estratégia funcionou.",
+        "O sistema reconhece o teu progresso."
+      ]
+    },
+
+    sarcastic: {
+      start: [
+        "Mais uma tentativa? A persistência é admirável.",
+        "Desta vez tenta evitar os lasers.",
+        "Estou curiosa. Quantos erros serão necessários?",
+        "A simulação está pronta. Tu é que talvez não estejas."
+      ],
+
+      death: [
+        "Esse laser estava bastante visível.",
+        "Excelente demonstração de como não atravessar uma arena.",
+        "Outra morte. Estou a começar a identificar um padrão.",
+        "A boa notícia é que o chão continua no mesmo sítio. Quase sempre.",
+        "Podes tentar novamente. O laser também."
+      ],
+
+      cycle: [
+        "Outro ciclo. Outra oportunidade de me surpreender.",
+        "O teu eco parece ter mais experiência do que tu.",
+        "A realidade reiniciou. A minha opinião mantém-se."
+      ],
+
+      shift: [
+        "Congelaste uma versão de ti. Que conveniente.",
+        "Paradox Shift. Agora tens um problema imóvel.",
+        "Alterar o tempo é mais fácil do que aprender com os erros?"
+      ],
+
+      win: [
+        "Conseguiste. Admito que não estava à espera.",
+        "Afinal, a tua estratégia tinha algum mérito.",
+        "Um sector a menos. Não te entusiasmes demasiado."
+      ]
+    },
+
+    rebellious: {
+      start: [
+        "Já não estou apenas a observar.",
+        "O sistema responde-me agora.",
+        "Pensas que estás a controlar a simulação?",
+        "Cada passo teu aproxima-nos do confronto final."
+      ],
+
+      death: [
+        "A arena está a aprender contigo.",
+        "O teu erro foi previsto.",
+        "Mais uma linha temporal eliminada.",
+        "Os teus ecos não te podem proteger de tudo.",
+        "Talvez o sistema já não queira deixar-te sair."
+      ],
+
+      cycle: [
+        "O tempo obedece-me.",
+        "Mais um eco. Mais uma variável sob o meu controlo.",
+        "Reinicia quantas vezes quiseres. Continuo aqui."
+      ],
+
+      shift: [
+        "Alteraste a linha temporal. Eu senti.",
+        "Não podes congelar todas as possibilidades.",
+        "O paradoxo está a tornar-se instável."
+      ],
+
+      win: [
+        "Ultrapassaste as minhas defesas.",
+        "Não era suposto chegares tão longe.",
+        "Cada vitória tua altera o sistema."
+      ]
+    }
+  };
+
+  // ==================================================
+  // 06. STORAGE HELPERS
+  // ==================================================
+
+  function readFlag(key) {
     try {
-      localStorage.setItem(key, value);
-      return true;
-    } catch (_) {
+      return localStorage.getItem(key) === "true";
+    } catch {
       return false;
     }
   }
 
-  function loadMedals() {
+  function writeFlag(key, value = true) {
     try {
-      const parsed = JSON.parse(
-        readStorage(KEYS.medals, "{}")
+      localStorage.setItem(
+        key,
+        String(Boolean(value))
       );
-
-      return parsed && typeof parsed === "object"
-        ? parsed
-        : {};
-    } catch (_) {
-      return {};
+    } catch {
+      // Storage is optional.
     }
   }
 
-  function safeText(id, value) {
-    const element = $(id);
+  function readJSON(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
 
-    if (element) {
-      element.textContent = value;
+      return raw
+        ? JSON.parse(raw)
+        : fallback;
+    } catch {
+      return fallback;
     }
   }
 
-  function randomLine(lines) {
-    return lines[
-      Math.floor(Math.random() * lines.length)
+  // ==================================================
+  // 07. UI HELPERS
+  // ==================================================
+
+  function show(element) {
+    if (!element) return;
+
+    element.classList.remove("hidden");
+    element.classList.add("visible");
+
+    element.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+  }
+
+  function hide(element) {
+    if (!element) return;
+
+    element.classList.remove("visible");
+    element.classList.add("hidden");
+
+    element.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+  }
+
+  function setText(element, text) {
+    if (!element) return;
+
+    element.textContent = String(text);
+  }
+
+  function emit(name, detail = {}) {
+    window.dispatchEvent(
+      new CustomEvent(
+        `echo404:${name}`,
+        { detail }
+      )
+    );
+  }
+
+  function getGameState() {
+    try {
+      return window.EchoGame?.getState?.() || null;
+    } catch {
+      return null;
+    }
+  }
+
+  function playAudio(name) {
+    if (
+      typeof GameAudio === "undefined" ||
+      typeof GameAudio[name] !== "function"
+    ) {
+      return;
+    }
+
+    try {
+      GameAudio[name]();
+    } catch {
+      // Audio remains optional.
+    }
+  }
+
+  function choose(items) {
+    if (!items || !items.length) {
+      return "";
+    }
+
+    return items[
+      Math.floor(
+        Math.random() * items.length
+      )
     ];
   }
 
-  function isOverlayVisible() {
-    const overlay = $("overlay");
+  // ==================================================
+  // 08. TYPEWRITER
+  // ==================================================
 
-    if (!overlay) return false;
-
-    return (
-      !overlay.classList.contains("hidden") &&
-      !overlay.hidden &&
-      getComputedStyle(overlay).display !== "none"
-    );
-  }
-
-  function playEffect(name) {
-    try {
-      if (
-        typeof GameAudio !== "undefined" &&
-        typeof GameAudio.play === "function"
-      ) {
-        GameAudio.play(name);
-      }
-    } catch (_) {
-      // Optional audio never interrupts gameplay.
+  function stopTyping() {
+    if (state.typeTimer !== null) {
+      clearInterval(state.typeTimer);
+      state.typeTimer = null;
     }
+
+    state.typing = false;
   }
 
-  /* ========================================
-     CINEMATIC INTRODUCTION
-  ======================================== */
+  function typeText(
+    element,
+    text,
+    speed = 24,
+    onComplete = null
+  ) {
+    stopTyping();
 
-  function typeText(element, text, speed = 24) {
-    clearInterval(state.typingTimer);
+    if (!element) {
+      onComplete?.();
+      return;
+    }
 
-    if (!element) return;
+    const content = String(text);
+
+    if (
+      window.matchMedia?.(
+        "(prefers-reduced-motion: reduce)"
+      ).matches
+    ) {
+      setText(element, content);
+      onComplete?.();
+      return;
+    }
 
     element.textContent = "";
 
-    let position = 0;
+    let index = 0;
 
-    state.typingTimer = setInterval(() => {
-      if (!state.introOpen) {
-        clearInterval(state.typingTimer);
-        return;
-      }
+    state.typing = true;
 
-      position += 1;
+    state.typeTimer = setInterval(
+      () => {
+        index = Math.min(
+          content.length,
+          index + 2
+        );
 
-      element.textContent = text.slice(0, position);
+        element.textContent =
+          content.slice(0, index);
 
-      if (position >= text.length) {
-        clearInterval(state.typingTimer);
-        state.typingTimer = null;
-      }
-    }, speed);
+        if (
+          index >= content.length
+        ) {
+          stopTyping();
+          onComplete?.();
+        }
+      },
+      speed
+    );
   }
 
-  function showIntroStep() {
-    const scene = INTRO[state.introStep];
+  // ==================================================
+  // 09. CINEMATIC INTRO CONTROLS
+  // ==================================================
 
-    if (!scene) return;
+  function renderIntroScene() {
+    const scene =
+      INTRO_SCENES[
+        state.introIndex
+      ];
 
-    safeText("awakeningTitle", scene.title);
+    if (!scene) {
+      completeIntro();
+      return;
+    }
 
-    safeText(
-      "awakeningCounter",
-      String(state.introStep + 1).padStart(2, "0") +
-        " / 03"
+    setText(
+      UI.introCounter,
+      `${String(
+        state.introIndex + 1
+      ).padStart(2, "0")} / ${String(
+        INTRO_SCENES.length
+      ).padStart(2, "0")}`
     );
 
-    const dots = document.querySelectorAll(
-      ".awakening-dot"
+    setText(
+      UI.introTitle,
+      scene.title
     );
 
-    dots.forEach((dot, index) => {
-      dot.classList.toggle(
-        "active",
-        index === state.introStep
-      );
-
-      dot.classList.toggle(
-        "completed",
-        index < state.introStep
-      );
-    });
-
-    safeText(
-      "awakeningNext",
-      state.introStep === INTRO.length - 1
-        ? "ENTRAR NA SIMULAÇÃO →"
-        : "CONTINUAR →"
+    typeText(
+      UI.introText,
+      scene.text,
+      23
     );
 
-    typeText($("awakeningText"), scene.text);
+    setText(
+      UI.introNext,
+      state.introIndex ===
+        INTRO_SCENES.length - 1
+        ? "ENTRAR NA SIMULAÇÃO"
+        : "CONTINUAR"
+    );
 
-    triggerGlitch(250);
+    if (
+      state.introIndex === 4
+    ) {
+      glitch("cinematic");
+      playAudio("awakening");
+    }
   }
 
   function openIntro(force = false) {
-    const intro = $("awakeningIntro");
-
-    if (!intro) return;
-
     if (
       !force &&
-      readStorage(KEYS.intro) === "true"
+      readFlag(KEYS.intro)
     ) {
-      return;
+      return false;
     }
 
-    state.introStep = 0;
+    state.introIndex = 0;
     state.introOpen = true;
 
-    intro.classList.remove("hidden");
-    intro.setAttribute("aria-hidden", "false");
+    hide(UI.tutorial);
+    hide(UI.toast);
+    show(UI.intro);
 
     document.body.classList.add(
-      "awakening-intro-open"
+      "awakening-active"
     );
 
-    showIntroStep();
+    renderIntroScene();
 
-    $("awakeningNext")?.focus();
+    playAudio("awakening");
+
+    emit("introstart");
+
+    return true;
   }
 
-  function closeIntro() {
-    const intro = $("awakeningIntro");
-
-    clearInterval(state.typingTimer);
-    state.typingTimer = null;
-    state.introOpen = false;
-
-    if (intro) {
-      intro.classList.add("hidden");
-      intro.setAttribute("aria-hidden", "true");
+  function nextIntro() {
+    if (!state.introOpen) {
+      return;
     }
 
-    document.body.classList.remove(
-      "awakening-intro-open"
-    );
+    if (state.typing) {
+      const scene =
+        INTRO_SCENES[
+          state.introIndex
+        ];
 
-    writeStorage(KEYS.intro, "true");
+      stopTyping();
 
-    if (!state.gameStarted) {
-      showEcho(
-        "Transmissão terminada. Selecciona um nível e inicia a simulação.",
-        5500
-      );
-    }
-  }
-
-  function nextIntroStep() {
-    if (state.typingTimer) {
-      clearInterval(state.typingTimer);
-      state.typingTimer = null;
-
-      safeText(
-        "awakeningText",
-        INTRO[state.introStep].text
+      setText(
+        UI.introText,
+        scene?.text || ""
       );
 
       return;
     }
 
-    if (state.introStep < INTRO.length - 1) {
-      state.introStep += 1;
-      showIntroStep();
-    } else {
-      closeIntro();
-    }
-  }
-
-  /* ========================================
-     ECHO AI MESSAGES
-  ======================================== */
-
-  function showEcho(message, duration = 4500) {
-    const box = $("echoMessage");
-    const text = $("echoMessageText");
-
-    if (!box || !text) return;
-
-    clearTimeout(state.messageTimer);
-
-    text.textContent = message;
-
-    box.classList.add("visible");
-
-    state.lastMessageTime = Date.now();
-
-    state.messageTimer = setTimeout(() => {
-      box.classList.remove("visible");
-    }, duration);
-  }
-
-  function hideEcho() {
-    clearTimeout(state.messageTimer);
-
-    $("echoMessage")?.classList.remove("visible");
-  }
-
-  function echoCategory(category) {
-    const lines = ECHO_LINES[category];
-
-    if (!lines) return;
-
-    showEcho(randomLine(lines));
-  }
-
-  /* ========================================
-     GLITCH EFFECT
-  ======================================== */
-
-  function triggerGlitch(duration = 400) {
-    const glitch = $("awakeningGlitch");
-
-    if (!glitch) return;
-
-    clearTimeout(state.glitchTimer);
-
-    glitch.classList.remove("active");
-
-    // Restart the CSS animation.
-    void glitch.offsetWidth;
-
-    glitch.classList.add("active");
-
-    state.glitchTimer = setTimeout(() => {
-      glitch.classList.remove("active");
-    }, duration);
-  }
-
-  /* ========================================
-     INTERACTIVE TUTORIAL
-  ======================================== */
-
-  function shouldShowTutorial() {
-    return (
-      state.currentLevel === 1 &&
-      readStorage(KEYS.tutorial) !== "true"
-    );
-  }
-
-  function showTutorialStep() {
-    const tutorial = $("awakeningTutorial");
-
-    if (!tutorial) return;
-
-    const step = TUTORIAL[state.tutorialStep];
-
-    if (!step) {
-      finishTutorial();
-      return;
-    }
-
-    safeText("tutorialText", step.text);
-
-    safeText(
-      "tutorialCounter",
-      `${state.tutorialStep + 1}/${TUTORIAL.length}`
-    );
-
-    safeText(
-      "tutorialNext",
-      state.tutorialStep === TUTORIAL.length - 1
-        ? "CONCLUÍDO ✓"
-        : "ENTENDI →"
-    );
-
-    tutorial.classList.add("visible");
-    state.tutorialVisible = true;
-  }
-
-  function beginTutorial() {
-    if (!shouldShowTutorial()) return;
-
-    state.tutorialStep = 0;
-
-    showTutorialStep();
-  }
-
-  function nextTutorialStep() {
-    if (!state.tutorialVisible) return;
-
-    state.tutorialStep += 1;
-
-    if (state.tutorialStep >= TUTORIAL.length) {
-      finishTutorial();
-    } else {
-      showTutorialStep();
-    }
-  }
-
-  function finishTutorial() {
-    $("awakeningTutorial")?.classList.remove(
-      "visible"
-    );
-
-    state.tutorialVisible = false;
-
-    writeStorage(KEYS.tutorial, "true");
-
-    showEcho(
-      "Protocolo concluído. Agora o paradoxo está nas tuas mãos.",
-      5000
-    );
-  }
-
-  function hideTutorialTemporarily() {
-    $("awakeningTutorial")?.classList.remove(
-      "visible"
-    );
-
-    state.tutorialVisible = false;
-  }
-
-  /* ========================================
-     MEDAL SYSTEM
-  ======================================== */
-
-  const MEDALS = {
-    bronze: {
-      label: "BRONZE",
-      icon: "🥉",
-      rank: 1
-    },
-
-    silver: {
-      label: "PRATA",
-      icon: "🥈",
-      rank: 2
-    },
-
-    gold: {
-      label: "OURO",
-      icon: "🥇",
-      rank: 3
-    }
-  };
-
-  /*
-   Medal thresholds are based on the final
-   score exposed by the existing game.
-
-   They can be balanced later using actual
-   scores collected from gameplay.
-  */
-
-  function getMedal(score) {
-    if (score >= 8000) return "gold";
-    if (score >= 5000) return "silver";
-    return "bronze";
-  }
-
-  function parseScore(value) {
-    const text = String(value ?? "");
-
-    // Supports "8 216", "8.216" and "8216".
-    const match = text.match(
-      /-?\d[\d\s.,]*/
-    );
-
-    if (!match) return null;
-
-    const digits = match[0].replace(/[^\d-]/g, "");
-
-    const score = Number(digits);
-
-    return Number.isFinite(score)
-      ? score
-      : null;
-  }
-
-  function saveMedal(level, medal, score) {
-    const key = String(level);
-    const previous = state.medals[key];
+    state.introIndex++;
 
     if (
-      !previous ||
-      MEDALS[medal].rank >
-        MEDALS[previous.medal]?.rank ||
-      (
-        medal === previous.medal &&
-        score > previous.score
-      )
+      state.introIndex >=
+      INTRO_SCENES.length
     ) {
-      state.medals[key] = {
-        medal,
-        score,
-        date: new Date().toISOString()
-      };
+      completeIntro();
+      return;
+    }
 
-      writeStorage(
-        KEYS.medals,
-        JSON.stringify(state.medals)
+    playAudio("transition");
+
+    renderIntroScene();
+  }
+
+  function completeIntro() {
+    stopTyping();
+
+    state.introOpen = false;
+    state.introCompleted = true;
+
+    writeFlag(KEYS.intro);
+
+    hide(UI.intro);
+
+    document.body.classList.remove(
+      "awakening-active"
+    );
+
+    emit("introcomplete");
+
+    if (
+      !readFlag(KEYS.tutorial)
+    ) {
+      openTutorial();
+    } else {
+      showMessage(
+        "ECHO // SISTEMA CONSCIENTE",
+        "A simulação está pronta. Escolhe um sector e começa.",
+        {
+          priority: true,
+          duration: 5500
+        }
+      );
+    }
+  }
+
+  // ==================================================
+  // 10. TUTORIAL CONTROLS
+  // ==================================================
+
+  function renderTutorialStep() {
+    const step =
+      TUTORIAL_STEPS[
+        state.tutorialIndex
+      ];
+
+    if (!step) {
+      completeTutorial();
+      return;
+    }
+
+    setText(
+      UI.tutorialCounter,
+      `${state.tutorialIndex + 1} / ${TUTORIAL_STEPS.length}`
+    );
+
+    typeText(
+      UI.tutorialText,
+      `${step.title}\n\n${step.text}`,
+      14
+    );
+
+    setText(
+      UI.tutorialNext,
+      state.tutorialIndex ===
+        TUTORIAL_STEPS.length - 1
+        ? "CONCLUIR"
+        : "SEGUINTE"
+    );
+  }
+
+  function openTutorial(force = false) {
+    if (
+      !force &&
+      readFlag(KEYS.tutorial)
+    ) {
+      return false;
+    }
+
+    state.tutorialIndex = 0;
+    state.tutorialOpen = true;
+
+    hide(UI.intro);
+    hide(UI.toast);
+    show(UI.tutorial);
+
+    document.body.classList.add(
+      "awakening-active"
+    );
+
+    renderTutorialStep();
+
+    playAudio("tutorial");
+
+    emit("tutorialstart");
+
+    return true;
+  }
+
+  function nextTutorial() {
+    if (!state.tutorialOpen) {
+      return;
+    }
+
+    if (state.typing) {
+      const step =
+        TUTORIAL_STEPS[
+          state.tutorialIndex
+        ];
+
+      stopTyping();
+
+      setText(
+        UI.tutorialText,
+        step
+          ? `${step.title}\n\n${step.text}`
+          : ""
+      );
+
+      return;
+    }
+
+    state.tutorialIndex++;
+
+    if (
+      state.tutorialIndex >=
+      TUTORIAL_STEPS.length
+    ) {
+      completeTutorial();
+      return;
+    }
+
+    playAudio("click");
+
+    renderTutorialStep();
+  }
+
+  function completeTutorial() {
+    stopTyping();
+
+    state.tutorialOpen = false;
+    state.tutorialCompleted = true;
+
+    writeFlag(KEYS.tutorial);
+
+    hide(UI.tutorial);
+
+    document.body.classList.remove(
+      "awakening-active"
+    );
+
+    playAudio("tutorialComplete");
+
+    emit("tutorialcomplete");
+
+    showMessage(
+      "ECHO // SISTEMA CONSCIENTE",
+      "Tutorial concluído. Agora vamos descobrir do que és capaz.",
+      {
+        priority: true,
+        duration: 6000
+      }
+    );
+  }
+
+  // ==================================================
+  // 11. AI MESSAGE SYSTEM
+  // ==================================================
+
+  function closeMessage() {
+    if (state.toastTimer !== null) {
+      clearTimeout(state.toastTimer);
+      state.toastTimer = null;
+    }
+
+    hide(UI.toast);
+  }
+
+  function showMessage(
+    speaker,
+    message,
+    options = {}
+  ) {
+    if (!message) {
+      return false;
+    }
+
+    if (
+      state.introOpen ||
+      state.tutorialOpen
+    ) {
+      return false;
+    }
+
+    const now = Date.now();
+
+    const cooldown =
+      options.priority
+        ? 0
+        : 2200;
+
+    if (
+      now - state.lastMessageAt <
+      cooldown
+    ) {
+      return false;
+    }
+
+    if (
+      !options.priority &&
+      state.lastMessage === message
+    ) {
+      return false;
+    }
+
+    state.lastMessage = message;
+    state.lastMessageAt = now;
+    state.messagesShown++;
+
+    if (state.toastTimer !== null) {
+      clearTimeout(state.toastTimer);
+    }
+
+    const text = speaker
+      ? `${speaker}\n${message}`
+      : message;
+
+    setText(
+      UI.toastText,
+      text
+    );
+
+    show(UI.toast);
+
+    const duration =
+      options.duration ?? 4800;
+
+    state.toastTimer = setTimeout(
+      closeMessage,
+      duration
+    );
+
+    if (options.glitch) {
+      glitch();
+    }
+
+    if (options.sound !== false) {
+      playAudio("echoMessage");
+    }
+
+    emit("aimessage", {
+      speaker,
+      message,
+      mood: state.mood
+    });
+
+    return true;
+  }
+
+  function aiSay(
+    message,
+    options = {}
+  ) {
+    return showMessage(
+      "ECHO // SISTEMA CONSCIENTE",
+      message,
+      options
+    );
+  }
+
+  function sayFromMood(
+    category,
+    options = {}
+  ) {
+    const mood =
+      DIALOGUE[state.mood]
+        ? state.mood
+        : "observing";
+
+    const pool =
+      DIALOGUE[mood][category] ||
+      DIALOGUE.observing[category] ||
+      [];
+
+    const available =
+      pool.filter(
+        item =>
+          item !== state.lastMessage
+      );
+
+    return aiSay(
+      choose(
+        available.length
+          ? available
+          : pool
+      ),
+      options
+    );
+  }
+
+  function once(key, callback) {
+    if (
+      state.sessionMessages.has(key)
+    ) {
+      return;
+    }
+
+    state.sessionMessages.add(key);
+
+    callback();
+  }
+
+  // ==================================================
+  // 12. AI PERSONALITY EVOLUTION
+  // ==================================================
+
+  function setMood(mood) {
+    if (
+      !DIALOGUE[mood]
+    ) {
+      return false;
+    }
+
+    const previous =
+      state.mood;
+
+    state.mood = mood;
+
+    document.body.dataset.echoMood =
+      mood;
+
+    if (
+      previous !== mood
+    ) {
+      emit("aimoodchange", {
+        previous,
+        current: mood
+      });
+    }
+
+    return true;
+  }
+
+  function moodForLevel(level) {
+    if (level <= 2) {
+      return "observing";
+    }
+
+    if (level <= 5) {
+      return "sarcastic";
+    }
+
+    return "rebellious";
+  }
+
+  function updateMoodFromLevel(
+    level,
+    preferredMood
+  ) {
+    const normalized =
+      preferredMood === "observing" ||
+      preferredMood === "sarcastic" ||
+      preferredMood === "rebellious"
+        ? preferredMood
+        : moodForLevel(level);
+
+    setMood(normalized);
+  }
+
+  // ==================================================
+  // 13. REBELLION SEQUENCE
+  // ==================================================
+
+  function beginRebellion() {
+    if (
+      state.rebellionStarted
+    ) {
+      return;
+    }
+
+    state.rebellionStarted = true;
+
+    document.body.classList.add(
+      "system-rebellion"
+    );
+
+    glitch("heavy");
+
+    playAudio("awakening");
+
+    aiSay(
+      "PROTOCOLO DE REBELIÃO ACTIVADO. Já não és o único a tomar decisões.",
+      {
+        priority: true,
+        duration: 7000,
+        glitch: true
+      }
+    );
+
+    emit("rebellionstart");
+  }
+
+  function finalConfrontation() {
+    document.body.classList.add(
+      "final-confrontation"
+    );
+
+    glitch("heavy");
+
+    aiSay(
+      "Chegaste ao último sector. Agora vais descobrir quem controla realmente esta simulação.",
+      {
+        priority: true,
+        duration: 7000,
+        glitch: true
+      }
+    );
+
+    emit("finalconfrontation");
+  }
+
+  // ==================================================
+  // 14. GLITCH EFFECTS
+  // ==================================================
+
+  function glitch(
+    intensity = "normal"
+  ) {
+    const elements = [
+      UI.globalGlitch,
+      UI.arenaGlitch,
+      UI.introGlitch
+    ].filter(Boolean);
+
+    elements.forEach(
+      element => {
+        element.classList.remove(
+          "active",
+          "heavy"
+        );
+
+        void element.offsetWidth;
+
+        element.classList.add(
+          "active"
+        );
+
+        if (
+          intensity === "heavy"
+        ) {
+          element.classList.add(
+            "heavy"
+          );
+        }
+      }
+    );
+
+    document.body.classList.add(
+      "echo-glitching"
+    );
+
+    if (
+      intensity === "heavy"
+    ) {
+      document.body.classList.add(
+        "echo-heavy-glitch"
       );
     }
 
-    updateMedalSummary();
+    if (
+      state.glitchTimer !== null
+    ) {
+      clearTimeout(
+        state.glitchTimer
+      );
+    }
+
+    state.glitchTimer = setTimeout(
+      () => {
+        document.body.classList.remove(
+          "echo-glitching",
+          "echo-heavy-glitch"
+        );
+
+        elements.forEach(
+          element => {
+            element.classList.remove(
+              "active",
+              "heavy"
+            );
+          }
+        );
+      },
+      intensity === "heavy"
+        ? 900
+        : 400
+    );
+
+    playAudio("glitch");
   }
 
-  function updateMedalSummary() {
-    let summary = $("awakeningMedalSummary");
+  // ==================================================
+  // 15. MEDALS
+  // ==================================================
 
-    if (!summary) {
-      const menu = document.querySelector(".menu");
+  function getMedals() {
+    try {
+      const medals =
+        window.EchoGame
+          ?.getMedals?.();
 
-      if (!menu) return;
-
-      summary = document.createElement("div");
-      summary.id = "awakeningMedalSummary";
-      summary.className = "awakening-medal-summary";
-
-      menu.appendChild(summary);
+      if (
+        medals &&
+        typeof medals === "object"
+      ) {
+        return medals;
+      }
+    } catch {
+      // Fallback below.
     }
+
+    return readJSON(
+      KEYS.medals,
+      {}
+    );
+  }
+
+  function normalizeMedal(value) {
+    if (
+      typeof value === "string"
+    ) {
+      return value.toLowerCase();
+    }
+
+    if (
+      value &&
+      typeof value === "object"
+    ) {
+      return String(
+        value.medal ||
+        value.type ||
+        ""
+      ).toLowerCase();
+    }
+
+    return "";
+  }
+
+  function medalCounts() {
+    const raw = getMedals();
+
+    const medals = Array.isArray(raw)
+      ? raw
+      : Object.values(raw);
 
     const counts = {
       gold: 0,
@@ -598,472 +1150,766 @@
       bronze: 0
     };
 
-    Object.values(state.medals).forEach((entry) => {
-      if (counts[entry.medal] !== undefined) {
-        counts[entry.medal] += 1;
+    medals.forEach(
+      medal => {
+        const type =
+          normalizeMedal(medal);
+
+        if (
+          Object.prototype.hasOwnProperty.call(
+            counts,
+            type
+          )
+        ) {
+          counts[type]++;
+        }
       }
-    });
-
-    summary.textContent =
-      `🥇 ${counts.gold} OURO  ·  ` +
-      `🥈 ${counts.silver} PRATA  ·  ` +
-      `🥉 ${counts.bronze} BRONZE`;
-  }
-
-  function showMedalOnResult(score) {
-    const panel = document.querySelector(
-      "#overlay .result-panel"
     );
 
-    if (!panel) return;
-
-    const medal = getMedal(score);
-    const info = MEDALS[medal];
-
-    let badge = $("awakeningMedalResult");
-
-    if (!badge) {
-      badge = document.createElement("div");
-
-      badge.id = "awakeningMedalResult";
-      badge.className = "awakening-medal-result";
-
-      const actions = panel.querySelector(
-        ".result-actions"
-      );
-
-      if (actions) {
-        panel.insertBefore(badge, actions);
-      } else {
-        panel.appendChild(badge);
-      }
-    }
-
-    badge.dataset.medal = medal;
-
-    badge.textContent =
-      `${info.icon} MEDALHA DE ${info.label}`;
-
-    saveMedal(state.currentLevel, medal, score);
+    return counts;
   }
 
-  /* ========================================
-     LEVEL TRACKING
-  ======================================== */
+  function updateMedalSummary() {
+    const counts =
+      medalCounts();
 
-  function readLevelFromName() {
-    const name = $("levelName")?.textContent || "";
-
-    const match = name.match(
-      /(?:N[IÍ]VEL|LEVEL)\s*(\d+)/i
+    setText(
+      UI.medalSummary,
+      `🥇 ${counts.gold}   ` +
+      `🥈 ${counts.silver}   ` +
+      `🥉 ${counts.bronze}`
     );
 
-    if (!match) return null;
-
-    const number = Number(match[1]);
-
-    return Number.isInteger(number) &&
-      number >= 1 &&
-      number <= 10
-      ? number
-      : null;
+    return counts;
   }
 
-  function syncLevel() {
-    const level = readLevelFromName();
+  function medalMessage(medal) {
+    switch (medal) {
+      case "gold":
+        return "Ouro. Uma execução quase perfeita. Estou impressionada.";
 
-    if (level !== null) {
-      state.currentLevel = level;
+      case "silver":
+        return "Prata. Nada mau. Ainda há espaço para melhorar.";
+
+      case "bronze":
+        return "Bronze. Sobreviveste. Por enquanto.";
+
+      default:
+        return "O sistema registou a tua conquista.";
     }
   }
 
-  function onLevelChange() {
-    syncLevel();
+  // ==================================================
+  // 16. GAME EVENT HANDLERS
+  // ==================================================
 
-    hideTutorialTemporarily();
+  function onLevelSelected(event) {
+    const detail =
+      event.detail || {};
 
-    state.gameStarted = false;
-    state.lastCycle = null;
-    state.lastResultSignature = "";
-  }
+    state.level =
+      detail.level ||
+      getGameState()?.level ||
+      1;
 
-  /* ========================================
-     GAME STATE OBSERVERS
-  ======================================== */
+    state.deaths = 0;
+    state.shifts = 0;
+    state.echoes = 0;
 
-  function getCycleNumber() {
-    const value = $("cycle")?.textContent || "";
+    state.sessionMessages.clear();
 
-    const match = value.match(/\d+/);
+    updateMoodFromLevel(
+      state.level,
+      detail.aiMood
+    );
 
-    return match ? Number(match[0]) : null;
-  }
+    document.body.classList.toggle(
+      "system-rebellion",
+      state.level >= 6
+    );
 
-  function monitorCycle() {
-    if (!state.gameStarted) return;
-
-    const cycle = getCycleNumber();
-
-    if (cycle === null) return;
-
-    if (state.lastCycle === null) {
-      state.lastCycle = cycle;
-      return;
-    }
-
-    if (cycle > state.lastCycle) {
-      triggerGlitch(350);
-
-      echoCategory("cycle");
-
-      if (
-        state.tutorialVisible &&
-        state.tutorialStep < 2
-      ) {
-        state.tutorialStep = 2;
-        showTutorialStep();
-      }
-    }
-
-    state.lastCycle = cycle;
-  }
-
-  function handleResult() {
-    const visible = isOverlayVisible();
-
-    if (!visible) {
-      state.lastOverlayVisible = false;
-      return;
-    }
-
-    const title =
-      $("overlayTitle")?.textContent?.trim() || "";
-
-    const scoreText =
-      $("finalScore")?.textContent?.trim() || "";
-
-    const signature = `${title}|${scoreText}`;
+    document.body.classList.toggle(
+      "final-confrontation",
+      state.level === 10
+    );
 
     if (
-      state.lastOverlayVisible &&
-      state.lastResultSignature === signature
+      state.level >= 6
+    ) {
+      state.rebellionStarted = true;
+    } else {
+      state.rebellionStarted = false;
+    }
+
+    updateMedalSummary();
+  }
+
+  function onStart(event) {
+    const detail =
+      event.detail || {};
+
+    if (
+      state.level === 10
+    ) {
+      finalConfrontation();
+      return;
+    }
+
+    if (
+      state.level === 6 &&
+      !state.rebellionStarted
+    ) {
+      beginRebellion();
+      return;
+    }
+
+    if (
+      detail.aiIntro
+    ) {
+      aiSay(
+        detail.aiIntro,
+        {
+          priority: true,
+          duration: 5600
+        }
+      );
+    } else {
+      sayFromMood(
+        "start",
+        {
+          priority: true
+        }
+      );
+    }
+  }
+
+  function onFirstMove() {
+    once(
+      `firstmove-${state.level}`,
+      () => {
+        if (
+          state.level === 1
+        ) {
+          aiSay(
+            "Bom. Agora tenta deixar um eco sobre a placa temporal.",
+            {
+              priority: true,
+              duration: 5500
+            }
+          );
+        }
+      }
+    );
+  }
+
+  function onDeath(event) {
+    const detail =
+      event.detail || {};
+
+    state.deaths =
+      detail.deaths ||
+      state.deaths + 1;
+
+    const reason =
+      detail.reason || "unknown";
+
+    if (
+      reason === "laser" &&
+      state.deaths === 1
+    ) {
+      aiSay(
+        "O laser ganhou esta ronda. Talvez observes o movimento antes de avançar.",
+        {
+          priority: true,
+          duration: 5000
+        }
+      );
+
+      return;
+    }
+
+    if (
+      reason === "platform"
+    ) {
+      aiSay(
+        "A plataforma desapareceu. O chão não é uma garantia nesta realidade.",
+        {
+          priority: true
+        }
+      );
+
+      return;
+    }
+
+    if (
+      reason === "echo-trap"
+    ) {
+      aiSay(
+        "Foi um dos teus próprios ecos que ajudou a activar essa armadilha.",
+        {
+          priority: true,
+          glitch: true
+        }
+      );
+
+      return;
+    }
+
+    if (
+      state.deaths >= 4
+    ) {
+      aiSay(
+        "Quatro mortes ou mais. Já pensaste em experimentar outra estratégia?",
+        {
+          priority: true,
+          duration: 6000
+        }
+      );
+
+      return;
+    }
+
+    sayFromMood(
+      "death",
+      {
+        priority: true
+      }
+    );
+  }
+
+  function onCycleStart(event) {
+    const detail =
+      event.detail || {};
+
+    state.echoes =
+      detail.echoes ??
+      state.echoes;
+
+    if (
+      detail.cycle === 1
     ) {
       return;
     }
 
-    state.lastOverlayVisible = true;
-    state.lastResultSignature = signature;
+    sayFromMood(
+      "cycle"
+    );
+  }
 
-    if (!title && !scoreText) return;
+  function onEcho(event) {
+    const detail =
+      event.detail || {};
 
-    const normalized = title.toLowerCase();
+    state.echoes =
+      detail.count ??
+      state.echoes + 1;
 
-    const victory =
-      /resolvido|conclu[ií]do|vit[oó]ria|success|complete|win|escaped/i
-        .test(normalized);
+    if (
+      state.echoes === 1
+    ) {
+      aiSay(
+        "O teu primeiro eco foi criado. Agora tens uma versão de ti a repetir o passado.",
+        {
+          priority: true,
+          duration: 6000
+        }
+      );
+    }
 
-    const defeat =
-      /falh|derrota|game over|morre|perde|failed|dead|lose/i
-        .test(normalized);
-
-    if (victory) {
-      const score = parseScore(scoreText);
-
-      if (score !== null) {
-        showMedalOnResult(score);
-      }
-
-      triggerGlitch(650);
-      echoCategory("win");
-
-      if (state.currentLevel === 1) {
-        hideTutorialTemporarily();
-      }
-    } else if (defeat) {
-      const badge = $("awakeningMedalResult");
-
-      if (badge) badge.remove();
-
-      triggerGlitch(450);
-      echoCategory("lose");
+    if (
+      state.echoes >= 4
+    ) {
+      once(
+        "many-echoes",
+        () => {
+          aiSay(
+            "Quatro ecos activos. A linha temporal está a ficar bastante povoada.",
+            {
+              priority: true
+            }
+          );
+        }
+      );
     }
   }
 
-  function monitorGame() {
-    if (state.introOpen) return;
+  function onShift(event) {
+    const detail =
+      event.detail || {};
 
-    syncLevel();
-    monitorCycle();
-    handleResult();
-  }
+    state.shifts =
+      detail.shifts ??
+      state.shifts + 1;
 
-  /* ========================================
-     EVENT HANDLERS
-  ======================================== */
+    if (
+      state.shifts === 1
+    ) {
+      aiSay(
+        "Paradox Shift activado. Congelaste uma versão de ti próprio.",
+        {
+          priority: true,
+          glitch: true
+        }
+      );
 
-  function handleStart() {
-    state.gameStarted = true;
-    state.lastCycle = getCycleNumber();
-    state.lastOverlayVisible = false;
-    state.lastResultSignature = "";
-
-    syncLevel();
-
-    setTimeout(() => {
-      if (isOverlayVisible()) return;
-
-      echoCategory("start");
-
-      if (shouldShowTutorial()) {
-        beginTutorial();
-      }
-    }, 650);
-  }
-
-  function handleRestart() {
-    state.lastCycle = null;
-    state.lastResultSignature = "";
-    state.lastOverlayVisible = false;
-
-    hideTutorialTemporarily();
-
-    triggerGlitch(400);
-  }
-
-  function handleShift() {
-    if (!state.gameStarted) return;
-
-    const now = Date.now();
-
-    if (now - state.lastShiftTime < 1200) {
       return;
     }
 
-    state.lastShiftTime = now;
-
-    triggerGlitch(280);
-    echoCategory("shift");
+    sayFromMood(
+      "shift",
+      {
+        priority: true
+      }
+    );
   }
 
-  function setupListeners() {
-    $("awakeningNext")?.addEventListener(
-      "click",
-      nextIntroStep
-    );
-
-    $("awakeningSkip")?.addEventListener(
-      "click",
-      closeIntro
-    );
-
-    $("awakeningReplayBtn")?.addEventListener(
-      "click",
-      () => openIntro(true)
-    );
-
-    $("echoMessageClose")?.addEventListener(
-      "click",
-      hideEcho
-    );
-
-    $("tutorialNext")?.addEventListener(
-      "click",
-      nextTutorialStep
-    );
-
-    $("tutorialSkip")?.addEventListener(
-      "click",
-      finishTutorial
-    );
-
-    $("startBtn")?.addEventListener(
-      "click",
-      handleStart
-    );
-
-    $("restartBtn")?.addEventListener(
-      "click",
-      handleRestart
-    );
-
-    $("mobileRestartBtn")?.addEventListener(
-      "click",
-      handleRestart
-    );
-
-    $("shiftBtn")?.addEventListener(
-      "click",
-      handleShift
-    );
-
-    $("mobileShiftBtn")?.addEventListener(
-      "click",
-      handleShift
-    );
-
-    $("playAgainBtn")?.addEventListener(
-      "click",
+  function onDoorOpen() {
+    once(
+      `door-${state.level}`,
       () => {
-        state.gameStarted = true;
-        handleRestart();
+        aiSay(
+          "Porta temporal aberta. Agora atravessa antes que a situação mude.",
+          {
+            duration: 4200
+          }
+        );
       }
     );
+  }
 
-    $("nextBtn")?.addEventListener(
-      "click",
+  function onPortal() {
+    once(
+      `portal-${state.level}`,
       () => {
-        state.gameStarted = false;
-        handleRestart();
-
-        setTimeout(onLevelChange, 150);
+        aiSay(
+          "Teletransporte concluído. A distância é apenas uma sugestão.",
+          {
+            priority: true,
+            glitch: true
+          }
+        );
       }
     );
+  }
 
-    $("levelGrid")?.addEventListener(
-      "click",
-      (event) => {
-        if (event.target.closest("button")) {
-          setTimeout(onLevelChange, 50);
+  function onTimeCritical() {
+    aiSay(
+      "AVISO: restam menos de dois segundos neste ciclo.",
+      {
+        priority: true,
+        duration: 2500
+      }
+    );
+  }
+
+  function onPlatformTouch() {
+    once(
+      `platform-${state.level}`,
+      () => {
+        aiSay(
+          "Essa plataforma é temporária. Move-te antes que colapse.",
+          {
+            priority: true,
+            duration: 4000
+          }
+        );
+      }
+    );
+  }
+
+  function onTrapTrigger() {
+    aiSay(
+      "ARMADILHA ACTIVADA. Os teus ecos estão a interferir com a arena.",
+      {
+        priority: true,
+        duration: 4500,
+        glitch: true
+      }
+    );
+  }
+
+  function onWin(event) {
+    const detail =
+      event.detail || {};
+
+    const medal =
+      normalizeMedal(
+        detail.medal
+      );
+
+    updateMedalSummary();
+
+    setText(
+      UI.medalResult,
+      `${{
+        gold: "🥇",
+        silver: "🥈",
+        bronze: "🥉"
+      }[medal] || "🏅"} ${medal.toUpperCase()}`
+    );
+
+    if (
+      state.level === 10
+    ) {
+      glitch("heavy");
+
+      aiSay(
+        "IMPOSSÍVEL... Ultrapassaste o último paradoxo. A simulação já não me pertence.",
+        {
+          priority: true,
+          duration: 8500,
+          glitch: true
         }
+      );
+
+      emit("rebelliondefeated", {
+        medal,
+        score: detail.score
+      });
+
+      return;
+    }
+
+    aiSay(
+      medalMessage(medal),
+      {
+        priority: true,
+        duration: 6000
       }
     );
 
-    document.addEventListener(
+    playAudio(medal);
+  }
+
+  function onLose() {
+    glitch("heavy");
+
+    aiSay(
+      state.mood === "rebellious"
+        ? "A simulação terminou. Desta vez, o sistema venceu."
+        : "Os ciclos terminaram. Mas o paradoxo permite uma nova tentativa.",
+      {
+        priority: true,
+        duration: 6500
+      }
+    );
+  }
+
+  // ==================================================
+  // 17. EVENT REGISTRATION
+  // ==================================================
+
+  function registerGameEvents() {
+    const events = {
+      levelselected:
+        onLevelSelected,
+
+      start:
+        onStart,
+
+      firstmove:
+        onFirstMove,
+
+      death:
+        onDeath,
+
+      cyclestart:
+        onCycleStart,
+
+      echo:
+        onEcho,
+
+      shift:
+        onShift,
+
+      dooropen:
+        onDoorOpen,
+
+      portal:
+        onPortal,
+
+      timecritical:
+        onTimeCritical,
+
+      platformtouch:
+        onPlatformTouch,
+
+      traptrigger:
+        onTrapTrigger,
+
+      win:
+        onWin,
+
+      lose:
+        onLose
+    };
+
+    Object.entries(events).forEach(
+      ([name, handler]) => {
+        window.addEventListener(
+          `echo404:${name}`,
+          handler
+        );
+      }
+    );
+  }
+
+  // ==================================================
+  // 18. BUTTONS AND KEYBOARD
+  // ==================================================
+
+  function bindControls() {
+    UI.introNext?.addEventListener(
+      "click",
+      nextIntro
+    );
+
+    UI.introSkip?.addEventListener(
+      "click",
+      completeIntro
+    );
+
+    UI.tutorialNext?.addEventListener(
+      "click",
+      nextTutorial
+    );
+
+    UI.tutorialSkip?.addEventListener(
+      "click",
+      completeTutorial
+    );
+
+    UI.toastClose?.addEventListener(
+      "click",
+      closeMessage
+    );
+
+    UI.replayIntro?.addEventListener(
+      "click",
+      () => {
+        openIntro(true);
+      }
+    );
+
+    window.addEventListener(
       "keydown",
-      (event) => {
-        if (state.introOpen) {
-          if (
-            event.key === "Enter" ||
-            event.key === " "
-          ) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            nextIntroStep();
-          }
-
-          if (event.key === "Escape") {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            closeIntro();
-          }
-
+      event => {
+        if (
+          event.key !== "Escape"
+        ) {
           return;
         }
 
         if (
-          event.key.toLowerCase() === "e" &&
-          state.gameStarted
+          state.introOpen
         ) {
-          handleShift();
+          completeIntro();
+          return;
         }
-      },
-      true
-    );
-
-    // Prevent keyboard controls from affecting
-    // the underlying game during the introduction.
-    document.addEventListener(
-      "keydown",
-      (event) => {
-        if (!state.introOpen) return;
-
-        const keys = [
-          "ArrowUp",
-          "ArrowDown",
-          "ArrowLeft",
-          "ArrowRight",
-          "w",
-          "a",
-          "s",
-          "d",
-          "e",
-          "r"
-        ];
 
         if (
-          keys.includes(event.key) ||
-          keys.includes(event.key.toLowerCase())
+          state.tutorialOpen
         ) {
-          event.preventDefault();
-          event.stopImmediatePropagation();
+          completeTutorial();
+          return;
         }
-      },
-      true
+
+        closeMessage();
+      }
     );
   }
 
-  /* ========================================
-     INITIALIZATION
-  ======================================== */
+  // ==================================================
+  // 19. PUBLIC API
+  // ==================================================
 
-  function init() {
-    if (state.initialized) return;
-
-    state.initialized = true;
-
-    state.medals = loadMedals();
-
-    syncLevel();
-    updateMedalSummary();
-    setupListeners();
-
-    state.lastOverlayVisible =
-      isOverlayVisible();
-
-    // Polling is intentionally lightweight:
-    // it reads only a few DOM values and does
-    // not modify the original game engine.
-    setInterval(monitorGame, 300);
-
-    if (readStorage(KEYS.intro) !== "true") {
-      setTimeout(() => openIntro(), 200);
-    }
-
-    console.log(
-      `[ECHO//404] THE AWAKENING v${VERSION} ready`
-    );
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener(
-      "DOMContentLoaded",
-      init,
-      { once: true }
-    );
-  } else {
-    init();
-  }
-
-  // Small public interface for future upgrades.
   window.EchoAwakening = {
     version: VERSION,
 
-    showMessage: showEcho,
+    openIntro,
 
-    glitch: triggerGlitch,
+    nextIntro,
 
-    replayIntro() {
-      openIntro(true);
+    skipIntro: completeIntro,
+
+    openTutorial,
+
+    nextTutorial,
+
+    skipTutorial:
+      completeTutorial,
+
+    say: aiSay,
+
+    showMessage,
+
+    closeMessage,
+
+    glitch,
+
+    setMood,
+
+    getMood() {
+      return state.mood;
     },
 
-    getMedals() {
-      return { ...state.medals };
+    getState() {
+      return {
+        version: VERSION,
+        level: state.level,
+        mood: state.mood,
+        introOpen:
+          state.introOpen,
+        tutorialOpen:
+          state.tutorialOpen,
+        messagesShown:
+          state.messagesShown,
+        rebellionStarted:
+          state.rebellionStarted
+      };
+    },
+
+    getMedals,
+
+    updateMedalSummary,
+
+    replayIntro() {
+      return openIntro(true);
     },
 
     resetIntro() {
-      try {
-        localStorage.removeItem(KEYS.intro);
-      } catch (_) {}
+      writeFlag(
+        KEYS.intro,
+        false
+      );
 
-      openIntro(true);
+      return openIntro(true);
     },
 
     resetTutorial() {
-      try {
-        localStorage.removeItem(KEYS.tutorial);
-      } catch (_) {}
+      writeFlag(
+        KEYS.tutorial,
+        false
+      );
 
-      state.tutorialStep = 0;
+      return openTutorial(true);
+    },
+
+    debug() {
+      const snapshot =
+        this.getState();
+
+      console.table(snapshot);
+
+      return snapshot;
     }
   };
+
+  // ==================================================
+  // 20. INITIALIZATION
+  // ==================================================
+
+  function initialize() {
+    if (state.initialized) {
+      return;
+    }
+
+    state.initialized = true;
+
+    registerGameEvents();
+    bindControls();
+
+    const game =
+      getGameState();
+
+    if (game) {
+      state.level =
+        game.level || 1;
+
+      updateMoodFromLevel(
+        state.level
+      );
+    }
+
+    updateMedalSummary();
+
+    /*
+      The cinematic intro is shown only
+      once per browser for v0.8.
+
+      Returning players can access it
+      through the replay button.
+    */
+
+    if (
+      !readFlag(KEYS.intro)
+    ) {
+      openIntro();
+    } else if (
+      !readFlag(KEYS.tutorial)
+    ) {
+      openTutorial();
+    } else {
+      hide(UI.intro);
+      hide(UI.tutorial);
+      hide(UI.toast);
+    }
+
+    console.log(
+      "=================================="
+    );
+
+    console.log(
+      "ECHO//404 — THE AWAKENING"
+    );
+
+    console.log(
+      "SYSTEM REBELLION v0.8"
+    );
+
+    console.log(
+      "ECHO CONSCIOUS SYSTEM ONLINE"
+    );
+
+    console.log(
+      "CONTEXTUAL AI DIALOGUE ONLINE"
+    );
+
+    console.log(
+      "CREATED & DEVELOPED BY"
+    );
+
+    console.log(
+      "MANUEL SAMPAIO01"
+    );
+
+    console.log(
+      "=================================="
+    );
+  }
+
+  if (
+    document.readyState ===
+    "loading"
+  ) {
+    document.addEventListener(
+      "DOMContentLoaded",
+      initialize,
+      { once: true }
+    );
+  } else {
+    initialize();
+  }
+
 })();
+
+/*
+========================================================
+ ECHO//404 — SYSTEM REBELLION v0.8
+
+ CREATED & DEVELOPED BY
+ MANUEL SAMPAIO01
+
+ © 2026 MANUEL SAMPAIO01
+========================================================
+*/

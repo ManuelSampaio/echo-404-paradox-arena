@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-AO">
 <head>
   <meta charset="UTF-8">
 
@@ -9,737 +9,1320 @@
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
 
-  <meta name="theme-color" content="#050711">
+  <meta
+    name="theme-color"
+    content="#070b18"
+  >
 
   <meta
     name="description"
-    content="ECHO//404 — The Awakening. Um puzzle temporal onde o teu passado é a tua arma. Criado por Manuel Sampaio01."
+    content="ECHO//404 — SYSTEM REBELLION. Um jogo futurista de puzzles temporais, ecos, paradoxos e sobrevivência. Created & Developed by MANUEL SAMPAIO01."
   >
 
-  <meta name="author" content="Manuel Sampaio01">
-
-  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta
-    name="apple-mobile-web-app-status-bar-style"
-    content="black-translucent"
+    name="author"
+    content="MANUEL SAMPAIO01"
   >
 
-  <title>ECHO//404 — The Awakening v0.7</title>
+  <meta
+    name="color-scheme"
+    content="dark"
+  >
 
-  <link rel="stylesheet" href="style.css?v=070">
+  <title>
+    ECHO//404 — SYSTEM REBELLION v0.8
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css?v=080"
+  >
 </head>
 
-<body>
+<body class="echo404-app">
 
-  <!-- =====================================
-       INTRODUÇÃO CINEMATOGRÁFICA
-       THE AWAKENING
-  ====================================== -->
+  <!-- ======================================
+       BACKGROUND / ATMOSPHERE
+  ======================================= -->
 
   <div
+    class="background-grid"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="ambient-glow ambient-glow-one"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="ambient-glow ambient-glow-two"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="screen-noise"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="screen-scanlines"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    id="globalGlitch"
+    class="global-glitch"
+    aria-hidden="true"
+  ></div>
+
+  <!-- ======================================
+       CINEMATIC INTRO
+  ======================================= -->
+
+  <section
     id="awakeningIntro"
     class="awakening-intro hidden"
     role="dialog"
     aria-modal="true"
     aria-labelledby="awakeningTitle"
-    aria-hidden="true"
   >
 
-    <div class="awakening-screen">
+    <div class="awakening-intro-backdrop"></div>
 
-      <div class="awakening-topline">
-        <span>ECHO//404</span>
-        <span class="awakening-signal">
-          ● SIGNAL DETECTED
-        </span>
+    <div class="awakening-intro-content">
+
+      <div class="awakening-system-label">
+        ECHO SYSTEM // INITIALIZING
       </div>
 
-      <div class="awakening-core" aria-hidden="true">
-        <div class="awakening-ring awakening-ring-outer"></div>
-        <div class="awakening-ring awakening-ring-inner"></div>
-        <div class="awakening-eye">◈</div>
+      <div
+        class="awakening-symbol"
+        aria-hidden="true"
+      >
+        ◈
       </div>
 
-      <div class="awakening-terminal">
-
-        <div class="awakening-terminal-label">
-          <span>INCOMING TRANSMISSION</span>
-          <span id="awakeningCounter">01 / 03</span>
-        </div>
-
-        <h2 id="awakeningTitle">
-          SINAL DETECTADO
-        </h2>
-
-        <p
-          id="awakeningText"
-          class="awakening-typed"
-          aria-live="polite"
-        ></p>
-
-        <div
-          class="awakening-progress"
-          aria-label="Progresso da introdução"
-        >
-          <span class="awakening-dot active"></span>
-          <span class="awakening-dot"></span>
-          <span class="awakening-dot"></span>
-        </div>
-
+      <div
+        id="awakeningCounter"
+        class="awakening-counter"
+      >
+        PROTOCOL 01 / 04
       </div>
 
-      <div class="awakening-actions">
+      <h1
+        id="awakeningTitle"
+        class="awakening-title"
+      >
+        THE AWAKENING
+      </h1>
+
+      <p
+        id="awakeningText"
+        class="awakening-text"
+      >
+        O tempo está a fragmentar-se.
+        Os teus ecos são a única forma
+        de restaurar a realidade.
+      </p>
+
+      <div
+        id="awakeningGlitch"
+        class="awakening-glitch"
+        aria-hidden="true"
+      ></div>
+
+      <div class="awakening-intro-actions">
 
         <button
           id="awakeningSkip"
-          class="awakening-btn awakening-btn-ghost"
           type="button"
+          class="btn btn-secondary"
         >
-          SALTAR INTRODUÇÃO
+          SALTAR
         </button>
 
         <button
           id="awakeningNext"
-          class="awakening-btn awakening-btn-primary"
           type="button"
+          class="btn btn-primary"
         >
-          CONTINUAR →
+          CONTINUAR
         </button>
 
       </div>
 
-      <p class="awakening-footer">
-        TEMPORAL SYSTEM // VERSION 0.7
-      </p>
+      <div class="awakening-signature">
+        CREATED & DEVELOPED BY
+        MANUEL SAMPAIO01
+      </div>
 
     </div>
+  </section>
 
-  </div>
-
-  <!-- =====================================
-       EFEITOS DE GLITCH
-  ====================================== -->
-
-  <div
-    id="awakeningGlitch"
-    class="awakening-glitch"
-    aria-hidden="true"
-  ></div>
-
-  <!-- =====================================
-       ASSISTENTE TEMPORAL — IA ECHO
-  ====================================== -->
+  <!-- ======================================
+       MAIN APPLICATION
+  ======================================= -->
 
   <div
-    id="echoMessage"
-    class="echo-message"
-    role="status"
-    aria-live="polite"
+    id="app"
+    class="app-container"
   >
 
-    <div class="echo-avatar" aria-hidden="true">
-      ◈
-    </div>
-
-    <div class="echo-message-content">
-
-      <strong>
-        ECHO // ASSISTENTE TEMPORAL
-      </strong>
-
-      <p id="echoMessageText"></p>
-
-    </div>
-
-    <button
-      id="echoMessageClose"
-      class="echo-message-close"
-      type="button"
-      aria-label="Fechar mensagem"
-    >
-      ×
-    </button>
-
-  </div>
-
-  <!-- =====================================
-       TUTORIAL INTERACTIVO
-  ====================================== -->
-
-  <div
-    id="awakeningTutorial"
-    class="awakening-tutorial"
-    aria-live="polite"
-  >
-
-    <div class="tutorial-heading">
-
-      <span>
-        ◈ PROTOCOLO DE APRENDIZAGEM
-      </span>
-
-      <span id="tutorialCounter">
-        1/4
-      </span>
-
-    </div>
-
-    <p id="tutorialText"></p>
-
-    <div class="tutorial-actions">
-
-      <button
-        id="tutorialSkip"
-        type="button"
-      >
-        DISPENSAR
-      </button>
-
-      <button
-        id="tutorialNext"
-        type="button"
-      >
-        ENTENDI →
-      </button>
-
-    </div>
-
-  </div>
-
-  <!-- =====================================
-       APLICAÇÃO PRINCIPAL
-  ====================================== -->
-
-  <main class="app">
-
-    <!-- CABEÇALHO -->
+    <!-- ====================================
+         HEADER
+    ===================================== -->
 
     <header class="game-header">
 
-      <div class="version">
-        SYSTEM BUILD // 0.7 THE AWAKENING
+      <div class="header-brand">
+
+        <div class="brand-mark">
+          ◈
+        </div>
+
+        <div class="brand-information">
+
+          <div class="brand-overline">
+            PARADOX EVOLUTION
+          </div>
+
+          <h1 class="game-logo">
+            ECHO<span>//</span>404
+          </h1>
+
+          <div class="game-subtitle">
+            SYSTEM REBELLION
+          </div>
+
+        </div>
+
       </div>
 
-      <h1 class="logo">
-        ECHO<span>//404</span>
-      </h1>
+      <div class="header-actions">
 
-      <p class="subtitle">
-        PARADOX EVOLUTION
-      </p>
+        <span
+          id="systemStatus"
+          class="system-status"
+        >
+          <span class="system-status-dot"></span>
+          SYSTEM ONLINE
+        </span>
 
-      <p class="tagline">
-        O TEU PASSADO É A TUA ARMA
-      </p>
+        <button
+          id="soundBtn"
+          type="button"
+          class="btn btn-icon sound-button"
+          aria-label="Activar ou desactivar som"
+          title="Activar ou desactivar som"
+        >
+          🔊
+        </button>
+
+        <button
+          id="fullscreenBtn"
+          type="button"
+          class="btn btn-icon fullscreen-button"
+          aria-label="Ecrã completo"
+          title="Ecrã completo"
+        >
+          ⛶
+        </button>
+
+      </div>
 
     </header>
 
-    <!-- =====================================
-         SELECÇÃO DE NÍVEIS
-    ====================================== -->
+    <!-- ====================================
+         SYSTEM INFORMATION
+    ===================================== -->
 
-    <section class="menu">
+    <section class="system-banner">
 
-      <div class="menu-heading">
+      <div class="system-banner-left">
 
-        <h2>
-          SELECCIONAR NÍVEL
-        </h2>
+        <span class="system-tag">
+          v0.8
+        </span>
 
-        <span id="progress">
-          0 / 10 CONCLUÍDOS
+        <span class="system-banner-text">
+          TEMPORAL SIMULATION ACTIVE
         </span>
 
       </div>
 
-      <div
-        id="levelGrid"
-        class="level-grid"
+      <div class="system-banner-right">
+
+        <span
+          id="threatLevel"
+          class="threat-level"
+        >
+          THREAT LEVEL: LOW
+        </span>
+
+      </div>
+
+    </section>
+
+    <!-- ====================================
+         GAME LAYOUT
+    ===================================== -->
+
+    <main class="game-layout">
+
+      <!-- ==================================
+           SIDEBAR
+      =================================== -->
+
+      <aside
+        class="game-sidebar"
         aria-label="Selecção de níveis"
-      ></div>
-
-      <p id="levelName">
-        NÍVEL 1 — O Primeiro Eco
-      </p>
-
-      <!-- MEDALHAS CONQUISTADAS -->
-
-      <div
-        id="awakeningMedalSummary"
-        class="awakening-medal-summary"
-        aria-label="Medalhas conquistadas"
-      >
-        🥇 0 OURO · 🥈 0 PRATA · 🥉 0 BRONZE
-      </div>
-
-    </section>
-
-    <!-- =====================================
-         INDICADORES DO JOGO
-    ====================================== -->
-
-    <section
-      class="hud"
-      aria-label="Indicadores do jogo"
-    >
-
-      <div class="stat">
-        <span>CICLO</span>
-        <strong id="cycle">1/6</strong>
-      </div>
-
-      <div class="stat">
-        <span>TEMPO</span>
-        <strong id="timer">10.0</strong>
-      </div>
-
-      <div class="stat">
-        <span>ECOS</span>
-        <strong id="ghosts">0</strong>
-      </div>
-
-      <div class="stat">
-        <span>PONTUAÇÃO</span>
-        <strong id="score">0</strong>
-      </div>
-
-      <div class="stat">
-        <span>RECORDE</span>
-        <strong id="best">0</strong>
-      </div>
-
-    </section>
-
-    <!-- =====================================
-         BARRA DE TEMPO
-    ====================================== -->
-
-    <div
-      class="timer-track"
-      role="progressbar"
-      aria-label="Tempo restante do ciclo"
-    >
-      <div id="timerBar"></div>
-    </div>
-
-    <!-- =====================================
-         ARENA PRINCIPAL
-    ====================================== -->
-
-    <section class="arena-wrapper">
-
-      <canvas
-        id="gameCanvas"
-        width="800"
-        height="500"
-        aria-label="Arena de jogo ECHO 404"
-      ></canvas>
-
-      <!-- RESULTADO DA SIMULAÇÃO -->
-
-      <div
-        id="overlay"
-        class="overlay hidden"
       >
 
-        <div class="result-panel">
+        <section class="panel levels-panel">
 
-          <p class="result-label">
-            SIMULATION RESULT
-          </p>
+          <div class="panel-heading">
 
-          <h2 id="overlayTitle">
-            PARADOXO RESOLVIDO
-          </h2>
+            <div>
+              <span class="panel-overline">
+                TEMPORAL SECTORS
+              </span>
 
-          <p id="overlayMessage"></p>
-
-          <strong id="finalScore">
-            0 PONTOS
-          </strong>
-
-          <!-- MEDALHA DO NÍVEL -->
-
-          <div
-            id="awakeningMedalResult"
-            class="awakening-medal-result hidden"
-            aria-live="polite"
-          ></div>
-
-          <div class="result-actions">
-
-            <button
-              id="playAgainBtn"
-              type="button"
-            >
-              JOGAR NOVAMENTE
-            </button>
-
-            <button
-              id="nextBtn"
-              type="button"
-            >
-              PRÓXIMO NÍVEL
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- =====================================
-         CONTROLOS TÁCTEIS — MOBILE
-    ====================================== -->
-
-    <section
-      id="mobileControls"
-      class="mobile-controls"
-      aria-label="Controlos tácteis do jogo"
-    >
-
-      <div class="mobile-controls-heading">
-
-        <span>
-          CONTROLO TÁCTIL
-        </span>
-
-        <span class="mobile-controls-status">
-          MOBILE SYSTEM // READY
-        </span>
-
-      </div>
-
-      <div class="mobile-controls-layout">
-
-        <!-- DIRECCIONAL -->
-
-        <div class="mobile-dpad-section">
-
-          <div
-            id="mobileDpad"
-            class="mobile-dpad"
-            aria-label="Direccional"
-          >
-
-            <button
-              id="moveUp"
-              class="dpad-btn dpad-up"
-              type="button"
-              data-direction="up"
-              aria-label="Mover para cima"
-            >
-              ▲
-            </button>
-
-            <button
-              id="moveLeft"
-              class="dpad-btn dpad-left"
-              type="button"
-              data-direction="left"
-              aria-label="Mover para a esquerda"
-            >
-              ◀
-            </button>
-
-            <div
-              class="dpad-center"
-              aria-hidden="true"
-            >
-              +
+              <h2>
+                SELECT LEVEL
+              </h2>
             </div>
 
-            <button
-              id="moveRight"
-              class="dpad-btn dpad-right"
-              type="button"
-              data-direction="right"
-              aria-label="Mover para a direita"
-            >
-              ▶
-            </button>
-
-            <button
-              id="moveDown"
-              class="dpad-btn dpad-down"
-              type="button"
-              data-direction="down"
-              aria-label="Mover para baixo"
-            >
-              ▼
-            </button>
+            <span class="panel-symbol">
+              ◈
+            </span>
 
           </div>
 
-          <span class="mobile-control-label">
-            MOVIMENTO
-          </span>
-
-        </div>
-
-        <!-- ACÇÕES MOBILE -->
-
-        <div class="mobile-action-section">
-
-          <button
-            id="mobileShiftBtn"
-            class="mobile-shift-btn"
-            type="button"
-            aria-label="Activar Paradox Shift"
+          <div
+            id="progress"
+            class="level-progress"
           >
+            0 / 10 COMPLETED
+          </div>
 
-            <span class="shift-icon">
-              ◆
+          <div
+            id="levelGrid"
+            class="level-grid"
+            aria-label="Níveis disponíveis"
+          ></div>
+
+          <div class="level-legend">
+
+            <span>
+              <i class="legend-dot unlocked"></i>
+              AVAILABLE
             </span>
 
             <span>
-              PARADOX
+              <i class="legend-dot completed"></i>
+              COMPLETED
             </span>
 
-            <strong>
-              SHIFT
+            <span>
+              <i class="legend-dot locked"></i>
+              LOCKED
+            </span>
+
+          </div>
+
+        </section>
+
+        <!-- ================================
+             MEDALS
+        ================================= -->
+
+        <section class="panel medals-panel">
+
+          <div class="panel-heading">
+
+            <div>
+              <span class="panel-overline">
+                PERFORMANCE
+              </span>
+
+              <h2>
+                MEDAL COLLECTION
+              </h2>
+            </div>
+
+            <span class="panel-symbol">
+              ★
+            </span>
+
+          </div>
+
+          <div
+            id="awakeningMedalSummary"
+            class="medal-summary"
+          >
+            🥇 0
+            &nbsp; 🥈 0
+            &nbsp; 🥉 0
+          </div>
+
+        </section>
+
+        <!-- ================================
+             CONTROLS GUIDE
+        ================================= -->
+
+        <section class="panel controls-panel">
+
+          <div class="panel-heading">
+
+            <div>
+              <span class="panel-overline">
+                OPERATOR MANUAL
+              </span>
+
+              <h2>
+                CONTROLS
+              </h2>
+            </div>
+
+          </div>
+
+          <div class="controls-guide">
+
+            <div class="control-guide-row">
+
+              <span>
+                MOVEMENT
+              </span>
+
+              <span class="keyboard-group">
+                <kbd>W</kbd>
+                <kbd>A</kbd>
+                <kbd>S</kbd>
+                <kbd>D</kbd>
+              </span>
+
+            </div>
+
+            <div class="control-guide-row">
+
+              <span>
+                ALTERNATIVE
+              </span>
+
+              <span class="keyboard-group">
+                <kbd>↑</kbd>
+                <kbd>←</kbd>
+                <kbd>↓</kbd>
+                <kbd>→</kbd>
+              </span>
+
+            </div>
+
+            <div class="control-guide-row">
+
+              <span>
+                PARADOX SHIFT
+              </span>
+
+              <kbd>SPACE</kbd>
+
+            </div>
+
+            <div class="control-guide-row">
+
+              <span>
+                RESTART
+              </span>
+
+              <kbd>R</kbd>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </aside>
+
+      <!-- ==================================
+           MAIN GAME AREA
+      =================================== -->
+
+      <section class="game-main">
+
+        <!-- ================================
+             LEVEL INFORMATION
+        ================================= -->
+
+        <section class="panel level-information">
+
+          <div class="level-information-top">
+
+            <div>
+
+              <span class="panel-overline">
+                CURRENT SIMULATION
+              </span>
+
+              <h2 id="levelName">
+                O Primeiro Eco
+              </h2>
+
+            </div>
+
+            <div
+              id="difficultyBadge"
+              class="difficulty-badge"
+            >
+              INICIANTE
+            </div>
+
+          </div>
+
+          <div
+            id="levelHint"
+            class="level-hint"
+          >
+            Utiliza os ecos temporais
+            para abrir a porta.
+          </div>
+
+        </section>
+
+        <!-- ================================
+             HUD
+        ================================= -->
+
+        <section
+          class="game-hud"
+          aria-label="Estatísticas da partida"
+        >
+
+          <div class="hud-card">
+
+            <span class="hud-label">
+              CYCLE
+            </span>
+
+            <strong
+              id="cycle"
+              class="hud-value"
+            >
+              1 / 6
             </strong>
 
-          </button>
+          </div>
 
-          <span class="mobile-control-label">
-            HABILIDADE TEMPORAL
-          </span>
+          <div
+            id="timerCard"
+            class="hud-card timer-card"
+          >
+
+            <span class="hud-label">
+              TIME LEFT
+            </span>
+
+            <strong
+              id="timer"
+              class="hud-value"
+            >
+              10.0
+            </strong>
+
+          </div>
+
+          <div class="hud-card">
+
+            <span class="hud-label">
+              ECHOES
+            </span>
+
+            <strong
+              id="ghosts"
+              class="hud-value"
+            >
+              0
+            </strong>
+
+          </div>
+
+          <div class="hud-card">
+
+            <span class="hud-label">
+              SCORE
+            </span>
+
+            <strong
+              id="score"
+              class="hud-value"
+            >
+              0
+            </strong>
+
+          </div>
+
+          <div class="hud-card">
+
+            <span class="hud-label">
+              BEST
+            </span>
+
+            <strong
+              id="best"
+              class="hud-value"
+            >
+              0
+            </strong>
+
+          </div>
+
+        </section>
+
+        <!-- ================================
+             TIMER PROGRESS
+        ================================= -->
+
+        <div class="timer-progress-track">
+
+          <div
+            id="timerBar"
+            class="timer-progress-bar"
+          ></div>
+
+        </div>
+
+        <!-- ================================
+             ARENA
+        ================================= -->
+
+        <section class="arena-section">
+
+          <div
+            id="arenaShell"
+            class="arena-shell"
+          >
+
+            <div
+              class="arena-corner arena-corner-tl"
+              aria-hidden="true"
+            ></div>
+
+            <div
+              class="arena-corner arena-corner-tr"
+              aria-hidden="true"
+            ></div>
+
+            <div
+              class="arena-corner arena-corner-bl"
+              aria-hidden="true"
+            ></div>
+
+            <div
+              class="arena-corner arena-corner-br"
+              aria-hidden="true"
+            ></div>
+
+            <canvas
+              id="gameCanvas"
+              width="800"
+              height="500"
+              aria-label="Arena temporal ECHO//404"
+            >
+              O teu navegador não suporta
+              HTML Canvas.
+            </canvas>
+
+            <!-- ============================
+                 CRITICAL WARNING
+            ============================= -->
+
+            <div
+              id="criticalWarning"
+              class="critical-warning hidden"
+              aria-live="polite"
+            >
+              ⚠ TEMPORAL COLLAPSE IMMINENT
+            </div>
+
+            <!-- ============================
+                 GLITCH OVERLAY
+            ============================= -->
+
+            <div
+              id="arenaGlitch"
+              class="arena-glitch"
+              aria-hidden="true"
+            ></div>
+
+            <!-- ============================
+                 GAME RESULT OVERLAY
+            ============================= -->
+
+            <div
+              id="overlay"
+              class="game-overlay"
+            >
+
+              <div class="overlay-content">
+
+                <span class="overlay-overline">
+                  TEMPORAL PROTOCOL
+                </span>
+
+                <h2 id="overlayTitle">
+                  ECHO//404
+                </h2>
+
+                <p id="overlayMessage">
+                  Selecciona um nível
+                  e inicia a simulação.
+                </p>
+
+                <div
+                  id="awakeningMedalResult"
+                  class="medal-result"
+                ></div>
+
+                <div class="overlay-score">
+
+                  <span>
+                    FINAL SCORE
+                  </span>
+
+                  <strong id="finalScore">
+                    0
+                  </strong>
+
+                </div>
+
+                <div class="overlay-actions">
+
+                  <button
+                    id="playAgainBtn"
+                    type="button"
+                    class="btn btn-primary"
+                  >
+                    PLAY AGAIN
+                  </button>
+
+                  <button
+                    id="nextBtn"
+                    type="button"
+                    class="btn btn-secondary"
+                  >
+                    NEXT LEVEL
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ================================
+               ARENA STATUS
+          ================================= -->
+
+          <div class="arena-status-bar">
+
+            <div class="arena-status-left">
+
+              <span class="status-indicator"></span>
+
+              <span id="status">
+                SYSTEM READY
+              </span>
+
+            </div>
+
+            <div
+              id="arenaThreatStatus"
+              class="arena-threat-status"
+            >
+              NO ANOMALIES DETECTED
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ================================
+             MAIN GAME BUTTONS
+        ================================= -->
+
+        <section class="game-actions">
 
           <button
-            id="mobileRestartBtn"
-            class="mobile-restart-btn"
+            id="startBtn"
             type="button"
-            aria-label="Reiniciar simulação"
+            class="btn btn-primary"
           >
-            ↻ REINICIAR
+            ▶ START SIMULATION
+          </button>
+
+          <button
+            id="restartBtn"
+            type="button"
+            class="btn btn-secondary"
+          >
+            ↻ RESTART
+          </button>
+
+          <button
+            id="shiftBtn"
+            type="button"
+            class="btn btn-shift"
+          >
+            ◈ PARADOX SHIFT
+          </button>
+
+        </section>
+
+        <!-- ================================
+             AI ECHO PANEL
+        ================================= -->
+
+        <section
+          id="echoAiPanel"
+          class="panel echo-ai-panel"
+          aria-label="Sistema de inteligência ECHO"
+        >
+
+          <div class="echo-ai-header">
+
+            <div class="echo-ai-identity">
+
+              <div
+                id="echoAiAvatar"
+                class="echo-ai-avatar"
+                aria-hidden="true"
+              >
+                ◈
+              </div>
+
+              <div>
+
+                <span class="panel-overline">
+                  ARTIFICIAL CONSCIOUSNESS
+                </span>
+
+                <h2>
+                  ECHO // SISTEMA CONSCIENTE
+                </h2>
+
+              </div>
+
+            </div>
+
+            <div
+              id="echoAiState"
+              class="echo-ai-state"
+            >
+              OBSERVING
+            </div>
+
+          </div>
+
+          <div
+            id="echoMessage"
+            class="echo-message"
+            role="status"
+            aria-live="polite"
+          >
+
+            <div class="echo-message-content">
+
+              <span
+                id="echoMessageLabel"
+                class="echo-message-label"
+              >
+                ECHO:
+              </span>
+
+              <p id="echoMessageText">
+                Estou a observar os teus movimentos.
+                Tenta não me desiludir.
+              </p>
+
+            </div>
+
+            <button
+              id="echoMessageClose"
+              type="button"
+              class="echo-message-close"
+              aria-label="Fechar mensagem da ECHO"
+            >
+              ×
+            </button>
+
+          </div>
+
+          <div class="echo-ai-footer">
+
+            <span
+              id="echoAiMood"
+              class="echo-ai-mood"
+            >
+              MOOD: NEUTRAL
+            </span>
+
+            <span
+              id="echoAiAnalysis"
+              class="echo-ai-analysis"
+            >
+              PLAYER ANALYSIS ACTIVE
+            </span>
+
+          </div>
+
+        </section>
+
+        <!-- ================================
+             DYNAMIC OBSTACLE STATUS
+        ================================= -->
+
+        <section
+          id="obstaclePanel"
+          class="panel obstacle-panel"
+        >
+
+          <div class="panel-heading">
+
+            <div>
+
+              <span class="panel-overline">
+                ARENA DEFENCE SYSTEM
+              </span>
+
+              <h2>
+                DYNAMIC HAZARDS
+              </h2>
+
+            </div>
+
+            <span
+              id="obstacleCount"
+              class="obstacle-count"
+            >
+              0 ACTIVE
+            </span>
+
+          </div>
+
+          <div class="obstacle-grid">
+
+            <div class="obstacle-item">
+
+              <span class="obstacle-icon">
+                ⚡
+              </span>
+
+              <div>
+                <strong>
+                  MOVING LASERS
+                </strong>
+
+                <small id="movingLaserStatus">
+                  STANDBY
+                </small>
+              </div>
+
+            </div>
+
+            <div class="obstacle-item">
+
+              <span class="obstacle-icon">
+                ▥
+              </span>
+
+              <div>
+                <strong>
+                  PHASE WALLS
+                </strong>
+
+                <small id="phaseWallStatus">
+                  STANDBY
+                </small>
+              </div>
+
+            </div>
+
+            <div class="obstacle-item">
+
+              <span class="obstacle-icon">
+                ◇
+              </span>
+
+              <div>
+                <strong>
+                  TEMPORAL PLATFORMS
+                </strong>
+
+                <small id="platformStatus">
+                  STANDBY
+                </small>
+              </div>
+
+            </div>
+
+            <div class="obstacle-item">
+
+              <span class="obstacle-icon">
+                ⟁
+              </span>
+
+              <div>
+                <strong>
+                  ECHO TRAPS
+                </strong>
+
+                <small id="echoTrapStatus">
+                  STANDBY
+                </small>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ================================
+             MOBILE CONTROLS
+        ================================= -->
+
+        <section
+          id="mobileControls"
+          class="mobile-controls"
+          aria-label="Controlos para dispositivos móveis"
+        >
+
+          <div class="mobile-controls-heading">
+
+            <span>
+              TOUCH CONTROL SYSTEM
+            </span>
+
+            <span>
+              MOBILE READY
+            </span>
+
+          </div>
+
+          <div class="mobile-control-layout">
+
+            <!-- D-PAD:
+                 Mantém os IDs para game.js.
+            -->
+
+            <div
+              id="mobileDpad"
+              class="mobile-dpad"
+              aria-label="Direcções"
+            >
+
+              <button
+                id="moveUp"
+                type="button"
+                class="dpad-btn dpad-up"
+                data-direction="up"
+                aria-label="Mover para cima"
+              >
+                ▲
+              </button>
+
+              <button
+                id="moveLeft"
+                type="button"
+                class="dpad-btn dpad-left"
+                data-direction="left"
+                aria-label="Mover para a esquerda"
+              >
+                ◀
+              </button>
+
+              <div
+                class="dpad-center"
+                aria-hidden="true"
+              >
+                ◈
+              </div>
+
+              <button
+                id="moveRight"
+                type="button"
+                class="dpad-btn dpad-right"
+                data-direction="right"
+                aria-label="Mover para a direita"
+              >
+                ▶
+              </button>
+
+              <button
+                id="moveDown"
+                type="button"
+                class="dpad-btn dpad-down"
+                data-direction="down"
+                aria-label="Mover para baixo"
+              >
+                ▼
+              </button>
+
+            </div>
+
+            <!-- NOVO JOYSTICK:
+                 O JavaScript v0.8 deverá
+                 implementar a sua lógica.
+            -->
+
+            <div
+              id="virtualJoystick"
+              class="virtual-joystick hidden"
+              aria-label="Joystick virtual"
+            >
+
+              <div
+                id="joystickBase"
+                class="joystick-base"
+              >
+
+                <div
+                  id="joystickStick"
+                  class="joystick-stick"
+                ></div>
+
+              </div>
+
+            </div>
+
+            <div class="mobile-action-buttons">
+
+              <button
+                id="mobileShiftBtn"
+                type="button"
+                class="mobile-action-btn mobile-shift"
+              >
+                <span>◈</span>
+                <small>SHIFT</small>
+              </button>
+
+              <button
+                id="mobileRestartBtn"
+                type="button"
+                class="mobile-action-btn mobile-restart"
+              >
+                <span>↻</span>
+                <small>RESTART</small>
+              </button>
+
+            </div>
+
+          </div>
+
+          <div class="mobile-control-options">
+
+            <button
+              id="controlModeBtn"
+              type="button"
+              class="btn btn-secondary"
+              aria-label="Alternar modo de controlo"
+            >
+              CONTROL MODE: D-PAD
+            </button>
+
+          </div>
+
+        </section>
+
+      </section>
+
+    </main>
+
+    <!-- ====================================
+         TUTORIAL
+    ===================================== -->
+
+    <section
+      id="awakeningTutorial"
+      class="awakening-tutorial"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="tutorialTitle"
+    >
+
+      <div class="tutorial-content">
+
+        <div class="tutorial-heading">
+
+          <span class="tutorial-overline">
+            OPERATOR TRAINING
+          </span>
+
+          <h2 id="tutorialTitle">
+            TEMPORAL TRAINING
+          </h2>
+
+        </div>
+
+        <div
+          id="tutorialCounter"
+          class="tutorial-counter"
+        >
+          STEP 01 / 05
+        </div>
+
+        <p
+          id="tutorialText"
+          class="tutorial-text"
+        >
+          Aprende a controlar o tempo
+          e os teus próprios ecos.
+        </p>
+
+        <div class="tutorial-actions">
+
+          <button
+            id="tutorialSkip"
+            type="button"
+            class="btn btn-secondary"
+          >
+            SALTAR
+          </button>
+
+          <button
+            id="tutorialNext"
+            type="button"
+            class="btn btn-primary"
+          >
+            SEGUINTE
           </button>
 
         </div>
 
       </div>
 
-      <p class="mobile-controls-tip">
-        Mantém o dedo pressionado numa seta para te moveres.
-        Utiliza PARADOX SHIFT para alterar o último eco.
-      </p>
-
     </section>
 
-    <!-- =====================================
-         ESTADO DO JOGO
-    ====================================== -->
-
-    <div class="status-panel">
-
-      <span class="status-indicator"></span>
-
-      <p
-        id="status"
-        aria-live="polite"
-      >
-        Sistema pronto. Inicia a simulação.
-      </p>
-
-    </div>
-
-    <!-- =====================================
-         BOTÕES PRINCIPAIS
-    ====================================== -->
-
-    <section class="controls">
-
-      <button
-        id="startBtn"
-        type="button"
-      >
-        INICIAR SIMULAÇÃO
-      </button>
-
-      <button
-        id="restartBtn"
-        class="secondary"
-        type="button"
-      >
-        REINICIAR
-      </button>
-
-      <button
-        id="shiftBtn"
-        class="secondary"
-        type="button"
-      >
-        PARADOX SHIFT [E]
-      </button>
-
-      <button
-        id="soundBtn"
-        class="secondary"
-        type="button"
-      >
-        SOM: ON
-      </button>
-
-      <!-- NOVO BOTÃO DA V0.7 -->
-
-      <button
-        id="awakeningReplayBtn"
-        class="secondary"
-        type="button"
-      >
-        ◈ REVER HISTÓRIA
-      </button>
-
-    </section>
-
-    <!-- =====================================
-         PROTOCOLO DE SOBREVIVÊNCIA
-    ====================================== -->
-
-    <section class="instructions">
-
-      <h3>
-        PROTOCOLO DE SOBREVIVÊNCIA
-      </h3>
-
-      <div class="instruction-grid">
-
-        <div class="instruction">
-          <span class="symbol cyan">■</span>
-          <span>Jogador — controla o presente</span>
-        </div>
-
-        <div class="instruction">
-          <span class="symbol purple">■</span>
-          <span>Eco — reproduz o passado</span>
-        </div>
-
-        <div class="instruction">
-          <span class="symbol yellow">●</span>
-          <span>Placa — activa portas temporais</span>
-        </div>
-
-        <div class="instruction">
-          <span class="symbol red">■</span>
-          <span>Porta — bloqueia o caminho</span>
-        </div>
-
-        <div class="instruction">
-          <span class="symbol green">■</span>
-          <span>Portal verde — saída do nível</span>
-        </div>
-
-        <div class="instruction">
-          <span class="symbol blue">◉</span>
-          <span>Portal azul — teletransporte</span>
-        </div>
-
-        <div class="instruction">
-          <span class="symbol red">⚡</span>
-          <span>Laser — perigo temporal</span>
-        </div>
-
-        <div class="instruction">
-          <span class="symbol purple">◆</span>
-          <span>Paradox Shift — altera um eco</span>
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- =====================================
-         GUIA DE CONTROLOS
-    ====================================== -->
-
-    <section class="keyboard-help">
-
-      <h3>CONTROLOS</h3>
-
-      <div class="keyboard-grid">
-
-        <p>
-          PC: W A S D / SETAS — MOVIMENTO
-        </p>
-
-        <p>
-          PC: E — PARADOX SHIFT
-        </p>
-
-        <p>
-          PC: R — REINICIAR
-        </p>
-
-        <p>
-          PC: ESPAÇO — INICIAR
-        </p>
-
-        <p>
-          MOBILE: DIRECCIONAL — MOVIMENTO
-        </p>
-
-        <p>
-          MOBILE: BOTÃO ◆ — PARADOX SHIFT
-        </p>
-
-      </div>
-
-    </section>
-
-    <!-- =====================================
-         CRÉDITOS DO CRIADOR
-    ====================================== -->
+    <!-- ====================================
+         FOOTER
+    ===================================== -->
 
     <footer class="game-footer">
 
-      <p class="footer-game-title">
-        ECHO//404 — PARADOX EVOLUTION
-      </p>
+      <div class="footer-top">
 
-      <p class="footer-version">
-        VERSION 0.7 | THE AWAKENING
-      </p>
+        <div class="footer-brand">
 
-      <p class="footer-technology">
-        BUILT WITH HTML5 CANVAS
-      </p>
+          <strong>
+            ECHO//404
+          </strong>
 
-      <div class="creator-signature">
+          <span>
+            PARADOX EVOLUTION
+          </span>
 
-        <p>
-          CREATED & DEVELOPED BY
-        </p>
+        </div>
 
-        <strong>
-          MANUEL SAMPAIO01
-        </strong>
-
-        <p>
-          © 2026 MANUEL SAMPAIO01
-        </p>
+        <div class="footer-version">
+          SYSTEM REBELLION // v0.8
+        </div>
 
       </div>
 
+      <div class="footer-divider"></div>
+
+      <div class="footer-creator">
+
+        <span class="footer-creator-label">
+          CREATED & DEVELOPED BY
+        </span>
+
+        <strong class="footer-creator-name">
+          MANUEL SAMPAIO01
+        </strong>
+
+      </div>
+
+      <p class="footer-copyright">
+        © 2026 MANUEL SAMPAIO01.
+        ALL RIGHTS RESERVED.
+      </p>
+
     </footer>
 
-  </main>
+  </div>
 
-  <!-- =====================================
-       SISTEMAS DO JOGO
-       ORDEM DE CARREGAMENTO
-  ====================================== -->
+  <!-- ======================================
+       SCRIPT LOADING
+       ORDER IS IMPORTANT
+  ======================================= -->
 
-  <script src="levels.js"></script>
-  <script src="storage.js"></script>
-  <script src="audio.js"></script>
+  <script src="levels.js?v=080"></script>
 
-  <!-- MOTOR PRINCIPAL -->
-  <script src="game.js"></script>
+  <script src="storage.js?v=080"></script>
 
-  <!-- THE AWAKENING v0.7 -->
-  <script src="awakening.js?v=070"></script>
+  <script src="audio.js?v=080"></script>
+
+  <script src="game.js?v=080"></script>
+
+  <script src="awakening.js?v=080"></script>
+
+  <!-- ======================================
+       FULLSCREEN SUPPORT
+  ======================================= -->
+
+  <script>
+    "use strict";
+
+    (() => {
+      const fullscreenBtn =
+        document.getElementById(
+          "fullscreenBtn"
+        );
+
+      if (!fullscreenBtn) {
+        return;
+      }
+
+      fullscreenBtn.addEventListener(
+        "click",
+        async () => {
+          try {
+            if (
+              document.fullscreenElement
+            ) {
+              await document.exitFullscreen();
+            } else if (
+              document.documentElement
+                .requestFullscreen
+            ) {
+              await document.documentElement
+                .requestFullscreen();
+            }
+          } catch (error) {
+            console.warn(
+              "ECHO//404: fullscreen indisponível.",
+              error
+            );
+          }
+        }
+      );
+
+      document.addEventListener(
+        "fullscreenchange",
+        () => {
+          fullscreenBtn.textContent =
+            document.fullscreenElement
+              ? "⤢"
+              : "⛶";
+        }
+      );
+    })();
+  </script>
 
 </body>
 </html>

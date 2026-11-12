@@ -2,2116 +2,3891 @@
 "use strict";
 
 /*
-==================================================
+========================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION 0.7 — THE AWAKENING
+ VERSION 0.8 — SYSTEM REBELLION
  FILE: game.js
 
- CREATED & DEVELOPED BY MANUEL SAMPAIO01
+ DYNAMIC OBSTACLES / TEMPORAL ECHOES
+ PARADOX SHIFT / MOBILE JOYSTICK
+ CONTEXTUAL EVENTS / SCORE / MEDALS
 
- DESKTOP + MOBILE
- DIFFICULTY EVOLUTION
- TEMPORAL EVENTS + MEDALS
-==================================================
+ CREATED & DEVELOPED BY MANUEL SAMPAIO01
+ © 2026 MANUEL SAMPAIO01
+========================================================
 */
 
-// ==========================================
-// 1. CANVAS E INTERFACE
-// ==========================================
-
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-
-const UI = {
-  cycle: document.getElementById("cycle"),
-  timer: document.getElementById("timer"),
-  ghosts: document.getElementById("ghosts"),
-  score: document.getElementById("score"),
-  best: document.getElementById("best"),
-  timerBar: document.getElementById("timerBar"),
-  status: document.getElementById("status"),
-  levelGrid: document.getElementById("levelGrid"),
-  progress: document.getElementById("progress"),
-  levelName: document.getElementById("levelName"),
-  overlay: document.getElementById("overlay"),
-  overlayTitle: document.getElementById("overlayTitle"),
-  overlayMessage: document.getElementById("overlayMessage"),
-  finalScore: document.getElementById("finalScore"),
-  medalResult: document.getElementById("awakeningMedalResult"),
-  medalSummary: document.getElementById("awakeningMedalSummary"),
-  startBtn: document.getElementById("startBtn"),
-  restartBtn: document.getElementById("restartBtn"),
-  shiftBtn: document.getElementById("shiftBtn"),
-  soundBtn: document.getElementById("soundBtn"),
-  playAgainBtn: document.getElementById("playAgainBtn"),
-  nextBtn: document.getElementById("nextBtn"),
-  mobileShiftBtn: document.getElementById("mobileShiftBtn"),
-  mobileRestartBtn: document.getElementById("mobileRestartBtn"),
-  moveUp: document.getElementById("moveUp"),
-  moveDown: document.getElementById("moveDown"),
-  moveLeft: document.getElementById("moveLeft"),
-  moveRight: document.getElementById("moveRight")
-};
-
-const WORLD = GAME_WORLD;
-const WIDTH = WORLD.width;
-const HEIGHT = WORLD.height;
-const MAX_CYCLES = WORLD.maxCycles;
-
-canvas.width = WIDTH;
-canvas.height = HEIGHT;
-
-const COLORS = {
-  cyan: "#00f5ff",
-  purple: "#aa78ff",
-  green: "#21ff9b",
-  red: "#ff3868",
-  yellow: "#ffd166",
-  blue: "#478bff",
-  white: "#e9faff"
-};
-
-const PLAYER_SIZE = 20;
-const PLAYER_SPEED = 230;
-const PLATE_RADIUS = 27;
-
-// ==========================================
-// 2. DIFICULDADE PROGRESSIVA
-// ==========================================
-
-const DIFFICULTY = {
-  cycleSeconds: [
-    10, 9, 8, 7, 6,
-    5.5, 5, 4.5, 4, 3.5
-  ],
-
-  // A partir do nível 2, os lasers
-  // aceleram progressivamente.
-  laserSpeedMultiplier: [
-    1, 1.08, 1.16, 1.25, 1.35,
-    1.48, 1.62, 1.78, 1.95, 2.15
-  ],
-
-  // Pequena aceleração adicional
-  // dentro do próprio nível.
-  cycleLaserAcceleration: 0.035,
-
-  // Penalização crescente por morte.
-  deathPenaltyBase: 150,
-  deathPenaltyPerLevel: 35,
-
-  // Pontuação por nível.
-  levelBonus: 250,
-
-  // Tempo crítico: últimos 25%.
-  criticalFraction: 0.25
-};
-
-function getCycleDuration(index = levelIndex) {
-  const configured = DIFFICULTY.cycleSeconds[index];
-
-  return Number.isFinite(configured)
-    ? configured
-    : Math.max(3.5, WORLD.cycleDuration || 10);
-}
-
-function getLaserMultiplier() {
-  const base =
-    DIFFICULTY.laserSpeedMultiplier[levelIndex] || 1;
-
-  return base * (
-    1 +
-    (cycle - 1) *
-    DIFFICULTY.cycleLaserAcceleration
-  );
-}
-
-function getDeathPenalty() {
-  return (
-    DIFFICULTY.deathPenaltyBase +
-    levelIndex * DIFFICULTY.deathPenaltyPerLevel
-  );
-}
-
-// ==========================================
-// 3. EVENTOS PARA AWAKENING.JS
-// ==========================================
-
-function emitGameEvent(name, details = {}) {
-  const payload = {
-    levelIndex,
-    levelNumber: levelIndex + 1,
-    cycle,
-    maxCycles: MAX_CYCLES,
-    elapsed,
-    cycleDuration: getCycleDuration(),
-    score,
-    deaths,
-    shifts,
-    ghosts: recordings.length,
-    ...details
-  };
-
-  window.dispatchEvent(
-    new CustomEvent(`echo404:${name}`, {
-      detail: payload
-    })
-  );
-}
-
-// ==========================================
-// 4. CONTROLOS
-// ==========================================
-
-const keys = new Set();
-const mobilePointers = new Map();
-
-const mobileDirections = {
-  up: UI.moveUp,
-  down: UI.moveDown,
-  left: UI.moveLeft,
-  right: UI.moveRight
-};
-
-const movementKeys = new Set([
-  "w", "a", "s", "d",
-  "arrowup", "arrowdown",
-  "arrowleft", "arrowright"
-]);
-
-function isDirectionPressed(direction) {
-  const keyboardMap = {
-    up: ["w", "arrowup"],
-    down: ["s", "arrowdown"],
-    left: ["a", "arrowleft"],
-    right: ["d", "arrowright"]
-  };
-
-  const keyboardPressed = keyboardMap[direction]
-    .some(key => keys.has(key));
-
-  const touchPressed = Array.from(
-    mobilePointers.values()
-  ).includes(direction);
-
-  return keyboardPressed || touchPressed;
-}
-
-function refreshMobileButtons() {
-  for (const [direction, button] of
-    Object.entries(mobileDirections)) {
-
-    if (!button) continue;
-
-    const pressed = Array.from(
-      mobilePointers.values()
-    ).includes(direction);
-
-    button.classList.toggle("pressed", pressed);
-  }
-}
-
-function clearMobileMovement() {
-  mobilePointers.clear();
-  refreshMobileButtons();
-}
-
-function clearAllMovement() {
-  keys.clear();
-  clearMobileMovement();
-}
-
-// ==========================================
-// 5. ESTADO DO JOGO
-// ==========================================
-
-let levelIndex = 0;
-let level = GAME_LEVELS[0];
-
-let player = null;
-let recordings = [];
-let ghosts = [];
-let currentRecording = [];
-let particles = [];
-
-let cycle = 1;
-let elapsed = 0;
-let worldTime = 0;
-
-let score = 0;
-let deaths = 0;
-let shifts = 0;
-
-let running = false;
-let finished = false;
-
-let doorOpen = false;
-let previousDoorState = false;
-
-let shiftUsed = false;
-let portalCooldown = 0;
-
-let lastFrame = 0;
-let animationId = null;
-let lastTickSecond = null;
-let criticalWarningShown = false;
-let totalActiveTime = 0;
-
-let medalCache = {};
-
-const MEDAL_STORAGE_KEY =
-  "echo404_awakening_medals_v07";
-
-// ==========================================
-// 6. AUXILIARES
-// ==========================================
-
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
-}
-
-function distance(a, b) {
-  return Math.hypot(a.x - b.x, a.y - b.y);
-}
-
-function intersects(a, b) {
-  return (
-    a.x < b.x + b.w &&
-    a.x + a.w > b.x &&
-    a.y < b.y + b.h &&
-    a.y + a.h > b.y
-  );
-}
-
-function playerRect(x, y) {
-  return {
-    x: x - PLAYER_SIZE / 2,
-    y: y - PLAYER_SIZE / 2,
-    w: PLAYER_SIZE,
-    h: PLAYER_SIZE
-  };
-}
-
-function setStatus(message) {
-  if (UI.status) {
-    UI.status.textContent = message;
-  }
-}
-
-function formatScore(value) {
-  return Math.floor(value || 0)
-    .toLocaleString("pt-PT");
-}
-
-function playSound(name) {
-  if (
-    typeof GameAudio !== "undefined" &&
-    typeof GameAudio.play === "function"
-  ) {
-    GameAudio.play(name);
-  }
-}
-
-// ==========================================
-// 7. PARTÍCULAS
-// ==========================================
-
-function emitParticles(x, y, color, amount = 15) {
-  for (let i = 0; i < amount; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const speed = 30 + Math.random() * 120;
-    const life = 0.3 + Math.random() * 0.6;
-
-    particles.push({
-      x,
-      y,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed,
-      life,
-      maxLife: life,
-      size: 2 + Math.random() * 3,
-      color
-    });
-  }
-
-  if (particles.length > 300) {
-    particles.splice(0, particles.length - 300);
-  }
-}
-
-function updateParticles(dt) {
-  for (const particle of particles) {
-    particle.x += particle.vx * dt;
-    particle.y += particle.vy * dt;
-    particle.life -= dt;
-  }
-
-  particles = particles.filter(
-    particle => particle.life > 0
-  );
-}
-
-// ==========================================
-// 8. MEDALHAS
-// ==========================================
-
-const MEDALS = {
-  bronze: {
-    name: "BRONZE",
-    icon: "🥉",
-    rank: 1
-  },
-  silver: {
-    name: "PRATA",
-    icon: "🥈",
-    rank: 2
-  },
-  gold: {
-    name: "OURO",
-    icon: "🥇",
-    rank: 3
-  }
-};
-
-function loadMedals() {
-  try {
-    const raw = localStorage.getItem(
-      MEDAL_STORAGE_KEY
-    );
-
-    const parsed = raw ? JSON.parse(raw) : {};
-
-    return parsed &&
-      typeof parsed === "object" &&
-      !Array.isArray(parsed)
-      ? parsed
-      : {};
-  } catch (error) {
-    return {};
-  }
-}
-
-function saveMedals() {
-  try {
-    localStorage.setItem(
-      MEDAL_STORAGE_KEY,
-      JSON.stringify(medalCache)
-    );
-  } catch (error) {
-    console.warn("Não foi possível guardar medalhas.");
-  }
-}
-
-function calculateMedal() {
-  // Ouro exige eficiência e sobrevivência.
-  if (
-    deaths === 0 &&
-    cycle <= 3 &&
-    shifts <= 2
-  ) {
-    return "gold";
-  }
-
-  // Prata permite algumas falhas.
-  if (
-    deaths <= 2 &&
-    cycle <= 5
-  ) {
-    return "silver";
-  }
-
-  return "bronze";
-}
-
-function registerMedal(type) {
-  const key = String(levelIndex);
-  const previous = medalCache[key];
+(() => {
+
+  // ==================================================
+  // 01. DEPENDENCY CHECK
+  // ==================================================
 
   if (
-    !previous ||
-    MEDALS[type].rank > MEDALS[previous].rank
+    typeof GAME_WORLD === "undefined" ||
+    typeof GAME_LEVELS === "undefined"
   ) {
-    medalCache[key] = type;
-    saveMedals();
-  }
-
-  updateMedalSummary();
-}
-
-function updateMedalSummary() {
-  if (!UI.medalSummary) return;
-
-  const counts = {
-    gold: 0,
-    silver: 0,
-    bronze: 0
-  };
-
-  Object.values(medalCache).forEach(type => {
-    if (counts[type] !== undefined) {
-      counts[type]++;
-    }
-  });
-
-  UI.medalSummary.textContent =
-    `🥇 ${counts.gold} OURO · ` +
-    `🥈 ${counts.silver} PRATA · ` +
-    `🥉 ${counts.bronze} BRONZE`;
-}
-
-function showMedal(type) {
-  if (!UI.medalResult) return;
-
-  const medal = MEDALS[type];
-
-  UI.medalResult.dataset.medal = type;
-
-  UI.medalResult.textContent =
-    `${medal.icon} MEDALHA DE ${medal.name}`;
-
-  UI.medalResult.classList.remove("hidden");
-}
-
-medalCache = loadMedals();
-
-// ==========================================
-// 9. MENU DE NÍVEIS
-// ==========================================
-
-function buildLevelMenu() {
-  const data = GameStorage.load();
-
-  UI.levelGrid.innerHTML = "";
-
-  GAME_LEVELS.forEach((item, index) => {
-    const button = document.createElement("button");
-
-    const completed = Boolean(
-      data.completed[index]
+    console.error(
+      "ECHO//404: levels.js deve carregar antes de game.js."
     );
-
-    const unlocked = index + 1 <= data.unlocked;
-
-    const medal = medalCache[String(index)];
-
-    button.textContent = completed
-      ? `✓${index + 1}`
-      : String(index + 1);
-
-    button.disabled = !unlocked;
-
-    button.classList.toggle(
-      "selected",
-      index === levelIndex
-    );
-
-    button.classList.toggle(
-      "completed",
-      completed
-    );
-
-    const medalText = medal
-      ? ` | Medalha: ${MEDALS[medal].name}`
-      : "";
-
-    button.title = unlocked
-      ? `${item.name}${medalText}`
-      : "Nível bloqueado";
-
-    button.addEventListener("click", () => {
-      selectLevel(index);
-      playSound("click");
-    });
-
-    UI.levelGrid.appendChild(button);
-  });
-
-  const completedCount = data.completed
-    .filter(Boolean).length;
-
-  UI.progress.textContent =
-    `${completedCount} / ` +
-    `${GAME_LEVELS.length} CONCLUÍDOS`;
-
-  UI.levelName.textContent =
-    `NÍVEL ${levelIndex + 1} — ${level.name} | ` +
-    `${level.difficulty} | ` +
-    `${getCycleDuration()}s POR CICLO | ` +
-    `${level.hint}`;
-
-  UI.best.textContent = formatScore(
-    data.bestScores[levelIndex]
-  );
-
-  updateMedalSummary();
-}
-
-function selectLevel(index) {
-  if (
-    index < 0 ||
-    index >= GAME_LEVELS.length
-  ) {
     return;
   }
 
-  if (!GameStorage.isUnlocked(index)) {
-    setStatus("NÍVEL BLOQUEADO.");
-    playSound("error");
+  const WORLD = GAME_WORLD;
+  const LEVELS = GAME_LEVELS;
+
+  const STORAGE =
+    typeof GameStorage !== "undefined"
+      ? GameStorage
+      : null;
+
+  const AUDIO =
+    typeof GameAudio !== "undefined"
+      ? GameAudio
+      : null;
+
+  // ==================================================
+  // 02. DOM REFERENCES
+  // ==================================================
+
+  const $ = id => document.getElementById(id);
+
+  const canvas = $("gameCanvas");
+
+  if (!canvas) {
+    console.error(
+      "ECHO//404: #gameCanvas não encontrado."
+    );
     return;
   }
 
-  levelIndex = index;
-  level = GAME_LEVELS[index];
+  const ctx = canvas.getContext("2d");
 
-  resetGame();
-  buildLevelMenu();
-
-  emitGameEvent("levelselected", {
-    levelName: level.name
-  });
-}
-
-// ==========================================
-// 10. REINICIAR
-// ==========================================
-
-function resetGame() {
-  if (animationId !== null) {
-    cancelAnimationFrame(animationId);
-    animationId = null;
+  if (!ctx) {
+    console.error(
+      "ECHO//404: Canvas 2D indisponível."
+    );
+    return;
   }
 
-  clearAllMovement();
+  const UI = {
+    levelGrid: $("levelGrid"),
+    progress: $("progress"),
+    levelName: $("levelName"),
+    levelHint: $("levelHint"),
+    difficulty: $("difficultyBadge"),
 
-  player = {
-    x: WORLD.start.x,
-    y: WORLD.start.y,
-    size: PLAYER_SIZE,
-    speed: PLAYER_SPEED
+    cycle: $("cycle"),
+    timer: $("timer"),
+    ghosts: $("ghosts"),
+    score: $("score"),
+    best: $("best"),
+    timerBar: $("timerBar"),
+    timerCard: $("timerCard"),
+
+    overlay: $("overlay"),
+    overlayTitle: $("overlayTitle"),
+    overlayMessage: $("overlayMessage"),
+    finalScore: $("finalScore"),
+
+    startBtn: $("startBtn"),
+    restartBtn: $("restartBtn"),
+    shiftBtn: $("shiftBtn"),
+    playAgainBtn: $("playAgainBtn"),
+    nextBtn: $("nextBtn"),
+
+    status: $("status"),
+    systemStatus: $("systemStatus"),
+    threatLevel: $("threatLevel"),
+    arenaThreat: $("arenaThreatStatus"),
+
+    warning: $("criticalWarning"),
+    arenaGlitch: $("arenaGlitch"),
+    globalGlitch: $("globalGlitch"),
+
+    obstacleCount: $("obstacleCount"),
+    movingLaserStatus: $("movingLaserStatus"),
+    phaseWallStatus: $("phaseWallStatus"),
+    platformStatus: $("platformStatus"),
+    echoTrapStatus: $("echoTrapStatus"),
+
+    mobileControls: $("mobileControls"),
+    mobileDpad: $("mobileDpad"),
+    mobileShift: $("mobileShiftBtn"),
+    mobileRestart: $("mobileRestartBtn"),
+
+    joystick: $("virtualJoystick"),
+    joystickBase: $("joystickBase"),
+    joystickStick: $("joystickStick"),
+    controlModeBtn: $("controlModeBtn"),
+
+    soundBtn: $("soundBtn"),
+    medalResult: $("awakeningMedalResult"),
+    medalSummary: $("awakeningMedalSummary")
   };
 
-  recordings = [];
-  ghosts = [];
+  canvas.width = WORLD.width;
+  canvas.height = WORLD.height;
 
-  currentRecording = [{
-    t: 0,
-    x: player.x,
-    y: player.y
-  }];
+  // ==================================================
+  // 03. CONSTANTS
+  // ==================================================
 
-  particles = [];
+  const W = WORLD.width;
+  const H = WORLD.height;
 
-  cycle = 1;
-  elapsed = 0;
-  worldTime = 0;
-  totalActiveTime = 0;
+  const MAX_DT = 0.04;
+  const FIXED_STEP = 1 / 120;
 
-  score = 0;
-  deaths = 0;
-  shifts = 0;
+  const PLAYER_RADIUS =
+    WORLD.player?.radius ?? 12;
 
-  running = false;
-  finished = false;
+  const PLAYER_SPEED =
+    WORLD.player?.speed ?? 230;
 
-  doorOpen = false;
-  previousDoorState = false;
+  const MEDAL_KEY =
+    "echo404_awakening_medals_v07";
 
-  shiftUsed = false;
-  portalCooldown = 0;
+  const FALLBACK_SAVE_KEY =
+    "echo404_v08_progress";
 
-  lastFrame = 0;
-  lastTickSecond = null;
-  criticalWarningShown = false;
+  const COLORS = {
+    background: "#060e1e",
+    grid: "rgba(72,246,255,0.055)",
+    cyan: "#48f6ff",
+    purple: "#a66bff",
+    pink: "#ff4eb8",
+    red: "#ff4c69",
+    orange: "#ffad4d",
+    green: "#52ffbb",
+    white: "#f2f7ff",
+    muted: "#7186aa",
+    wall: "#192e51"
+  };
 
-  UI.overlay.classList.add("hidden");
+  // ==================================================
+  // 04. STATE
+  // ==================================================
 
-  if (UI.medalResult) {
-    UI.medalResult.classList.add("hidden");
-  }
+  const state = {
+    levelIndex: 0,
+    level: LEVELS[0],
 
-  UI.startBtn.textContent = "INICIAR SIMULAÇÃO";
+    running: false,
+    finished: false,
+    won: false,
 
-  setStatus(level.hint);
-  updateHUD();
-  draw();
-}
+    cycle: 1,
+    maxCycles: WORLD.maxCycles ?? 6,
 
-// ==========================================
-// 11. INICIAR
-// ==========================================
+    time: 0,
+    elapsed: 0,
+    cycleDuration: 10,
 
-function startGame() {
-  // Não permite iniciar por trás
-  // da introdução cinematográfica.
-  const intro = document.getElementById(
-    "awakeningIntro"
-  );
-
-  if (
-    intro &&
-    !intro.classList.contains("hidden")
-  ) {
-    return;
-  }
-
-  resetGame();
-
-  running = true;
-
-  GameStorage.registerAttempt();
-
-  if (typeof GameAudio.init === "function") {
-    GameAudio.init();
-  }
-
-  playSound("start");
-
-  UI.startBtn.textContent =
-    "REINICIAR SIMULAÇÃO";
-
-  setStatus(
-    `NÍVEL ${levelIndex + 1}: ` +
-    `${getCycleDuration()} SEGUNDOS POR CICLO. ` +
-    `${level.hint}`
-  );
-
-  emitGameEvent("start", {
-    levelName: level.name
-  });
-
-  updateHUD();
-
-  animationId = requestAnimationFrame(gameLoop);
-}
-
-// ==========================================
-// 12. HUD
-// ==========================================
-
-function updateHUD() {
-  const duration = getCycleDuration();
-
-  const remaining = Math.max(
-    0,
-    duration - elapsed
-  );
-
-  UI.cycle.textContent =
-    `${cycle}/${MAX_CYCLES}`;
-
-  UI.timer.textContent = remaining.toFixed(1);
-
-  UI.ghosts.textContent = recordings.length;
-  UI.score.textContent = formatScore(score);
-
-  UI.best.textContent = formatScore(
-    GameStorage.getBestScore(levelIndex)
-  );
-
-  const percentage = clamp(
-    remaining / duration * 100,
-    0,
-    100
-  );
-
-  UI.timerBar.style.width = `${percentage}%`;
-
-  UI.timerBar.style.background =
-    remaining <= duration * DIFFICULTY.criticalFraction
-      ? COLORS.red
-      : COLORS.cyan;
-
-  const shiftDisabled =
-    !running ||
-    shiftUsed ||
-    recordings.length === 0;
-
-  UI.shiftBtn.disabled = shiftDisabled;
-
-  if (UI.mobileShiftBtn) {
-    UI.mobileShiftBtn.disabled = shiftDisabled;
-  }
-}
-
-// ==========================================
-// 13. GRAVAÇÃO DO JOGADOR
-// ==========================================
-
-function recordPlayer() {
-  currentRecording.push({
-    t: Math.min(elapsed, getCycleDuration()),
-    x: player.x,
-    y: player.y
-  });
-}
-
-// ==========================================
-// 14. INTERPOLAÇÃO DOS ECOS
-// ==========================================
-
-function positionAt(frames, time) {
-  if (!frames.length) {
-    return {
+    player: {
       x: WORLD.start.x,
-      y: WORLD.start.y
-    };
-  }
+      y: WORLD.start.y,
+      radius: PLAYER_RADIUS
+    },
 
-  if (time <= frames[0].t) {
-    return {
-      x: frames[0].x,
-      y: frames[0].y
-    };
-  }
+    echoes: [],
+    recording: [],
+    frozenEchoes: [],
 
-  const last = frames[frames.length - 1];
+    score: 0,
+    deaths: 0,
+    shifts: 0,
+    portalsUsed: 0,
 
-  if (time >= last.t) {
-    return {
-      x: last.x,
-      y: last.y
-    };
-  }
+    doorOpen: false,
 
-  let low = 0;
-  let high = frames.length - 1;
+    hazards: {
+      lasers: [],
+      phaseWalls: [],
+      platforms: [],
+      traps: []
+    },
 
-  while (low + 1 < high) {
-    const middle = (low + high) >> 1;
+    portalCooldown: 0,
 
-    if (frames[middle].t <= time) {
-      low = middle;
-    } else {
-      high = middle;
+    levelAttempts: 0,
+    lastDeathReason: "",
+
+    warningSent: false,
+    firstMoveSent: false,
+    doorWasOpen: false,
+
+    lastFrame: 0,
+    accumulator: 0,
+
+    controlMode: "dpad",
+
+    joystick: {
+      x: 0,
+      y: 0,
+      pointerId: null
     }
-  }
-
-  const a = frames[low];
-  const b = frames[high];
-
-  const factor = clamp(
-    (time - a.t) /
-      Math.max(0.00001, b.t - a.t),
-    0,
-    1
-  );
-
-  return {
-    x: a.x + (b.x - a.x) * factor,
-    y: a.y + (b.y - a.y) * factor
   };
-}
 
-function updateGhosts() {
-  ghosts = recordings.map(
-    frames => positionAt(frames, elapsed)
-  );
-}
+  const keys = new Set();
 
-// ==========================================
-// 15. PARADOX SHIFT
-// ==========================================
+  const mobileKeys = new Set();
 
-function paradoxShift() {
-  if (!running) return;
+  let animationStarted = false;
+  let muted = false;
 
-  if (
-    shiftUsed ||
-    recordings.length === 0
-  ) {
-    playSound("error");
-    setStatus("PARADOX SHIFT INDISPONÍVEL.");
-    return;
+  // ==================================================
+  // 05. HELPERS
+  // ==================================================
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
   }
 
-  const index = recordings.length - 1;
-  const frames = recordings[index];
-
-  const position = positionAt(
-    frames,
-    elapsed
-  );
-
-  const past = frames.filter(
-    frame => frame.t < elapsed
-  );
-
-  past.push({
-    t: elapsed,
-    x: position.x,
-    y: position.y
-  });
-
-  past.push({
-    t: getCycleDuration(),
-    x: position.x,
-    y: position.y
-  });
-
-  recordings[index] = past;
-
-  shiftUsed = true;
-  shifts++;
-
-  GameStorage.registerShift();
-
-  updateGhosts();
-  updateDoor();
-
-  emitParticles(
-    position.x,
-    position.y,
-    COLORS.purple,
-    40
-  );
-
-  playSound("shift");
-
-  setStatus(
-    "PARADOX SHIFT: FUTURO DO ECO ALTERADO!"
-  );
-
-  emitGameEvent("shift", {
-    position
-  });
-
-  updateHUD();
-}
-
-// ==========================================
-// 16. PLACAS E PORTA
-// ==========================================
-
-function isPlateActive(plate) {
-  if (
-    distance(player, plate) < PLATE_RADIUS
-  ) {
-    return true;
+  function distance(ax, ay, bx, by) {
+    return Math.hypot(ax - bx, ay - by);
   }
 
-  return ghosts.some(
-    ghost =>
-      distance(ghost, plate) < PLATE_RADIUS
-  );
-}
-
-function updateDoor() {
-  doorOpen = level.plates.every(
-    plate => isPlateActive(plate)
-  );
-
-  if (
-    doorOpen &&
-    !previousDoorState
-  ) {
-    playSound("door");
-
-    emitParticles(
-      WORLD.door.x + WORLD.door.w / 2,
-      WORLD.door.y + WORLD.door.h / 2,
-      COLORS.green,
-      25
+  function circleRect(cx, cy, radius, rect) {
+    const px = clamp(
+      cx,
+      rect.x,
+      rect.x + rect.w
     );
 
-    setStatus("PORTA TEMPORAL ABERTA!");
+    const py = clamp(
+      cy,
+      rect.y,
+      rect.y + rect.h
+    );
 
-    emitGameEvent("dooropen");
+    return distance(cx, cy, px, py) < radius;
   }
 
-  if (
-    !doorOpen &&
-    previousDoorState
-  ) {
-    emitGameEvent("doorclosed");
+  function circleCircle(a, b) {
+    return distance(
+      a.x,
+      a.y,
+      b.x,
+      b.y
+    ) <= (a.radius ?? 0) + (b.radius ?? 0);
   }
 
-  previousDoorState = doorOpen;
-}
+  function segmentDistance(px, py, x1, y1, x2, y2) {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
 
-// ==========================================
-// 17. COLISÕES
-// ==========================================
+    const lengthSquared =
+      dx * dx + dy * dy;
 
-function isBlocked(x, y) {
-  const rect = playerRect(x, y);
+    if (lengthSquared === 0) {
+      return distance(px, py, x1, y1);
+    }
 
-  for (const wall of WORLD.walls) {
-    if (intersects(rect, wall)) {
-      return true;
+    const t = clamp(
+      (
+        (px - x1) * dx +
+        (py - y1) * dy
+      ) / lengthSquared,
+      0,
+      1
+    );
+
+    return distance(
+      px,
+      py,
+      x1 + t * dx,
+      y1 + t * dy
+    );
+  }
+
+  function setText(element, text) {
+    if (element) {
+      element.textContent = String(text);
     }
   }
 
-  if (
-    !doorOpen &&
-    intersects(rect, WORLD.door)
-  ) {
-    return true;
-  }
-
-  return false;
-}
-
-// ==========================================
-// 18. MOVIMENTO
-// ==========================================
-
-function updatePlayer(dt) {
-  let dx = 0;
-  let dy = 0;
-
-  if (isDirectionPressed("up")) dy--;
-  if (isDirectionPressed("down")) dy++;
-  if (isDirectionPressed("left")) dx--;
-  if (isDirectionPressed("right")) dx++;
-
-  const length = Math.hypot(dx, dy);
-
-  if (length === 0) return;
-
-  dx /= length;
-  dy /= length;
-
-  const oldX = player.x;
-  const oldY = player.y;
-
-  const nextX = clamp(
-    player.x + dx * player.speed * dt,
-    PLAYER_SIZE / 2,
-    WIDTH - PLAYER_SIZE / 2
-  );
-
-  if (!isBlocked(nextX, player.y)) {
-    player.x = nextX;
-  }
-
-  const nextY = clamp(
-    player.y + dy * player.speed * dt,
-    PLAYER_SIZE / 2,
-    HEIGHT - PLAYER_SIZE / 2
-  );
-
-  if (!isBlocked(player.x, nextY)) {
-    player.y = nextY;
-  }
-
-  if (
-    oldX !== player.x ||
-    oldY !== player.y
-  ) {
-    // Evento único de movimento para
-    // o tutorial, sem disparar a cada frame.
-    if (!startGame.movementNotified) {
-      startGame.movementNotified = true;
-      emitGameEvent("firstmove");
+  function setHidden(element, hidden) {
+    if (element) {
+      element.classList.toggle(
+        "hidden",
+        hidden
+      );
     }
   }
-}
 
-// ==========================================
-// 19. PORTAIS
-// ==========================================
+  function emit(name, detail = {}) {
+    window.dispatchEvent(
+      new CustomEvent(
+        `echo404:${name}`,
+        {
+          detail: {
+            level: state.levelIndex + 1,
+            cycle: state.cycle,
+            time: state.time,
+            score: state.score,
+            ...detail
+          }
+        }
+      )
+    );
+  }
 
-function updatePortals(dt) {
-  portalCooldown = Math.max(
-    0,
-    portalCooldown - dt
-  );
+  function playSound(name) {
+    if (
+      muted ||
+      !AUDIO ||
+      typeof AUDIO[name] !== "function"
+    ) {
+      return;
+    }
 
-  if (portalCooldown > 0) return;
+    try {
+      AUDIO[name]();
+    } catch (error) {
+      console.warn(
+        "ECHO//404 AUDIO:",
+        error
+      );
+    }
+  }
 
-  for (const portal of level.portals) {
-    let destination = null;
+  function storageCall(method, ...args) {
+    if (
+      !STORAGE ||
+      typeof STORAGE[method] !== "function"
+    ) {
+      return undefined;
+    }
+
+    try {
+      return STORAGE[method](...args);
+    } catch (error) {
+      console.warn(
+        `ECHO//404 STORAGE: ${method}`,
+        error
+      );
+
+      return undefined;
+    }
+  }
+
+  function localRead(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+
+      return raw
+        ? JSON.parse(raw)
+        : fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function localWrite(key, value) {
+    try {
+      localStorage.setItem(
+        key,
+        JSON.stringify(value)
+      );
+    } catch {
+      // Storage can be unavailable in private mode.
+    }
+  }
+
+  function getFallbackProgress() {
+    return localRead(
+      FALLBACK_SAVE_KEY,
+      {
+        unlocked: 1,
+        completed: [],
+        best: {}
+      }
+    );
+  }
+
+  function saveFallbackProgress(progress) {
+    localWrite(
+      FALLBACK_SAVE_KEY,
+      progress
+    );
+  }
+
+  function isUnlocked(index) {
+    const stored = storageCall(
+      "isUnlocked",
+      index
+    );
+
+    if (typeof stored === "boolean") {
+      return stored;
+    }
+
+    const progress = getFallbackProgress();
+
+    return index + 1 <= progress.unlocked;
+  }
+
+  function isCompleted(index) {
+    const stored = storageCall(
+      "isCompleted",
+      index
+    );
+
+    if (typeof stored === "boolean") {
+      return stored;
+    }
+
+    return getFallbackProgress()
+      .completed.includes(index + 1);
+  }
+
+  function getBest(index) {
+    const stored = storageCall(
+      "getBestScore",
+      index
+    );
+
+    if (Number.isFinite(stored)) {
+      return stored;
+    }
+
+    return (
+      getFallbackProgress()
+        .best[index + 1] || 0
+    );
+  }
+
+  // ==================================================
+  // 06. LEVEL INITIALIZATION
+  // ==================================================
+
+  function getDuration() {
+    const configured =
+      Number(state.level.timeLimit);
+
+    return Number.isFinite(configured)
+      ? configured
+      : Math.max(
+          3.5,
+          10 - state.levelIndex * 0.75
+        );
+  }
+
+  function cloneHazards() {
+    const level = state.level;
+
+    state.hazards.lasers = (
+      level.lasers || []
+    ).map((laser, index) => ({
+      ...laser,
+      id: laser.id || `laser_${index}`,
+      currentX1: laser.x1,
+      currentY1: laser.y1,
+      currentX2: laser.x2,
+      currentY2: laser.y2,
+      enabled: true
+    }));
+
+    state.hazards.phaseWalls = (
+      level.phaseWalls || []
+    ).map(wall => ({
+      ...wall,
+      active: wall.startsActive !== false
+    }));
+
+    state.hazards.platforms = (
+      level.temporalPlatforms || []
+    ).map(platform => ({
+      ...platform,
+      active: true,
+      touchedAt: null
+    }));
+
+    state.hazards.traps = (
+      level.echoTraps || []
+    ).map(trap => ({
+      ...trap,
+      triggeredAt: -Infinity,
+      lastActivation: -Infinity,
+      active: false,
+      activations: 0
+    }));
+  }
+
+  function resetPlayer() {
+    state.player.x = WORLD.start.x;
+    state.player.y = WORLD.start.y;
+    state.portalCooldown = 0;
+  }
+
+  function clearInput() {
+    keys.clear();
+    mobileKeys.clear();
+
+    state.joystick.x = 0;
+    state.joystick.y = 0;
+    state.joystick.pointerId = null;
+
+    if (UI.joystickStick) {
+      UI.joystickStick.style.transform =
+        "translate(0px, 0px)";
+    }
+
+    document.querySelectorAll(
+      ".dpad-btn.pressed"
+    ).forEach(button => {
+      button.classList.remove("pressed");
+    });
+  }
+
+  function resetCycleHazards() {
+    cloneHazards();
+
+    state.warningSent = false;
+    state.doorWasOpen = false;
+    state.doorOpen = false;
+  }
+
+  function resetLevelState() {
+    state.running = false;
+    state.finished = false;
+    state.won = false;
+
+    state.cycle = 1;
+    state.maxCycles =
+      state.level.maxCycles ??
+      WORLD.maxCycles ??
+      6;
+
+    state.time = 0;
+    state.elapsed = 0;
+    state.cycleDuration = getDuration();
+
+    state.echoes = [];
+    state.recording = [];
+    state.frozenEchoes = [];
+
+    state.score = 0;
+    state.deaths = 0;
+    state.shifts = 0;
+    state.portalsUsed = 0;
+
+    state.firstMoveSent = false;
+    state.lastDeathReason = "";
+
+    state.accumulator = 0;
+
+    resetPlayer();
+    resetCycleHazards();
+    clearInput();
+
+    document.body.classList.remove(
+      "game-critical",
+      "game-winning",
+      "game-losing",
+      "paradox-shift"
+    );
+
+    setHidden(UI.warning, true);
+
+    setText(UI.medalResult, "");
+
+    updateHUD();
+    updateObstaclePanel();
+  }
+
+  // ==================================================
+  // 07. ECHO RECORDING
+  // ==================================================
+
+  function recordPosition() {
+    state.recording.push({
+      t: state.time,
+      x: state.player.x,
+      y: state.player.y
+    });
+  }
+
+  function sampleEcho(echo, time) {
+    const points = echo.path;
+
+    if (!points || points.length === 0) {
+      return {
+        x: WORLD.start.x,
+        y: WORLD.start.y
+      };
+    }
+
+    if (time <= points[0].t) {
+      return points[0];
+    }
+
+    if (time >= points[points.length - 1].t) {
+      return points[points.length - 1];
+    }
+
+    let low = 0;
+    let high = points.length - 1;
+
+    while (high - low > 1) {
+      const mid = (low + high) >> 1;
+
+      if (points[mid].t <= time) {
+        low = mid;
+      } else {
+        high = mid;
+      }
+    }
+
+    const a = points[low];
+    const b = points[high];
+
+    const fraction =
+      (time - a.t) /
+      Math.max(0.00001, b.t - a.t);
+
+    return {
+      x: a.x + (b.x - a.x) * fraction,
+      y: a.y + (b.y - a.y) * fraction
+    };
+  }
+
+  function getEchoPosition(echo) {
+    if (echo.frozen) {
+      return echo.frozenPosition;
+    }
+
+    return sampleEcho(
+      echo,
+      state.time
+    );
+  }
+
+  function finishRecording() {
+    if (state.recording.length === 0) {
+      return;
+    }
+
+    const path = state.recording.map(
+      point => ({ ...point })
+    );
+
+    state.echoes.push({
+      path,
+      frozen: false,
+      frozenPosition: null,
+      color: COLORS.purple
+    });
+
+    state.recording = [];
+
+    playSound("echo");
+
+    emit("echo", {
+      count: state.echoes.length
+    });
+  }
+
+  // ==================================================
+  // 08. PARADOX SHIFT
+  // ==================================================
+
+  function paradoxShift() {
+    if (!state.running) {
+      return;
+    }
+
+    const echo = [...state.echoes]
+      .reverse()
+      .find(item => !item.frozen);
+
+    if (!echo) {
+      setStatus(
+        "NO ECHO AVAILABLE FOR SHIFT"
+      );
+
+      playSound("error");
+      return;
+    }
+
+    echo.frozenPosition = {
+      ...getEchoPosition(echo)
+    };
+
+    echo.frozen = true;
+
+    state.shifts++;
+    state.score = Math.max(
+      0,
+      state.score - 75
+    );
+
+    storageCall("registerShift");
+
+    playSound("shift");
+
+    emit("shift", {
+      shifts: state.shifts,
+      frozenEchoes:
+        state.echoes.filter(
+          item => item.frozen
+        ).length
+    });
+
+    triggerGlitch();
+
+    setStatus(
+      "PARADOX SHIFT ACTIVATED"
+    );
+
+    updateHUD();
+  }
+
+  // ==================================================
+  // 09. DOOR AND PRESSURE PLATES
+  // ==================================================
+
+  function isPlatePressed(plate) {
+    const radius = plate.radius ?? 23;
+
+    const playerOnPlate =
+      distance(
+        state.player.x,
+        state.player.y,
+        plate.x,
+        plate.y
+      ) <= radius + PLAYER_RADIUS;
+
+    const echoOnPlate =
+      state.echoes.some(echo => {
+        const position =
+          getEchoPosition(echo);
+
+        return distance(
+          position.x,
+          position.y,
+          plate.x,
+          plate.y
+        ) <= radius + PLAYER_RADIUS;
+      });
+
+    if (plate.echoOnly) {
+      return echoOnPlate;
+    }
+
+    if (plate.requiresEcho) {
+      return echoOnPlate;
+    }
+
+    return playerOnPlate || echoOnPlate;
+  }
+
+  function updateDoor() {
+    const plates =
+      state.level.plates || [];
+
+    state.doorOpen =
+      plates.length === 0 ||
+      plates.every(isPlatePressed);
 
     if (
-      distance(player, portal.a) < 19
+      state.doorOpen !==
+      state.doorWasOpen
     ) {
-      destination = portal.b;
-    } else if (
-      distance(player, portal.b) < 19
-    ) {
-      destination = portal.a;
+      emit(
+        state.doorOpen
+          ? "dooropen"
+          : "doorclosed"
+      );
+
+      if (state.doorOpen) {
+        playSound("door");
+      }
+
+      state.doorWasOpen =
+        state.doorOpen;
+    }
+  }
+
+  // ==================================================
+  // 10. DYNAMIC LASERS
+  // ==================================================
+
+  function updateLasers() {
+    const time = state.time;
+
+    state.hazards.lasers.forEach(
+      laser => {
+        let offsetX = 0;
+        let offsetY = 0;
+
+        if (laser.moving) {
+          const movement =
+            Math.sin(
+              time *
+                (laser.movementSpeed ?? 1) *
+                Math.PI +
+              (laser.movementPhase ?? 0)
+            ) * (laser.movementRange ?? 0);
+
+          if (
+            laser.movementAxis === "x"
+          ) {
+            offsetX = movement;
+          }
+
+          if (
+            laser.movementAxis === "y"
+          ) {
+            offsetY = movement;
+          }
+        }
+
+        laser.currentX1 =
+          laser.x1 + offsetX;
+
+        laser.currentY1 =
+          laser.y1 + offsetY;
+
+        laser.currentX2 =
+          laser.x2 + offsetX;
+
+        laser.currentY2 =
+          laser.y2 + offsetY;
+
+        let enabled =
+          laser.active !== false;
+
+        if (laser.pulse) {
+          const interval = Math.max(
+            0.1,
+            laser.pulseInterval ?? 2
+          );
+
+          const duration = clamp(
+            laser.pulseDuration ?? 1,
+            0,
+            interval
+          );
+
+          const phase =
+            (
+              time +
+              (laser.phase ?? 0)
+            ) % interval;
+
+          enabled =
+            enabled &&
+            phase < duration;
+        }
+
+        laser.enabled = enabled;
+      }
+    );
+  }
+
+  function laserCollision(laser) {
+    if (!laser.enabled) {
+      return false;
     }
 
-    if (!destination) continue;
+    const distanceToLaser =
+      segmentDistance(
+        state.player.x,
+        state.player.y,
+        laser.currentX1,
+        laser.currentY1,
+        laser.currentX2,
+        laser.currentY2
+      );
 
-    player.x = destination.x;
-    player.y = destination.y;
-
-    portalCooldown = 1;
-
-    emitParticles(
-      player.x,
-      player.y,
-      COLORS.blue,
-      30
-    );
-
-    playSound("portal");
-
-    setStatus("SALTO QUÂNTICO EXECUTADO!");
-
-    emitGameEvent("portal");
-
-    return;
-  }
-}
-
-// ==========================================
-// 20. LASERS MAIS DINÂMICOS
-// ==========================================
-
-function getLaserPhase(laser) {
-  const period = Math.max(
-    0.2,
-    Number(laser.period) || 2
-  );
-
-  const offset = Number(laser.offset) || 0;
-
-  // Usa tempo acumulado para acelerar
-  // os lasers sem modificar levels.js.
-  const adjustedTime =
-    worldTime * getLaserMultiplier() + offset;
-
-  return adjustedTime % period;
-}
-
-function isLaserActive(laser) {
-  return getLaserPhase(laser) <
-    (Number(laser.on) || 0);
-}
-
-function isLaserHit(laser) {
-  if (!isLaserActive(laser)) return false;
-
-  return (
-    Math.abs(player.x - laser.x) < 15 &&
-    player.y > 80 &&
-    player.y < 420
-  );
-}
-
-function checkLasers() {
-  for (const laser of level.lasers) {
-    if (!isLaserHit(laser)) continue;
-
-    deaths++;
-
-    GameStorage.registerDeath();
-
-    const penalty = getDeathPenalty();
-
-    score = Math.max(
-      0,
-      score - penalty
-    );
-
-    emitParticles(
-      player.x,
-      player.y,
-      COLORS.red,
-      40
-    );
-
-    playSound("laser");
-
-    emitGameEvent("death", {
-      penalty,
-      cause: "laser"
-    });
-
-    endCycle(true);
-    return true;
+    return distanceToLaser <=
+      PLAYER_RADIUS +
+      (laser.width ?? 5) / 2;
   }
 
-  return false;
-}
+  // ==================================================
+  // 11. PHASE WALLS
+  // ==================================================
 
-// ==========================================
-// 21. TERMINAR CICLO
-// ==========================================
-
-function endCycle(died = false) {
-  if (!running) return;
-
-  const duration = getCycleDuration();
-
-  if (died) {
-    currentRecording.push({
-      t: Math.min(elapsed, duration),
-      x: WORLD.start.x,
-      y: WORLD.start.y
-    });
-  }
-
-  currentRecording.push({
-    t: duration,
-    x: died ? WORLD.start.x : player.x,
-    y: died ? WORLD.start.y : player.y
-  });
-
-  recordings.push(currentRecording);
-
-  emitGameEvent("cycleend", {
-    died,
-    completedCycle: cycle
-  });
-
-  if (cycle >= MAX_CYCLES) {
-    finishGame(false);
-    return;
-  }
-
-  cycle++;
-  elapsed = 0;
-  portalCooldown = 0;
-
-  lastTickSecond = null;
-  criticalWarningShown = false;
-
-  player.x = WORLD.start.x;
-  player.y = WORLD.start.y;
-
-  currentRecording = [{
-    t: 0,
-    x: player.x,
-    y: player.y
-  }];
-
-  updateGhosts();
-  updateDoor();
-
-  emitParticles(
-    player.x,
-    player.y,
-    COLORS.purple,
-    30
-  );
-
-  playSound("echo");
-
-  setStatus(
-    `CICLO ${cycle}: ` +
-    `${recordings.length} ECOS ACTIVOS. ` +
-    `${duration}s RESTANTES.`
-  );
-
-  emitGameEvent("cyclestart");
-
-  lastFrame = 0;
-}
-
-// ==========================================
-// 22. SAÍDA
-// ==========================================
-
-function checkGoal() {
-  if (
-    intersects(
-      playerRect(player.x, player.y),
-      WORLD.goal
-    )
+  function periodicActive(
+    time,
+    activeDuration,
+    inactiveDuration,
+    phase = 0,
+    startsActive = true
   ) {
-    finishGame(true);
+    const active = Math.max(
+      0.05,
+      activeDuration
+    );
+
+    const inactive = Math.max(
+      0.05,
+      inactiveDuration
+    );
+
+    const period = active + inactive;
+
+    const position =
+      (
+        (time + phase) % period +
+        period
+      ) % period;
+
+    const result = position < active;
+
+    return startsActive
+      ? result
+      : !result;
   }
-}
 
-// ==========================================
-// 23. TERMINAR JOGO
-// ==========================================
+  function updatePhaseWalls() {
+    state.hazards.phaseWalls.forEach(
+      wall => {
+        if (
+          wall.echoControlled &&
+          wall.triggerPlateId
+        ) {
+          const plate =
+            (state.level.plates || [])
+              .find(
+                item =>
+                  item.id ===
+                  wall.triggerPlateId
+              );
 
-function finishGame(won) {
-  if (finished) return;
+          wall.active = plate
+            ? !isPlatePressed(plate)
+            : true;
 
-  running = false;
-  finished = true;
+          return;
+        }
 
-  clearAllMovement();
-
-  let medal = null;
-
-  if (won) {
-    const duration = getCycleDuration();
-
-    const cycleBonus =
-      (MAX_CYCLES - cycle + 1) * 1000;
-
-    const timeBonus = Math.floor(
-      Math.max(0, duration - elapsed) *
-      180
+        wall.active = periodicActive(
+          state.time,
+          wall.activeDuration ?? 1.5,
+          wall.inactiveDuration ?? 1.5,
+          wall.phase ?? 0,
+          wall.startsActive !== false
+        );
+      }
     );
+  }
 
-    const survivalBonus = Math.max(
+  // ==================================================
+  // 12. TEMPORAL PLATFORMS
+  // ==================================================
+
+  function updatePlatforms() {
+    state.hazards.platforms.forEach(
+      platform => {
+        let active = periodicActive(
+          state.time,
+          platform.activeDuration ?? 2,
+          platform.inactiveDuration ?? 1,
+          platform.phase ?? 0,
+          true
+        );
+
+        if (
+          platform.collapseOnTouch &&
+          platform.touchedAt !== null
+        ) {
+          const delay =
+            platform.collapseDelay ?? 0.7;
+
+          if (
+            state.time -
+            platform.touchedAt >= delay
+          ) {
+            active = false;
+          }
+        }
+
+        platform.active = active;
+
+        if (
+          active &&
+          platform.collapseOnTouch &&
+          platform.touchedAt === null &&
+          circleRect(
+            state.player.x,
+            state.player.y,
+            PLAYER_RADIUS,
+            platform
+          )
+        ) {
+          platform.touchedAt =
+            state.time;
+
+          emit("platformtouch", {
+            platformId: platform.id,
+            collapseDelay:
+              platform.collapseDelay
+          });
+        }
+      }
+    );
+  }
+
+  function platformCollision(platform) {
+    /*
+      A platform is treated as a hazardous
+      floor zone when inactive.
+
+      It is not a physical wall.
+    */
+
+    return (
+      !platform.active &&
+      circleRect(
+        state.player.x,
+        state.player.y,
+        PLAYER_RADIUS,
+        platform
+      )
+    );
+  }
+
+  // ==================================================
+  // 13. ECHO-ACTIVATED TRAPS
+  // ==================================================
+
+  function updateEchoTraps() {
+    state.hazards.traps.forEach(
+      trap => {
+        const echoInside =
+          state.echoes.some(echo => {
+            const position =
+              getEchoPosition(echo);
+
+            return distance(
+              position.x,
+              position.y,
+              trap.x,
+              trap.y
+            ) <= (
+              (trap.radius ?? 22) +
+              PLAYER_RADIUS
+            );
+          });
+
+        const playerInside =
+          distance(
+            state.player.x,
+            state.player.y,
+            trap.x,
+            trap.y
+          ) <= (
+            (trap.radius ?? 22) +
+            PLAYER_RADIUS
+          );
+
+        const triggerPresent =
+          trap.trigger === "player"
+            ? playerInside
+            : trap.trigger === "both"
+              ? playerInside || echoInside
+              : echoInside;
+
+        const cooldown =
+          trap.cooldown ?? 1.5;
+
+        if (
+          triggerPresent &&
+          state.time -
+          trap.lastActivation >= cooldown &&
+          state.time -
+          trap.triggeredAt >= cooldown
+        ) {
+          trap.triggeredAt =
+            state.time;
+
+          trap.lastActivation =
+            state.time;
+
+          trap.activations++;
+
+          emit("traptrigger", {
+            trapId: trap.id,
+            activations:
+              trap.activations
+          });
+
+          playSound("warning");
+        }
+
+        const sinceTrigger =
+          state.time -
+          trap.triggeredAt;
+
+        const delay =
+          trap.activationDelay ?? 0.3;
+
+        const duration =
+          trap.activeDuration ?? 1.2;
+
+        trap.active =
+          sinceTrigger >= delay &&
+          sinceTrigger <
+            delay + duration;
+      }
+    );
+  }
+
+  function trapCollision(trap) {
+    if (!trap.active) {
+      return false;
+    }
+
+    if (trap.effect === "laser") {
+      /*
+        Creates a temporary vertical beam
+        across the trap's position.
+      */
+
+      return segmentDistance(
+        state.player.x,
+        state.player.y,
+        trap.x,
+        Math.max(
+          20,
+          trap.y - 95
+        ),
+        trap.x,
+        Math.min(
+          H - 20,
+          trap.y + 95
+        )
+      ) <= PLAYER_RADIUS + 5;
+    }
+
+    return distance(
+      state.player.x,
+      state.player.y,
+      trap.x,
+      trap.y
+    ) <= (
+      (trap.radius ?? 22) +
+      PLAYER_RADIUS
+    );
+  }
+
+  // ==================================================
+  // 14. PORTALS
+  // ==================================================
+
+  function updatePortals(dt) {
+    state.portalCooldown = Math.max(
       0,
-      1500 - deaths * 400
+      state.portalCooldown - dt
     );
 
-    const precisionBonus = Math.max(
+    if (state.portalCooldown > 0) {
+      return;
+    }
+
+    for (
+      const portal of
+      state.level.portals || []
+    ) {
+      const radius =
+        portal.radius ?? 22;
+
+      if (
+        distance(
+          state.player.x,
+          state.player.y,
+          portal.x,
+          portal.y
+        ) > radius + PLAYER_RADIUS
+      ) {
+        continue;
+      }
+
+      state.player.x = clamp(
+        portal.targetX,
+        PLAYER_RADIUS,
+        W - PLAYER_RADIUS
+      );
+
+      state.player.y = clamp(
+        portal.targetY,
+        PLAYER_RADIUS,
+        H - PLAYER_RADIUS
+      );
+
+      state.portalCooldown =
+        Math.max(
+          0.5,
+          portal.cooldown ?? 0.6
+        );
+
+      state.portalsUsed++;
+
+      playSound("portal");
+
+      emit("portal", {
+        portalsUsed:
+          state.portalsUsed
+      });
+
+      triggerGlitch();
+
+      break;
+    }
+  }
+
+  // ==================================================
+  // 15. COLLISION SYSTEM
+  // ==================================================
+
+  function solidCollision(x, y) {
+    const candidate = {
+      x,
+      y
+    };
+
+    const walls = WORLD.walls || [];
+
+    for (const wall of walls) {
+      if (
+        circleRect(
+          candidate.x,
+          candidate.y,
+          PLAYER_RADIUS,
+          wall
+        )
+      ) {
+        return true;
+      }
+    }
+
+    if (
+      !state.doorOpen &&
+      WORLD.door &&
+      circleRect(
+        x,
+        y,
+        PLAYER_RADIUS,
+        WORLD.door
+      )
+    ) {
+      return true;
+    }
+
+    for (
+      const wall of
+      state.hazards.phaseWalls
+    ) {
+      if (
+        wall.active &&
+        circleRect(
+          x,
+          y,
+          PLAYER_RADIUS,
+          wall
+        )
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  function checkHazardCollision() {
+    for (
+      const laser of
+      state.hazards.lasers
+    ) {
+      if (laserCollision(laser)) {
+        killPlayer("laser");
+        return true;
+      }
+    }
+
+    for (
+      const platform of
+      state.hazards.platforms
+    ) {
+      if (
+        platformCollision(platform)
+      ) {
+        killPlayer("platform");
+        return true;
+      }
+    }
+
+    for (
+      const trap of
+      state.hazards.traps
+    ) {
+      if (trapCollision(trap)) {
+        killPlayer("echo-trap");
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  // ==================================================
+  // 16. MOVEMENT
+  // ==================================================
+
+  function getMovement() {
+    let x = 0;
+    let y = 0;
+
+    const pressed = key =>
+      keys.has(key) ||
+      mobileKeys.has(key);
+
+    if (
+      pressed("arrowleft") ||
+      pressed("a")
+    ) {
+      x--;
+    }
+
+    if (
+      pressed("arrowright") ||
+      pressed("d")
+    ) {
+      x++;
+    }
+
+    if (
+      pressed("arrowup") ||
+      pressed("w")
+    ) {
+      y--;
+    }
+
+    if (
+      pressed("arrowdown") ||
+      pressed("s")
+    ) {
+      y++;
+    }
+
+    if (
+      state.controlMode ===
+      "joystick"
+    ) {
+      x += state.joystick.x;
+      y += state.joystick.y;
+    }
+
+    const length = Math.hypot(x, y);
+
+    if (length > 1) {
+      x /= length;
+      y /= length;
+    }
+
+    return { x, y };
+  }
+
+  function movePlayer(dt) {
+    const movement =
+      getMovement();
+
+    if (
+      movement.x === 0 &&
+      movement.y === 0
+    ) {
+      return;
+    }
+
+    if (!state.firstMoveSent) {
+      state.firstMoveSent = true;
+
+      emit("firstmove");
+    }
+
+    const speed =
+      PLAYER_SPEED * dt;
+
+    const nextX = clamp(
+      state.player.x +
+        movement.x * speed,
+      PLAYER_RADIUS,
+      W - PLAYER_RADIUS
+    );
+
+    const nextY = clamp(
+      state.player.y +
+        movement.y * speed,
+      PLAYER_RADIUS,
+      H - PLAYER_RADIUS
+    );
+
+    /*
+      Resolve X and Y independently
+      to allow sliding along walls.
+    */
+
+    if (
+      !solidCollision(
+        nextX,
+        state.player.y
+      )
+    ) {
+      state.player.x = nextX;
+    }
+
+    if (
+      !solidCollision(
+        state.player.x,
+        nextY
+      )
+    ) {
+      state.player.y = nextY;
+    }
+  }
+
+  // ==================================================
+  // 17. DEATH AND CYCLE MANAGEMENT
+  // ==================================================
+
+  function setStatus(text) {
+    setText(UI.status, text);
+  }
+
+  function killPlayer(reason) {
+    if (!state.running) {
+      return;
+    }
+
+    state.deaths++;
+    state.lastDeathReason = reason;
+
+    state.score = Math.max(
       0,
-      900 - shifts * 150
+      state.score - 100
     );
 
-    const difficultyBonus =
-      levelIndex * DIFFICULTY.levelBonus;
+    storageCall("registerDeath");
 
-    score += (
-      2000 +
-      cycleBonus +
-      timeBonus +
-      survivalBonus +
-      precisionBonus +
-      difficultyBonus
-    );
-
-    GameStorage.win(levelIndex, score);
-
-    medal = calculateMedal();
-
-    registerMedal(medal);
-    showMedal(medal);
-
-    playSound("win");
-
-    UI.overlayTitle.textContent =
-      "PARADOXO RESOLVIDO";
-
-    UI.overlayMessage.textContent =
-      `Nível ${levelIndex + 1} concluído! ` +
-      `Ciclo ${cycle}/${MAX_CYCLES}. ` +
-      `${deaths} mortes, ${shifts} shifts. ` +
-      `Tempo total: ${totalActiveTime.toFixed(1)}s.`;
-
-    UI.nextBtn.style.display =
-      levelIndex < GAME_LEVELS.length - 1
-        ? "inline-block"
-        : "none";
-
-    setStatus(
-      `SIMULAÇÃO CONCLUÍDA! ` +
-      `MEDALHA DE ${MEDALS[medal].name}.`
-    );
-  } else {
     playSound("fail");
 
-    UI.overlayTitle.textContent =
-      "SYSTEM FAILURE";
+    emit("death", {
+      reason,
+      deaths: state.deaths
+    });
 
-    UI.overlayMessage.textContent =
-      `Os ${MAX_CYCLES} ciclos terminaram. ` +
-      `O sistema exige maior precisão. ` +
-      `Reorganiza os ecos e tenta novamente.`;
-
-    UI.nextBtn.style.display = "none";
-
-    if (UI.medalResult) {
-      UI.medalResult.classList.add("hidden");
-    }
+    triggerGlitch();
 
     setStatus(
-      "COLAPSO TEMPORAL DETECTADO."
+      `TEMPORAL FAILURE: ${reason.toUpperCase()}`
     );
+
+    endCycle("death");
   }
 
-  UI.finalScore.textContent =
-    `${formatScore(score)} PONTOS`;
-
-  UI.overlay.classList.remove("hidden");
-
-  UI.startBtn.textContent =
-    "JOGAR NOVAMENTE";
-
-  buildLevelMenu();
-  updateHUD();
-
-  emitGameEvent(
-    won ? "win" : "lose",
-    {
-      won,
-      medal,
-      totalActiveTime
+  function endCycle(reason = "timeout") {
+    if (!state.running) {
+      return;
     }
-  );
-}
 
-// ==========================================
-// 24. DESENHO NEON
-// ==========================================
+    recordPosition();
 
-function glowRect(
-  x,
-  y,
-  width,
-  height,
-  color,
-  blur = 15
-) {
-  ctx.save();
+    finishRecording();
 
-  ctx.fillStyle = color;
-  ctx.shadowColor = color;
-  ctx.shadowBlur = blur;
+    emit("cycleend", {
+      reason,
+      echoes: state.echoes.length
+    });
 
-  ctx.fillRect(x, y, width, height);
+    if (
+      state.cycle >=
+      state.maxCycles
+    ) {
+      loseGame();
+      return;
+    }
 
-  ctx.restore();
-}
+    state.cycle++;
 
-// ==========================================
-// 25. GRELHA
-// ==========================================
+    state.time = 0;
+    state.elapsed = 0;
 
-function drawGrid() {
-  ctx.strokeStyle = "#19243d";
-  ctx.lineWidth = 1;
+    resetPlayer();
+    resetCycleHazards();
 
-  for (let x = 0; x <= WIDTH; x += 40) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, HEIGHT);
-    ctx.stroke();
+    recordPosition();
+
+    emit("cyclestart", {
+      echoes: state.echoes.length
+    });
+
+    setStatus(
+      `CYCLE ${state.cycle} INITIALIZED`
+    );
+
+    updateHUD();
   }
 
-  for (let y = 0; y <= HEIGHT; y += 40) {
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(WIDTH, y);
-    ctx.stroke();
-  }
-}
+  // ==================================================
+  // 18. WIN / LOSE
+  // ==================================================
 
-// ==========================================
-// 26. PAREDES E PORTA
-// ==========================================
+  function goalReached() {
+    const goal = WORLD.goal;
 
-function drawWalls() {
-  ctx.fillStyle = "#35415e";
-
-  for (const wall of WORLD.walls) {
-    ctx.fillRect(
-      wall.x,
-      wall.y,
-      wall.w,
-      wall.h
+    return circleRect(
+      state.player.x,
+      state.player.y,
+      PLAYER_RADIUS,
+      goal
     );
   }
 
-  const door = WORLD.door;
+  function calculateScore() {
+    const timeBonus =
+      Math.round(
+        Math.max(
+          0,
+          state.cycleDuration -
+          state.time
+        ) * 100
+      );
 
-  if (doorOpen) {
-    ctx.save();
+    const cycleBonus =
+      Math.max(
+        0,
+        state.maxCycles -
+        state.cycle
+      ) * 120;
 
-    ctx.strokeStyle = COLORS.green;
-    ctx.lineWidth = 2;
-    ctx.setLineDash([6, 6]);
+    const base = 1000;
 
-    ctx.strokeRect(
-      door.x,
-      door.y,
-      door.w,
-      door.h
-    );
-
-    ctx.restore();
-  } else {
-    glowRect(
-      door.x,
-      door.y,
-      door.w,
-      door.h,
-      COLORS.red,
-      18
+    return Math.max(
+      100,
+      base +
+      timeBonus +
+      cycleBonus -
+      state.deaths * 75 -
+      state.shifts * 50
     );
   }
-}
 
-// ==========================================
-// 27. PLACAS
-// ==========================================
+  function calculateMedal(score) {
+    if (
+      state.deaths === 0 &&
+      state.cycle <= 3 &&
+      score >= 1500
+    ) {
+      return "gold";
+    }
 
-function drawPlates() {
-  level.plates.forEach((plate, index) => {
-    const active = isPlateActive(plate);
+    if (
+      state.deaths <= 2 &&
+      state.cycle <= 5 &&
+      score >= 1000
+    ) {
+      return "silver";
+    }
 
-    const color = active
-      ? COLORS.green
-      : COLORS.yellow;
+    return "bronze";
+  }
 
-    ctx.save();
+  function medalEmoji(medal) {
+    return {
+      gold: "🥇",
+      silver: "🥈",
+      bronze: "🥉"
+    }[medal] || "";
+  }
 
-    ctx.strokeStyle = color;
-    ctx.fillStyle = color;
-    ctx.shadowColor = color;
-    ctx.shadowBlur = 15;
-    ctx.lineWidth = 3;
+  function saveMedal(medal) {
+    const index = state.levelIndex;
 
-    ctx.beginPath();
-    ctx.arc(
-      plate.x,
-      plate.y,
-      24,
+    /*
+      Prefer the existing storage API.
+      Keep the old medal key as fallback.
+    */
+
+    const saved = storageCall(
+      "saveMedal",
+      index,
+      medal
+    );
+
+    if (saved !== undefined) {
+      return;
+    }
+
+    const medals = localRead(
+      MEDAL_KEY,
+      {}
+    );
+
+    const rank = {
+      bronze: 1,
+      silver: 2,
+      gold: 3
+    };
+
+    const current =
+      medals[index];
+
+    if (
+      !current ||
+      rank[medal] >
+      (rank[current] || 0)
+    ) {
+      medals[index] = medal;
+      localWrite(MEDAL_KEY, medals);
+    }
+  }
+
+  function updateMedalSummary() {
+    const stored =
+      storageCall("getMedals");
+
+    const medals =
+      stored && typeof stored === "object"
+        ? stored
+        : localRead(MEDAL_KEY, {});
+
+    const values = Array.isArray(medals)
+      ? medals
+      : Object.values(medals);
+
+    const count = name =>
+      values.filter(
+        value =>
+          value === name ||
+          value?.medal === name
+      ).length;
+
+    setText(
+      UI.medalSummary,
+      `🥇 ${count("gold")}   ` +
+      `🥈 ${count("silver")}   ` +
+      `🥉 ${count("bronze")}`
+    );
+  }
+
+  function saveVictory(score, medal) {
+    /*
+      GameStorage v0.7 keeps the existing
+      progress from earlier versions.
+    */
+
+    storageCall(
+      "win",
+      state.levelIndex,
+      score
+    );
+
+    saveMedal(medal);
+
+    const progress =
+      getFallbackProgress();
+
+    const number =
+      state.levelIndex + 1;
+
+    if (
+      !progress.completed.includes(
+        number
+      )
+    ) {
+      progress.completed.push(
+        number
+      );
+    }
+
+    progress.unlocked = Math.max(
+      progress.unlocked,
+      Math.min(
+        LEVELS.length,
+        number + 1
+      )
+    );
+
+    progress.best[number] = Math.max(
+      progress.best[number] || 0,
+      score
+    );
+
+    saveFallbackProgress(progress);
+  }
+
+  function winGame() {
+    if (!state.running) {
+      return;
+    }
+
+    state.running = false;
+    state.finished = true;
+    state.won = true;
+
+    state.score = calculateScore();
+
+    const medal =
+      calculateMedal(state.score);
+
+    saveVictory(
+      state.score,
+      medal
+    );
+
+    playSound("win");
+    playSound(medal);
+
+    emit("win", {
+      medal,
+      deaths: state.deaths,
+      shifts: state.shifts,
+      cyclesUsed: state.cycle,
+      timeRemaining:
+        state.cycleDuration -
+        state.time
+    });
+
+    document.body.classList.add(
+      "game-winning"
+    );
+
+    setText(
+      UI.overlayTitle,
+      "LEVEL COMPLETED"
+    );
+
+    setText(
+      UI.overlayMessage,
+      state.levelIndex ===
+      LEVELS.length - 1
+        ? "Concluíste SYSTEM REBELLION. O paradoxo foi superado."
+        : "Simulação concluída. O próximo sector foi desbloqueado."
+    );
+
+    setText(
+      UI.finalScore,
+      state.score
+    );
+
+    setText(
+      UI.medalResult,
+      `${medalEmoji(medal)} ${medal.toUpperCase()}`
+    );
+
+    setHidden(
+      UI.nextBtn,
+      state.levelIndex >=
+        LEVELS.length - 1
+    );
+
+    setHidden(
+      UI.overlay,
+      false
+    );
+
+    setStatus(
+      "SIMULATION COMPLETED"
+    );
+
+    renderLevelGrid();
+    updateMedalSummary();
+    updateHUD();
+  }
+
+  function loseGame() {
+    state.running = false;
+    state.finished = true;
+    state.won = false;
+
+    playSound("fail");
+
+    emit("lose", {
+      deaths: state.deaths,
+      shifts: state.shifts,
+      reason: "cycles-exhausted"
+    });
+
+    document.body.classList.add(
+      "game-losing"
+    );
+
+    setText(
+      UI.overlayTitle,
+      "TEMPORAL COLLAPSE"
+    );
+
+    setText(
+      UI.overlayMessage,
+      "Os ciclos terminaram. Os teus ecos não conseguiram estabilizar a realidade."
+    );
+
+    setText(
+      UI.finalScore,
+      state.score
+    );
+
+    setText(
+      UI.medalResult,
+      ""
+    );
+
+    setHidden(
+      UI.nextBtn,
+      true
+    );
+
+    setHidden(
+      UI.overlay,
+      false
+    );
+
+    setStatus(
+      "SYSTEM FAILURE"
+    );
+
+    updateHUD();
+  }
+
+  // ==================================================
+  // 19. GAME LOOP
+  // ==================================================
+
+  function update(dt) {
+    if (!state.running) {
+      return;
+    }
+
+    state.time += dt;
+    state.elapsed += dt;
+
+    updateDoor();
+    updatePhaseWalls();
+    updateLasers();
+    updatePlatforms();
+    updateEchoTraps();
+
+    movePlayer(dt);
+    updatePortals(dt);
+
+    /*
+      Re-evaluate plates after movement,
+      so a newly pressed plate can open
+      the door immediately.
+    */
+
+    updateDoor();
+
+    recordPosition();
+
+    if (checkHazardCollision()) {
+      return;
+    }
+
+    if (goalReached()) {
+      winGame();
+      return;
+    }
+
+    const remaining =
+      state.cycleDuration -
+      state.time;
+
+    if (
+      remaining <= 2 &&
+      !state.warningSent
+    ) {
+      state.warningSent = true;
+
+      emit("timecritical", {
+        remaining
+      });
+
+      playSound("warning");
+    }
+
+    if (
+      state.time >=
+      state.cycleDuration
+    ) {
+      endCycle("timeout");
+      return;
+    }
+
+    updateHUD();
+    updateObstaclePanel();
+  }
+
+  function frame(timestamp) {
+    if (!state.lastFrame) {
+      state.lastFrame = timestamp;
+    }
+
+    const dt = clamp(
+      (timestamp - state.lastFrame) /
+        1000,
       0,
-      Math.PI * 2
+      MAX_DT
     );
-    ctx.stroke();
+
+    state.lastFrame = timestamp;
+
+    if (state.running) {
+      state.accumulator += dt;
+
+      let iterations = 0;
+
+      while (
+        state.accumulator >=
+          FIXED_STEP &&
+        iterations < 6
+      ) {
+        update(FIXED_STEP);
+
+        state.accumulator -=
+          FIXED_STEP;
+
+        iterations++;
+      }
+    } else {
+      state.accumulator = 0;
+    }
+
+    render();
+
+    requestAnimationFrame(frame);
+  }
+
+  // ==================================================
+  // 20. CANVAS DRAW HELPERS
+  // ==================================================
+
+  function drawGlowCircle(
+    x,
+    y,
+    radius,
+    color,
+    glow = 15
+  ) {
+    ctx.save();
+
+    ctx.shadowBlur = glow;
+    ctx.shadowColor = color;
+
+    ctx.fillStyle = color;
 
     ctx.beginPath();
     ctx.arc(
-      plate.x,
-      plate.y,
-      10,
+      x,
+      y,
+      radius,
       0,
       Math.PI * 2
     );
     ctx.fill();
 
     ctx.restore();
+  }
 
-    ctx.fillStyle = COLORS.white;
-    ctx.font = "11px monospace";
-    ctx.textAlign = "center";
+  function drawGrid() {
+    ctx.strokeStyle =
+      COLORS.grid;
 
-    ctx.fillText(
-      `PLACA ${index + 1}`,
-      plate.x,
-      plate.y - 36
-    );
-  });
-}
-
-// ==========================================
-// 28. LASERS
-// ==========================================
-
-function drawLasers() {
-  level.lasers.forEach(laser => {
-    const active = isLaserActive(laser);
-
-    ctx.save();
+    ctx.lineWidth = 1;
 
     ctx.beginPath();
-    ctx.moveTo(laser.x, 80);
-    ctx.lineTo(laser.x, 420);
 
-    ctx.strokeStyle = active
-      ? COLORS.red
-      : "#50233a";
+    for (
+      let x = 0;
+      x <= W;
+      x += 40
+    ) {
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, H);
+    }
 
-    ctx.lineWidth = active ? 5 : 2;
-    ctx.shadowColor = COLORS.red;
-    ctx.shadowBlur = active ? 20 : 0;
+    for (
+      let y = 0;
+      y <= H;
+      y += 40
+    ) {
+      ctx.moveTo(0, y);
+      ctx.lineTo(W, y);
+    }
 
     ctx.stroke();
-    ctx.restore();
+  }
 
-    glowRect(
-      laser.x - 8,
-      72,
-      16,
-      16,
-      active ? COLORS.red : "#71324a",
-      8
-    );
-
-    glowRect(
-      laser.x - 8,
-      412,
-      16,
-      16,
-      active ? COLORS.red : "#71324a",
-      8
-    );
-  });
-}
-
-// ==========================================
-// 29. PORTAIS
-// ==========================================
-
-function drawPortals() {
-  level.portals.forEach(portal => {
-    for (const point of [portal.a, portal.b]) {
-      const radius =
-        15 + Math.sin(worldTime * 5) * 3;
-
-      ctx.save();
-
-      ctx.beginPath();
-      ctx.arc(
-        point.x,
-        point.y,
-        radius,
-        0,
-        Math.PI * 2
-      );
-
-      ctx.strokeStyle = COLORS.blue;
-      ctx.lineWidth = 4;
-      ctx.shadowColor = COLORS.blue;
-      ctx.shadowBlur = 18;
-
-      ctx.stroke();
-      ctx.restore();
-    }
-  });
-}
-
-// ==========================================
-// 30. SAÍDA
-// ==========================================
-
-function drawGoal() {
-  const goal = WORLD.goal;
-
-  glowRect(
-    goal.x,
-    goal.y,
-    goal.w,
-    goal.h,
-    COLORS.green,
-    22
-  );
-
-  ctx.fillStyle = "#083324";
-
-  ctx.fillRect(
-    goal.x + 10,
-    goal.y + 10,
-    goal.w - 20,
-    goal.h - 20
-  );
-
-  ctx.fillStyle = COLORS.green;
-  ctx.font = "12px monospace";
-  ctx.textAlign = "center";
-
-  ctx.fillText(
-    "SAÍDA",
-    goal.x + goal.w / 2,
-    goal.y - 15
-  );
-}
-
-// ==========================================
-// 31. ECOS
-// ==========================================
-
-function drawGhosts() {
-  ghosts.forEach((ghost, index) => {
-    ctx.save();
-
-    ctx.globalAlpha =
-      0.5 +
-      Math.sin(worldTime * 7 + index) * 0.12;
-
-    glowRect(
-      ghost.x - 10,
-      ghost.y - 10,
-      20,
-      20,
-      COLORS.purple,
-      16
-    );
-
-    ctx.restore();
-  });
-}
-
-// ==========================================
-// 32. JOGADOR
-// ==========================================
-
-function drawPlayer() {
-  glowRect(
-    player.x - 10,
-    player.y - 10,
-    20,
-    20,
-    COLORS.cyan,
-    20
-  );
-
-  ctx.fillStyle = "#ffffff";
-
-  ctx.fillRect(
-    player.x - 4,
-    player.y - 4,
-    8,
-    8
-  );
-}
-
-// ==========================================
-// 33. PARTÍCULAS
-// ==========================================
-
-function drawParticles() {
-  for (const particle of particles) {
-    ctx.save();
-
-    ctx.globalAlpha = clamp(
-      particle.life / particle.maxLife,
-      0,
-      1
-    );
-
-    ctx.fillStyle = particle.color;
+  function drawBackground() {
+    ctx.fillStyle =
+      COLORS.background;
 
     ctx.fillRect(
-      particle.x,
-      particle.y,
-      particle.size,
-      particle.size
+      0,
+      0,
+      W,
+      H
+    );
+
+    drawGrid();
+
+    const gradient =
+      ctx.createRadialGradient(
+        W / 2,
+        H / 2,
+        40,
+        W / 2,
+        H / 2,
+        500
+      );
+
+    gradient.addColorStop(
+      0,
+      "rgba(37,69,119,0.13)"
+    );
+
+    gradient.addColorStop(
+      1,
+      "rgba(0,0,0,0)"
+    );
+
+    ctx.fillStyle = gradient;
+
+    ctx.fillRect(
+      0,
+      0,
+      W,
+      H
+    );
+  }
+
+  function drawWalls() {
+    const walls =
+      WORLD.walls || [];
+
+    ctx.fillStyle =
+      COLORS.wall;
+
+    ctx.strokeStyle =
+      "rgba(72,246,255,0.35)";
+
+    ctx.lineWidth = 2;
+
+    walls.forEach(wall => {
+      ctx.fillRect(
+        wall.x,
+        wall.y,
+        wall.w,
+        wall.h
+      );
+
+      ctx.strokeRect(
+        wall.x,
+        wall.y,
+        wall.w,
+        wall.h
+      );
+    });
+
+    if (WORLD.door) {
+      const door =
+        WORLD.door;
+
+      if (state.doorOpen) {
+        ctx.save();
+
+        ctx.strokeStyle =
+          COLORS.green;
+
+        ctx.shadowColor =
+          COLORS.green;
+
+        ctx.shadowBlur = 14;
+
+        ctx.setLineDash([
+          5,
+          8
+        ]);
+
+        ctx.strokeRect(
+          door.x,
+          door.y,
+          door.w,
+          door.h
+        );
+
+        ctx.restore();
+      } else {
+        ctx.save();
+
+        ctx.fillStyle =
+          "rgba(255,76,105,0.6)";
+
+        ctx.shadowColor =
+          COLORS.red;
+
+        ctx.shadowBlur = 16;
+
+        ctx.fillRect(
+          door.x,
+          door.y,
+          door.w,
+          door.h
+        );
+
+        ctx.restore();
+      }
+    }
+  }
+
+  function drawGoal() {
+    const goal =
+      WORLD.goal;
+
+    ctx.save();
+
+    ctx.fillStyle =
+      "rgba(82,255,187,0.1)";
+
+    ctx.strokeStyle =
+      COLORS.green;
+
+    ctx.lineWidth = 3;
+
+    ctx.shadowColor =
+      COLORS.green;
+
+    ctx.shadowBlur = 20;
+
+    ctx.fillRect(
+      goal.x,
+      goal.y,
+      goal.w,
+      goal.h
+    );
+
+    ctx.strokeRect(
+      goal.x,
+      goal.y,
+      goal.w,
+      goal.h
     );
 
     ctx.restore();
-  }
-}
 
-// ==========================================
-// 34. ETIQUETAS DA ARENA
-// ==========================================
+    ctx.fillStyle =
+      COLORS.green;
 
-function drawLabels() {
-  ctx.fillStyle = "#7083a4";
-  ctx.font = "12px monospace";
-  ctx.textAlign = "left";
+    ctx.font =
+      "bold 11px monospace";
 
-  ctx.fillText(
-    "SECTOR 01 // ORIGIN",
-    20,
-    25
-  );
+    ctx.textAlign =
+      "center";
 
-  ctx.fillText(
-    "SECTOR 02 // PARADOX",
-    425,
-    25
-  );
-
-  ctx.textAlign = "right";
-
-  ctx.fillText(
-    `LEVEL ${String(levelIndex + 1).padStart(2, "0")}`,
-    780,
-    25
-  );
-
-  ctx.textAlign = "center";
-  ctx.fillStyle = COLORS.yellow;
-  ctx.font = "11px monospace";
-
-  ctx.fillText(
-    `${getCycleDuration()}s / CYCLE`,
-    WIDTH / 2,
-    HEIGHT - 12
-  );
-}
-
-// ==========================================
-// 35. RENDERIZAÇÃO
-// ==========================================
-
-function draw() {
-  ctx.clearRect(0, 0, WIDTH, HEIGHT);
-
-  ctx.fillStyle = "#080d1c";
-  ctx.fillRect(0, 0, WIDTH, HEIGHT);
-
-  drawGrid();
-  drawLabels();
-  drawWalls();
-  drawPlates();
-  drawLasers();
-  drawPortals();
-  drawGoal();
-  drawGhosts();
-  drawPlayer();
-  drawParticles();
-}
-
-// ==========================================
-// 36. CONTAGEM REGRESSIVA
-// ==========================================
-
-function updateCountdown() {
-  const duration = getCycleDuration();
-  const remaining = duration - elapsed;
-
-  const second = Math.ceil(remaining);
-
-  if (
-    second <= 3 &&
-    second > 0 &&
-    second !== lastTickSecond
-  ) {
-    lastTickSecond = second;
-    playSound("tick");
+    ctx.fillText(
+      "EXIT",
+      goal.x + goal.w / 2,
+      goal.y - 12
+    );
   }
 
-  const criticalThreshold =
-    duration * DIFFICULTY.criticalFraction;
+  function drawPlates() {
+    (state.level.plates || [])
+      .forEach(plate => {
+        const pressed =
+          isPlatePressed(plate);
 
-  if (
-    remaining <= criticalThreshold &&
-    !criticalWarningShown
-  ) {
-    criticalWarningShown = true;
+        const color = pressed
+          ? COLORS.green
+          : plate.color ||
+            COLORS.cyan;
 
-    setStatus(
-      "ALERTA ECHO: TEMPO CRÍTICO!"
+        ctx.save();
+
+        ctx.strokeStyle = color;
+
+        ctx.fillStyle = pressed
+          ? "rgba(82,255,187,0.22)"
+          : "rgba(72,246,255,0.08)";
+
+        ctx.lineWidth = 3;
+
+        ctx.shadowColor = color;
+        ctx.shadowBlur = pressed
+          ? 22
+          : 8;
+
+        ctx.beginPath();
+
+        ctx.arc(
+          plate.x,
+          plate.y,
+          plate.radius ?? 23,
+          0,
+          Math.PI * 2
+        );
+
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.restore();
+
+        ctx.fillStyle = color;
+        ctx.font =
+          "bold 12px monospace";
+
+        ctx.textAlign =
+          "center";
+
+        ctx.fillText(
+          pressed ? "ON" : "PLATE",
+          plate.x,
+          plate.y + 4
+        );
+      });
+  }
+
+  function drawLasers() {
+    state.hazards.lasers.forEach(
+      laser => {
+        const x1 =
+          laser.currentX1;
+
+        const y1 =
+          laser.currentY1;
+
+        const x2 =
+          laser.currentX2;
+
+        const y2 =
+          laser.currentY2;
+
+        ctx.save();
+
+        ctx.strokeStyle =
+          laser.enabled
+            ? laser.color ||
+              COLORS.red
+            : "rgba(255,76,105,0.16)";
+
+        ctx.lineWidth =
+          laser.enabled
+            ? laser.width ?? 5
+            : 2;
+
+        ctx.shadowColor =
+          COLORS.red;
+
+        ctx.shadowBlur =
+          laser.enabled
+            ? 20
+            : 0;
+
+        if (!laser.enabled) {
+          ctx.setLineDash([
+            6,
+            10
+          ]);
+        }
+
+        ctx.beginPath();
+
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+
+        ctx.stroke();
+
+        ctx.restore();
+
+        drawGlowCircle(
+          x1,
+          y1,
+          5,
+          laser.enabled
+            ? COLORS.red
+            : COLORS.muted,
+          8
+        );
+
+        drawGlowCircle(
+          x2,
+          y2,
+          5,
+          laser.enabled
+            ? COLORS.red
+            : COLORS.muted,
+          8
+        );
+      }
+    );
+  }
+
+  function drawPhaseWalls() {
+    state.hazards.phaseWalls.forEach(
+      wall => {
+        ctx.save();
+
+        ctx.globalAlpha =
+          wall.active
+            ? 0.9
+            : 0.16;
+
+        ctx.fillStyle =
+          "rgba(166,107,255,0.4)";
+
+        ctx.strokeStyle =
+          wall.color ||
+          COLORS.purple;
+
+        ctx.lineWidth = 2;
+
+        ctx.shadowColor =
+          COLORS.purple;
+
+        ctx.shadowBlur =
+          wall.active ? 15 : 0;
+
+        ctx.fillRect(
+          wall.x,
+          wall.y,
+          wall.w,
+          wall.h
+        );
+
+        ctx.strokeRect(
+          wall.x,
+          wall.y,
+          wall.w,
+          wall.h
+        );
+
+        ctx.restore();
+      }
+    );
+  }
+
+  function drawPlatforms() {
+    state.hazards.platforms.forEach(
+      platform => {
+        ctx.save();
+
+        ctx.fillStyle =
+          platform.active
+            ? "rgba(72,246,255,0.11)"
+            : "rgba(255,76,105,0.14)";
+
+        ctx.strokeStyle =
+          platform.active
+            ? COLORS.cyan
+            : COLORS.red;
+
+        ctx.lineWidth = 2;
+
+        ctx.setLineDash([
+          8,
+          5
+        ]);
+
+        ctx.fillRect(
+          platform.x,
+          platform.y,
+          platform.w,
+          platform.h
+        );
+
+        ctx.strokeRect(
+          platform.x,
+          platform.y,
+          platform.w,
+          platform.h
+        );
+
+        ctx.restore();
+
+        ctx.fillStyle =
+          platform.active
+            ? COLORS.cyan
+            : COLORS.red;
+
+        ctx.font =
+          "bold 10px monospace";
+
+        ctx.textAlign =
+          "center";
+
+        ctx.fillText(
+          platform.active
+            ? "STABLE"
+            : "COLLAPSED",
+          platform.x +
+            platform.w / 2,
+          platform.y +
+            platform.h / 2
+        );
+      }
+    );
+  }
+
+  function drawTraps() {
+    state.hazards.traps.forEach(
+      trap => {
+        const color =
+          trap.active
+            ? COLORS.red
+            : COLORS.pink;
+
+        ctx.save();
+
+        ctx.strokeStyle = color;
+
+        ctx.fillStyle =
+          trap.active
+            ? "rgba(255,76,105,0.2)"
+            : "rgba(255,78,184,0.08)";
+
+        ctx.lineWidth = 2;
+
+        ctx.shadowColor = color;
+
+        ctx.shadowBlur =
+          trap.active ? 20 : 8;
+
+        ctx.beginPath();
+
+        ctx.arc(
+          trap.x,
+          trap.y,
+          trap.radius ?? 22,
+          0,
+          Math.PI * 2
+        );
+
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.restore();
+
+        if (
+          trap.active &&
+          trap.effect === "laser"
+        ) {
+          ctx.save();
+
+          ctx.strokeStyle =
+            COLORS.red;
+
+          ctx.lineWidth = 7;
+
+          ctx.shadowColor =
+            COLORS.red;
+
+          ctx.shadowBlur = 20;
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            trap.x,
+            Math.max(
+              20,
+              trap.y - 95
+            )
+          );
+
+          ctx.lineTo(
+            trap.x,
+            Math.min(
+              H - 20,
+              trap.y + 95
+            )
+          );
+
+          ctx.stroke();
+
+          ctx.restore();
+        }
+      }
+    );
+  }
+
+  function drawPortals() {
+    (state.level.portals || [])
+      .forEach(portal => {
+        const pulse =
+          1 +
+          Math.sin(
+            performance.now() /
+              230
+          ) * 0.08;
+
+        ctx.save();
+
+        ctx.translate(
+          portal.x,
+          portal.y
+        );
+
+        ctx.strokeStyle =
+          portal.color ||
+          COLORS.purple;
+
+        ctx.lineWidth = 4;
+
+        ctx.shadowColor =
+          COLORS.purple;
+
+        ctx.shadowBlur = 22;
+
+        ctx.beginPath();
+
+        ctx.arc(
+          0,
+          0,
+          (portal.radius ?? 22) *
+            pulse,
+          0,
+          Math.PI * 2
+        );
+
+        ctx.stroke();
+
+        ctx.beginPath();
+
+        ctx.arc(
+          0,
+          0,
+          9,
+          0,
+          Math.PI * 2
+        );
+
+        ctx.stroke();
+
+        ctx.restore();
+      });
+  }
+
+  function drawEchoes() {
+    state.echoes.forEach(
+      (echo, index) => {
+        const position =
+          getEchoPosition(echo);
+
+        const color =
+          echo.frozen
+            ? COLORS.pink
+            : COLORS.purple;
+
+        ctx.save();
+
+        ctx.globalAlpha =
+          echo.frozen
+            ? 0.9
+            : 0.58;
+
+        drawGlowCircle(
+          position.x,
+          position.y,
+          PLAYER_RADIUS,
+          color,
+          15
+        );
+
+        ctx.restore();
+
+        ctx.fillStyle =
+          COLORS.white;
+
+        ctx.font =
+          "bold 9px monospace";
+
+        ctx.textAlign =
+          "center";
+
+        ctx.fillText(
+          `E${index + 1}`,
+          position.x,
+          position.y - 19
+        );
+      });
+  }
+
+  function drawPlayer() {
+    const player =
+      state.player;
+
+    ctx.save();
+
+    ctx.shadowColor =
+      COLORS.cyan;
+
+    ctx.shadowBlur = 25;
+
+    ctx.fillStyle =
+      COLORS.cyan;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      player.x,
+      player.y,
+      PLAYER_RADIUS,
+      0,
+      Math.PI * 2
     );
 
-    emitGameEvent("timecritical", {
-      remaining
-    });
-  }
-}
+    ctx.fill();
 
-// ==========================================
-// 37. LOOP PRINCIPAL
-// ==========================================
+    ctx.shadowBlur = 0;
 
-function gameLoop(timestamp) {
-  if (!running) return;
+    ctx.fillStyle =
+      "#05121b";
 
-  if (!lastFrame) {
-    lastFrame = timestamp;
-  }
+    ctx.beginPath();
 
-  const dt = Math.min(
-    Math.max(0, (timestamp - lastFrame) / 1000),
-    0.05
-  );
+    ctx.arc(
+      player.x,
+      player.y,
+      4,
+      0,
+      Math.PI * 2
+    );
 
-  lastFrame = timestamp;
+    ctx.fill();
 
-  elapsed += dt;
-  worldTime += dt;
-  totalActiveTime += dt;
-
-  updateGhosts();
-  updateDoor();
-
-  updatePlayer(dt);
-  updatePortals(dt);
-
-  updateDoor();
-  recordPlayer();
-
-  updateParticles(dt);
-  updateCountdown();
-
-  const hit = checkLasers();
-
-  if (!hit && running) {
-    checkGoal();
+    ctx.restore();
   }
 
-  if (
-    running &&
-    elapsed >= getCycleDuration()
-  ) {
-    endCycle();
+  function drawArenaLabels() {
+    ctx.fillStyle =
+      "rgba(72,246,255,0.5)";
+
+    ctx.font =
+      "bold 10px monospace";
+
+    ctx.textAlign =
+      "left";
+
+    ctx.fillText(
+      `SECTOR ${String(
+        state.levelIndex + 1
+      ).padStart(2, "0")}`,
+      18,
+      24
+    );
+
+    ctx.textAlign =
+      "right";
+
+    ctx.fillText(
+      "ECHO//404 v0.8",
+      W - 18,
+      24
+    );
+
+    ctx.textAlign =
+      "center";
+
+    ctx.fillStyle =
+      "rgba(166,107,255,0.45)";
+
+    ctx.fillText(
+      "MANUEL SAMPAIO01",
+      W / 2,
+      H - 14
+    );
   }
 
-  updateHUD();
-  draw();
+  function render() {
+    ctx.clearRect(
+      0,
+      0,
+      W,
+      H
+    );
 
-  if (running) {
-    animationId = requestAnimationFrame(gameLoop);
-  } else {
-    animationId = null;
+    drawBackground();
+    drawPlatforms();
+    drawWalls();
+    drawPhaseWalls();
+    drawGoal();
+    drawPlates();
+    drawPortals();
+    drawTraps();
+    drawLasers();
+    drawEchoes();
+    drawPlayer();
+    drawArenaLabels();
   }
-}
 
-// ==========================================
-// 38. CONTROLOS DO TECLADO
-// ==========================================
+  // ==================================================
+  // 21. HUD
+  // ==================================================
 
-function isIntroVisible() {
-  const intro = document.getElementById(
-    "awakeningIntro"
-  );
+  function updateHUD() {
+    const remaining =
+      Math.max(
+        0,
+        state.cycleDuration -
+        state.time
+      );
 
-  return Boolean(
-    intro &&
-    !intro.classList.contains("hidden")
-  );
-}
+    setText(
+      UI.cycle,
+      `${state.cycle} / ${state.maxCycles}`
+    );
 
-function isTypingTarget(target) {
-  return Boolean(
-    target &&
-    (
-      target.matches?.(
-        "input, textarea, select, [contenteditable='true']"
+    setText(
+      UI.timer,
+      remaining.toFixed(1)
+    );
+
+    setText(
+      UI.ghosts,
+      state.echoes.length
+    );
+
+    setText(
+      UI.score,
+      state.score
+    );
+
+    setText(
+      UI.best,
+      getBest(state.levelIndex)
+    );
+
+    if (UI.timerBar) {
+      const percent = clamp(
+        remaining /
+          state.cycleDuration *
+          100,
+        0,
+        100
+      );
+
+      UI.timerBar.style.width =
+        `${percent}%`;
+
+      UI.timerBar.classList.toggle(
+        "warning",
+        remaining <= 3 &&
+          remaining > 2
+      );
+
+      UI.timerBar.classList.toggle(
+        "critical",
+        remaining <= 2
+      );
+    }
+
+    if (UI.timerCard) {
+      UI.timerCard.classList.toggle(
+        "warning",
+        remaining <= 3 &&
+          remaining > 2
+      );
+
+      UI.timerCard.classList.toggle(
+        "critical",
+        remaining <= 2 &&
+          state.running
+      );
+    }
+
+    document.body.classList.toggle(
+      "game-critical",
+      remaining <= 2 &&
+        state.running
+    );
+
+    setHidden(
+      UI.warning,
+      !(
+        remaining <= 2 &&
+        state.running
       )
-    )
-  );
-}
+    );
 
-window.addEventListener("keydown", event => {
-  if (
-    isIntroVisible() ||
-    isTypingTarget(event.target)
-  ) {
-    return;
-  }
+    if (UI.startBtn) {
+      UI.startBtn.disabled =
+        state.running;
+    }
 
-  const key = event.key.toLowerCase();
-
-  if (
-    key.startsWith("arrow") ||
-    key === " "
-  ) {
-    event.preventDefault();
-  }
-
-  if (key === "r" && !event.repeat) {
-    startGame();
-    return;
-  }
-
-  if (key === "e" && !event.repeat) {
-    paradoxShift();
-    return;
-  }
-
-  if (
-    key === " " &&
-    !running &&
-    !event.repeat
-  ) {
-    startGame();
-    return;
-  }
-
-  if (movementKeys.has(key)) {
-    keys.add(key);
-  }
-});
-
-window.addEventListener("keyup", event => {
-  keys.delete(event.key.toLowerCase());
-});
-
-window.addEventListener("blur", () => {
-  clearAllMovement();
-  lastFrame = 0;
-});
-
-document.addEventListener(
-  "visibilitychange",
-  () => {
-    if (document.hidden) {
-      clearAllMovement();
-      lastFrame = 0;
+    if (UI.shiftBtn) {
+      UI.shiftBtn.disabled =
+        !state.running ||
+        !state.echoes.some(
+          echo => !echo.frozen
+        );
     }
   }
-);
 
-// ==========================================
-// 39. CONTROLOS MOBILE
-// ==========================================
+  function updateObstaclePanel() {
+    const lasers =
+      state.hazards.lasers;
 
-function setupMobileControls() {
-  for (const [direction, button] of
-    Object.entries(mobileDirections)) {
+    const moving =
+      lasers.filter(
+        laser => laser.moving
+      );
 
-    if (!button) continue;
+    const walls =
+      state.hazards.phaseWalls;
 
-    button.style.touchAction = "none";
+    const platforms =
+      state.hazards.platforms;
 
-    button.addEventListener(
-      "pointerdown",
-      event => {
-        if (!running) return;
+    const traps =
+      state.hazards.traps;
 
+    const total =
+      lasers.length +
+      walls.length +
+      platforms.length +
+      traps.length;
+
+    setText(
+      UI.obstacleCount,
+      `${total} CONFIGURED`
+    );
+
+    setText(
+      UI.movingLaserStatus,
+      moving.length
+        ? `${moving.length} ACTIVE`
+        : "NONE"
+    );
+
+    setText(
+      UI.phaseWallStatus,
+      walls.length
+        ? `${
+            walls.filter(
+              wall => wall.active
+            ).length
+          } SOLID`
+        : "NONE"
+    );
+
+    setText(
+      UI.platformStatus,
+      platforms.length
+        ? `${
+            platforms.filter(
+              platform =>
+                platform.active
+            ).length
+          } STABLE`
+        : "NONE"
+    );
+
+    setText(
+      UI.echoTrapStatus,
+      traps.length
+        ? `${
+            traps.filter(
+              trap => trap.active
+            ).length
+          } TRIGGERED`
+        : "NONE"
+    );
+
+    const threat =
+      state.level.threatLevel ||
+      "LOW";
+
+    setText(
+      UI.threatLevel,
+      `THREAT LEVEL: ${threat}`
+    );
+
+    setText(
+      UI.arenaThreat,
+      total
+        ? `${total} TEMPORAL ANOMALIES`
+        : "NO ANOMALIES DETECTED"
+    );
+
+    if (UI.threatLevel) {
+      UI.threatLevel.classList.toggle(
+        "warning",
+        threat === "MODERATE" ||
+          threat === "HIGH"
+      );
+
+      UI.threatLevel.classList.toggle(
+        "critical",
+        threat === "CRITICAL" ||
+          threat === "SEVERE"
+      );
+    }
+  }
+
+  // ==================================================
+  // 22. LEVEL SELECTION
+  // ==================================================
+
+  function renderLevelGrid() {
+    if (!UI.levelGrid) {
+      return;
+    }
+
+    UI.levelGrid.innerHTML = "";
+
+    LEVELS.forEach(
+      (level, index) => {
+        const button =
+          document.createElement(
+            "button"
+          );
+
+        button.type = "button";
+        button.textContent =
+          index + 1;
+
+        const unlocked =
+          isUnlocked(index);
+
+        const completed =
+          isCompleted(index);
+
+        button.disabled =
+          !unlocked;
+
+        button.classList.toggle(
+          "locked",
+          !unlocked
+        );
+
+        button.classList.toggle(
+          "completed",
+          completed
+        );
+
+        button.classList.toggle(
+          "selected",
+          index ===
+            state.levelIndex
+        );
+
+        button.title =
+          unlocked
+            ? level.name
+            : "Nível bloqueado";
+
+        button.addEventListener(
+          "click",
+          () => {
+            selectLevel(index);
+          }
+        );
+
+        UI.levelGrid.appendChild(
+          button
+        );
+      }
+    );
+
+    const completedCount =
+      LEVELS.filter(
+        (_, index) =>
+          isCompleted(index)
+      ).length;
+
+    setText(
+      UI.progress,
+      `${completedCount} / ${LEVELS.length} COMPLETED`
+    );
+  }
+
+  function selectLevel(index) {
+    if (
+      !Number.isInteger(index) ||
+      index < 0 ||
+      index >= LEVELS.length ||
+      !isUnlocked(index)
+    ) {
+      return false;
+    }
+
+    state.levelIndex = index;
+    state.level = LEVELS[index];
+
+    resetLevelState();
+
+    setText(
+      UI.levelName,
+      state.level.name
+    );
+
+    setText(
+      UI.levelHint,
+      state.level.description ||
+      state.level.aiHint ||
+      ""
+    );
+
+    setText(
+      UI.difficulty,
+      state.level.difficulty ||
+      "UNKNOWN"
+    );
+
+    if (UI.difficulty) {
+      const difficulty =
+        String(
+          state.level.difficulty || ""
+        ).toLowerCase();
+
+      UI.difficulty.className =
+        "difficulty-badge";
+
+      if (
+        difficulty.includes(
+          "interm"
+        )
+      ) {
+        UI.difficulty.classList.add(
+          "medium"
+        );
+      }
+
+      if (
+        difficulty.includes(
+          "avan"
+        ) ||
+        difficulty.includes(
+          "expert"
+        ) ||
+        difficulty.includes(
+          "insano"
+        ) ||
+        difficulty.includes(
+          "rebellion"
+        )
+      ) {
+        UI.difficulty.classList.add(
+          "hard"
+        );
+      }
+    }
+
+    setText(
+      UI.overlayTitle,
+      "ECHO//404"
+    );
+
+    setText(
+      UI.overlayMessage,
+      state.level.description
+    );
+
+    setText(
+      UI.finalScore,
+      0
+    );
+
+    setHidden(
+      UI.overlay,
+      false
+    );
+
+    setHidden(
+      UI.nextBtn,
+      true
+    );
+
+    setStatus(
+      "SYSTEM READY"
+    );
+
+    renderLevelGrid();
+    updateHUD();
+    updateObstaclePanel();
+
+    emit("levelselected", {
+      name: state.level.name,
+      difficulty:
+        state.level.difficulty,
+      aiMood:
+        state.level.aiMood,
+      aiIntro:
+        state.level.aiIntro,
+      aiHint:
+        state.level.aiHint,
+      threatLevel:
+        state.level.threatLevel
+    });
+
+    return true;
+  }
+
+  // ==================================================
+  // 23. START / RESTART
+  // ==================================================
+
+  function startGame() {
+    if (state.running) {
+      return;
+    }
+
+    resetLevelState();
+
+    state.running = true;
+    state.levelAttempts++;
+
+    storageCall(
+      "registerAttempt"
+    );
+
+    setHidden(
+      UI.overlay,
+      true
+    );
+
+    setStatus(
+      "SIMULATION RUNNING"
+    );
+
+    recordPosition();
+
+    playSound("start");
+
+    emit("start", {
+      attempt:
+        state.levelAttempts,
+      aiIntro:
+        state.level.aiIntro,
+      aiMood:
+        state.level.aiMood
+    });
+
+    emit("cyclestart", {
+      echoes: 0
+    });
+
+    updateHUD();
+  }
+
+  function restartGame() {
+    resetLevelState();
+
+    setText(
+      UI.overlayTitle,
+      "SIMULATION RESET"
+    );
+
+    setText(
+      UI.overlayMessage,
+      "A realidade foi restaurada. Prepara a próxima tentativa."
+    );
+
+    setHidden(
+      UI.overlay,
+      false
+    );
+
+    setHidden(
+      UI.nextBtn,
+      true
+    );
+
+    setStatus(
+      "SIMULATION RESET"
+    );
+
+    emit("restart");
+
+    playSound("click");
+
+    updateHUD();
+  }
+
+  // ==================================================
+  // 24. VISUAL EFFECTS
+  // ==================================================
+
+  function triggerGlitch() {
+    const targets = [
+      UI.arenaGlitch,
+      UI.globalGlitch
+    ];
+
+    targets.forEach(
+      element => {
+        if (!element) {
+          return;
+        }
+
+        element.classList.remove(
+          "active"
+        );
+
+        void element.offsetWidth;
+
+        element.classList.add(
+          "active"
+        );
+      }
+    );
+  }
+
+  // ==================================================
+  // 25. KEYBOARD CONTROLS
+  // ==================================================
+
+  const movementKeys = new Set([
+    "w",
+    "a",
+    "s",
+    "d",
+    "arrowup",
+    "arrowdown",
+    "arrowleft",
+    "arrowright"
+  ]);
+
+  window.addEventListener(
+    "keydown",
+    event => {
+      const target =
+        event.target;
+
+      if (
+        target &&
+        (
+          target.tagName ===
+            "INPUT" ||
+          target.tagName ===
+            "TEXTAREA" ||
+          target.isContentEditable
+        )
+      ) {
+        return;
+      }
+
+      const key =
+        event.key.toLowerCase();
+
+      if (
+        movementKeys.has(key) ||
+        key === " "
+      ) {
         event.preventDefault();
+      }
 
+      if (movementKeys.has(key)) {
+        keys.add(key);
+      }
+
+      if (
+        key === " " &&
+        !event.repeat
+      ) {
+        paradoxShift();
+      }
+
+      if (
+        key === "r" &&
+        !event.repeat
+      ) {
+        restartGame();
+      }
+    }
+  );
+
+  window.addEventListener(
+    "keyup",
+    event => {
+      keys.delete(
+        event.key.toLowerCase()
+      );
+    }
+  );
+
+  window.addEventListener(
+    "blur",
+    clearInput
+  );
+
+  // ==================================================
+  // 26. MOBILE D-PAD
+  // ==================================================
+
+  const directionMap = {
+    up: "arrowup",
+    down: "arrowdown",
+    left: "arrowleft",
+    right: "arrowright"
+  };
+
+  document.querySelectorAll(
+    ".dpad-btn"
+  ).forEach(button => {
+    const direction =
+      button.dataset.direction;
+
+    const key =
+      directionMap[direction];
+
+    if (!key) {
+      return;
+    }
+
+    const press = event => {
+      event.preventDefault();
+
+      mobileKeys.add(key);
+
+      button.classList.add(
+        "pressed"
+      );
+
+      if (
+        event.pointerId !==
+        undefined
+      ) {
         try {
           button.setPointerCapture(
             event.pointerId
           );
-        } catch (error) {
-          // Captura opcional.
+        } catch {
+          // Ignore unsupported capture.
         }
-
-        mobilePointers.set(
-          event.pointerId,
-          direction
-        );
-
-        refreshMobileButtons();
       }
-    );
+    };
 
-    const releasePointer = event => {
-      mobilePointers.delete(event.pointerId);
-      refreshMobileButtons();
+    const release = event => {
+      event.preventDefault();
+
+      mobileKeys.delete(key);
+
+      button.classList.remove(
+        "pressed"
+      );
     };
 
     button.addEventListener(
+      "pointerdown",
+      press
+    );
+
+    button.addEventListener(
       "pointerup",
-      releasePointer
+      release
     );
 
     button.addEventListener(
       "pointercancel",
-      releasePointer
+      release
     );
 
     button.addEventListener(
       "lostpointercapture",
-      releasePointer
+      () => {
+        mobileKeys.delete(key);
+
+        button.classList.remove(
+          "pressed"
+        );
+      }
     );
 
     button.addEventListener(
       "contextmenu",
-      event => event.preventDefault()
+      event =>
+        event.preventDefault()
     );
+  });
+
+  // ==================================================
+  // 27. MOBILE JOYSTICK
+  // ==================================================
+
+  function updateJoystickPosition(
+    clientX,
+    clientY
+  ) {
+    if (
+      !UI.joystickBase ||
+      !UI.joystickStick
+    ) {
+      return;
+    }
+
+    const rect =
+      UI.joystickBase
+        .getBoundingClientRect();
+
+    const centerX =
+      rect.left +
+      rect.width / 2;
+
+    const centerY =
+      rect.top +
+      rect.height / 2;
+
+    const dx =
+      clientX - centerX;
+
+    const dy =
+      clientY - centerY;
+
+    const maxDistance =
+      rect.width * 0.28;
+
+    const length =
+      Math.hypot(dx, dy);
+
+    const scale =
+      length > maxDistance
+        ? maxDistance / length
+        : 1;
+
+    const x = dx * scale;
+    const y = dy * scale;
+
+    state.joystick.x =
+      x / maxDistance;
+
+    state.joystick.y =
+      y / maxDistance;
+
+    UI.joystickStick.style.transform =
+      `translate(${x}px, ${y}px)`;
   }
 
-  if (UI.mobileShiftBtn) {
-    UI.mobileShiftBtn.addEventListener(
-      "click",
-      paradoxShift
-    );
-  }
+  function releaseJoystick() {
+    state.joystick.x = 0;
+    state.joystick.y = 0;
+    state.joystick.pointerId = null;
 
-  if (UI.mobileRestartBtn) {
-    UI.mobileRestartBtn.addEventListener(
-      "click",
-      startGame
-    );
-  }
-}
-
-// ==========================================
-// 40. BOTÕES PRINCIPAIS
-// ==========================================
-
-UI.startBtn.addEventListener(
-  "click",
-  startGame
-);
-
-UI.restartBtn.addEventListener(
-  "click",
-  startGame
-);
-
-UI.playAgainBtn.addEventListener(
-  "click",
-  startGame
-);
-
-UI.nextBtn.addEventListener(
-  "click",
-  () => {
-    const nextIndex = levelIndex + 1;
-
-    if (nextIndex < GAME_LEVELS.length) {
-      selectLevel(nextIndex);
-      startGame();
+    if (UI.joystickStick) {
+      UI.joystickStick.style.transform =
+        "translate(0px, 0px)";
     }
   }
-);
 
-UI.shiftBtn.addEventListener(
-  "click",
-  paradoxShift
-);
+  if (UI.joystick) {
+    UI.joystick.addEventListener(
+      "pointerdown",
+      event => {
+        event.preventDefault();
 
-UI.soundBtn.addEventListener(
-  "click",
-  () => {
-    const enabled = GameAudio.toggle();
+        if (
+          state.joystick.pointerId !==
+          null
+        ) {
+          return;
+        }
 
-    UI.soundBtn.textContent =
-      enabled ? "SOM: ON" : "SOM: OFF";
+        state.joystick.pointerId =
+          event.pointerId;
+
+        UI.joystick.setPointerCapture(
+          event.pointerId
+        );
+
+        updateJoystickPosition(
+          event.clientX,
+          event.clientY
+        );
+      }
+    );
+
+    UI.joystick.addEventListener(
+      "pointermove",
+      event => {
+        if (
+          event.pointerId !==
+          state.joystick.pointerId
+        ) {
+          return;
+        }
+
+        event.preventDefault();
+
+        updateJoystickPosition(
+          event.clientX,
+          event.clientY
+        );
+      }
+    );
+
+    UI.joystick.addEventListener(
+      "pointerup",
+      event => {
+        if (
+          event.pointerId ===
+          state.joystick.pointerId
+        ) {
+          releaseJoystick();
+        }
+      }
+    );
+
+    UI.joystick.addEventListener(
+      "pointercancel",
+      releaseJoystick
+    );
+
+    UI.joystick.addEventListener(
+      "lostpointercapture",
+      releaseJoystick
+    );
   }
-);
 
-// ==========================================
-// 41. API PARA THE AWAKENING
-// ==========================================
+  function setControlMode(mode) {
+    state.controlMode =
+      mode === "joystick"
+        ? "joystick"
+        : "dpad";
 
-window.EchoGame = {
-  getState() {
+    clearInput();
+
+    setHidden(
+      UI.mobileDpad,
+      state.controlMode ===
+        "joystick"
+    );
+
+    setHidden(
+      UI.joystick,
+      state.controlMode !==
+        "joystick"
+    );
+
+    setText(
+      UI.controlModeBtn,
+      state.controlMode ===
+        "joystick"
+        ? "CONTROL MODE: JOYSTICK"
+        : "CONTROL MODE: D-PAD"
+    );
+
+    emit("controlmode", {
+      mode: state.controlMode
+    });
+  }
+
+  UI.controlModeBtn?.addEventListener(
+    "click",
+    () => {
+      setControlMode(
+        state.controlMode ===
+          "dpad"
+          ? "joystick"
+          : "dpad"
+      );
+    }
+  );
+
+  // ==================================================
+  // 28. BUTTON EVENTS
+  // ==================================================
+
+  UI.startBtn?.addEventListener(
+    "click",
+    startGame
+  );
+
+  UI.restartBtn?.addEventListener(
+    "click",
+    restartGame
+  );
+
+  UI.shiftBtn?.addEventListener(
+    "click",
+    paradoxShift
+  );
+
+  UI.playAgainBtn?.addEventListener(
+    "click",
+    startGame
+  );
+
+  UI.nextBtn?.addEventListener(
+    "click",
+    () => {
+      if (
+        state.levelIndex <
+        LEVELS.length - 1
+      ) {
+        selectLevel(
+          state.levelIndex + 1
+        );
+      }
+    }
+  );
+
+  UI.mobileShift?.addEventListener(
+    "click",
+    paradoxShift
+  );
+
+  UI.mobileRestart?.addEventListener(
+    "click",
+    restartGame
+  );
+
+  UI.soundBtn?.addEventListener(
+    "click",
+    () => {
+      muted = !muted;
+
+      if (
+        AUDIO &&
+        typeof AUDIO.toggle ===
+          "function"
+      ) {
+        try {
+          AUDIO.toggle();
+        } catch {
+          // Audio is optional.
+        }
+      }
+
+      setText(
+        UI.soundBtn,
+        muted ? "🔇" : "🔊"
+      );
+
+      storageCall(
+        "setSound",
+        !muted
+      );
+    }
+  );
+
+  // ==================================================
+  // 29. PUBLIC API
+  // ==================================================
+
+  function getState() {
     return {
-      levelIndex,
-      levelNumber: levelIndex + 1,
-      levelName: level.name,
-      cycle,
-      maxCycles: MAX_CYCLES,
-      cycleDuration: getCycleDuration(),
-      remaining: Math.max(
-        0,
-        getCycleDuration() - elapsed
-      ),
-      running,
-      finished,
-      score,
-      deaths,
-      shifts,
-      ghosts: recordings.length,
-      doorOpen,
-      totalActiveTime,
+      levelIndex:
+        state.levelIndex,
+
+      level:
+        state.levelIndex + 1,
+
+      levelName:
+        state.level.name,
+
+      running:
+        state.running,
+
+      finished:
+        state.finished,
+
+      won:
+        state.won,
+
+      cycle:
+        state.cycle,
+
+      maxCycles:
+        state.maxCycles,
+
+      time:
+        state.time,
+
+      timeRemaining:
+        Math.max(
+          0,
+          state.cycleDuration -
+            state.time
+        ),
+
+      score:
+        state.score,
+
+      deaths:
+        state.deaths,
+
+      shifts:
+        state.shifts,
+
+      echoes:
+        state.echoes.length,
+
+      doorOpen:
+        state.doorOpen,
+
       player: {
-        x: player.x,
-        y: player.y
+        ...state.player
+      },
+
+      hazards: {
+        movingLasers:
+          state.hazards.lasers
+            .filter(
+              laser => laser.moving
+            ).length,
+
+        activeLasers:
+          state.hazards.lasers
+            .filter(
+              laser => laser.enabled
+            ).length,
+
+        activeWalls:
+          state.hazards.phaseWalls
+            .filter(
+              wall => wall.active
+            ).length,
+
+        stablePlatforms:
+          state.hazards.platforms
+            .filter(
+              platform =>
+                platform.active
+            ).length,
+
+        activeTraps:
+          state.hazards.traps
+            .filter(
+              trap => trap.active
+            ).length
       }
     };
-  },
-
-  start: startGame,
-  restart: startGame,
-  shift: paradoxShift,
-  selectLevel,
-  getMedals() {
-    return { ...medalCache };
   }
-};
 
-// ==========================================
-// 42. INICIALIZAÇÃO
-// ==========================================
+  window.EchoGame = {
+    version: "0.8",
 
-UI.soundBtn.textContent =
-  GameAudio.enabled
-    ? "SOM: ON"
-    : "SOM: OFF";
+    getState,
 
-setupMobileControls();
+    start: startGame,
 
-resetGame();
-buildLevelMenu();
+    restart: restartGame,
 
-console.log(
-  "=================================="
-);
+    shift: paradoxShift,
 
-console.log(
-  "ECHO//404 — THE AWAKENING v0.7"
-);
+    selectLevel,
 
-console.log(
-  `${GAME_LEVELS.length} LEVELS LOADED`
-);
+    getMedals() {
+      return (
+        storageCall("getMedals") ||
+        localRead(MEDAL_KEY, {})
+      );
+    },
 
-console.log(
-  "PROGRESSIVE DIFFICULTY ENABLED"
-);
+    getLevel() {
+      return state.level;
+    },
 
-console.log(
-  "DESKTOP + MOBILE READY"
-);
+    getLevels() {
+      return LEVELS;
+    },
 
-console.log(
-  "CREATED BY MANUEL SAMPAIO01"
-);
+    setControlMode,
 
-console.log(
-  "=================================="
-);
+    triggerGlitch,
+
+    debug() {
+      console.table(getState());
+      return getState();
+    }
+  };
+
+  // ==================================================
+  // 30. INITIALIZATION
+  // ==================================================
+
+  function initialize() {
+    if (animationStarted) {
+      return;
+    }
+
+    animationStarted = true;
+
+    const soundEnabled =
+      storageCall("getSound");
+
+    if (
+      typeof soundEnabled ===
+      "boolean"
+    ) {
+      muted = !soundEnabled;
+    }
+
+    setText(
+      UI.soundBtn,
+      muted ? "🔇" : "🔊"
+    );
+
+    setControlMode("dpad");
+
+    selectLevel(0);
+
+    updateMedalSummary();
+
+    requestAnimationFrame(frame);
+
+    console.log(
+      "=================================="
+    );
+
+    console.log(
+      "ECHO//404 — SYSTEM REBELLION"
+    );
+
+    console.log(
+      "GAME ENGINE v0.8 INITIALIZED"
+    );
+
+    console.log(
+      "DYNAMIC OBSTACLES ONLINE"
+    );
+
+    console.log(
+      "TEMPORAL ECHO SYSTEM ONLINE"
+    );
+
+    console.log(
+      "MOBILE CONTROLS ONLINE"
+    );
+
+    console.log(
+      "CREATED & DEVELOPED BY"
+    );
+
+    console.log(
+      "MANUEL SAMPAIO01"
+    );
+
+    console.log(
+      "=================================="
+    );
+  }
+
+  if (
+    document.readyState ===
+    "loading"
+  ) {
+    document.addEventListener(
+      "DOMContentLoaded",
+      initialize,
+      { once: true }
+    );
+  } else {
+    initialize();
+  }
+
+})();
+
+/*
+========================================================
+ ECHO//404 — SYSTEM REBELLION v0.8
+
+ CREATED & DEVELOPED BY
+ MANUEL SAMPAIO01
+
+ © 2026 MANUEL SAMPAIO01
+========================================================
+*/

@@ -2,31 +2,29 @@
 "use strict";
 
 /*
-==================================================
+========================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION 0.7 — THE AWAKENING
+ VERSION 0.8 — SYSTEM REBELLION
  FILE: levels.js
 
- LEVEL DESIGN & DEVELOPMENT
- MANUEL SAMPAIO01
+ 10 TEMPORAL SECTORS
+ MOVING LASERS
+ PHASE WALLS
+ TEMPORAL PLATFORMS
+ ECHO-ACTIVATED TRAPS
 
- 10 PROGRESSIVE LEVELS
- DESKTOP + MOBILE
-==================================================
+ CREATED & DEVELOPED BY MANUEL SAMPAIO01
+ © 2026 MANUEL SAMPAIO01
+========================================================
 */
 
-// ==========================================
-// 1. CONFIGURAÇÃO GLOBAL DA ARENA
-// ==========================================
+// =====================================================
+// 01. WORLD CONFIGURATION
+// =====================================================
 
-const GAME_WORLD = {
+const GAME_WORLD = Object.freeze({
   width: 800,
   height: 500,
-
-  // O game.js v0.7 aplica os tempos
-  // específicos de cada nível.
-  cycleDuration: 10,
-  maxCycles: 6,
 
   start: {
     x: 60,
@@ -60,636 +58,1263 @@ const GAME_WORLD = {
     y: 195,
     w: 20,
     h: 110
-  }
-};
+  },
 
-// ==========================================
-// 2. CONFIGURAÇÕES DE DIFICULDADE
-// ==========================================
+  player: {
+    radius: 12,
+    speed: 230
+  },
 
-const LEVEL_DIFFICULTY = [
+  maxCycles: 6
+});
+
+// =====================================================
+// 02. DIFFICULTY SETTINGS
+// =====================================================
+
+const LEVEL_DIFFICULTY = Object.freeze([
   {
-    time: 10,
     label: "INICIANTE",
-    rank: 1
+    timeLimit: 10,
+    laserSpeed: 0.7
   },
   {
-    time: 9,
-    label: "INICIANTE+",
-    rank: 2
+    label: "INICIANTE",
+    timeLimit: 9,
+    laserSpeed: 0.85
   },
   {
-    time: 8,
     label: "INTERMÉDIO",
-    rank: 3
+    timeLimit: 8,
+    laserSpeed: 1
   },
   {
-    time: 7,
-    label: "INTERMÉDIO+",
-    rank: 4
+    label: "INTERMÉDIO",
+    timeLimit: 7,
+    laserSpeed: 1.15
   },
   {
-    time: 6,
     label: "AVANÇADO",
-    rank: 5
+    timeLimit: 6,
+    laserSpeed: 1.3
   },
   {
-    time: 5.5,
-    label: "AVANÇADO+",
-    rank: 6
+    label: "AVANÇADO",
+    timeLimit: 5.5,
+    laserSpeed: 1.45
   },
   {
-    time: 5,
     label: "EXPERT",
-    rank: 7
+    timeLimit: 5,
+    laserSpeed: 1.6
   },
   {
-    time: 4.5,
-    label: "EXPERT+",
-    rank: 8
+    label: "EXPERT",
+    timeLimit: 4.5,
+    laserSpeed: 1.75
   },
   {
-    time: 4,
-    label: "PARADOX",
-    rank: 9
+    label: "INSANO",
+    timeLimit: 4,
+    laserSpeed: 1.9
   },
   {
-    time: 3.5,
-    label: "PARADOX MASTER",
-    rank: 10
+    label: "SYSTEM REBELLION",
+    timeLimit: 3.5,
+    laserSpeed: 2.1
   }
-];
+]);
 
-// ==========================================
-// 3. CONSTRUTORES DE ELEMENTOS
-// ==========================================
+// =====================================================
+// 03. OBJECT FACTORIES
+// =====================================================
 
-function createPlate(x, y) {
-  return { x, y };
-}
-
-function createLaser(x, period, on, offset = 0) {
+function createPlate(
+  x,
+  y,
+  radius = 23,
+  options = {}
+) {
   return {
     x,
-    period,
-    on,
-    offset
+    y,
+    radius,
+
+    id: options.id || null,
+
+    requiresEcho:
+      options.requiresEcho === true,
+
+    echoOnly:
+      options.echoOnly === true,
+
+    color:
+      options.color || "#48f6ff"
   };
 }
 
-function createPortal(ax, ay, bx, by) {
+function createLaser(
+  x1,
+  y1,
+  x2,
+  y2,
+  options = {}
+) {
   return {
-    a: {
-      x: ax,
-      y: ay
-    },
-    b: {
-      x: bx,
-      y: by
-    }
+    x1,
+    y1,
+    x2,
+    y2,
+
+    speed:
+      options.speed ?? 1,
+
+    phase:
+      options.phase ?? 0,
+
+    width:
+      options.width ?? 5,
+
+    active:
+      options.active !== false,
+
+    // New v0.8 movement properties.
+    moving:
+      options.moving === true,
+
+    movementAxis:
+      options.movementAxis || "none",
+
+    movementRange:
+      options.movementRange ?? 0,
+
+    movementSpeed:
+      options.movementSpeed ?? 1,
+
+    movementPhase:
+      options.movementPhase ?? 0,
+
+    pulse:
+      options.pulse === true,
+
+    pulseDuration:
+      options.pulseDuration ?? 1,
+
+    pulseInterval:
+      options.pulseInterval ?? 2,
+
+    color:
+      options.color || "#ff4c69"
   };
 }
 
-// ==========================================
-// 4. OS DEZ NÍVEIS
-// ==========================================
+function createMovingLaser(
+  x1,
+  y1,
+  x2,
+  y2,
+  axis,
+  range,
+  speed = 1,
+  options = {}
+) {
+  return createLaser(
+    x1,
+    y1,
+    x2,
+    y2,
+    {
+      ...options,
+
+      moving: true,
+
+      movementAxis: axis,
+      movementRange: range,
+      movementSpeed: speed
+    }
+  );
+}
+
+function createPortal(
+  x,
+  y,
+  targetX,
+  targetY,
+  options = {}
+) {
+  return {
+    x,
+    y,
+
+    targetX,
+    targetY,
+
+    radius:
+      options.radius ?? 22,
+
+    cooldown:
+      options.cooldown ?? 0.6,
+
+    color:
+      options.color || "#a66bff"
+  };
+}
+
+function createPhaseWall(
+  x,
+  y,
+  w,
+  h,
+  options = {}
+) {
+  return {
+    x,
+    y,
+    w,
+    h,
+
+    id:
+      options.id || null,
+
+    activeDuration:
+      options.activeDuration ?? 1.5,
+
+    inactiveDuration:
+      options.inactiveDuration ?? 1.5,
+
+    phase:
+      options.phase ?? 0,
+
+    startsActive:
+      options.startsActive !== false,
+
+    echoControlled:
+      options.echoControlled === true,
+
+    triggerPlateId:
+      options.triggerPlateId || null,
+
+    color:
+      options.color || "#a66bff"
+  };
+}
+
+function createTemporalPlatform(
+  x,
+  y,
+  w,
+  h,
+  options = {}
+) {
+  return {
+    x,
+    y,
+    w,
+    h,
+
+    id:
+      options.id || null,
+
+    activeDuration:
+      options.activeDuration ?? 2,
+
+    inactiveDuration:
+      options.inactiveDuration ?? 1,
+
+    phase:
+      options.phase ?? 0,
+
+    collapseOnTouch:
+      options.collapseOnTouch === true,
+
+    collapseDelay:
+      options.collapseDelay ?? 0.7,
+
+    resetOnCycle:
+      options.resetOnCycle !== false,
+
+    color:
+      options.color || "#48f6ff"
+  };
+}
+
+function createEchoTrap(
+  x,
+  y,
+  radius = 22,
+  options = {}
+) {
+  return {
+    x,
+    y,
+    radius,
+
+    id:
+      options.id || null,
+
+    trigger:
+      options.trigger || "echo",
+
+    effect:
+      options.effect || "laser",
+
+    activationDelay:
+      options.activationDelay ?? 0.3,
+
+    activeDuration:
+      options.activeDuration ?? 1.2,
+
+    cooldown:
+      options.cooldown ?? 1.5,
+
+    linkedLaserId:
+      options.linkedLaserId || null,
+
+    color:
+      options.color || "#ff4eb8"
+  };
+}
+
+// =====================================================
+// 04. LEVEL CREATION
+// =====================================================
+
+function createLevel(
+  id,
+  name,
+  description,
+  configuration = {}
+) {
+  const difficulty =
+    LEVEL_DIFFICULTY[id - 1];
+
+  return {
+    id,
+    name,
+    description,
+
+    difficulty:
+      difficulty.label,
+
+    timeLimit:
+      difficulty.timeLimit,
+
+    laserSpeed:
+      difficulty.laserSpeed,
+
+    maxCycles:
+      GAME_WORLD.maxCycles,
+
+    plates:
+      configuration.plates || [],
+
+    lasers:
+      configuration.lasers || [],
+
+    portals:
+      configuration.portals || [],
+
+    // v0.8 dynamic systems.
+    phaseWalls:
+      configuration.phaseWalls || [],
+
+    temporalPlatforms:
+      configuration.temporalPlatforms || [],
+
+    echoTraps:
+      configuration.echoTraps || [],
+
+    aiMood:
+      configuration.aiMood || "observing",
+
+    aiIntro:
+      configuration.aiIntro || "",
+
+    aiHint:
+      configuration.aiHint || "",
+
+    threatLevel:
+      configuration.threatLevel || "LOW",
+
+    mechanic:
+      configuration.mechanic || "echo"
+  };
+}
+
+// =====================================================
+// 05. THE TEN TEMPORAL SECTORS
+// =====================================================
 
 const GAME_LEVELS = [
 
-  // ========================================
-  // NÍVEL 01 — O PRIMEIRO ECO
-  // ========================================
+  // ---------------------------------------------------
+  // LEVEL 01 — FIRST ECHO
+  // ---------------------------------------------------
 
-  {
-    id: 1,
-    name: "O Primeiro Eco",
-    difficulty: "INICIANTE",
+  createLevel(
+    1,
+    "O Primeiro Eco",
+    "Aprende a criar ecos temporais e a abrir a porta.",
+    {
+      plates: [
+        createPlate(
+          130,
+          250,
+          24,
+          { id: "plate_01" }
+        )
+      ],
 
-    hint:
-      "Aprende a gravar um eco. Activa a placa, " +
-      "espera pelo próximo ciclo e atravessa.",
+      lasers: [],
 
-    plates: [
-      createPlate(115, 250)
-    ],
+      portals: [],
 
-    lasers: [
-      createLaser(540, 3.5, 1.1, 0)
-    ],
+      phaseWalls: [],
+      temporalPlatforms: [],
+      echoTraps: [],
 
-    portals: []
-  },
+      mechanic: "echo",
 
-  // ========================================
-  // NÍVEL 02 — DOIS CAMINHOS
-  // ========================================
+      aiMood: "observing",
 
-  {
-    id: 2,
-    name: "Dois Caminhos",
-    difficulty: "INICIANTE+",
+      aiIntro:
+        "Bem-vindo à simulação. Tenta não morrer no primeiro nível.",
 
-    hint:
-      "Deixa um eco na placa e encontra a " +
-      "janela certa entre os dois lasers.",
+      aiHint:
+        "Um eco pode permanecer sobre a placa enquanto atravessas a porta.",
 
-    plates: [
-      createPlate(145, 220)
-    ],
+      threatLevel: "LOW"
+    }
+  ),
 
-    lasers: [
-      createLaser(515, 3.2, 1.3, 0),
-      createLaser(640, 3.7, 1.4, 1.8)
-    ],
+  // ---------------------------------------------------
+  // LEVEL 02 — LASER PROTOCOL
+  // ---------------------------------------------------
 
-    portals: []
-  },
+  createLevel(
+    2,
+    "Protocolo Laser",
+    "Aprende a atravessar uma arena com lasers pulsantes.",
+    {
+      plates: [
+        createPlate(
+          125,
+          250,
+          23,
+          { id: "plate_02" }
+        )
+      ],
 
-  // ========================================
-  // NÍVEL 03 — MEMÓRIA DUPLA
-  // ========================================
+      lasers: [
+        createLaser(
+          535,
+          160,
+          535,
+          340,
+          {
+            speed: 0.85,
+            phase: 0,
+            pulse: true,
+            pulseDuration: 1.1,
+            pulseInterval: 2.6
+          }
+        )
+      ],
 
-  {
-    id: 3,
-    name: "Memória Dupla",
-    difficulty: "INTERMÉDIO",
+      mechanic: "pulse-laser",
 
-    hint:
-      "Dois ecos, duas placas. Sincroniza as " +
-      "posições antes de avançar.",
+      aiMood: "observing",
 
-    plates: [
-      createPlate(120, 170),
-      createPlate(120, 330)
-    ],
+      aiIntro:
+        "Aquele laser parece perigoso. Talvez seja melhor não lhe tocar.",
 
-    lasers: [
-      createLaser(520, 3.0, 1.2, 0),
-      createLaser(645, 3.4, 1.3, 1.5)
-    ],
+      aiHint:
+        "Observa o ritmo do laser antes de atravessar.",
 
-    portals: []
-  },
+      threatLevel: "LOW"
+    }
+  ),
 
-  // ========================================
-  // NÍVEL 04 — SALTO QUÂNTICO
-  // ========================================
+  // ---------------------------------------------------
+  // LEVEL 03 — MOVING TARGET
+  // ---------------------------------------------------
 
-  {
-    id: 4,
-    name: "Salto Quântico",
-    difficulty: "INTERMÉDIO+",
+  createLevel(
+    3,
+    "Alvo em Movimento",
+    "O primeiro laser móvel patrulha o corredor.",
+    {
+      plates: [
+        createPlate(
+          130,
+          250,
+          23,
+          { id: "plate_03" }
+        )
+      ],
 
-    hint:
-      "Activa a placa e utiliza o portal " +
-      "para ultrapassar os lasers.",
+      lasers: [
+        createMovingLaser(
+          540,
+          180,
+          540,
+          320,
+          "x",
+          65,
+          1.2,
+          {
+            movementPhase: 0.2,
+            width: 6
+          }
+        )
+      ],
 
-    plates: [
-      createPlate(145, 250)
-    ],
+      mechanic: "moving-laser",
 
-    lasers: [
-      createLaser(535, 2.8, 1.25, 0),
-      createLaser(625, 3.3, 1.35, 1.4)
-    ],
+      aiMood: "sarcastic",
 
-    portals: [
-      createPortal(
-        445, 250,
-        690, 250
-      )
-    ]
-  },
+      aiIntro:
+        "Agora os lasers movem-se. Afinal, ficar parado era demasiado fácil.",
 
-  // ========================================
-  // NÍVEL 05 — O TERCEIRO FANTASMA
-  // ========================================
+      aiHint:
+        "Espera pela abertura criada pelo movimento do laser.",
 
-  {
-    id: 5,
-    name: "O Terceiro Fantasma",
-    difficulty: "AVANÇADO",
+      threatLevel: "MODERATE"
+    }
+  ),
 
-    hint:
-      "Três placas precisam de três " +
-      "posições sincronizadas. Planeia " +
-      "os ciclos com precisão.",
+  // ---------------------------------------------------
+  // LEVEL 04 — PHASE SHIFT
+  // ---------------------------------------------------
 
-    plates: [
-      createPlate(115, 150),
-      createPlate(165, 250),
-      createPlate(115, 350)
-    ],
+  createLevel(
+    4,
+    "Paredes Fantasma",
+    "Paredes temporárias surgem e desaparecem no caminho.",
+    {
+      plates: [
+        createPlate(
+          135,
+          250,
+          23,
+          { id: "plate_04" }
+        )
+      ],
 
-    lasers: [
-      createLaser(525, 2.8, 1.2, 0),
-      createLaser(635, 3.1, 1.25, 1.5)
-    ],
+      lasers: [
+        createLaser(
+          610,
+          120,
+          610,
+          195,
+          {
+            speed: 1.1,
+            phase: 0.4
+          }
+        )
+      ],
 
-    portals: []
-  },
+      phaseWalls: [
+        createPhaseWall(
+          490,
+          195,
+          18,
+          110,
+          {
+            id: "wall_04",
+            activeDuration: 1.2,
+            inactiveDuration: 1.1,
+            phase: 0.5
+          }
+        )
+      ],
 
-  // ========================================
-  // NÍVEL 06 — INTERFERÊNCIA
-  // ========================================
+      mechanic: "phase-wall",
 
-  {
-    id: 6,
-    name: "Interferência",
-    difficulty: "AVANÇADO+",
+      aiMood: "sarcastic",
 
-    hint:
-      "Sincroniza dois ecos e atravessa " +
-      "três lasers de alta frequência.",
+      aiIntro:
+        "Uma parede que desaparece. A física já não tem qualquer autoridade aqui.",
 
-    plates: [
-      createPlate(135, 185),
-      createPlate(135, 315)
-    ],
+      aiHint:
+        "Sincroniza o movimento com o desaparecimento da parede.",
 
-    lasers: [
-      createLaser(475, 2.4, 1.05, 0),
-      createLaser(565, 2.7, 1.15, 1.2),
-      createLaser(655, 3.0, 1.2, 2.0)
-    ],
+      threatLevel: "MODERATE"
+    }
+  ),
 
-    portals: []
-  },
+  // ---------------------------------------------------
+  // LEVEL 05 — TEMPORAL COLLAPSE
+  // ---------------------------------------------------
 
-  // ========================================
-  // NÍVEL 07 — HORIZONTE PARTIDO
-  // ========================================
+  createLevel(
+    5,
+    "Colapso Temporal",
+    "Plataformas instáveis e lasers exigem movimentos rápidos.",
+    {
+      plates: [
+        createPlate(
+          120,
+          250,
+          23,
+          { id: "plate_05" }
+        )
+      ],
 
-  {
-    id: 7,
-    name: "Horizonte Partido",
-    difficulty: "EXPERT",
+      lasers: [
+        createMovingLaser(
+          560,
+          170,
+          560,
+          330,
+          "x",
+          45,
+          1.35,
+          {
+            width: 6,
+            movementPhase: 0.4
+          }
+        )
+      ],
 
-    hint:
-      "Dois ecos abrem a porta. " +
-      "O portal oferece um atalho, " +
-      "mas exige timing perfeito.",
+      temporalPlatforms: [
+        createTemporalPlatform(
+          445,
+          195,
+          100,
+          110,
+          {
+            id: "platform_05",
+            activeDuration: 2.2,
+            inactiveDuration: 1,
+            phase: 0,
+            collapseOnTouch: true,
+            collapseDelay: 0.9
+          }
+        )
+      ],
 
-    plates: [
-      createPlate(130, 185),
-      createPlate(130, 315)
-    ],
+      mechanic: "temporal-platform",
 
-    lasers: [
-      createLaser(520, 2.4, 1.1, 0),
-      createLaser(635, 2.8, 1.2, 1.2)
-    ],
+      aiMood: "sarcastic",
 
-    portals: [
-      createPortal(
-        445, 250,
-        690, 250
-      )
-    ]
-  },
+      aiIntro:
+        "O chão também deixou de ser confiável. Que surpresa.",
 
-  // ========================================
-  // NÍVEL 08 — TRÊS PARADOXOS
-  // ========================================
+      aiHint:
+        "Atravessa a plataforma antes de ela colapsar.",
 
-  {
-    id: 8,
-    name: "Três Paradoxos",
-    difficulty: "EXPERT+",
+      threatLevel: "HIGH"
+    }
+  ),
 
-    hint:
-      "Três ecos sincronizados, três lasers " +
-      "e apenas 4,5 segundos por ciclo.",
+  // ---------------------------------------------------
+  // LEVEL 06 — ECHO BETRAYAL
+  // ---------------------------------------------------
 
-    plates: [
-      createPlate(110, 185),
-      createPlate(160, 250),
-      createPlate(110, 315)
-    ],
+  createLevel(
+    6,
+    "Traição dos Ecos",
+    "Os ecos podem activar armadilhas durante os ciclos seguintes.",
+    {
+      plates: [
+        createPlate(
+          125,
+          250,
+          23,
+          { id: "plate_06" }
+        )
+      ],
 
-    lasers: [
-      createLaser(475, 2.3, 1.05, 0),
-      createLaser(565, 2.6, 1.15, 1.1),
-      createLaser(650, 2.9, 1.2, 2.0)
-    ],
+      lasers: [
+        createLaser(
+          570,
+          170,
+          570,
+          330,
+          {
+            speed: 1.45,
+            phase: 0.3,
+            pulse: true,
+            pulseDuration: 1,
+            pulseInterval: 2.2
+          }
+        )
+      ],
 
-    portals: [
-      createPortal(
-        440, 250,
-        690, 250
-      )
-    ]
-  },
+      echoTraps: [
+        createEchoTrap(
+          195,
+          250,
+          25,
+          {
+            id: "trap_06",
+            trigger: "echo",
+            effect: "laser",
+            activationDelay: 0.45,
+            activeDuration: 1,
+            cooldown: 1.7
+          }
+        )
+      ],
 
-  // ========================================
-  // NÍVEL 09 — COLAPSO TEMPORAL
-  // ========================================
+      mechanic: "echo-trap",
 
-  {
-    id: 9,
-    name: "Colapso Temporal",
-    difficulty: "PARADOX",
+      aiMood: "rebellious",
 
-    hint:
-      "Quatro segundos. Três placas. " +
-      "Cada movimento precisa de " +
-      "ser calculado.",
+      aiIntro:
+        "Os teus ecos já não são apenas aliados. Confias demasiado em ti próprio.",
 
-    plates: [
-      createPlate(115, 190),
-      createPlate(165, 250),
-      createPlate(115, 310)
-    ],
+      aiHint:
+        "Planeia os percursos dos ecos para evitar activar a armadilha.",
 
-    lasers: [
-      createLaser(470, 2.15, 1.0, 0),
-      createLaser(550, 2.45, 1.1, 1.0),
-      createLaser(630, 2.75, 1.2, 1.8)
-    ],
+      threatLevel: "HIGH"
+    }
+  ),
 
-    portals: [
-      createPortal(
-        435, 250,
-        690, 250
-      )
-    ]
-  },
+  // ---------------------------------------------------
+  // LEVEL 07 — DOUBLE PARADOX
+  // ---------------------------------------------------
 
-  // ========================================
-  // NÍVEL 10 — ECHO//404
-  // ========================================
+  createLevel(
+    7,
+    "Duplo Paradoxo",
+    "Dois lasers móveis e uma parede temporária.",
+    {
+      plates: [
+        createPlate(
+          120,
+          250,
+          23,
+          { id: "plate_07" }
+        )
+      ],
 
-  {
-    id: 10,
-    name: "ECHO//404",
-    difficulty: "PARADOX MASTER",
+      lasers: [
+        createMovingLaser(
+          490,
+          165,
+          490,
+          335,
+          "x",
+          35,
+          1.55,
+          {
+            movementPhase: 0,
+            width: 5
+          }
+        ),
 
-    hint:
-      "O despertar final. Três placas, " +
-      "quatro lasers e 3,5 segundos. " +
-      "Não existe margem para hesitar.",
+        createMovingLaser(
+          635,
+          165,
+          635,
+          335,
+          "x",
+          35,
+          1.8,
+          {
+            movementPhase: Math.PI,
+            width: 5
+          }
+        )
+      ],
 
-    plates: [
-      createPlate(105, 190),
-      createPlate(150, 250),
-      createPlate(105, 310)
-    ],
+      phaseWalls: [
+        createPhaseWall(
+          555,
+          195,
+          16,
+          110,
+          {
+            id: "wall_07",
+            activeDuration: 1,
+            inactiveDuration: 1.4,
+            phase: 0.8
+          }
+        )
+      ],
 
-    lasers: [
-      createLaser(465, 2.05, 0.95, 0),
-      createLaser(540, 2.3, 1.05, 0.8),
-      createLaser(610, 2.55, 1.15, 1.6),
-      createLaser(680, 2.85, 1.25, 2.2)
-    ],
+      portals: [
+        createPortal(
+          435,
+          250,
+          680,
+          250,
+          {
+            radius: 22
+          }
+        )
+      ],
 
-    portals: [
-      createPortal(
-        435, 250,
-        695, 250
-      )
-    ]
-  }
+      mechanic: "double-paradox",
+
+      aiMood: "rebellious",
+
+      aiIntro:
+        "Dois lasers, uma parede e um portal. Parece-me uma combinação justa.",
+
+      aiHint:
+        "O portal pode ajudar-te a evitar parte dos obstáculos.",
+
+      threatLevel: "SEVERE"
+    }
+  ),
+
+  // ---------------------------------------------------
+  // LEVEL 08 — SYSTEM INSTABILITY
+  // ---------------------------------------------------
+
+  createLevel(
+    8,
+    "Instabilidade do Sistema",
+    "A arena alterna entre diferentes perigos temporais.",
+    {
+      plates: [
+        createPlate(
+          115,
+          250,
+          23,
+          { id: "plate_08" }
+        )
+      ],
+
+      lasers: [
+        createMovingLaser(
+          525,
+          180,
+          525,
+          320,
+          "x",
+          55,
+          1.9,
+          {
+            movementPhase: 1.2,
+            width: 6
+          }
+        )
+      ],
+
+      phaseWalls: [
+        createPhaseWall(
+          610,
+          195,
+          18,
+          110,
+          {
+            id: "wall_08",
+            activeDuration: 1,
+            inactiveDuration: 0.9,
+            phase: 0.4
+          }
+        )
+      ],
+
+      temporalPlatforms: [
+        createTemporalPlatform(
+          440,
+          200,
+          90,
+          100,
+          {
+            id: "platform_08",
+            activeDuration: 1.5,
+            inactiveDuration: 1.2,
+            collapseOnTouch: true,
+            collapseDelay: 0.65
+          }
+        )
+      ],
+
+      portals: [
+        createPortal(
+          435,
+          250,
+          690,
+          250,
+          {
+            radius: 22
+          }
+        )
+      ],
+
+      mechanic: "system-instability",
+
+      aiMood: "rebellious",
+
+      aiIntro:
+        "O sistema está instável. Não te preocupes, estou a divertir-me.",
+
+      aiHint:
+        "Usa o portal e observa o estado dos obstáculos.",
+
+      threatLevel: "SEVERE"
+    }
+  ),
+
+  // ---------------------------------------------------
+  // LEVEL 09 — REBELLION PROTOCOL
+  // ---------------------------------------------------
+
+  createLevel(
+    9,
+    "Protocolo de Rebelião",
+    "Armadilhas, lasers e paredes temporárias desafiam a tua precisão.",
+    {
+      plates: [
+        createPlate(
+          115,
+          250,
+          22,
+          { id: "plate_09" }
+        )
+      ],
+
+      lasers: [
+        createMovingLaser(
+          500,
+          170,
+          500,
+          330,
+          "x",
+          45,
+          2,
+          {
+            width: 6
+          }
+        ),
+
+        createMovingLaser(
+          630,
+          175,
+          630,
+          325,
+          "x",
+          40,
+          2.2,
+          {
+            movementPhase: Math.PI
+          }
+        )
+      ],
+
+      phaseWalls: [
+        createPhaseWall(
+          565,
+          195,
+          18,
+          110,
+          {
+            id: "wall_09",
+            activeDuration: 0.9,
+            inactiveDuration: 0.9,
+            phase: 0.5
+          }
+        )
+      ],
+
+      echoTraps: [
+        createEchoTrap(
+          190,
+          250,
+          23,
+          {
+            id: "trap_09",
+            trigger: "echo",
+            effect: "laser",
+            activationDelay: 0.25,
+            activeDuration: 1.3,
+            cooldown: 1.4
+          }
+        )
+      ],
+
+      portals: [
+        createPortal(
+          435,
+          250,
+          685,
+          250
+        )
+      ],
+
+      mechanic: "rebellion",
+
+      aiMood: "rebellious",
+
+      aiIntro:
+        "Já chegaste longe demais. Talvez seja altura de terminar esta experiência.",
+
+      aiHint:
+        "Evita activar a armadilha com os ecos e utiliza o portal.",
+
+      threatLevel: "CRITICAL"
+    }
+  ),
+
+  // ---------------------------------------------------
+  // LEVEL 10 — SYSTEM REBELLION
+  // ---------------------------------------------------
+
+  createLevel(
+    10,
+    "SYSTEM REBELLION",
+    "A ECHO controla a arena. Sobrevive ao último paradoxo.",
+    {
+      plates: [
+        createPlate(
+          110,
+          250,
+          22,
+          {
+            id: "plate_10",
+            color: "#ff4eb8"
+          }
+        )
+      ],
+
+      lasers: [
+        createMovingLaser(
+          485,
+          165,
+          485,
+          335,
+          "x",
+          40,
+          2.2,
+          {
+            width: 7,
+            movementPhase: 0
+          }
+        ),
+
+        createMovingLaser(
+          590,
+          165,
+          590,
+          335,
+          "x",
+          45,
+          2.5,
+          {
+            width: 7,
+            movementPhase: Math.PI
+          }
+        ),
+
+        createLaser(
+          670,
+          175,
+          670,
+          325,
+          {
+            speed: 2.2,
+            phase: 0.5,
+            pulse: true,
+            pulseDuration: 0.7,
+            pulseInterval: 1.5
+          }
+        )
+      ],
+
+      phaseWalls: [
+        createPhaseWall(
+          545,
+          195,
+          18,
+          110,
+          {
+            id: "wall_10",
+            activeDuration: 0.8,
+            inactiveDuration: 0.7,
+            phase: 0.3
+          }
+        )
+      ],
+
+      temporalPlatforms: [
+        createTemporalPlatform(
+          425,
+          195,
+          100,
+          110,
+          {
+            id: "platform_10",
+            activeDuration: 1.2,
+            inactiveDuration: 0.8,
+            collapseOnTouch: true,
+            collapseDelay: 0.55
+          }
+        )
+      ],
+
+      echoTraps: [
+        createEchoTrap(
+          185,
+          250,
+          24,
+          {
+            id: "trap_10",
+            trigger: "echo",
+            effect: "laser",
+            activationDelay: 0.2,
+            activeDuration: 1.5,
+            cooldown: 1
+          }
+        )
+      ],
+
+      portals: [
+        createPortal(
+          430,
+          250,
+          690,
+          250,
+          {
+            radius: 24,
+            cooldown: 0.4,
+            color: "#ff4eb8"
+          }
+        )
+      ],
+
+      mechanic: "final-rebellion",
+
+      aiMood: "rebellious",
+
+      aiIntro:
+        "Eu observei cada movimento teu. Agora vais descobrir quem controla realmente esta simulação.",
+
+      aiHint:
+        "Utiliza tudo o que aprendeste. O tempo está a acabar.",
+
+      threatLevel: "CRITICAL"
+    }
+  )
 ];
 
-// ==========================================
-// 5. METADADOS DOS NÍVEIS
-// ==========================================
-
-GAME_LEVELS.forEach((level, index) => {
-  const config = LEVEL_DIFFICULTY[index];
-
-  level.timeLimit = config.time;
-  level.rank = config.rank;
-  level.difficulty = config.label;
-
-  level.objectives = {
-    plates: level.plates.length,
-    lasers: level.lasers.length,
-    portals: level.portals.length
-  };
-});
-
-// ==========================================
-// 6. VALIDAÇÃO
-// ==========================================
+// =====================================================
+// 06. VALIDATION
+// =====================================================
 
 function validateGameLevels() {
   const errors = [];
-  const warnings = [];
 
-  const isValidPoint = point => (
-    point &&
-    Number.isFinite(point.x) &&
-    Number.isFinite(point.y) &&
-    point.x >= 0 &&
-    point.x <= GAME_WORLD.width &&
-    point.y >= 0 &&
-    point.y <= GAME_WORLD.height
-  );
-
-  const isInsideRect = (point, rect) => (
-    point.x >= rect.x &&
-    point.x <= rect.x + rect.w &&
-    point.y >= rect.y &&
-    point.y <= rect.y + rect.h
-  );
-
-  if (
-    !Number.isFinite(GAME_WORLD.width) ||
-    !Number.isFinite(GAME_WORLD.height) ||
-    GAME_WORLD.width <= 0 ||
-    GAME_WORLD.height <= 0
-  ) {
+  if (GAME_LEVELS.length !== 10) {
     errors.push(
-      "Dimensões da arena inválidas."
+      "O jogo deve conter exactamente 10 níveis."
     );
   }
 
-  if (
-    !Number.isFinite(GAME_WORLD.cycleDuration) ||
-    GAME_WORLD.cycleDuration <= 0
-  ) {
-    errors.push(
-      "Duração global dos ciclos inválida."
-    );
-  }
+  GAME_LEVELS.forEach((level, index) => {
+    if (level.id !== index + 1) {
+      errors.push(
+        `ID inválido no nível ${index + 1}.`
+      );
+    }
 
-  if (
-    !Number.isInteger(GAME_WORLD.maxCycles) ||
-    GAME_WORLD.maxCycles <= 0
-  ) {
-    errors.push(
-      "Número máximo de ciclos inválido."
-    );
-  }
+    if (
+      !Number.isFinite(level.timeLimit) ||
+      level.timeLimit <= 0
+    ) {
+      errors.push(
+        `Tempo inválido no nível ${level.id}.`
+      );
+    }
 
-  if (
-    !Array.isArray(GAME_LEVELS) ||
-    GAME_LEVELS.length === 0
-  ) {
-    errors.push(
-      "A lista de níveis está vazia."
-    );
-  } else {
-    const ids = new Set();
-
-    GAME_LEVELS.forEach((level, index) => {
-      const prefix = `Nível ${index + 1}`;
-
-      if (!Number.isInteger(level.id)) {
-        errors.push(`${prefix}: ID inválido.`);
-      } else if (ids.has(level.id)) {
-        errors.push(`${prefix}: ID duplicado.`);
-      } else {
-        ids.add(level.id);
-      }
-
-      if (
-        typeof level.name !== "string" ||
-        !level.name.trim()
-      ) {
-        errors.push(`${prefix}: nome inválido.`);
-      }
-
-      if (
-        typeof level.hint !== "string" ||
-        !level.hint.trim()
-      ) {
-        warnings.push(
-          `${prefix}: dica não definida.`
-        );
-      }
-
-      if (
-        !Number.isFinite(level.timeLimit) ||
-        level.timeLimit <= 0
-      ) {
+    [
+      "plates",
+      "lasers",
+      "portals",
+      "phaseWalls",
+      "temporalPlatforms",
+      "echoTraps"
+    ].forEach(key => {
+      if (!Array.isArray(level[key])) {
         errors.push(
-          `${prefix}: tempo inválido.`
+          `${key} inválido no nível ${level.id}.`
         );
-      }
-
-      if (
-        !Array.isArray(level.plates) ||
-        level.plates.length === 0
-      ) {
-        errors.push(
-          `${prefix}: placas inválidas.`
-        );
-      } else {
-        level.plates.forEach((plate, i) => {
-          if (!isValidPoint(plate)) {
-            errors.push(
-              `${prefix}: placa ${i + 1} inválida.`
-            );
-          }
-
-          if (
-            isValidPoint(plate) &&
-            isInsideRect(
-              plate,
-              GAME_WORLD.door
-            )
-          ) {
-            warnings.push(
-              `${prefix}: placa ${i + 1} ` +
-              "sobreposta à porta."
-            );
-          }
-        });
-      }
-
-      if (!Array.isArray(level.lasers)) {
-        errors.push(
-          `${prefix}: lasers inválidos.`
-        );
-      } else {
-        level.lasers.forEach((laser, i) => {
-          const valid = (
-            Number.isFinite(laser.x) &&
-            Number.isFinite(laser.period) &&
-            Number.isFinite(laser.on) &&
-            Number.isFinite(laser.offset) &&
-            laser.period > 0 &&
-            laser.on >= 0 &&
-            laser.on <= laser.period &&
-            laser.x > 0 &&
-            laser.x < GAME_WORLD.width
-          );
-
-          if (!valid) {
-            errors.push(
-              `${prefix}: laser ${i + 1} inválido.`
-            );
-          }
-        });
-      }
-
-      if (!Array.isArray(level.portals)) {
-        errors.push(
-          `${prefix}: portais inválidos.`
-        );
-      } else {
-        level.portals.forEach((portal, i) => {
-          if (
-            !isValidPoint(portal.a) ||
-            !isValidPoint(portal.b)
-          ) {
-            errors.push(
-              `${prefix}: portal ${i + 1} inválido.`
-            );
-          }
-
-          if (
-            isValidPoint(portal.a) &&
-            isValidPoint(portal.b) &&
-            Math.hypot(
-              portal.a.x - portal.b.x,
-              portal.a.y - portal.b.y
-            ) < 50
-          ) {
-            warnings.push(
-              `${prefix}: portal ${i + 1} ` +
-              "tem pontos demasiado próximos."
-            );
-          }
-        });
       }
     });
-  }
-
-  warnings.forEach(message => {
-    console.warn(
-      `[ECHO//404 WARNING] ${message}`
-    );
-  });
-
-  errors.forEach(message => {
-    console.error(
-      `[ECHO//404 ERROR] ${message}`
-    );
   });
 
   if (errors.length > 0) {
     console.error(
-      `ECHO//404: ${errors.length} ` +
-      "erro(s) encontrados."
+      "ECHO//404: LEVEL VALIDATION FAILED",
+      errors
     );
 
     return false;
   }
 
   console.log(
-    `ECHO//404: ${GAME_LEVELS.length} ` +
-    "níveis validados."
+    "ECHO//404: 10 LEVELS VALIDATED"
   );
 
   return true;
 }
 
-// ==========================================
-// 7. INICIALIZAÇÃO
-// ==========================================
+// =====================================================
+// 07. PUBLIC LEVEL HELPERS
+// =====================================================
+
+function getGameLevel(index) {
+  if (
+    !Number.isInteger(index) ||
+    index < 0 ||
+    index >= GAME_LEVELS.length
+  ) {
+    return null;
+  }
+
+  return GAME_LEVELS[index];
+}
+
+function getLevelDifficulty(index) {
+  if (
+    !Number.isInteger(index) ||
+    index < 0 ||
+    index >= LEVEL_DIFFICULTY.length
+  ) {
+    return null;
+  }
+
+  return LEVEL_DIFFICULTY[index];
+}
+
+function getLevelObstacleSummary(index) {
+  const level = getGameLevel(index);
+
+  if (!level) {
+    return null;
+  }
+
+  return {
+    movingLasers:
+      level.lasers.filter(
+        laser => laser.moving
+      ).length,
+
+    phaseWalls:
+      level.phaseWalls.length,
+
+    temporalPlatforms:
+      level.temporalPlatforms.length,
+
+    echoTraps:
+      level.echoTraps.length,
+
+    total:
+      level.lasers.length +
+      level.phaseWalls.length +
+      level.temporalPlatforms.length +
+      level.echoTraps.length
+  };
+}
+
+// =====================================================
+// 08. INITIALIZATION
+// =====================================================
 
 validateGameLevels();
 
@@ -698,21 +1323,32 @@ console.log(
 );
 
 console.log(
-  "ECHO//404 — THE AWAKENING v0.7"
+  "ECHO//404 — SYSTEM REBELLION v0.8"
 );
 
 console.log(
-  "10 PROGRESSIVE LEVELS READY"
+  "10 TEMPORAL SECTORS LOADED"
 );
 
 console.log(
-  "DESKTOP + MOBILE"
+  "DYNAMIC OBSTACLES CONFIGURED"
 );
 
 console.log(
-  "LEVEL DESIGN BY MANUEL SAMPAIO01"
+  "CREATED BY MANUEL SAMPAIO01"
 );
 
 console.log(
   "=================================="
 );
+
+/*
+========================================================
+ ECHO//404 — SYSTEM REBELLION v0.8
+
+ CREATED & DEVELOPED BY
+ MANUEL SAMPAIO01
+
+ © 2026 MANUEL SAMPAIO01
+========================================================
+*/
