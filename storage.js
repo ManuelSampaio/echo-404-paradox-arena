@@ -2,22 +2,30 @@
 "use strict";
 
 /*
-================================================
+==================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION: 0.6
+ VERSION: 0.6.1 MOBILE EDITION
  FILE: storage.js
 
  SISTEMA DE PROGRESSO E RECORDES
-================================================
+
+ DESKTOP + MOBILE
+ LOCALSTORAGE
+ COMPATÍVEL COM A VERSÃO 0.6
+==================================================
 */
 
 const GameStorage = {
 
   // ==========================================
-  // 1. CHAVE DO ARMAZENAMENTO
+  // 1. CONFIGURAÇÕES
   // ==========================================
 
+  // Manter esta chave para preservar
+  // o progresso da versão anterior.
   key: "echo404_paradox_v06",
+
+  version: "0.6.1",
 
   totalLevels: 10,
 
@@ -27,21 +35,21 @@ const GameStorage = {
 
   defaults() {
     return {
-      version: "0.6",
+      version: this.version,
 
-      // Nível máximo desbloqueado
+      // Nível máximo desbloqueado.
       unlocked: 1,
 
-      // Melhores pontuações de cada nível
+      // Melhores pontuações.
       bestScores: Array(this.totalLevels).fill(0),
 
-      // Níveis concluídos
+      // Níveis concluídos.
       completed: Array(this.totalLevels).fill(false),
 
-      // Preferência de áudio
+      // Preferência de áudio.
       sound: true,
 
-      // Estatísticas gerais
+      // Estatísticas gerais.
       stats: {
         totalWins: 0,
         totalAttempts: 0,
@@ -50,99 +58,162 @@ const GameStorage = {
         totalScore: 0
       },
 
-      // Datas do progresso
+      // Datas do progresso.
       createdAt: new Date().toISOString(),
       updatedAt: null
     };
   },
 
   // ==========================================
-  // 3. CARREGAR PROGRESSO
+  // 3. FUNÇÕES AUXILIARES
+  // ==========================================
+
+  safeNumber(value, fallback = 0) {
+    const number = Number(value);
+
+    if (!Number.isFinite(number)) {
+      return fallback;
+    }
+
+    return Math.max(0, number);
+  },
+
+  safeInteger(value, fallback = 0) {
+    return Math.floor(
+      this.safeNumber(value, fallback)
+    );
+  },
+
+  isValidDate(value) {
+    return (
+      typeof value === "string" &&
+      value.trim().length > 0 &&
+      !Number.isNaN(Date.parse(value))
+    );
+  },
+
+  // ==========================================
+  // 4. NORMALIZAR PROGRESSO
+  // ==========================================
+
+  normalize(saved) {
+    const fallback = this.defaults();
+
+    if (
+      !saved ||
+      typeof saved !== "object" ||
+      Array.isArray(saved)
+    ) {
+      return fallback;
+    }
+
+    const scores = Array.isArray(saved.bestScores)
+      ? saved.bestScores
+      : [];
+
+    const completed = Array.isArray(saved.completed)
+      ? saved.completed
+      : [];
+
+    const stats =
+      saved.stats &&
+      typeof saved.stats === "object" &&
+      !Array.isArray(saved.stats)
+        ? saved.stats
+        : {};
+
+    const normalizedCompleted = Array.from(
+      { length: this.totalLevels },
+      (_, index) => completed[index] === true
+    );
+
+    const normalizedScores = Array.from(
+      { length: this.totalLevels },
+      (_, index) => this.safeInteger(scores[index])
+    );
+
+    const requestedUnlocked = this.safeInteger(
+      saved.unlocked,
+      1
+    );
+
+    // Se existem níveis concluídos, garante
+    // que o nível seguinte está desbloqueado.
+    let unlocked = Math.max(
+      1,
+      Math.min(
+        this.totalLevels,
+        requestedUnlocked
+      )
+    );
+
+    normalizedCompleted.forEach((done, index) => {
+      if (done) {
+        unlocked = Math.max(
+          unlocked,
+          Math.min(this.totalLevels, index + 2)
+        );
+      }
+    });
+
+    return {
+      version: this.version,
+
+      unlocked,
+
+      bestScores: normalizedScores,
+
+      completed: normalizedCompleted,
+
+      sound: saved.sound !== false,
+
+      stats: {
+        totalWins: this.safeInteger(
+          stats.totalWins
+        ),
+
+        totalAttempts: this.safeInteger(
+          stats.totalAttempts
+        ),
+
+        totalDeaths: this.safeInteger(
+          stats.totalDeaths
+        ),
+
+        totalShifts: this.safeInteger(
+          stats.totalShifts
+        ),
+
+        totalScore: this.safeInteger(
+          stats.totalScore
+        )
+      },
+
+      createdAt: this.isValidDate(saved.createdAt)
+        ? saved.createdAt
+        : fallback.createdAt,
+
+      updatedAt: this.isValidDate(saved.updatedAt)
+        ? saved.updatedAt
+        : null
+    };
+  },
+
+  // ==========================================
+  // 5. CARREGAR PROGRESSO
   // ==========================================
 
   load() {
-    const fallback = this.defaults();
-
     try {
       const raw = localStorage.getItem(this.key);
 
       if (!raw) {
-        return fallback;
+        return this.defaults();
       }
 
       const saved = JSON.parse(raw);
 
-      if (!saved || typeof saved !== "object") {
-        return fallback;
-      }
-
-      const scores = Array.isArray(saved.bestScores)
-        ? saved.bestScores
-        : [];
-
-      const completed = Array.isArray(saved.completed)
-        ? saved.completed
-        : [];
-
-      const stats = saved.stats || {};
-
-      return {
-        version: "0.6",
-
-        unlocked: Math.max(
-          1,
-          Math.min(
-            this.totalLevels,
-            Math.floor(Number(saved.unlocked) || 1)
-          )
-        ),
-
-        bestScores: Array.from(
-          { length: this.totalLevels },
-          (_, index) => {
-            return Math.max(
-              0,
-              Number(scores[index]) || 0
-            );
-          }
-        ),
-
-        completed: Array.from(
-          { length: this.totalLevels },
-          (_, index) => completed[index] === true
-        ),
-
-        sound: saved.sound !== false,
-
-        stats: {
-          totalWins: Math.max(
-            0, Number(stats.totalWins) || 0
-          ),
-
-          totalAttempts: Math.max(
-            0, Number(stats.totalAttempts) || 0
-          ),
-
-          totalDeaths: Math.max(
-            0, Number(stats.totalDeaths) || 0
-          ),
-
-          totalShifts: Math.max(
-            0, Number(stats.totalShifts) || 0
-          ),
-
-          totalScore: Math.max(
-            0, Number(stats.totalScore) || 0
-          )
-        },
-
-        createdAt:
-          typeof saved.createdAt === "string"
-            ? saved.createdAt
-            : fallback.createdAt,
-
-        updatedAt: saved.updatedAt || null
-      };
+      return this.normalize(saved);
 
     } catch (error) {
       console.warn(
@@ -150,18 +221,21 @@ const GameStorage = {
         error
       );
 
-      return fallback;
+      return this.defaults();
     }
   },
 
   // ==========================================
-  // 4. GUARDAR PROGRESSO
+  // 6. GUARDAR PROGRESSO
   // ==========================================
 
   save(data) {
     try {
+      const normalized = this.normalize(data);
+
       const payload = {
-        ...data,
+        ...normalized,
+        version: this.version,
         updatedAt: new Date().toISOString()
       };
 
@@ -183,7 +257,7 @@ const GameStorage = {
   },
 
   // ==========================================
-  // 5. REGISTAR VITÓRIA
+  // 7. REGISTAR VITÓRIA
   // ==========================================
 
   win(levelIndex, score) {
@@ -194,25 +268,26 @@ const GameStorage = {
       levelIndex < 0 ||
       levelIndex >= this.totalLevels
     ) {
-      console.warn("Nível inválido:", levelIndex);
+      console.warn(
+        "ECHO//404: nível inválido.",
+        levelIndex
+      );
+
       return data;
     }
 
-    const finalScore = Math.max(
-      0,
-      Math.floor(Number(score) || 0)
-    );
+    const finalScore = this.safeInteger(score);
 
-    // Marcar nível como concluído
+    // Marcar nível como concluído.
     data.completed[levelIndex] = true;
 
-    // Actualizar recorde, se for superior
+    // Actualizar o recorde.
     data.bestScores[levelIndex] = Math.max(
       data.bestScores[levelIndex],
       finalScore
     );
 
-    // Desbloquear o nível seguinte
+    // Desbloquear o próximo nível.
     data.unlocked = Math.max(
       data.unlocked,
       Math.min(
@@ -221,7 +296,7 @@ const GameStorage = {
       )
     );
 
-    // Actualizar estatísticas
+    // Actualizar estatísticas.
     data.stats.totalWins += 1;
     data.stats.totalScore += finalScore;
 
@@ -231,12 +306,10 @@ const GameStorage = {
   },
 
   // ==========================================
-  // 6. CONSULTAR RECORDE
+  // 8. CONSULTAR RECORDE
   // ==========================================
 
   getBestScore(levelIndex) {
-    const data = this.load();
-
     if (
       !Number.isInteger(levelIndex) ||
       levelIndex < 0 ||
@@ -245,35 +318,49 @@ const GameStorage = {
       return 0;
     }
 
+    const data = this.load();
+
     return data.bestScores[levelIndex];
   },
 
   // ==========================================
-  // 7. VERIFICAR NÍVEL DESBLOQUEADO
+  // 9. VERIFICAR NÍVEL DESBLOQUEADO
   // ==========================================
 
   isUnlocked(levelIndex) {
+    if (
+      !Number.isInteger(levelIndex) ||
+      levelIndex < 0 ||
+      levelIndex >= this.totalLevels
+    ) {
+      return false;
+    }
+
     const data = this.load();
 
-    return (
-      Number.isInteger(levelIndex) &&
-      levelIndex >= 0 &&
-      levelIndex < data.unlocked
-    );
+    return levelIndex < data.unlocked;
   },
 
   // ==========================================
-  // 8. VERIFICAR NÍVEL CONCLUÍDO
+  // 10. VERIFICAR NÍVEL CONCLUÍDO
   // ==========================================
 
   isCompleted(levelIndex) {
+    if (
+      !Number.isInteger(levelIndex) ||
+      levelIndex < 0 ||
+      levelIndex >= this.totalLevels
+    ) {
+      return false;
+    }
+
     const data = this.load();
 
     return data.completed[levelIndex] === true;
   },
 
   // ==========================================
-  // 9. REGISTAR TENTATIVA
+  // 11. REGISTAR TENTATIVA
   // ==========================================
 
   registerAttempt() {
@@ -281,11 +368,11 @@ const GameStorage = {
 
     data.stats.totalAttempts += 1;
 
-    this.save(data);
+    return this.save(data);
   },
 
   // ==========================================
-  // 10. REGISTAR MORTE
+  // 12. REGISTAR MORTE
   // ==========================================
 
   registerDeath() {
@@ -293,11 +380,11 @@ const GameStorage = {
 
     data.stats.totalDeaths += 1;
 
-    this.save(data);
+    return this.save(data);
   },
 
   // ==========================================
-  // 11. REGISTAR PARADOX SHIFT
+  // 13. REGISTAR PARADOX SHIFT
   // ==========================================
 
   registerShift() {
@@ -305,11 +392,11 @@ const GameStorage = {
 
     data.stats.totalShifts += 1;
 
-    this.save(data);
+    return this.save(data);
   },
 
   // ==========================================
-  // 12. CONFIGURAÇÕES DE SOM
+  // 14. CONFIGURAÇÕES DE SOM
   // ==========================================
 
   setSound(enabled) {
@@ -327,7 +414,7 @@ const GameStorage = {
   },
 
   // ==========================================
-  // 13. PROGRESSO GERAL
+  // 15. PROGRESSO GERAL
   // ==========================================
 
   getProgress() {
@@ -340,10 +427,11 @@ const GameStorage = {
       (completedCount / this.totalLevels) * 100
     );
 
-    const totalBestScore = data.bestScores.reduce(
-      (total, value) => total + value,
-      0
-    );
+    const totalBestScore =
+      data.bestScores.reduce(
+        (total, value) => total + value,
+        0
+      );
 
     return {
       completed: completedCount,
@@ -355,7 +443,7 @@ const GameStorage = {
   },
 
   // ==========================================
-  // 14. ESTATÍSTICAS
+  // 16. ESTATÍSTICAS
   // ==========================================
 
   getStats() {
@@ -363,7 +451,7 @@ const GameStorage = {
   },
 
   // ==========================================
-  // 15. EXPORTAR PROGRESSO
+  // 17. EXPORTAR PROGRESSO
   // ==========================================
 
   exportProgress() {
@@ -373,44 +461,47 @@ const GameStorage = {
   },
 
   // ==========================================
-  // 16. IMPORTAR PROGRESSO
+  // 18. IMPORTAR PROGRESSO
   // ==========================================
 
   importProgress(json) {
     try {
-      const parsed = JSON.parse(json);
+      const parsed =
+        typeof json === "string"
+          ? JSON.parse(json)
+          : json;
 
       if (
         !parsed ||
         typeof parsed !== "object" ||
+        Array.isArray(parsed) ||
         !Array.isArray(parsed.bestScores) ||
         !Array.isArray(parsed.completed)
       ) {
+        console.warn(
+          "ECHO//404: ficheiro de progresso inválido."
+        );
+
         return false;
       }
 
-      // Normalizar os dados antes de guardar.
-      const backup = localStorage.getItem(this.key);
-
-      try {
-        localStorage.setItem(
-          this.key,
-          JSON.stringify(parsed)
+      // Verificar se as estruturas têm
+      // conteúdo compatível com o jogo.
+      if (
+        parsed.bestScores.length !== this.totalLevels ||
+        parsed.completed.length !== this.totalLevels
+      ) {
+        console.warn(
+          "ECHO//404: número de níveis incompatível."
         );
 
-        const normalized = this.load();
-
-        return this.save(normalized);
-
-      } catch (error) {
-        if (backup === null) {
-          localStorage.removeItem(this.key);
-        } else {
-          localStorage.setItem(this.key, backup);
-        }
-
-        throw error;
+        return false;
       }
+
+      const normalized = this.normalize(parsed);
+
+      // Guardar apenas depois da validação.
+      return this.save(normalized);
 
     } catch (error) {
       console.warn(
@@ -423,7 +514,7 @@ const GameStorage = {
   },
 
   // ==========================================
-  // 17. APAGAR PROGRESSO
+  // 19. APAGAR PROGRESSO
   // ==========================================
 
   resetProgress() {
@@ -438,7 +529,7 @@ const GameStorage = {
 
     } catch (error) {
       console.warn(
-        "Não foi possível apagar o progresso.",
+        "ECHO//404: não foi possível apagar o progresso.",
         error
       );
 
@@ -447,7 +538,7 @@ const GameStorage = {
   },
 
   // ==========================================
-  // 18. DIAGNÓSTICO
+  // 20. DIAGNÓSTICO
   // ==========================================
 
   debug() {
@@ -459,6 +550,11 @@ const GameStorage = {
     console.table(this.getStats());
 
     console.log(
+      "Versão:",
+      this.version
+    );
+
+    console.log(
       "Dados completos:",
       this.load()
     );
@@ -466,9 +562,25 @@ const GameStorage = {
 };
 
 // ==========================================
-// 19. INICIALIZAÇÃO
+// 21. INICIALIZAÇÃO
 // ==========================================
 
 console.log(
-  "ECHO//404 STORAGE SYSTEM v0.6 READY"
+  "=================================="
+);
+
+console.log(
+  "ECHO//404 — PARADOX EVOLUTION"
+);
+
+console.log(
+  "STORAGE SYSTEM v0.6.1 READY"
+);
+
+console.log(
+  "DESKTOP + MOBILE // LOCALSTORAGE"
+);
+
+console.log(
+  "=================================="
 );

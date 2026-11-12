@@ -4,10 +4,11 @@
 /*
 ==================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION: 0.6
+ VERSION: 0.6.1 MOBILE EDITION
  FILE: game.js
 
  MOTOR PRINCIPAL
+ DESKTOP + MOBILE
 ==================================================
 */
 
@@ -42,7 +43,16 @@ const UI = {
   soundBtn: document.getElementById("soundBtn"),
 
   playAgainBtn: document.getElementById("playAgainBtn"),
-  nextBtn: document.getElementById("nextBtn")
+  nextBtn: document.getElementById("nextBtn"),
+
+  mobileControls: document.getElementById("mobileControls"),
+  mobileShiftBtn: document.getElementById("mobileShiftBtn"),
+  mobileRestartBtn: document.getElementById("mobileRestartBtn"),
+
+  moveUp: document.getElementById("moveUp"),
+  moveDown: document.getElementById("moveDown"),
+  moveLeft: document.getElementById("moveLeft"),
+  moveRight: document.getElementById("moveRight")
 };
 
 // ==========================================
@@ -71,10 +81,79 @@ const PLAYER_SIZE = 20;
 const PLAYER_SPEED = 230;
 const PLATE_RADIUS = 27;
 
-const keys = new Set();
+// Mantém a resolução lógica original.
+canvas.width = WIDTH;
+canvas.height = HEIGHT;
 
 // ==========================================
-// 3. ESTADO DO JOGO
+// 3. SISTEMA DE CONTROLOS
+// ==========================================
+
+// Teclas físicas do computador.
+const keys = new Set();
+
+// Direcções virtuais do telemóvel.
+// Cada pointerId representa um dedo.
+const mobilePointers = new Map();
+
+const mobileDirections = {
+  up: UI.moveUp,
+  down: UI.moveDown,
+  left: UI.moveLeft,
+  right: UI.moveRight
+};
+
+const movementKeys = new Set([
+  "w", "a", "s", "d",
+  "arrowup", "arrowdown",
+  "arrowleft", "arrowright"
+]);
+
+function isDirectionPressed(direction) {
+  const keyboardMap = {
+    up: ["w", "arrowup"],
+    down: ["s", "arrowdown"],
+    left: ["a", "arrowleft"],
+    right: ["d", "arrowright"]
+  };
+
+  const keyboardPressed = keyboardMap[direction].some(
+    key => keys.has(key)
+  );
+
+  const touchPressed = Array.from(
+    mobilePointers.values()
+  ).includes(direction);
+
+  return keyboardPressed || touchPressed;
+}
+
+function refreshMobileButtons() {
+  for (const [direction, button] of
+    Object.entries(mobileDirections)) {
+
+    if (!button) continue;
+
+    const active = Array.from(
+      mobilePointers.values()
+    ).includes(direction);
+
+    button.classList.toggle("pressed", active);
+  }
+}
+
+function clearMobileMovement() {
+  mobilePointers.clear();
+  refreshMobileButtons();
+}
+
+function clearAllMovement() {
+  keys.clear();
+  clearMobileMovement();
+}
+
+// ==========================================
+// 4. ESTADO DO JOGO
 // ==========================================
 
 let levelIndex = 0;
@@ -110,7 +189,7 @@ let animationId = null;
 let lastTickSecond = null;
 
 // ==========================================
-// 4. FUNÇÕES AUXILIARES
+// 5. FUNÇÕES AUXILIARES
 // ==========================================
 
 function clamp(value, min, max) {
@@ -147,40 +226,34 @@ function setStatus(message) {
 }
 
 function formatScore(value) {
-  return Math.floor(value).toLocaleString("pt-PT");
+  return Math.floor(value || 0).toLocaleString("pt-PT");
 }
 
 // ==========================================
-// 5. PARTÍCULAS
+// 6. PARTÍCULAS
 // ==========================================
 
-function emitParticles(
-  x,
-  y,
-  color,
-  amount = 15
-) {
+function emitParticles(x, y, color, amount = 15) {
   for (let i = 0; i < amount; i++) {
     const angle = Math.random() * Math.PI * 2;
     const speed = 30 + Math.random() * 120;
+
+    const life = 0.3 + Math.random() * 0.6;
 
     particles.push({
       x,
       y,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
-      life: 0.3 + Math.random() * 0.6,
-      maxLife: 0.9,
+      life,
+      maxLife: life,
       size: 2 + Math.random() * 3,
       color
     });
   }
 
   if (particles.length > 300) {
-    particles.splice(
-      0,
-      particles.length - 300
-    );
+    particles.splice(0, particles.length - 300);
   }
 }
 
@@ -197,7 +270,7 @@ function updateParticles(dt) {
 }
 
 // ==========================================
-// 6. MENU DE NÍVEIS
+// 7. MENU DE NÍVEIS
 // ==========================================
 
 function buildLevelMenu() {
@@ -208,7 +281,7 @@ function buildLevelMenu() {
   GAME_LEVELS.forEach((item, index) => {
     const button = document.createElement("button");
 
-    const completed = data.completed[index];
+    const completed = Boolean(data.completed[index]);
     const unlocked = index + 1 <= data.unlocked;
 
     button.textContent = completed
@@ -250,10 +323,7 @@ function buildLevelMenu() {
 }
 
 function selectLevel(index) {
-  if (
-    index < 0 ||
-    index >= GAME_LEVELS.length
-  ) {
+  if (index < 0 || index >= GAME_LEVELS.length) {
     return;
   }
 
@@ -271,7 +341,7 @@ function selectLevel(index) {
 }
 
 // ==========================================
-// 7. REINICIAR JOGO
+// 8. REINICIAR JOGO
 // ==========================================
 
 function resetGame() {
@@ -280,7 +350,7 @@ function resetGame() {
     animationId = null;
   }
 
-  keys.clear();
+  clearAllMovement();
 
   player = {
     x: WORLD.start.x,
@@ -331,7 +401,7 @@ function resetGame() {
 }
 
 // ==========================================
-// 8. INICIAR SIMULAÇÃO
+// 9. INICIAR SIMULAÇÃO
 // ==========================================
 
 function startGame() {
@@ -350,16 +420,17 @@ function startGame() {
     `NÍVEL ${levelIndex + 1}: ${level.hint}`
   );
 
+  updateHUD();
+
   animationId = requestAnimationFrame(gameLoop);
 }
 
 // ==========================================
-// 9. ACTUALIZAR HUD
+// 10. ACTUALIZAR HUD
 // ==========================================
 
 function updateHUD() {
-  UI.cycle.textContent =
-    `${cycle}/${MAX_CYCLES}`;
+  UI.cycle.textContent = `${cycle}/${MAX_CYCLES}`;
 
   UI.timer.textContent = Math.max(
     0,
@@ -375,28 +446,32 @@ function updateHUD() {
   );
 
   const percentage = clamp(
-    (CYCLE_DURATION - elapsed) /
-    CYCLE_DURATION * 100,
+    ((CYCLE_DURATION - elapsed) / CYCLE_DURATION) * 100,
     0,
     100
   );
 
-  UI.timerBar.style.width =
-    `${percentage}%`;
+  UI.timerBar.style.width = `${percentage}%`;
 
   UI.timerBar.style.background =
     CYCLE_DURATION - elapsed < 2.5
       ? COLORS.red
       : COLORS.cyan;
 
-  UI.shiftBtn.disabled =
+  const shiftDisabled =
     !running ||
     shiftUsed ||
     recordings.length === 0;
+
+  UI.shiftBtn.disabled = shiftDisabled;
+
+  if (UI.mobileShiftBtn) {
+    UI.mobileShiftBtn.disabled = shiftDisabled;
+  }
 }
 
 // ==========================================
-// 10. GRAVAÇÃO DOS MOVIMENTOS
+// 11. GRAVAÇÃO DOS MOVIMENTOS
 // ==========================================
 
 function recordPlayer() {
@@ -408,7 +483,7 @@ function recordPlayer() {
 }
 
 // ==========================================
-// 11. INTERPOLAÇÃO DOS FANTASMAS
+// 12. INTERPOLAÇÃO DOS FANTASMAS
 // ==========================================
 
 function positionAt(frames, time) {
@@ -453,7 +528,7 @@ function positionAt(frames, time) {
 
   const factor = clamp(
     (time - a.t) /
-    Math.max(0.00001, b.t - a.t),
+      Math.max(0.00001, b.t - a.t),
     0,
     1
   );
@@ -465,7 +540,7 @@ function positionAt(frames, time) {
 }
 
 // ==========================================
-// 12. ACTUALIZAR FANTASMAS
+// 13. ACTUALIZAR FANTASMAS
 // ==========================================
 
 function updateGhosts() {
@@ -475,7 +550,7 @@ function updateGhosts() {
 }
 
 // ==========================================
-// 13. PARADOX SHIFT
+// 14. PARADOX SHIFT
 // ==========================================
 
 function paradoxShift() {
@@ -486,27 +561,21 @@ function paradoxShift() {
   if (shiftUsed || recordings.length === 0) {
     GameAudio.play("error");
 
-    setStatus(
-      "PARADOX SHIFT INDISPONÍVEL."
-    );
-
+    setStatus("PARADOX SHIFT INDISPONÍVEL.");
     return;
   }
 
   const index = recordings.length - 1;
   const frames = recordings[index];
 
-  const position = positionAt(
-    frames,
-    elapsed
-  );
+  const position = positionAt(frames, elapsed);
 
   // Preserva o passado do último fantasma.
   const past = frames.filter(
     frame => frame.t < elapsed
   );
 
-  // Congela o fantasma no local actual.
+  // Congela o fantasma na posição actual.
   past.push({
     t: elapsed,
     x: position.x,
@@ -546,7 +615,7 @@ function paradoxShift() {
 }
 
 // ==========================================
-// 14. PLACAS TEMPORAIS
+// 15. PLACAS TEMPORAIS
 // ==========================================
 
 function isPlateActive(plate) {
@@ -560,7 +629,7 @@ function isPlateActive(plate) {
 }
 
 // ==========================================
-// 15. PORTA TEMPORAL
+// 16. PORTA TEMPORAL
 // ==========================================
 
 function updateDoor() {
@@ -568,10 +637,7 @@ function updateDoor() {
     plate => isPlateActive(plate)
   );
 
-  if (
-    doorOpen &&
-    !previousDoorState
-  ) {
+  if (doorOpen && !previousDoorState) {
     GameAudio.play("door");
 
     emitParticles(
@@ -581,16 +647,14 @@ function updateDoor() {
       25
     );
 
-    setStatus(
-      "PORTA TEMPORAL ABERTA!"
-    );
+    setStatus("PORTA TEMPORAL ABERTA!");
   }
 
   previousDoorState = doorOpen;
 }
 
 // ==========================================
-// 16. COLISÕES COM PAREDES
+// 17. COLISÕES
 // ==========================================
 
 function isBlocked(x, y) {
@@ -602,10 +666,7 @@ function isBlocked(x, y) {
     }
   }
 
-  if (
-    !doorOpen &&
-    intersects(rect, WORLD.door)
-  ) {
+  if (!doorOpen && intersects(rect, WORLD.door)) {
     return true;
   }
 
@@ -613,38 +674,26 @@ function isBlocked(x, y) {
 }
 
 // ==========================================
-// 17. MOVIMENTO DO JOGADOR
+// 18. MOVIMENTO DESKTOP + MOBILE
 // ==========================================
 
 function updatePlayer(dt) {
   let dx = 0;
   let dy = 0;
 
-  if (
-    keys.has("w") ||
-    keys.has("arrowup")
-  ) {
+  if (isDirectionPressed("up")) {
     dy--;
   }
 
-  if (
-    keys.has("s") ||
-    keys.has("arrowdown")
-  ) {
+  if (isDirectionPressed("down")) {
     dy++;
   }
 
-  if (
-    keys.has("a") ||
-    keys.has("arrowleft")
-  ) {
+  if (isDirectionPressed("left")) {
     dx--;
   }
 
-  if (
-    keys.has("d") ||
-    keys.has("arrowright")
-  ) {
+  if (isDirectionPressed("right")) {
     dx++;
   }
 
@@ -654,6 +703,7 @@ function updatePlayer(dt) {
     return;
   }
 
+  // Normaliza a velocidade diagonal.
   dx /= length;
   dy /= length;
 
@@ -679,7 +729,7 @@ function updatePlayer(dt) {
 }
 
 // ==========================================
-// 18. TELETRANSPORTES
+// 19. TELETRANSPORTES
 // ==========================================
 
 function updatePortals(dt) {
@@ -716,23 +766,19 @@ function updatePortals(dt) {
 
       GameAudio.play("portal");
 
-      setStatus(
-        "SALTO QUÂNTICO EXECUTADO!"
-      );
-
+      setStatus("SALTO QUÂNTICO EXECUTADO!");
       return;
     }
   }
 }
 
 // ==========================================
-// 19. LASERS
+// 20. LASERS
 // ==========================================
 
 function isLaserActive(laser) {
   const phase =
-    (worldTime + laser.offset) %
-    laser.period;
+    (worldTime + laser.offset) % laser.period;
 
   return phase < laser.on;
 }
@@ -756,10 +802,7 @@ function checkLasers() {
 
       GameStorage.registerDeath();
 
-      score = Math.max(
-        0,
-        score - 150
-      );
+      score = Math.max(0, score - 150);
 
       emitParticles(
         player.x,
@@ -771,7 +814,6 @@ function checkLasers() {
       GameAudio.play("laser");
 
       endCycle(true);
-
       return true;
     }
   }
@@ -780,7 +822,7 @@ function checkLasers() {
 }
 
 // ==========================================
-// 20. TERMINAR CICLO
+// 21. TERMINAR CICLO
 // ==========================================
 
 function endCycle(died = false) {
@@ -789,7 +831,6 @@ function endCycle(died = false) {
   }
 
   if (died) {
-    // Após a morte, o eco volta à origem.
     currentRecording.push({
       t: Math.min(elapsed, CYCLE_DURATION),
       x: WORLD.start.x,
@@ -813,6 +854,7 @@ function endCycle(died = false) {
   cycle++;
   elapsed = 0;
   portalCooldown = 0;
+  lastTickSecond = null;
 
   player.x = WORLD.start.x;
   player.y = WORLD.start.y;
@@ -841,7 +883,7 @@ function endCycle(died = false) {
 }
 
 // ==========================================
-// 21. VERIFICAR SAÍDA
+// 22. VERIFICAR SAÍDA
 // ==========================================
 
 function checkGoal() {
@@ -856,7 +898,7 @@ function checkGoal() {
 }
 
 // ==========================================
-// 22. TERMINAR JOGO
+// 23. TERMINAR JOGO
 // ==========================================
 
 function finishGame(won) {
@@ -866,6 +908,8 @@ function finishGame(won) {
 
   running = false;
   finished = true;
+
+  clearAllMovement();
 
   if (won) {
     const cycleBonus =
@@ -887,10 +931,7 @@ function finishGame(won) {
       survivalBonus
     );
 
-    GameStorage.win(
-      levelIndex,
-      score
-    );
+    GameStorage.win(levelIndex, score);
 
     GameAudio.play("win");
 
@@ -910,7 +951,6 @@ function finishGame(won) {
     setStatus(
       "SIMULAÇÃO CONCLUÍDA COM SUCESSO!"
     );
-
   } else {
     GameAudio.play("fail");
 
@@ -923,9 +963,7 @@ function finishGame(won) {
 
     UI.nextBtn.style.display = "none";
 
-    setStatus(
-      "COLAPSO TEMPORAL DETECTADO."
-    );
+    setStatus("COLAPSO TEMPORAL DETECTADO.");
   }
 
   UI.finalScore.textContent =
@@ -933,15 +971,14 @@ function finishGame(won) {
 
   UI.overlay.classList.remove("hidden");
 
-  UI.startBtn.textContent =
-    "JOGAR NOVAMENTE";
+  UI.startBtn.textContent = "JOGAR NOVAMENTE";
 
   buildLevelMenu();
   updateHUD();
 }
 
 // ==========================================
-// 23. DESENHO — RECTÂNGULO NEON
+// 24. RECTÂNGULOS NEON
 // ==========================================
 
 function glowRect(
@@ -958,18 +995,13 @@ function glowRect(
   ctx.shadowColor = color;
   ctx.shadowBlur = blur;
 
-  ctx.fillRect(
-    x,
-    y,
-    width,
-    height
-  );
+  ctx.fillRect(x, y, width, height);
 
   ctx.restore();
 }
 
 // ==========================================
-// 24. DESENHO — GRELHA
+// 25. DESENHO DA GRELHA
 // ==========================================
 
 function drawGrid() {
@@ -992,7 +1024,7 @@ function drawGrid() {
 }
 
 // ==========================================
-// 25. DESENHO — PAREDES E PORTA
+// 26. PAREDES E PORTA
 // ==========================================
 
 function drawWalls() {
@@ -1024,7 +1056,6 @@ function drawWalls() {
     );
 
     ctx.restore();
-
   } else {
     glowRect(
       door.x,
@@ -1038,7 +1069,7 @@ function drawWalls() {
 }
 
 // ==========================================
-// 26. DESENHO — PLACAS
+// 27. PLACAS TEMPORAIS
 // ==========================================
 
 function drawPlates() {
@@ -1056,7 +1087,6 @@ function drawPlates() {
 
     ctx.shadowColor = color;
     ctx.shadowBlur = 15;
-
     ctx.lineWidth = 3;
 
     ctx.beginPath();
@@ -1094,7 +1124,7 @@ function drawPlates() {
 }
 
 // ==========================================
-// 27. DESENHO — LASERS
+// 28. LASERS
 // ==========================================
 
 function drawLasers() {
@@ -1140,7 +1170,7 @@ function drawLasers() {
 }
 
 // ==========================================
-// 28. DESENHO — PORTAIS
+// 29. PORTAIS
 // ==========================================
 
 function drawPortals() {
@@ -1173,7 +1203,7 @@ function drawPortals() {
 }
 
 // ==========================================
-// 29. DESENHO — SAÍDA
+// 30. SAÍDA
 // ==========================================
 
 function drawGoal() {
@@ -1209,7 +1239,7 @@ function drawGoal() {
 }
 
 // ==========================================
-// 30. DESENHO — FANTASMAS
+// 31. FANTASMAS
 // ==========================================
 
 function drawGhosts() {
@@ -1234,7 +1264,7 @@ function drawGhosts() {
 }
 
 // ==========================================
-// 31. DESENHO — JOGADOR
+// 32. JOGADOR
 // ==========================================
 
 function drawPlayer() {
@@ -1258,7 +1288,7 @@ function drawPlayer() {
 }
 
 // ==========================================
-// 32. DESENHO — PARTÍCULAS
+// 33. PARTÍCULAS
 // ==========================================
 
 function drawParticles() {
@@ -1285,7 +1315,7 @@ function drawParticles() {
 }
 
 // ==========================================
-// 33. DESENHO — INFORMAÇÕES
+// 34. INFORMAÇÕES DA ARENA
 // ==========================================
 
 function drawLabels() {
@@ -1316,25 +1346,14 @@ function drawLabels() {
 }
 
 // ==========================================
-// 34. RENDERIZAÇÃO PRINCIPAL
+// 35. RENDERIZAÇÃO PRINCIPAL
 // ==========================================
 
 function draw() {
-  ctx.clearRect(
-    0,
-    0,
-    WIDTH,
-    HEIGHT
-  );
+  ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
   ctx.fillStyle = "#080d1c";
-
-  ctx.fillRect(
-    0,
-    0,
-    WIDTH,
-    HEIGHT
-  );
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
   drawGrid();
   drawLabels();
@@ -1349,7 +1368,7 @@ function draw() {
 }
 
 // ==========================================
-// 35. CONTAGEM REGRESSIVA
+// 36. CONTAGEM REGRESSIVA
 // ==========================================
 
 function updateCountdown() {
@@ -1368,7 +1387,7 @@ function updateCountdown() {
 }
 
 // ==========================================
-// 36. LOOP PRINCIPAL
+// 37. LOOP PRINCIPAL
 // ==========================================
 
 function gameLoop(timestamp) {
@@ -1408,10 +1427,7 @@ function gameLoop(timestamp) {
     checkGoal();
   }
 
-  if (
-    running &&
-    elapsed >= CYCLE_DURATION
-  ) {
+  if (running && elapsed >= CYCLE_DURATION) {
     endCycle();
   }
 
@@ -1419,38 +1435,37 @@ function gameLoop(timestamp) {
   draw();
 
   if (running) {
-    animationId = requestAnimationFrame(
-      gameLoop
-    );
+    animationId = requestAnimationFrame(gameLoop);
+  } else {
+    animationId = null;
   }
 }
 
 // ==========================================
-// 37. TECLADO
+// 38. CONTROLOS DO TECLADO
 // ==========================================
 
 window.addEventListener("keydown", event => {
   const key = event.key.toLowerCase();
 
+  // Evita que as setas façam scroll.
   if (
-    key.startsWith("arrow") ||
-    key === " "
+    movementKeys.has(key) &&
+    key.startsWith("arrow")
   ) {
     event.preventDefault();
   }
 
-  if (
-    key === "r" &&
-    !event.repeat
-  ) {
+  if (key === " ") {
+    event.preventDefault();
+  }
+
+  if (key === "r" && !event.repeat) {
     startGame();
     return;
   }
 
-  if (
-    key === "e" &&
-    !event.repeat
-  ) {
+  if (key === "e" && !event.repeat) {
     paradoxShift();
     return;
   }
@@ -1464,22 +1479,119 @@ window.addEventListener("keydown", event => {
     return;
   }
 
-  keys.add(key);
+  if (movementKeys.has(key)) {
+    keys.add(key);
+  }
 });
 
 window.addEventListener("keyup", event => {
-  keys.delete(
-    event.key.toLowerCase()
-  );
+  keys.delete(event.key.toLowerCase());
 });
 
 window.addEventListener("blur", () => {
-  keys.clear();
+  clearAllMovement();
   lastFrame = 0;
 });
 
+document.addEventListener(
+  "visibilitychange",
+  () => {
+    if (document.hidden) {
+      clearAllMovement();
+      lastFrame = 0;
+    }
+  }
+);
+
 // ==========================================
-// 38. BOTÕES
+// 39. CONTROLOS TÁCTEIS
+// ==========================================
+
+function setupMobileControls() {
+  for (const [direction, button] of
+    Object.entries(mobileDirections)) {
+
+    if (!button) {
+      continue;
+    }
+
+    // Impede gestos do browser nos botões.
+    button.style.touchAction = "none";
+
+    button.addEventListener(
+      "pointerdown",
+      event => {
+        if (!running) {
+          return;
+        }
+
+        event.preventDefault();
+
+        try {
+          button.setPointerCapture(event.pointerId);
+        } catch (error) {
+          // Alguns browsers podem não permitir
+          // captura de ponteiros.
+        }
+
+        mobilePointers.set(
+          event.pointerId,
+          direction
+        );
+
+        refreshMobileButtons();
+      }
+    );
+
+    const releasePointer = event => {
+      if (!mobilePointers.has(event.pointerId)) {
+        return;
+      }
+
+      mobilePointers.delete(event.pointerId);
+      refreshMobileButtons();
+    };
+
+    button.addEventListener(
+      "pointerup",
+      releasePointer
+    );
+
+    button.addEventListener(
+      "pointercancel",
+      releasePointer
+    );
+
+    button.addEventListener(
+      "lostpointercapture",
+      releasePointer
+    );
+
+    button.addEventListener(
+      "contextmenu",
+      event => event.preventDefault()
+    );
+  }
+
+  // Botão Paradox Shift.
+  if (UI.mobileShiftBtn) {
+    UI.mobileShiftBtn.addEventListener(
+      "click",
+      paradoxShift
+    );
+  }
+
+  // Botão de reiniciar.
+  if (UI.mobileRestartBtn) {
+    UI.mobileRestartBtn.addEventListener(
+      "click",
+      startGame
+    );
+  }
+}
+
+// ==========================================
+// 40. BOTÕES DO JOGO
 // ==========================================
 
 UI.startBtn.addEventListener(
@@ -1525,13 +1637,15 @@ UI.soundBtn.addEventListener(
 );
 
 // ==========================================
-// 39. INICIALIZAÇÃO
+// 41. INICIALIZAÇÃO
 // ==========================================
 
 UI.soundBtn.textContent =
   GameAudio.enabled
     ? "SOM: ON"
     : "SOM: OFF";
+
+setupMobileControls();
 
 resetGame();
 buildLevelMenu();
@@ -1545,7 +1659,7 @@ console.log(
 );
 
 console.log(
-  "VERSION 0.6 — GAME ENGINE READY"
+  "VERSION 0.6.1 — MOBILE EDITION"
 );
 
 console.log(
@@ -1553,8 +1667,9 @@ console.log(
 );
 
 console.log(
+  "DESKTOP + MOBILE CONTROLS READY"
+);
+
+console.log(
   "=================================="
 );
-GameAudio.play("portal");
-GameAudio.play("shift");
-GameAudio.play("win");

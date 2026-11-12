@@ -4,11 +4,13 @@
 /*
 ==================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION: 0.6
+ VERSION: 0.6.1 MOBILE EDITION
  FILE: audio.js
 
  SISTEMA DE ÁUDIO FUTURISTA
  Web Audio API — Sem ficheiros externos
+
+ DESKTOP + ANDROID + iOS
 ==================================================
 */
 
@@ -49,14 +51,12 @@ const GameAudio = {
         return false;
       }
 
-      if (!this.context) {
+      if (!this.context || this.context.state === "closed") {
         this.context = new AudioContextClass();
 
-        this.masterGain =
-          this.context.createGain();
+        this.masterGain = this.context.createGain();
 
-        this.masterGain.gain.value =
-          this.volume;
+        this.masterGain.gain.value = this.volume;
 
         this.masterGain.connect(
           this.context.destination
@@ -65,10 +65,12 @@ const GameAudio = {
         this.initialized = true;
       }
 
+      // Alguns dispositivos móveis suspendem
+      // automaticamente o contexto de áudio.
       if (this.context.state === "suspended") {
         this.context.resume().catch(error => {
           console.warn(
-            "Não foi possível activar o áudio:",
+            "ECHO//404: não foi possível activar o áudio.",
             error
           );
         });
@@ -98,27 +100,24 @@ const GameAudio = {
     delay = 0,
     endFrequency = null
   ) {
-    if (!this.enabled) {
-      return;
-    }
-
-    if (!this.init()) {
+    if (!this.enabled || !this.init()) {
       return;
     }
 
     const ac = this.context;
 
-    const oscillator =
-      ac.createOscillator();
+    if (!ac || ac.state === "closed") {
+      return;
+    }
 
-    const gain =
-      ac.createGain();
+    const oscillator = ac.createOscillator();
+    const gain = ac.createGain();
 
     const startTime =
       ac.currentTime + Math.max(0, delay);
 
     const endTime =
-      startTime + Math.max(0.01, duration);
+      startTime + Math.max(0.02, duration);
 
     oscillator.type = type;
 
@@ -132,10 +131,15 @@ const GameAudio = {
       endFrequency > 0
     ) {
       oscillator.frequency.exponentialRampToValueAtTime(
-        endFrequency,
+        Math.max(1, endFrequency),
         endTime
       );
     }
+
+    const attackEnd = Math.min(
+      startTime + 0.01,
+      startTime + (endTime - startTime) / 2
+    );
 
     gain.gain.setValueAtTime(
       0.0001,
@@ -144,7 +148,7 @@ const GameAudio = {
 
     gain.gain.exponentialRampToValueAtTime(
       Math.max(0.0001, volume),
-      startTime + 0.01
+      attackEnd
     );
 
     gain.gain.exponentialRampToValueAtTime(
@@ -179,11 +183,20 @@ const GameAudio = {
 
     const ac = this.context;
 
+    if (!ac || ac.state === "closed") {
+      return;
+    }
+
     const sampleRate = ac.sampleRate;
+
+    const safeDuration = Math.max(
+      0.01,
+      duration
+    );
 
     const frameCount = Math.max(
       1,
-      Math.floor(sampleRate * duration)
+      Math.floor(sampleRate * safeDuration)
     );
 
     const buffer = ac.createBuffer(
@@ -200,21 +213,15 @@ const GameAudio = {
         (1 - i / frameCount);
     }
 
-    const source =
-      ac.createBufferSource();
-
-    const gain =
-      ac.createGain();
-
-    const filter =
-      ac.createBiquadFilter();
+    const source = ac.createBufferSource();
+    const gain = ac.createGain();
+    const filter = ac.createBiquadFilter();
 
     filter.type = "lowpass";
     filter.frequency.value = 1800;
 
     source.buffer = buffer;
-
-    gain.gain.value = volume;
+    gain.gain.value = Math.max(0, volume);
 
     source.connect(filter);
     filter.connect(gain);
@@ -242,7 +249,7 @@ const GameAudio = {
     type = "sine",
     volume = 0.12
   ) {
-    if (!this.enabled) {
+    if (!this.enabled || !Array.isArray(notes)) {
       return;
     }
 
@@ -514,10 +521,12 @@ const GameAudio = {
       tick: () => this.tick()
     };
 
-    if (Object.prototype.hasOwnProperty.call(
-      sounds,
-      name
-    )) {
+    if (
+      Object.prototype.hasOwnProperty.call(
+        sounds,
+        name
+      )
+    ) {
       sounds[name]();
     }
   },
@@ -555,7 +564,7 @@ const GameAudio = {
       Math.min(1, number)
     );
 
-    if (this.masterGain) {
+    if (this.masterGain && this.context) {
       this.masterGain.gain.setTargetAtTime(
         this.volume,
         this.context.currentTime,
@@ -575,7 +584,12 @@ const GameAudio = {
       this.context &&
       this.context.state === "running"
     ) {
-      this.context.suspend();
+      this.context.suspend().catch(error => {
+        console.warn(
+          "ECHO//404: não foi possível suspender áudio.",
+          error
+        );
+      });
     }
   },
 
@@ -611,9 +625,66 @@ const GameAudio = {
 };
 
 // ==========================================
-// 24. INICIALIZAÇÃO
+// 24. COMPATIBILIDADE MOBILE
+// ==========================================
+
+// Em dispositivos móveis, o áudio deve ser
+// activado através de uma interacção do utilizador.
+// Não reproduzimos sons automaticamente ao carregar.
+
+function unlockGameAudio() {
+  if (!GameAudio.enabled) {
+    return;
+  }
+
+  GameAudio.init();
+}
+
+// Primeira interacção por toque.
+document.addEventListener(
+  "pointerdown",
+  unlockGameAudio,
+  { once: true, passive: true }
+);
+
+// Primeira interacção por teclado.
+document.addEventListener(
+  "keydown",
+  unlockGameAudio,
+  { once: true }
+);
+
+// Quando o utilizador regressa à página,
+// tenta retomar o áudio, caso esteja activo.
+document.addEventListener(
+  "visibilitychange",
+  () => {
+    if (!document.hidden && GameAudio.enabled) {
+      GameAudio.resume();
+    }
+  }
+);
+
+// ==========================================
+// 25. INICIALIZAÇÃO
 // ==========================================
 
 console.log(
-  "ECHO//404 AUDIO SYSTEM v0.6 READY"
+  "=================================="
+);
+
+console.log(
+  "ECHO//404 — PARADOX EVOLUTION"
+);
+
+console.log(
+  "AUDIO SYSTEM v0.6.1 MOBILE READY"
+);
+
+console.log(
+  "WEB AUDIO API // DESKTOP + MOBILE"
+);
+
+console.log(
+  "=================================="
 );

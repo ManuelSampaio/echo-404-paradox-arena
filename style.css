@@ -1,35 +1,43 @@
 
+/*
+==================================================
+ ECHO//404 — PARADOX EVOLUTION
+ VERSION 0.6.1 — MOBILE EDITION
+ FILE: style.css
+
+ FULL RESPONSIVE DESIGN
+ DESKTOP + TABLET + MOBILE
+==================================================
+*/
+
 /* ==========================================
-   ECHO//404 — PARADOX EVOLUTION
-   VERSION 0.6
-   HYBRID PIXEL ART + CYBERPUNK NEON
+   1. FONTES E VARIÁVEIS
 ========================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&display=swap');
-
-/* ==========================================
-   1. CORES E VARIÁVEIS
-========================================== */
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap");
 
 :root {
   --bg: #050711;
-  --bg-light: #0a1021;
+  --bg-secondary: #080e1d;
   --panel: #0d152b;
-  --panel-light: #121e38;
+  --panel-light: #14213a;
 
   --cyan: #00f5ff;
+  --green: #00ff9d;
   --purple: #aa78ff;
-  --green: #21ff9b;
   --red: #ff3868;
   --yellow: #ffd166;
-  --blue: #478bff;
 
-  --white: #e9faff;
-  --muted: #8999b8;
-  --border: #293956;
+  --white: #e9f6ff;
+  --muted: #8095b3;
+  --border: #243551;
 
-  --font-game: 'Orbitron', sans-serif;
-  --font-mono: 'Share Tech Mono', monospace;
+  --font-game: "Orbitron", sans-serif;
+  --font-body: "Rajdhani", sans-serif;
+  --font-mono: "Share Tech Mono", monospace;
+
+  --radius: 10px;
+  --transition: 0.2s ease;
 }
 
 /* ==========================================
@@ -37,80 +45,97 @@
 ========================================== */
 
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 html {
+  min-height: 100%;
   scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
   min-height: 100vh;
+  padding: 30px 18px 50px;
 
   background:
     radial-gradient(
       ellipse at 50% 0%,
-      #152343 0%,
-      #080d1b 42%,
-      #050711 80%
-    );
+      rgba(0, 245, 255, 0.08),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse at 90% 80%,
+      rgba(170, 120, 255, 0.06),
+      transparent 45%
+    ),
+    var(--bg);
 
   color: var(--white);
-  font-family: var(--font-mono);
-
-  padding: 28px 15px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
   overflow-x: hidden;
 }
-
-/* Efeito scanline */
 
 body::before {
   content: "";
   position: fixed;
   inset: 0;
 
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 3px,
-    rgba(0, 0, 0, 0.07) 4px
-  );
+  background-image:
+    linear-gradient(
+      rgba(0, 245, 255, 0.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 245, 255, 0.025) 1px,
+      transparent 1px
+    );
 
-  pointer-events: none;
-  z-index: 100;
-}
-
-/* Brilho ambiente */
-
-body::after {
-  content: "";
-  position: fixed;
-
-  width: 600px;
-  height: 600px;
-
-  top: -350px;
-  left: 50%;
-  transform: translateX(-50%);
-
-  background: radial-gradient(
-    circle,
-    rgba(0, 245, 255, 0.08),
-    transparent 70%
-  );
-
+  background-size: 45px 45px;
   pointer-events: none;
   z-index: -1;
 }
 
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
 /* ==========================================
-   3. CONTENTOR PRINCIPAL
+   3. CONTAINER PRINCIPAL
 ========================================== */
 
+.container,
+.game-container,
+.app,
+main {
+  width: 100%;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container,
+.game-container,
 .app {
-  width: min(100%, 940px);
-  margin: 0 auto;
   position: relative;
 }
 
@@ -118,263 +143,408 @@ body::after {
    4. CABEÇALHO
 ========================================== */
 
-.game-header {
+.game-header,
+header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 30px;
 }
 
 .version {
-  color: var(--green);
+  display: inline-block;
+  margin-bottom: 18px;
+  color: var(--cyan);
+  font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 4px;
-  margin-bottom: 12px;
-
-  animation: pulseText 3s infinite;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
-.logo {
+.logo,
+h1 {
+  margin-bottom: 10px;
+
   font-family: var(--font-game);
+  font-size: clamp(36px, 7vw, 68px);
   font-weight: 900;
+  letter-spacing: 3px;
+  line-height: 1.2;
 
-  font-size: clamp(36px, 7vw, 66px);
-  letter-spacing: 6px;
-
-  margin: 0;
-  line-height: 1.3;
-
-  color: var(--white);
-  text-shadow: 0 0 25px rgba(255,255,255,0.15);
-}
-
-.logo span {
   color: var(--cyan);
 
   text-shadow:
-    0 0 12px rgba(0,245,255,0.6),
-    0 0 35px rgba(0,245,255,0.25);
-}
-
-.logo:hover {
-  animation: glitch 0.3s linear;
+    0 0 12px rgba(0, 245, 255, 0.6),
+    0 0 40px rgba(0, 245, 255, 0.25);
 }
 
 .subtitle {
-  color: var(--purple);
+  margin-bottom: 10px;
+
   font-family: var(--font-game);
-
-  font-size: 12px;
-  font-weight: 600;
-
-  letter-spacing: 7px;
-  margin: 12px 0;
+  font-size: 13px;
+  letter-spacing: 5px;
+  color: var(--white);
 }
 
 .tagline {
   color: var(--muted);
+  font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 3px;
-  margin-top: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 /* ==========================================
    5. MENU DE NÍVEIS
 ========================================== */
 
-.menu {
-  background: rgba(13,21,43,0.9);
-  border: 1px solid var(--border);
-
-  padding: 22px;
-  margin-bottom: 22px;
-
-  box-shadow: inset 0 0 30px rgba(0,0,0,0.15);
-}
-
-.menu-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-}
-
-.menu-heading h2 {
-  font-family: var(--font-game);
-  font-size: 12px;
-  letter-spacing: 2px;
-
-  color: var(--purple);
-  margin: 0;
-}
-
-#progress {
-  font-size: 11px;
-  color: var(--green);
-  white-space: nowrap;
-}
-
-.level-grid {
-  display: grid;
-  grid-template-columns: repeat(10, minmax(0,1fr));
-
-  gap: 8px;
-  margin: 22px 0 15px;
-}
-
-.level-grid button {
+.menu,
+.level-menu {
   width: 100%;
-  min-height: 48px;
+  margin-bottom: 22px;
+  padding: 22px;
 
-  padding: 8px 2px;
-
-  background: #111b32;
-  color: var(--cyan);
-
-  border: 1px solid #354565;
-
-  font-family: var(--font-game);
-  font-size: 12px;
-  font-weight: 700;
-
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.level-grid button:hover:not(:disabled) {
-  border-color: var(--cyan);
-  background: #14283b;
-
-  box-shadow: 0 0 18px rgba(0,245,255,0.25);
-  transform: translateY(-2px);
-}
-
-.level-grid button.selected {
-  border-color: var(--cyan);
-  background: rgba(0,245,255,0.1);
+  background: rgba(13, 21, 43, 0.92);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 
   box-shadow:
-    0 0 12px rgba(0,245,255,0.2),
-    inset 0 0 12px rgba(0,245,255,0.1);
+    0 0 25px rgba(0, 0, 0, 0.25),
+    inset 0 0 18px rgba(0, 245, 255, 0.02);
 }
 
-.level-grid button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  filter: grayscale(1);
+.menu h2,
+.level-menu h2 {
+  margin-bottom: 15px;
+
+  color: var(--cyan);
+  font-family: var(--font-game);
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.progress,
+.progress-text,
+#progress {
+  margin-bottom: 14px;
+
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.level-grid,
+#levelGrid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.level-grid button,
+#levelGrid button,
+.level-btn {
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 3px;
+
+  background: #101c32;
+  color: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 6px;
+
+  font-family: var(--font-game);
+  font-size: 11px;
+  font-weight: 600;
+
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+.level-grid button:hover:not(:disabled),
+#levelGrid button:hover:not(:disabled) {
+  background: #18334b;
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.15);
+}
+
+.level-grid button.active,
+#levelGrid button.active,
+.level-btn.active,
+.level-btn.selected {
+  background: rgba(0, 245, 255, 0.13);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.15);
+}
+
+.level-grid button.completed,
+#levelGrid button.completed,
+.level-btn.completed {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.level-grid button:disabled,
+#levelGrid button:disabled {
+  background: #0b1120;
+  border-color: #1b273a;
+  color: #50617b;
+}
+
+.level-info,
+#levelName {
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.8;
 }
 
 #levelName {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.7;
-  margin: 0;
+  display: block;
 }
 
 /* ==========================================
-   6. HUD — INDICADORES
+   6. HUD
 ========================================== */
 
 .hud {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0,1fr));
-
-  gap: 9px;
-  margin-bottom: 12px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
 }
 
 .stat {
-  background: rgba(13,21,43,0.92);
+  min-width: 0;
+  padding: 15px 10px;
+
+  background: rgba(13, 21, 43, 0.95);
   border: 1px solid var(--border);
+  border-radius: 8px;
 
-  padding: 15px 8px;
   text-align: center;
-
-  transition: border-color 0.2s;
 }
 
-.stat:hover {
-  border-color: var(--cyan);
-}
-
-.stat span {
+.stat span,
+.stat-label {
   display: block;
-
-  font-size: 10px;
-  letter-spacing: 2px;
+  margin-bottom: 7px;
 
   color: var(--muted);
-  margin-bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
-.stat strong {
+.stat strong,
+.stat-value {
   display: block;
 
-  font-family: var(--font-game);
-  font-size: clamp(12px,2vw,19px);
-  font-weight: 700;
-
   color: var(--cyan);
-  text-shadow: 0 0 12px rgba(0,245,255,0.3);
+  font-family: var(--font-game);
+  font-size: clamp(12px, 1.6vw, 19px);
+  font-weight: 700;
+}
+
+#score,
+#best {
+  color: var(--green);
+}
+
+#timer {
+  color: var(--yellow);
 }
 
 /* ==========================================
-   7. BARRA DE TEMPO
+   7. BARRA DO TEMPO
 ========================================== */
 
 .timer-track {
-  height: 6px;
-  background: #1b2944;
+  width: 100%;
+  height: 8px;
+  margin-bottom: 15px;
 
+  background: #101c32;
+  border: 1px solid var(--border);
+  border-radius: 20px;
   overflow: hidden;
-  margin-bottom: 12px;
 }
 
+.timer-bar,
 #timerBar {
   width: 100%;
   height: 100%;
 
-  background: var(--cyan);
+  background: linear-gradient(
+    90deg,
+    var(--cyan),
+    var(--purple)
+  );
 
-  box-shadow: 0 0 18px var(--cyan);
-  transition: width 0.08s linear;
+  box-shadow: 0 0 14px rgba(0, 245, 255, 0.45);
+
+  transition: width 0.1s linear;
 }
 
 /* ==========================================
    8. ARENA
 ========================================== */
 
-.arena-wrapper {
+.arena-wrapper,
+.game-arena,
+.canvas-wrapper {
   position: relative;
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto 16px;
 
-  background: #080d1c;
-
+  background: #070d1b;
   border: 2px solid var(--cyan);
+  border-radius: 10px;
 
   box-shadow:
-    0 0 15px rgba(0,245,255,0.25),
-    0 0 45px rgba(0,245,255,0.08),
-    inset 0 0 25px rgba(0,245,255,0.04);
+    0 0 15px rgba(0, 245, 255, 0.15),
+    0 0 50px rgba(0, 245, 255, 0.05);
 
   overflow: hidden;
 }
 
-#gameCanvas {
+#gameCanvas,
+canvas {
   display: block;
-
   width: 100%;
   height: auto;
+  max-width: 100%;
 
-  background: #080d1c;
-
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
+  background: #070d1b;
+  touch-action: none;
 }
 
 /* ==========================================
-   9. PAINEL DE RESULTADO
+   9. PAINEL DE ESTADO
 ========================================== */
 
-.overlay {
+.status-panel {
+  width: 100%;
+  max-width: 800px;
+  min-height: 54px;
+  margin: 0 auto 16px;
+  padding: 12px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(13, 21, 43, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  text-align: center;
+}
+
+#status {
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* ==========================================
+   10. BOTÕES PRINCIPAIS
+========================================== */
+
+.controls,
+.game-controls,
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  max-width: 800px;
+  margin: 0 auto 20px;
+}
+
+.controls button,
+.game-controls button,
+.action-buttons button,
+#startBtn,
+#restartBtn,
+#shiftBtn,
+#soundBtn,
+#playAgainBtn,
+#nextBtn {
+  min-height: 44px;
+  padding: 12px 18px;
+
+  background: rgba(0, 245, 255, 0.08);
+  color: var(--cyan);
+
+  border: 1px solid var(--cyan);
+  border-radius: 6px;
+
+  font-family: var(--font-game);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  transition:
+    background var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
+}
+
+.controls button:hover:not(:disabled),
+.game-controls button:hover:not(:disabled),
+.action-buttons button:hover:not(:disabled),
+#startBtn:hover:not(:disabled),
+#restartBtn:hover:not(:disabled),
+#shiftBtn:hover:not(:disabled),
+#soundBtn:hover:not(:disabled),
+#playAgainBtn:hover:not(:disabled),
+#nextBtn:hover:not(:disabled) {
+  background: rgba(0, 245, 255, 0.18);
+  box-shadow: 0 0 18px rgba(0, 245, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+#startBtn,
+#nextBtn {
+  background: rgba(0, 255, 157, 0.12);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+#restartBtn,
+#playAgainBtn {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+#shiftBtn {
+  background: rgba(170, 120, 255, 0.12);
+  border-color: var(--purple);
+  color: var(--purple);
+}
+
+#soundBtn {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+
+/* ==========================================
+   11. OVERLAY E RESULTADOS
+========================================== */
+
+.overlay,
+#overlay {
   position: absolute;
   inset: 0;
 
@@ -382,75 +552,64 @@ body::after {
   align-items: center;
   justify-content: center;
 
-  padding: 15px;
+  padding: 18px;
 
-  background: rgba(3,6,17,0.92);
-  backdrop-filter: blur(6px);
+  background: rgba(3, 6, 17, 0.88);
+  backdrop-filter: blur(8px);
 
-  z-index: 10;
+  z-index: 20;
 }
 
-.overlay.hidden {
-  display: none;
+.overlay.hidden,
+#overlay.hidden {
+  display: none !important;
 }
 
 .result-panel {
-  width: min(100%,450px);
+  width: 100%;
+  max-width: 440px;
+  max-height: 95%;
+  overflow-y: auto;
 
-  padding: 35px 25px;
+  padding: 28px 24px;
+
+  background: #0d152b;
+  border: 1px solid var(--cyan);
+  border-radius: 12px;
+
+  box-shadow: 0 0 40px rgba(0, 245, 255, 0.18);
 
   text-align: center;
-
-  background: #0d1428;
-  border: 1px solid var(--purple);
-
-  box-shadow:
-    0 0 40px rgba(170,120,255,0.2),
-    inset 0 0 25px rgba(170,120,255,0.05);
-
-  animation: resultAppear 0.35s ease-out;
 }
 
 .result-label {
+  margin-bottom: 12px;
   color: var(--purple);
-
+  font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 4px;
-
-  margin-bottom: 20px;
+  letter-spacing: 2px;
 }
 
 #overlayTitle {
-  font-family: var(--font-game);
-
-  font-size: clamp(18px,4vw,28px);
-  font-weight: 800;
-
+  margin-bottom: 14px;
   color: var(--cyan);
-
-  text-shadow: 0 0 18px rgba(0,245,255,0.3);
+  font-family: var(--font-game);
+  font-size: 22px;
+  line-height: 1.4;
 }
 
 #overlayMessage {
-  color: var(--muted);
-
-  font-size: 13px;
-  line-height: 1.8;
-
-  margin: 20px 0;
+  margin-bottom: 18px;
+  color: var(--white);
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 #finalScore {
-  display: block;
-
+  margin-bottom: 20px;
+  color: var(--green);
   font-family: var(--font-game);
-  font-size: clamp(18px,4vw,28px);
-
-  color: var(--yellow);
-
-  margin: 25px 0;
-
-  text-shadow: 0 0 15px rgba(255,209,102,0.3);
+  font-size: 25px;
 }
 
 .result-actions {
@@ -461,382 +620,706 @@ body::after {
 }
 
 /* ==========================================
-   10. BOTÕES GERAIS
-========================================== */
-
-button {
-  font-family: var(--font-game);
-
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-
-  padding: 14px 20px;
-
-  background: var(--cyan);
-  color: #050711;
-
-  border: 1px solid var(--cyan);
-
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-button:hover:not(:disabled) {
-  background: #e9faff;
-
-  box-shadow: 0 0 22px rgba(0,245,255,0.4);
-
-  transform: translateY(-2px);
-}
-
-button:active:not(:disabled) {
-  transform: scale(0.97);
-}
-
-button:focus-visible {
-  outline: 2px solid var(--yellow);
-  outline-offset: 3px;
-}
-
-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-button.secondary {
-  background: transparent;
-  color: var(--cyan);
-}
-
-button.secondary:hover:not(:disabled) {
-  background: var(--cyan);
-  color: #050711;
-}
-
-/* ==========================================
-   11. ESTADO DO JOGO
-========================================== */
-
-.status-panel {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  gap: 12px;
-  min-height: 65px;
-
-  text-align: center;
-}
-
-.status-indicator {
-  width: 8px;
-  height: 8px;
-
-  flex-shrink: 0;
-
-  background: var(--green);
-  border-radius: 50%;
-
-  box-shadow: 0 0 12px var(--green);
-
-  animation: pulseDot 1.5s infinite;
-}
-
-#status {
-  color: #c8d7ee;
-
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-/* ==========================================
-   12. CONTROLOS
-========================================== */
-
-.controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  flex-wrap: wrap;
-  gap: 12px;
-
-  margin-bottom: 30px;
-}
-
-/* ==========================================
-   13. INSTRUÇÕES
+   12. INSTRUÇÕES
 ========================================== */
 
 .instructions,
-.keyboard-help {
-  background: rgba(13,21,43,0.75);
+.help-panel,
+.game-help {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
 
+  background: rgba(13, 21, 43, 0.7);
   border: 1px solid var(--border);
-
-  padding: 25px;
-  margin-top: 20px;
+  border-radius: 8px;
 }
 
+.instructions h2,
 .instructions h3,
-.keyboard-help h3 {
-  color: var(--purple);
-
+.help-panel h2,
+.game-help h2 {
+  margin-bottom: 12px;
+  color: var(--cyan);
   font-family: var(--font-game);
-  font-size: 12px;
-
-  letter-spacing: 2px;
-  margin: 0 0 22px;
+  font-size: 13px;
 }
 
-.instruction-grid {
-  display: grid;
-  grid-template-columns: repeat(2,minmax(0,1fr));
-
-  gap: 18px;
-}
-
-.instruction {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  font-size: 12px;
-  color: #cbd8ee;
-
-  line-height: 1.5;
-}
-
-.symbol {
-  font-size: 22px;
-  line-height: 1;
-
-  min-width: 25px;
-  text-align: center;
-}
-
-.cyan { color: var(--cyan); }
-.purple { color: var(--purple); }
-.green { color: var(--green); }
-.red { color: var(--red); }
-.yellow { color: var(--yellow); }
-.blue { color: var(--blue); }
-
-/* ==========================================
-   14. AJUDA DO TECLADO
-========================================== */
-
-.keyboard-grid {
-  display: grid;
-  grid-template-columns: repeat(2,minmax(0,1fr));
-  gap: 10px;
-}
-
-.keyboard-grid p {
+.instructions p,
+.help-panel p,
+.game-help p {
+  margin-bottom: 8px;
   color: var(--muted);
-  font-size: 12px;
-
-  margin: 0;
+  font-size: 14px;
   line-height: 1.7;
 }
 
+kbd {
+  display: inline-block;
+  min-width: 24px;
+  padding: 3px 6px;
+
+  background: #14263c;
+  border: 1px solid var(--cyan);
+  border-radius: 4px;
+
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: center;
+}
+
 /* ==========================================
-   15. RODAPÉ
+   13. RODAPÉ
 ========================================== */
 
-footer {
-  text-align: center;
+footer,
+.game-footer {
+  margin: 30px auto 0;
+  padding: 18px 12px;
 
-  padding: 30px 10px 10px;
+  border-top: 1px solid var(--border);
+
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+/* ==========================================
+   14. CONTROLOS MOBILE
+========================================== */
+
+.mobile-controls {
+  display: none;
+
+  width: 100%;
+  max-width: 800px;
+  margin: 18px auto 24px;
+  padding: 18px;
+
+  background: rgba(13, 21, 43, 0.96);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  box-shadow:
+    inset 0 0 25px rgba(0, 245, 255, 0.03),
+    0 0 20px rgba(0, 0, 0, 0.2);
+
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.mobile-controls-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  margin-bottom: 20px;
+
+  color: var(--cyan);
+  font-family: var(--font-game);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.mobile-controls-status {
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-align: right;
+}
+
+.mobile-controls-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 16px;
+}
+
+.mobile-dpad-section,
+.mobile-action-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.mobile-control-label {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+/* ==========================================
+   15. DIRECCIONAL MOBILE
+========================================== */
+
+.mobile-dpad {
+  display: grid;
+
+  grid-template-columns: repeat(3, 56px);
+  grid-template-rows: repeat(3, 56px);
+
+  gap: 5px;
+
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.mobile-dpad .dpad-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 56px;
+  height: 56px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+
+  background: #14263c;
+  color: var(--cyan);
+
+  border: 1px solid var(--cyan);
+  border-radius: 8px;
+
+  font-family: var(--font-mono);
+  font-size: 25px;
+  font-weight: 700;
+
+  box-shadow:
+    inset 0 0 12px rgba(0, 245, 255, 0.06),
+    0 0 8px rgba(0, 245, 255, 0.1);
+
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background 0.08s,
+    box-shadow 0.08s,
+    transform 0.08s;
+}
+
+.dpad-up {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.dpad-left {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.dpad-center {
+  grid-column: 2;
+  grid-row: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #54738e;
+  font-size: 22px;
+
+  background: #0b1528;
+  border: 1px solid #263956;
+  border-radius: 8px;
+}
+
+.dpad-right {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.dpad-down {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.mobile-dpad .dpad-btn:active,
+.mobile-dpad .dpad-btn.pressed {
+  background: var(--cyan);
+  color: #050711;
+
+  box-shadow:
+    0 0 22px rgba(0, 245, 255, 0.55),
+    inset 0 0 10px rgba(255, 255, 255, 0.25);
+
+  transform: scale(0.94);
+}
+
+/* ==========================================
+   16. PARADOX SHIFT MOBILE
+========================================== */
+
+.mobile-shift-btn,
+#mobileShiftBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  width: 112px;
+  height: 112px;
+  padding: 10px;
+
+  background:
+    radial-gradient(
+      circle,
+      #30204f 0%,
+      #19152f 65%,
+      #0d1022 100%
+    );
+
+  color: #eadcff;
+
+  border: 2px solid var(--purple);
+  border-radius: 50%;
+
+  font-family: var(--font-game);
+  font-size: 10px;
+  letter-spacing: 1px;
+
+  box-shadow:
+    0 0 18px rgba(170, 120, 255, 0.22),
+    inset 0 0 18px rgba(170, 120, 255, 0.1);
+
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shift-icon {
+  color: var(--purple);
+  font-size: 29px;
+  line-height: 1;
+}
+
+.mobile-shift-btn strong {
+  font-size: 13px;
+}
+
+.mobile-shift-btn:active:not(:disabled),
+.mobile-shift-btn.pressed,
+#mobileShiftBtn:active:not(:disabled) {
+  background: var(--purple);
+  color: #050711;
+
+  box-shadow:
+    0 0 30px rgba(170, 120, 255, 0.65);
+
+  transform: scale(0.95);
+}
+
+.mobile-shift-btn:active .shift-icon,
+.mobile-shift-btn.pressed .shift-icon {
+  color: #050711;
+}
+
+/* ==========================================
+   17. REINICIAR MOBILE
+========================================== */
+
+.mobile-restart-btn,
+#mobileRestartBtn {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+
+  background: transparent;
+  color: var(--red);
+
+  border: 1px solid var(--red);
+  border-radius: 6px;
+
+  font-family: var(--font-game);
+  font-size: 9px;
+
+  touch-action: manipulation;
+}
+
+.mobile-restart-btn:active,
+#mobileRestartBtn:active {
+  background: rgba(255, 56, 104, 0.15);
+}
+
+.mobile-controls-tip {
+  margin: 18px 0 0;
 
   color: var(--muted);
   font-size: 11px;
-
-  letter-spacing: 1px;
-  line-height: 1.8;
+  line-height: 1.7;
+  text-align: center;
 }
 
-footer p:last-child {
-  color: #5d708f;
-  font-size: 10px;
-}
-
-/* ==========================================
-   16. ANIMAÇÕES
-========================================== */
-
-@keyframes pulseText {
-  0%,100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@keyframes pulseDot {
-  0%,100% {
-    opacity: 1;
-    box-shadow: 0 0 12px var(--green);
-  }
-
-  50% {
-    opacity: 0.3;
-    box-shadow: 0 0 3px var(--green);
-  }
-}
-
-@keyframes glitch {
-  0% {
-    transform: translate(0);
-    text-shadow: 2px 0 var(--red);
-  }
-
-  25% {
-    transform: translate(-2px,1px);
-    text-shadow: -2px 0 var(--cyan);
-  }
-
-  50% {
-    transform: translate(2px,-1px);
-    text-shadow: 2px 0 var(--purple);
-  }
-
-  75% {
-    transform: translate(-1px,2px);
-  }
-
-  100% {
-    transform: translate(0);
-    text-shadow: none;
-  }
-}
-
-@keyframes resultAppear {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.mobile-controls button {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* ==========================================
-   17. RESPONSIVIDADE
+   18. TABLETS
 ========================================== */
 
-@media (max-width: 700px) {
-  .level-grid {
-    grid-template-columns: repeat(5,minmax(0,1fr));
+@media (max-width: 900px) {
+  body {
+    padding: 22px 14px 40px;
+  }
+
+  .level-grid,
+  #levelGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
   .hud {
-    gap: 5px;
+    gap: 7px;
   }
 
   .stat {
-    padding: 12px 4px;
-  }
-
-  .stat span {
-    font-size: 8px;
-    letter-spacing: 0;
-  }
-
-  .stat strong {
-    font-size: 12px;
-  }
-
-  .instructions,
-  .keyboard-help {
-    padding: 18px;
+    padding: 12px 6px;
   }
 }
 
+/* ==========================================
+   19. DISPOSITIVOS TÁCTEIS
+========================================== */
+
+@media (pointer: coarse) {
+  .mobile-controls {
+    display: block;
+  }
+
+  .mobile-dpad .dpad-btn {
+    touch-action: none;
+  }
+
+  #gameCanvas {
+    touch-action: none;
+  }
+}
+
+/* ==========================================
+   20. ECRÃS ATÉ 700PX
+========================================== */
+
+@media (max-width: 700px) {
+  .mobile-controls {
+    display: block;
+  }
+
+  .game-header,
+  header {
+    margin-bottom: 22px;
+  }
+
+  .menu,
+  .level-menu {
+    padding: 16px 12px;
+  }
+
+  .hud {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .stat {
+    padding: 10px 6px;
+  }
+
+  .stat strong {
+    font-size: 14px;
+  }
+
+  .arena-wrapper {
+    border-width: 1px;
+  }
+
+  .result-panel {
+    max-height: 100%;
+    padding: 14px 12px;
+  }
+
+  .result-label {
+    margin-bottom: 8px;
+    font-size: 9px;
+  }
+
+  #overlayTitle {
+    font-size: 17px;
+    margin: 8px 0;
+  }
+
+  #overlayMessage {
+    font-size: 11px;
+    line-height: 1.4;
+    margin: 8px 0;
+  }
+
+  #finalScore {
+    font-size: 17px;
+    margin: 10px 0;
+  }
+
+  .result-actions {
+    gap: 6px;
+  }
+
+  .result-actions button {
+    padding: 10px 8px;
+    font-size: 8px;
+  }
+
+  .controls button {
+    min-height: 44px;
+  }
+}
+
+/* ==========================================
+   21. TELEMÓVEIS ATÉ 480PX
+========================================== */
+
 @media (max-width: 480px) {
   body {
-    padding: 18px 8px;
+    padding:
+      max(12px, env(safe-area-inset-top))
+      max(8px, env(safe-area-inset-right))
+      max(16px, env(safe-area-inset-bottom))
+      max(8px, env(safe-area-inset-left));
   }
 
-  .game-header {
-    margin-bottom: 24px;
-  }
-
-  .logo {
+  .version {
+    font-size: 9px;
     letter-spacing: 2px;
   }
 
+  .logo,
+  h1 {
+    font-size: clamp(30px, 10vw, 46px);
+    letter-spacing: 1px;
+  }
+
   .subtitle {
-    letter-spacing: 3px;
     font-size: 10px;
+    letter-spacing: 3px;
   }
 
   .tagline {
     font-size: 9px;
-    letter-spacing: 1px;
   }
 
-  .menu {
-    padding: 15px;
+  .menu h2 {
+    font-size: 11px;
   }
 
-  .menu-heading {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .level-grid {
+  .level-grid,
+  #levelGrid {
     gap: 5px;
   }
 
-  .level-grid button {
+  .level-grid button,
+  #levelGrid button {
     min-height: 40px;
     font-size: 10px;
   }
 
   .hud {
-    grid-template-columns: repeat(5,minmax(0,1fr));
+    gap: 6px;
   }
 
-  .stat {
-    padding: 9px 2px;
+  .stat span {
+    font-size: 9px;
+    letter-spacing: 0;
   }
 
   .stat strong {
-    font-size: 10px;
+    font-size: 13px;
   }
 
-  .instruction-grid,
-  .keyboard-grid {
-    grid-template-columns: 1fr;
+  .mobile-controls {
+    margin-top: 12px;
+    padding: 12px 8px;
   }
 
-  .controls {
+  .mobile-controls-heading {
+    font-size: 9px;
+    margin-bottom: 14px;
+  }
+
+  .mobile-controls-status {
+    font-size: 8px;
+  }
+
+  .mobile-controls-layout {
     gap: 8px;
   }
 
-  .controls button {
-    flex: 1 1 45%;
-    padding: 12px 8px;
+  .mobile-dpad {
+    grid-template-columns: repeat(3, 48px);
+    grid-template-rows: repeat(3, 48px);
+    gap: 4px;
+  }
+
+  .mobile-dpad .dpad-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+  }
+
+  .mobile-shift-btn,
+  #mobileShiftBtn {
+    width: 98px;
+    height: 98px;
     font-size: 9px;
   }
 
-  .result-panel {
-    padding: 20px 12px;
+  .mobile-shift-btn strong {
+    font-size: 11px;
   }
 
-  #status {
-    font-size: 11px;
+  .shift-icon {
+    font-size: 25px;
+  }
+
+  .mobile-restart-btn,
+  #mobileRestartBtn {
+    font-size: 8px;
+    padding: 10px 6px;
+  }
+
+  .mobile-control-label {
+    font-size: 8px;
+    letter-spacing: 0;
+  }
+
+  .mobile-controls-tip {
+    font-size: 10px;
+  }
+
+  .status-panel {
+    min-height: 50px;
+  }
+
+  .controls {
+    gap: 7px;
+  }
+
+  .controls button {
+    padding: 10px 9px;
+    font-size: 9px;
   }
 }
 
 /* ==========================================
-   18. ACESSIBILIDADE
+   22. TELEMÓVEIS MUITO ESTREITOS
+========================================== */
+
+@media (max-width: 350px) {
+  .mobile-dpad {
+    grid-template-columns: repeat(3, 42px);
+    grid-template-rows: repeat(3, 42px);
+    gap: 3px;
+  }
+
+  .mobile-dpad .dpad-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  .mobile-shift-btn,
+  #mobileShiftBtn {
+    width: 86px;
+    height: 86px;
+    font-size: 8px;
+  }
+
+  .mobile-shift-btn strong {
+    font-size: 10px;
+  }
+
+  .mobile-controls {
+    padding: 10px 5px;
+  }
+}
+
+/* ==========================================
+   23. MODO HORIZONTAL MOBILE
+========================================== */
+
+@media (orientation: landscape)
+       and (max-height: 550px)
+       and (pointer: coarse) {
+
+  body {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .game-header {
+    margin-bottom: 10px;
+  }
+
+  .game-header .tagline {
+    display: none;
+  }
+
+  .menu {
+    margin-bottom: 10px;
+  }
+
+  .hud {
+    margin-bottom: 6px;
+  }
+
+  .stat {
+    padding: 6px 4px;
+  }
+
+  .stat span {
+    margin-bottom: 3px;
+  }
+
+  .timer-track {
+    margin-bottom: 6px;
+  }
+
+  .mobile-controls {
+    margin-top: 8px;
+    padding: 10px;
+  }
+
+  .mobile-controls-heading,
+  .mobile-controls-tip {
+    display: none;
+  }
+
+  .mobile-dpad {
+    grid-template-columns: repeat(3, 44px);
+    grid-template-rows: repeat(3, 44px);
+    gap: 3px;
+  }
+
+  .mobile-dpad .dpad-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .mobile-shift-btn,
+  #mobileShiftBtn {
+    width: 86px;
+    height: 86px;
+  }
+}
+
+/* ==========================================
+   24. ACESSIBILIDADE
 ========================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -848,3 +1331,8 @@ footer p:last-child {
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================
+   END OF STYLESHEET
+   ECHO//404 v0.6.1 MOBILE EDITION
+========================================== */

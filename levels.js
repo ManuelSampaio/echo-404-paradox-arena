@@ -4,10 +4,13 @@
 /*
 ============================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION 0.6
+ VERSION 0.6.1 MOBILE EDITION
  FILE: levels.js
 
  Sistema de níveis e configuração da arena
+
+ 10 NÍVEIS
+ DESKTOP + MOBILE
 ============================================
 */
 
@@ -561,35 +564,155 @@ const GAME_LEVELS = [
 // ==========================================
 
 function validateGameLevels() {
-  GAME_LEVELS.forEach((level, index) => {
-    if (!level.name) {
-      console.warn(
-        `Nível ${index + 1} sem nome.`
-      );
-    }
+  const errors = [];
+  const warnings = [];
 
-    if (!Array.isArray(level.plates)) {
-      console.error(
-        `Nível ${index + 1}: placas inválidas.`
-      );
-    }
+  if (
+    !Number.isFinite(GAME_WORLD.width) ||
+    !Number.isFinite(GAME_WORLD.height) ||
+    GAME_WORLD.width <= 0 ||
+    GAME_WORLD.height <= 0
+  ) {
+    errors.push("Dimensões da arena inválidas.");
+  }
 
-    if (!Array.isArray(level.lasers)) {
-      console.error(
-        `Nível ${index + 1}: lasers inválidos.`
-      );
-    }
+  if (
+    !Number.isFinite(GAME_WORLD.cycleDuration) ||
+    GAME_WORLD.cycleDuration <= 0
+  ) {
+    errors.push("Duração dos ciclos inválida.");
+  }
 
-    if (!Array.isArray(level.portals)) {
-      console.error(
-        `Nível ${index + 1}: portais inválidos.`
-      );
-    }
-  });
+  if (
+    !Number.isInteger(GAME_WORLD.maxCycles) ||
+    GAME_WORLD.maxCycles <= 0
+  ) {
+    errors.push("Número máximo de ciclos inválido.");
+  }
+
+  if (!Array.isArray(GAME_LEVELS)) {
+    errors.push("Lista de níveis inválida.");
+  } else {
+    const ids = new Set();
+
+    GAME_LEVELS.forEach((level, index) => {
+      const number = index + 1;
+      const prefix = `Nível ${number}`;
+
+      if (!level || typeof level !== "object") {
+        errors.push(`${prefix}: configuração inválida.`);
+        return;
+      }
+
+      if (!Number.isInteger(level.id)) {
+        errors.push(`${prefix}: ID inválido.`);
+      } else if (ids.has(level.id)) {
+        errors.push(`${prefix}: ID duplicado.`);
+      } else {
+        ids.add(level.id);
+      }
+
+      if (
+        typeof level.name !== "string" ||
+        !level.name.trim()
+      ) {
+        errors.push(`${prefix}: nome inválido.`);
+      }
+
+      if (
+        typeof level.difficulty !== "string" ||
+        !level.difficulty.trim()
+      ) {
+        warnings.push(`${prefix}: dificuldade não definida.`);
+      }
+
+      if (
+        typeof level.hint !== "string" ||
+        !level.hint.trim()
+      ) {
+        warnings.push(`${prefix}: dica não definida.`);
+      }
+
+      if (!Array.isArray(level.plates)) {
+        errors.push(`${prefix}: placas inválidas.`);
+      } else {
+        level.plates.forEach((plate, plateIndex) => {
+          if (
+            !plate ||
+            !Number.isFinite(plate.x) ||
+            !Number.isFinite(plate.y)
+          ) {
+            errors.push(
+              `${prefix}: placa ${plateIndex + 1} inválida.`
+            );
+          }
+        });
+      }
+
+      if (!Array.isArray(level.lasers)) {
+        errors.push(`${prefix}: lasers inválidos.`);
+      } else {
+        level.lasers.forEach((laser, laserIndex) => {
+          if (
+            !laser ||
+            !Number.isFinite(laser.x) ||
+            !Number.isFinite(laser.period) ||
+            !Number.isFinite(laser.on) ||
+            !Number.isFinite(laser.offset) ||
+            laser.period <= 0 ||
+            laser.on < 0 ||
+            laser.on > laser.period
+          ) {
+            errors.push(
+              `${prefix}: laser ${laserIndex + 1} inválido.`
+            );
+          }
+        });
+      }
+
+      if (!Array.isArray(level.portals)) {
+        errors.push(`${prefix}: portais inválidos.`);
+      } else {
+        level.portals.forEach((portal, portalIndex) => {
+          const validPoint = point =>
+            point &&
+            Number.isFinite(point.x) &&
+            Number.isFinite(point.y);
+
+          if (
+            !portal ||
+            !validPoint(portal.a) ||
+            !validPoint(portal.b)
+          ) {
+            errors.push(
+              `${prefix}: portal ${portalIndex + 1} inválido.`
+            );
+          }
+        });
+      }
+    });
+  }
+
+  warnings.forEach(message => console.warn(message));
+  errors.forEach(message => console.error(message));
+
+  if (errors.length > 0) {
+    console.error(
+      `ECHO//404: ${errors.length} erro(s) de configuração.`
+    );
+
+    return false;
+  }
 
   console.log(
     `ECHO//404: ${GAME_LEVELS.length} níveis carregados.`
   );
+
+  console.log(
+    "ECHO//404 v0.6.1 — LEVEL SYSTEM READY"
+  );
+
+  return true;
 }
 
 // ==========================================

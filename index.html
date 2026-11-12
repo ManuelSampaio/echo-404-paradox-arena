@@ -3,13 +3,23 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#050711">
-  <meta name="description"
-        content="ECHO//404 — Um puzzle temporal onde o teu passado é a tua arma.">
 
-  <title>ECHO//404 — Paradox Evolution v0.6</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#050711">
+
+  <meta
+    name="description"
+    content="ECHO//404 — Um puzzle temporal onde o teu passado é a tua arma. Joga no computador ou telemóvel."
+  >
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>ECHO//404 — Paradox Evolution v0.6.1</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -17,10 +27,14 @@
 <body>
   <main class="app">
 
-    <!-- CABEÇALHO -->
+    <!-- =====================================
+         CABEÇALHO
+    ====================================== -->
+
     <header class="game-header">
+
       <div class="version">
-        SYSTEM BUILD // 0.6
+        SYSTEM BUILD // 0.6.1 MOBILE EDITION
       </div>
 
       <h1 class="logo">
@@ -34,24 +48,38 @@
       <p class="tagline">
         O TEU PASSADO É A TUA ARMA
       </p>
+
     </header>
 
-    <!-- SELECÇÃO DE NÍVEIS -->
+    <!-- =====================================
+         SELECÇÃO DE NÍVEIS
+    ====================================== -->
+
     <section class="menu">
+
       <div class="menu-heading">
         <h2>SELECCIONAR NÍVEL</h2>
         <span id="progress">0 / 10 CONCLUÍDOS</span>
       </div>
 
-      <div id="levelGrid" class="level-grid"></div>
+      <div
+        id="levelGrid"
+        class="level-grid"
+        aria-label="Selecção de níveis"
+      ></div>
 
       <p id="levelName">
         NÍVEL 1 — O Primeiro Eco
       </p>
+
     </section>
 
-    <!-- INDICADORES -->
-    <section class="hud">
+    <!-- =====================================
+         INDICADORES DO JOGO
+    ====================================== -->
+
+    <section class="hud" aria-label="Indicadores do jogo">
+
       <div class="stat">
         <span>CICLO</span>
         <strong id="cycle">1/6</strong>
@@ -76,25 +104,40 @@
         <span>RECORDE</span>
         <strong id="best">0</strong>
       </div>
+
     </section>
 
-    <!-- BARRA DE TEMPO -->
-    <div class="timer-track">
+    <!-- =====================================
+         BARRA DE TEMPO
+    ====================================== -->
+
+    <div
+      class="timer-track"
+      role="progressbar"
+      aria-label="Tempo restante do ciclo"
+    >
       <div id="timerBar"></div>
     </div>
 
-    <!-- ARENA -->
+    <!-- =====================================
+         ARENA
+    ====================================== -->
+
     <section class="arena-wrapper">
+
       <canvas
         id="gameCanvas"
         width="800"
         height="500"
-        aria-label="Arena de jogo ECHO 404">
-      </canvas>
+        aria-label="Arena de jogo ECHO 404"
+      ></canvas>
 
-      <!-- RESULTADO -->
+      <!-- RESULTADO DA SIMULAÇÃO -->
+
       <div id="overlay" class="overlay hidden">
+
         <div class="result-panel">
+
           <p class="result-label">
             SIMULATION RESULT
           </p>
@@ -110,51 +153,209 @@
           </strong>
 
           <div class="result-actions">
-            <button id="playAgainBtn">
+
+            <button id="playAgainBtn" type="button">
               JOGAR NOVAMENTE
             </button>
 
-            <button id="nextBtn">
+            <button id="nextBtn" type="button">
               PRÓXIMO NÍVEL
             </button>
+
           </div>
+
         </div>
+
       </div>
+
     </section>
 
-    <!-- ESTADO DO JOGO -->
+    <!-- =====================================
+         CONTROLOS TÁCTEIS — MOBILE
+    ====================================== -->
+
+    <section
+      id="mobileControls"
+      class="mobile-controls"
+      aria-label="Controlos tácteis do jogo"
+    >
+
+      <div class="mobile-controls-heading">
+
+        <span>CONTROLO TÁCTIL</span>
+
+        <span class="mobile-controls-status">
+          MOBILE SYSTEM // READY
+        </span>
+
+      </div>
+
+      <div class="mobile-controls-layout">
+
+        <!-- DIRECCIONAL -->
+
+        <div class="mobile-dpad-section">
+
+          <div
+            id="mobileDpad"
+            class="mobile-dpad"
+            aria-label="Direccional"
+          >
+
+            <button
+              id="moveUp"
+              class="dpad-btn dpad-up"
+              type="button"
+              data-direction="up"
+              aria-label="Mover para cima"
+            >
+              ▲
+            </button>
+
+            <button
+              id="moveLeft"
+              class="dpad-btn dpad-left"
+              type="button"
+              data-direction="left"
+              aria-label="Mover para a esquerda"
+            >
+              ◀
+            </button>
+
+            <div
+              class="dpad-center"
+              aria-hidden="true"
+            >
+              +
+            </div>
+
+            <button
+              id="moveRight"
+              class="dpad-btn dpad-right"
+              type="button"
+              data-direction="right"
+              aria-label="Mover para a direita"
+            >
+              ▶
+            </button>
+
+            <button
+              id="moveDown"
+              class="dpad-btn dpad-down"
+              type="button"
+              data-direction="down"
+              aria-label="Mover para baixo"
+            >
+              ▼
+            </button>
+
+          </div>
+
+          <span class="mobile-control-label">
+            MOVIMENTO
+          </span>
+
+        </div>
+
+        <!-- ACÇÕES -->
+
+        <div class="mobile-action-section">
+
+          <button
+            id="mobileShiftBtn"
+            class="mobile-shift-btn"
+            type="button"
+            aria-label="Activar Paradox Shift"
+          >
+            <span class="shift-icon">◆</span>
+            <span>PARADOX</span>
+            <strong>SHIFT</strong>
+          </button>
+
+          <span class="mobile-control-label">
+            HABILIDADE TEMPORAL
+          </span>
+
+          <button
+            id="mobileRestartBtn"
+            class="mobile-restart-btn"
+            type="button"
+            aria-label="Reiniciar simulação"
+          >
+            ↻ REINICIAR
+          </button>
+
+        </div>
+
+      </div>
+
+      <p class="mobile-controls-tip">
+        Mantém o dedo pressionado numa seta para te moveres.
+        Utiliza PARADOX SHIFT para alterar o último eco.
+      </p>
+
+    </section>
+
+    <!-- =====================================
+         ESTADO DO JOGO
+    ====================================== -->
+
     <div class="status-panel">
+
       <span class="status-indicator"></span>
 
-      <p id="status">
+      <p id="status" aria-live="polite">
         Sistema pronto. Inicia a simulação.
       </p>
+
     </div>
 
-    <!-- BOTÕES -->
+    <!-- =====================================
+         BOTÕES PRINCIPAIS
+    ====================================== -->
+
     <section class="controls">
-      <button id="startBtn">
+
+      <button id="startBtn" type="button">
         INICIAR SIMULAÇÃO
       </button>
 
-      <button id="restartBtn" class="secondary">
+      <button
+        id="restartBtn"
+        class="secondary"
+        type="button"
+      >
         REINICIAR
       </button>
 
-      <button id="shiftBtn" class="secondary">
+      <button
+        id="shiftBtn"
+        class="secondary"
+        type="button"
+      >
         PARADOX SHIFT [E]
       </button>
 
-      <button id="soundBtn" class="secondary">
+      <button
+        id="soundBtn"
+        class="secondary"
+        type="button"
+      >
         SOM: ON
       </button>
+
     </section>
 
-    <!-- INSTRUÇÕES -->
+    <!-- =====================================
+         INSTRUÇÕES
+    ====================================== -->
+
     <section class="instructions">
+
       <h3>PROTOCOLO DE SOBREVIVÊNCIA</h3>
 
       <div class="instruction-grid">
+
         <div class="instruction">
           <span class="symbol cyan">■</span>
           <span>Jogador — controla o presente</span>
@@ -194,40 +395,69 @@
           <span class="symbol purple">◆</span>
           <span>Paradox Shift — altera um eco</span>
         </div>
+
       </div>
+
     </section>
 
-    <!-- CONTROLOS -->
+    <!-- =====================================
+         GUIA DE CONTROLOS
+    ====================================== -->
+
     <section class="keyboard-help">
+
       <h3>CONTROLOS</h3>
 
       <div class="keyboard-grid">
-        <p>W A S D / SETAS — MOVIMENTO</p>
-        <p>E — PARADOX SHIFT</p>
-        <p>R — REINICIAR</p>
-        <p>ESPAÇO — INICIAR</p>
+
+        <p>PC: W A S D / SETAS — MOVIMENTO</p>
+
+        <p>PC: E — PARADOX SHIFT</p>
+
+        <p>PC: R — REINICIAR</p>
+
+        <p>PC: ESPAÇO — INICIAR</p>
+
+        <p>MOBILE: DIRECCIONAL — MOVIMENTO</p>
+
+        <p>MOBILE: BOTÃO ◆ — PARADOX SHIFT</p>
+
       </div>
+
     </section>
 
-    <!-- RODAPÉ -->
+    <!-- =====================================
+         RODAPÉ
+    ====================================== -->
+
     <footer>
+
       <p>
         ECHO//404 — PARADOX EVOLUTION
       </p>
 
       <p>
-        VERSION 0.6 | BUILT WITH HTML5 CANVAS
+        VERSION 0.6.1 | MOBILE EDITION
       </p>
+
+      <p>
+        BUILT WITH HTML5 CANVAS
+      </p>
+
     </footer>
 
   </main>
 
-  <!-- SISTEMAS DO JOGO -->
+  <!-- =====================================
+       SISTEMAS DO JOGO
+  ====================================== -->
+
   <script src="levels.js"></script>
   <script src="storage.js"></script>
   <script src="audio.js"></script>
 
   <!-- MOTOR PRINCIPAL -->
   <script src="game.js"></script>
+
 </body>
 </html>
