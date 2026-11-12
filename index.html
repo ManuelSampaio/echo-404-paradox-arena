@@ -9,76 +9,33 @@
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
 
-  <meta
-    name="theme-color"
-    content="#070b18"
-  >
+  <meta name="theme-color" content="#070b18">
 
   <meta
     name="description"
-    content="ECHO//404 — SYSTEM REBELLION. Um jogo futurista de puzzles temporais, ecos, paradoxos e sobrevivência. Created & Developed by MANUEL SAMPAIO01."
+    content="ECHO//404 — SYSTEM REBELLION. Um jogo futurista de puzzles temporais, ecos e paradoxos. Created & Developed by MANUEL SAMPAIO01."
   >
 
-  <meta
-    name="author"
-    content="MANUEL SAMPAIO01"
-  >
+  <meta name="author" content="MANUEL SAMPAIO01">
+  <meta name="color-scheme" content="dark">
 
-  <meta
-    name="color-scheme"
-    content="dark"
-  >
+  <title>ECHO//404 — SYSTEM REBELLION v0.9</title>
 
-  <title>
-    ECHO//404 — SYSTEM REBELLION v0.8
-  </title>
-
-  <link
-    rel="stylesheet"
-    href="style.css?v=080"
-  >
+  <link rel="stylesheet" href="style.css?v=080">
 </head>
 
 <body class="echo404-app">
 
-  <!-- ======================================
-       BACKGROUND / ATMOSPHERE
-  ======================================= -->
+  <!-- BACKGROUND -->
 
-  <div
-    class="background-grid"
-    aria-hidden="true"
-  ></div>
+  <div class="background-grid" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow-one" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow-two" aria-hidden="true"></div>
+  <div class="screen-noise" aria-hidden="true"></div>
+  <div class="screen-scanlines" aria-hidden="true"></div>
+  <div id="globalGlitch" class="global-glitch" aria-hidden="true"></div>
 
-  <div
-    class="ambient-glow ambient-glow-one"
-    aria-hidden="true"
-  ></div>
-
-  <div
-    class="ambient-glow ambient-glow-two"
-    aria-hidden="true"
-  ></div>
-
-  <div
-    class="screen-noise"
-    aria-hidden="true"
-  ></div>
-
-  <div
-    class="screen-scanlines"
-    aria-hidden="true"
-  ></div>
-
-  <div
-    id="globalGlitch"
-    class="global-glitch"
-    aria-hidden="true"
-  ></div>
-
-  <!-- ======================================
-       CINEMATIC INTRO
-  ======================================= -->
+  <!-- CINEMATIC INTRO -->
 
   <section
     id="awakeningIntro"
@@ -96,31 +53,17 @@
         ECHO SYSTEM // INITIALIZING
       </div>
 
-      <div
-        class="awakening-symbol"
-        aria-hidden="true"
-      >
-        ◈
-      </div>
+      <div class="awakening-symbol" aria-hidden="true">◈</div>
 
-      <div
-        id="awakeningCounter"
-        class="awakening-counter"
-      >
+      <div id="awakeningCounter" class="awakening-counter">
         PROTOCOL 01 / 04
       </div>
 
-      <h1
-        id="awakeningTitle"
-        class="awakening-title"
-      >
+      <h1 id="awakeningTitle" class="awakening-title">
         THE AWAKENING
       </h1>
 
-      <p
-        id="awakeningText"
-        class="awakening-text"
-      >
+      <p id="awakeningText" class="awakening-text">
         O tempo está a fragmentar-se.
         Os teus ecos são a única forma
         de restaurar a realidade.
@@ -153,33 +96,24 @@
       </div>
 
       <div class="awakening-signature">
-        CREATED & DEVELOPED BY
-        MANUEL SAMPAIO01
+        CREATED & DEVELOPED BY MANUEL SAMPAIO01
       </div>
 
     </div>
+
   </section>
 
-  <!-- ======================================
-       MAIN APPLICATION
-  ======================================= -->
+  <!-- APPLICATION -->
 
-  <div
-    id="app"
-    class="app-container"
-  >
+  <div id="app" class="app-container">
 
-    <!-- ====================================
-         HEADER
-    ===================================== -->
+    <!-- HEADER -->
 
     <header class="game-header">
 
       <div class="header-brand">
 
-        <div class="brand-mark">
-          ◈
-        </div>
+        <div class="brand-mark">◈</div>
 
         <div class="brand-information">
 
@@ -201,10 +135,7 @@
 
       <div class="header-actions">
 
-        <span
-          id="systemStatus"
-          class="system-status"
-        >
+        <span id="systemStatus" class="system-status">
           <span class="system-status-dot"></span>
           SYSTEM ONLINE
         </span>
@@ -233,17 +164,13 @@
 
     </header>
 
-    <!-- ====================================
-         SYSTEM INFORMATION
-    ===================================== -->
+    <!-- SYSTEM BANNER -->
 
     <section class="system-banner">
 
       <div class="system-banner-left">
 
-        <span class="system-tag">
-          v0.8
-        </span>
+        <span class="system-tag">v0.9</span>
 
         <span class="system-banner-text">
           TEMPORAL SIMULATION ACTIVE
@@ -253,10 +180,7 @@
 
       <div class="system-banner-right">
 
-        <span
-          id="threatLevel"
-          class="threat-level"
-        >
+        <span id="threatLevel" class="threat-level">
           THREAT LEVEL: LOW
         </span>
 
@@ -264,45 +188,38 @@
 
     </section>
 
-    <!-- ====================================
-         GAME LAYOUT
-    ===================================== -->
+    <!-- MAIN LAYOUT -->
 
     <main class="game-layout">
 
-      <!-- ==================================
-           SIDEBAR
-      =================================== -->
+      <!-- SIDEBAR -->
 
       <aside
         class="game-sidebar"
         aria-label="Selecção de níveis"
       >
 
+        <!-- LEVEL SELECTION -->
+
         <section class="panel levels-panel">
 
           <div class="panel-heading">
 
             <div>
+
               <span class="panel-overline">
                 TEMPORAL SECTORS
               </span>
 
-              <h2>
-                SELECT LEVEL
-              </h2>
+              <h2>SELECT LEVEL</h2>
+
             </div>
 
-            <span class="panel-symbol">
-              ◈
-            </span>
+            <span class="panel-symbol">◈</span>
 
           </div>
 
-          <div
-            id="progress"
-            class="level-progress"
-          >
+          <div id="progress" class="level-progress">
             0 / 10 COMPLETED
           </div>
 
@@ -333,27 +250,23 @@
 
         </section>
 
-        <!-- ================================
-             MEDALS
-        ================================= -->
+        <!-- MEDALS -->
 
         <section class="panel medals-panel">
 
           <div class="panel-heading">
 
             <div>
+
               <span class="panel-overline">
                 PERFORMANCE
               </span>
 
-              <h2>
-                MEDAL COLLECTION
-              </h2>
+              <h2>MEDAL COLLECTION</h2>
+
             </div>
 
-            <span class="panel-symbol">
-              ★
-            </span>
+            <span class="panel-symbol">★</span>
 
           </div>
 
@@ -361,29 +274,25 @@
             id="awakeningMedalSummary"
             class="medal-summary"
           >
-            🥇 0
-            &nbsp; 🥈 0
-            &nbsp; 🥉 0
+            🥇 0 &nbsp; 🥈 0 &nbsp; 🥉 0
           </div>
 
         </section>
 
-        <!-- ================================
-             CONTROLS GUIDE
-        ================================= -->
+        <!-- KEYBOARD GUIDE -->
 
         <section class="panel controls-panel">
 
           <div class="panel-heading">
 
             <div>
+
               <span class="panel-overline">
                 OPERATOR MANUAL
               </span>
 
-              <h2>
-                CONTROLS
-              </h2>
+              <h2>CONTROLS</h2>
+
             </div>
 
           </div>
@@ -392,9 +301,7 @@
 
             <div class="control-guide-row">
 
-              <span>
-                MOVEMENT
-              </span>
+              <span>MOVEMENT</span>
 
               <span class="keyboard-group">
                 <kbd>W</kbd>
@@ -407,9 +314,7 @@
 
             <div class="control-guide-row">
 
-              <span>
-                ALTERNATIVE
-              </span>
+              <span>ALTERNATIVE</span>
 
               <span class="keyboard-group">
                 <kbd>↑</kbd>
@@ -421,23 +326,13 @@
             </div>
 
             <div class="control-guide-row">
-
-              <span>
-                PARADOX SHIFT
-              </span>
-
+              <span>PARADOX SHIFT</span>
               <kbd>SPACE</kbd>
-
             </div>
 
             <div class="control-guide-row">
-
-              <span>
-                RESTART
-              </span>
-
+              <span>RESTART</span>
               <kbd>R</kbd>
-
             </div>
 
           </div>
@@ -446,15 +341,11 @@
 
       </aside>
 
-      <!-- ==================================
-           MAIN GAME AREA
-      =================================== -->
+      <!-- MAIN GAME -->
 
       <section class="game-main">
 
-        <!-- ================================
-             LEVEL INFORMATION
-        ================================= -->
+        <!-- LEVEL INFORMATION -->
 
         <section class="panel level-information">
 
@@ -481,19 +372,13 @@
 
           </div>
 
-          <div
-            id="levelHint"
-            class="level-hint"
-          >
-            Utiliza os ecos temporais
-            para abrir a porta.
+          <div id="levelHint" class="level-hint">
+            Utiliza os ecos temporais para abrir a porta.
           </div>
 
         </section>
 
-        <!-- ================================
-             HUD
-        ================================= -->
+        <!-- GAME HUD -->
 
         <section
           class="game-hud"
@@ -502,32 +387,19 @@
 
           <div class="hud-card">
 
-            <span class="hud-label">
-              CYCLE
-            </span>
+            <span class="hud-label">CYCLE</span>
 
-            <strong
-              id="cycle"
-              class="hud-value"
-            >
+            <strong id="cycle" class="hud-value">
               1 / 6
             </strong>
 
           </div>
 
-          <div
-            id="timerCard"
-            class="hud-card timer-card"
-          >
+          <div id="timerCard" class="hud-card timer-card">
 
-            <span class="hud-label">
-              TIME LEFT
-            </span>
+            <span class="hud-label">TIME LEFT</span>
 
-            <strong
-              id="timer"
-              class="hud-value"
-            >
+            <strong id="timer" class="hud-value">
               10.0
             </strong>
 
@@ -535,14 +407,9 @@
 
           <div class="hud-card">
 
-            <span class="hud-label">
-              ECHOES
-            </span>
+            <span class="hud-label">ECHOES</span>
 
-            <strong
-              id="ghosts"
-              class="hud-value"
-            >
+            <strong id="ghosts" class="hud-value">
               0
             </strong>
 
@@ -550,14 +417,9 @@
 
           <div class="hud-card">
 
-            <span class="hud-label">
-              SCORE
-            </span>
+            <span class="hud-label">SCORE</span>
 
-            <strong
-              id="score"
-              class="hud-value"
-            >
+            <strong id="score" class="hud-value">
               0
             </strong>
 
@@ -565,14 +427,9 @@
 
           <div class="hud-card">
 
-            <span class="hud-label">
-              BEST
-            </span>
+            <span class="hud-label">BEST</span>
 
-            <strong
-              id="best"
-              class="hud-value"
-            >
+            <strong id="best" class="hud-value">
               0
             </strong>
 
@@ -580,9 +437,7 @@
 
         </section>
 
-        <!-- ================================
-             TIMER PROGRESS
-        ================================= -->
+        <!-- TIMER -->
 
         <div class="timer-progress-track">
 
@@ -593,127 +448,111 @@
 
         </div>
 
-        <!-- ================================
-             ARENA
-        ================================= -->
+        <!-- GAMEPLAY ZONE -->
 
-        <section class="arena-section">
+        <div class="gameplay-zone">
 
-          <div
-            id="arenaShell"
-            class="arena-shell"
-          >
+          <!-- ARENA -->
 
-            <div
-              class="arena-corner arena-corner-tl"
-              aria-hidden="true"
-            ></div>
+          <section class="arena-section">
 
-            <div
-              class="arena-corner arena-corner-tr"
-              aria-hidden="true"
-            ></div>
+            <div id="arenaShell" class="arena-shell">
 
-            <div
-              class="arena-corner arena-corner-bl"
-              aria-hidden="true"
-            ></div>
+              <div
+                class="arena-corner arena-corner-tl"
+                aria-hidden="true"
+              ></div>
 
-            <div
-              class="arena-corner arena-corner-br"
-              aria-hidden="true"
-            ></div>
+              <div
+                class="arena-corner arena-corner-tr"
+                aria-hidden="true"
+              ></div>
 
-            <canvas
-              id="gameCanvas"
-              width="800"
-              height="500"
-              aria-label="Arena temporal ECHO//404"
-            >
-              O teu navegador não suporta
-              HTML Canvas.
-            </canvas>
+              <div
+                class="arena-corner arena-corner-bl"
+                aria-hidden="true"
+              ></div>
 
-            <!-- ============================
-                 CRITICAL WARNING
-            ============================= -->
+              <div
+                class="arena-corner arena-corner-br"
+                aria-hidden="true"
+              ></div>
 
-            <div
-              id="criticalWarning"
-              class="critical-warning hidden"
-              aria-live="polite"
-            >
-              ⚠ TEMPORAL COLLAPSE IMMINENT
-            </div>
+              <canvas
+                id="gameCanvas"
+                width="800"
+                height="500"
+                aria-label="Arena temporal ECHO//404"
+              >
+                O teu navegador não suporta HTML Canvas.
+              </canvas>
 
-            <!-- ============================
-                 GLITCH OVERLAY
-            ============================= -->
+              <div
+                id="criticalWarning"
+                class="critical-warning hidden"
+                aria-live="polite"
+              >
+                ⚠ TEMPORAL COLLAPSE IMMINENT
+              </div>
 
-            <div
-              id="arenaGlitch"
-              class="arena-glitch"
-              aria-hidden="true"
-            ></div>
+              <div
+                id="arenaGlitch"
+                class="arena-glitch"
+                aria-hidden="true"
+              ></div>
 
-            <!-- ============================
-                 GAME RESULT OVERLAY
-            ============================= -->
+              <!-- RESULT OVERLAY -->
 
-            <div
-              id="overlay"
-              class="game-overlay"
-            >
+              <div id="overlay" class="game-overlay">
 
-              <div class="overlay-content">
+                <div class="overlay-content">
 
-                <span class="overlay-overline">
-                  TEMPORAL PROTOCOL
-                </span>
-
-                <h2 id="overlayTitle">
-                  ECHO//404
-                </h2>
-
-                <p id="overlayMessage">
-                  Selecciona um nível
-                  e inicia a simulação.
-                </p>
-
-                <div
-                  id="awakeningMedalResult"
-                  class="medal-result"
-                ></div>
-
-                <div class="overlay-score">
-
-                  <span>
-                    FINAL SCORE
+                  <span class="overlay-overline">
+                    TEMPORAL PROTOCOL
                   </span>
 
-                  <strong id="finalScore">
-                    0
-                  </strong>
+                  <h2 id="overlayTitle">
+                    ECHO//404
+                  </h2>
 
-                </div>
+                  <p id="overlayMessage">
+                    Selecciona um nível e inicia a simulação.
+                  </p>
 
-                <div class="overlay-actions">
+                  <div
+                    id="awakeningMedalResult"
+                    class="medal-result"
+                  ></div>
 
-                  <button
-                    id="playAgainBtn"
-                    type="button"
-                    class="btn btn-primary"
-                  >
-                    PLAY AGAIN
-                  </button>
+                  <div class="overlay-score">
 
-                  <button
-                    id="nextBtn"
-                    type="button"
-                    class="btn btn-secondary"
-                  >
-                    NEXT LEVEL
-                  </button>
+                    <span>FINAL SCORE</span>
+
+                    <strong id="finalScore">
+                      0
+                    </strong>
+
+                  </div>
+
+                  <div class="overlay-actions">
+
+                    <button
+                      id="playAgainBtn"
+                      type="button"
+                      class="btn btn-primary"
+                    >
+                      PLAY AGAIN
+                    </button>
+
+                    <button
+                      id="nextBtn"
+                      type="button"
+                      class="btn btn-secondary"
+                    >
+                      NEXT LEVEL
+                    </button>
+
+                  </div>
 
                 </div>
 
@@ -721,38 +560,177 @@
 
             </div>
 
-          </div>
+            <!-- ARENA STATUS -->
 
-          <!-- ================================
-               ARENA STATUS
-          ================================= -->
+            <div class="arena-status-bar">
 
-          <div class="arena-status-bar">
+              <div class="arena-status-left">
 
-            <div class="arena-status-left">
+                <span class="status-indicator"></span>
 
-              <span class="status-indicator"></span>
+                <span id="status">
+                  SYSTEM READY
+                </span>
 
-              <span id="status">
-                SYSTEM READY
-              </span>
+              </div>
+
+              <div
+                id="arenaThreatStatus"
+                class="arena-threat-status"
+              >
+                NO ANOMALIES DETECTED
+              </div>
 
             </div>
 
-            <div
-              id="arenaThreatStatus"
-              class="arena-threat-status"
-            >
-              NO ANOMALIES DETECTED
+          </section>
+
+          <!-- MOBILE CONTROLS
+               Placed immediately after arena.
+               CSS v0.9 will make this compact.
+          -->
+
+          <section
+            id="mobileControls"
+            class="mobile-controls mobile-gamepad"
+            aria-label="Controlos para dispositivos móveis"
+          >
+
+            <div class="mobile-controls-heading">
+
+              <span>TOUCH CONTROL SYSTEM</span>
+
+              <span>MOBILE READY</span>
+
             </div>
 
-          </div>
+            <div class="mobile-control-layout">
 
-        </section>
+              <!-- D-PAD -->
 
-        <!-- ================================
-             MAIN GAME BUTTONS
-        ================================= -->
+              <div
+                id="mobileDpad"
+                class="mobile-dpad"
+                aria-label="Direcções"
+              >
+
+                <button
+                  id="moveUp"
+                  type="button"
+                  class="dpad-btn dpad-up"
+                  data-direction="up"
+                  aria-label="Mover para cima"
+                >
+                  ▲
+                </button>
+
+                <button
+                  id="moveLeft"
+                  type="button"
+                  class="dpad-btn dpad-left"
+                  data-direction="left"
+                  aria-label="Mover para a esquerda"
+                >
+                  ◀
+                </button>
+
+                <div
+                  class="dpad-center"
+                  aria-hidden="true"
+                >
+                  ◈
+                </div>
+
+                <button
+                  id="moveRight"
+                  type="button"
+                  class="dpad-btn dpad-right"
+                  data-direction="right"
+                  aria-label="Mover para a direita"
+                >
+                  ▶
+                </button>
+
+                <button
+                  id="moveDown"
+                  type="button"
+                  class="dpad-btn dpad-down"
+                  data-direction="down"
+                  aria-label="Mover para baixo"
+                >
+                  ▼
+                </button>
+
+              </div>
+
+              <!-- JOYSTICK -->
+
+              <div
+                id="virtualJoystick"
+                class="virtual-joystick hidden"
+                aria-label="Joystick virtual"
+              >
+
+                <div
+                  id="joystickBase"
+                  class="joystick-base"
+                >
+
+                  <div
+                    id="joystickStick"
+                    class="joystick-stick"
+                  ></div>
+
+                </div>
+
+              </div>
+
+              <!-- ACTION BUTTONS -->
+
+              <div class="mobile-action-buttons">
+
+                <button
+                  id="mobileShiftBtn"
+                  type="button"
+                  class="mobile-action-btn mobile-shift"
+                  aria-label="Activar Paradox Shift"
+                >
+                  <span>◈</span>
+                  <small>SHIFT</small>
+                </button>
+
+                <button
+                  id="mobileRestartBtn"
+                  type="button"
+                  class="mobile-action-btn mobile-restart"
+                  aria-label="Reiniciar simulação"
+                >
+                  <span>↻</span>
+                  <small>RESTART</small>
+                </button>
+
+              </div>
+
+            </div>
+
+            <div class="mobile-control-options">
+
+              <button
+                id="controlModeBtn"
+                type="button"
+                class="btn btn-secondary"
+                aria-label="Alternar modo de controlo"
+              >
+                CONTROL MODE: D-PAD
+              </button>
+
+            </div>
+
+          </section>
+
+        </div>
+
+        <!-- MAIN ACTIONS -->
 
         <section class="game-actions">
 
@@ -782,13 +760,14 @@
 
         </section>
 
-        <!-- ================================
-             AI ECHO PANEL
-        ================================= -->
+        <!-- ECHO AI
+             Retained for game integration.
+             CSS v0.9 will use a compact layout.
+        -->
 
         <section
           id="echoAiPanel"
-          class="panel echo-ai-panel"
+          class="panel echo-ai-panel echo-ai-compact"
           aria-label="Sistema de inteligência ECHO"
         >
 
@@ -881,10 +860,10 @@
 
         </section>
 
-        <!-- ================================
-             DYNAMIC OBSTACLE STATUS
-             HIDDEN — MOBILE CLEANUP v0.8
-        ================================= -->
+        <!-- DYNAMIC HAZARDS
+             Hidden visually.
+             All IDs retained for game.js.
+        -->
 
         <section
           id="obstaclePanel"
@@ -900,9 +879,7 @@
                 ARENA DEFENCE SYSTEM
               </span>
 
-              <h2>
-                DYNAMIC HAZARDS
-              </h2>
+              <h2>DYNAMIC HAZARDS</h2>
 
             </div>
 
@@ -919,222 +896,67 @@
 
             <div class="obstacle-item">
 
-              <span class="obstacle-icon">
-                ⚡
-              </span>
+              <span class="obstacle-icon">⚡</span>
 
               <div>
-                <strong>
-                  MOVING LASERS
-                </strong>
+
+                <strong>MOVING LASERS</strong>
 
                 <small id="movingLaserStatus">
                   STANDBY
                 </small>
+
               </div>
 
             </div>
 
             <div class="obstacle-item">
 
-              <span class="obstacle-icon">
-                ▥
-              </span>
+              <span class="obstacle-icon">▥</span>
 
               <div>
-                <strong>
-                  PHASE WALLS
-                </strong>
+
+                <strong>PHASE WALLS</strong>
 
                 <small id="phaseWallStatus">
                   STANDBY
                 </small>
+
               </div>
 
             </div>
 
             <div class="obstacle-item">
 
-              <span class="obstacle-icon">
-                ◇
-              </span>
+              <span class="obstacle-icon">◇</span>
 
               <div>
-                <strong>
-                  TEMPORAL PLATFORMS
-                </strong>
+
+                <strong>TEMPORAL PLATFORMS</strong>
 
                 <small id="platformStatus">
                   STANDBY
                 </small>
+
               </div>
 
             </div>
 
             <div class="obstacle-item">
 
-              <span class="obstacle-icon">
-                ⟁
-              </span>
+              <span class="obstacle-icon">⟁</span>
 
               <div>
-                <strong>
-                  ECHO TRAPS
-                </strong>
+
+                <strong>ECHO TRAPS</strong>
 
                 <small id="echoTrapStatus">
                   STANDBY
                 </small>
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-        <!-- ================================
-             MOBILE CONTROLS
-        ================================= -->
-
-        <section
-          id="mobileControls"
-          class="mobile-controls"
-          aria-label="Controlos para dispositivos móveis"
-        >
-
-          <div class="mobile-controls-heading">
-
-            <span>
-              TOUCH CONTROL SYSTEM
-            </span>
-
-            <span>
-              MOBILE READY
-            </span>
-
-          </div>
-
-          <div class="mobile-control-layout">
-
-            <!-- D-PAD:
-                 Mantém os IDs para game.js.
-            -->
-
-            <div
-              id="mobileDpad"
-              class="mobile-dpad"
-              aria-label="Direcções"
-            >
-
-              <button
-                id="moveUp"
-                type="button"
-                class="dpad-btn dpad-up"
-                data-direction="up"
-                aria-label="Mover para cima"
-              >
-                ▲
-              </button>
-
-              <button
-                id="moveLeft"
-                type="button"
-                class="dpad-btn dpad-left"
-                data-direction="left"
-                aria-label="Mover para a esquerda"
-              >
-                ◀
-              </button>
-
-              <div
-                class="dpad-center"
-                aria-hidden="true"
-              >
-                ◈
-              </div>
-
-              <button
-                id="moveRight"
-                type="button"
-                class="dpad-btn dpad-right"
-                data-direction="right"
-                aria-label="Mover para a direita"
-              >
-                ▶
-              </button>
-
-              <button
-                id="moveDown"
-                type="button"
-                class="dpad-btn dpad-down"
-                data-direction="down"
-                aria-label="Mover para baixo"
-              >
-                ▼
-              </button>
-
-            </div>
-
-            <!-- NOVO JOYSTICK:
-                 O JavaScript v0.8 deverá
-                 implementar a sua lógica.
-            -->
-
-            <div
-              id="virtualJoystick"
-              class="virtual-joystick hidden"
-              aria-label="Joystick virtual"
-            >
-
-              <div
-                id="joystickBase"
-                class="joystick-base"
-              >
-
-                <div
-                  id="joystickStick"
-                  class="joystick-stick"
-                ></div>
 
               </div>
 
             </div>
-
-            <div class="mobile-action-buttons">
-
-              <button
-                id="mobileShiftBtn"
-                type="button"
-                class="mobile-action-btn mobile-shift"
-              >
-                <span>◈</span>
-                <small>SHIFT</small>
-              </button>
-
-              <button
-                id="mobileRestartBtn"
-                type="button"
-                class="mobile-action-btn mobile-restart"
-              >
-                <span>↻</span>
-                <small>RESTART</small>
-              </button>
-
-            </div>
-
-          </div>
-
-          <div class="mobile-control-options">
-
-            <button
-              id="controlModeBtn"
-              type="button"
-              class="btn btn-secondary"
-              aria-label="Alternar modo de controlo"
-            >
-              CONTROL MODE: D-PAD
-            </button>
 
           </div>
 
@@ -1144,9 +966,7 @@
 
     </main>
 
-    <!-- ====================================
-         TUTORIAL
-    ===================================== -->
+    <!-- TUTORIAL -->
 
     <section
       id="awakeningTutorial"
@@ -1209,9 +1029,7 @@
 
     </section>
 
-    <!-- ====================================
-         FOOTER
-    ===================================== -->
+    <!-- FOOTER -->
 
     <footer class="game-footer">
 
@@ -1219,18 +1037,14 @@
 
         <div class="footer-brand">
 
-          <strong>
-            ECHO//404
-          </strong>
+          <strong>ECHO//404</strong>
 
-          <span>
-            PARADOX EVOLUTION
-          </span>
+          <span>PARADOX EVOLUTION</span>
 
         </div>
 
         <div class="footer-version">
-          SYSTEM REBELLION // v0.8
+          SYSTEM REBELLION // v0.9
         </div>
 
       </div>
@@ -1258,71 +1072,70 @@
 
   </div>
 
-  <!-- ======================================
-       SCRIPT LOADING
-       ORDER IS IMPORTANT
-  ======================================= -->
+  <!-- SCRIPTS
+       Preserve v0.8 JS integration.
+  -->
 
   <script src="levels.js?v=080"></script>
-
   <script src="storage.js?v=080"></script>
-
   <script src="audio.js?v=080"></script>
-
   <script src="game.js?v=080"></script>
-
   <script src="awakening.js?v=080"></script>
 
-  <!-- ======================================
-       FULLSCREEN SUPPORT
-  ======================================= -->
+  <!-- FULLSCREEN SUPPORT -->
 
   <script>
     "use strict";
 
     (() => {
-      const fullscreenBtn =
-        document.getElementById(
-          "fullscreenBtn"
-        );
 
-      if (!fullscreenBtn) {
-        return;
-      }
+      const fullscreenBtn =
+        document.getElementById("fullscreenBtn");
+
+      if (!fullscreenBtn) return;
 
       fullscreenBtn.addEventListener(
         "click",
         async () => {
+
           try {
-            if (
-              document.fullscreenElement
-            ) {
+
+            if (document.fullscreenElement) {
+
               await document.exitFullscreen();
+
             } else if (
-              document.documentElement
-                .requestFullscreen
+              document.documentElement.requestFullscreen
             ) {
-              await document.documentElement
-                .requestFullscreen();
+
+              await document.documentElement.requestFullscreen();
+
             }
+
           } catch (error) {
+
             console.warn(
               "ECHO//404: fullscreen indisponível.",
               error
             );
+
           }
+
         }
       );
 
       document.addEventListener(
         "fullscreenchange",
         () => {
+
           fullscreenBtn.textContent =
             document.fullscreenElement
               ? "⤢"
               : "⛶";
+
         }
       );
+
     })();
   </script>
 
