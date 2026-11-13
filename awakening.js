@@ -4,16 +4,17 @@
 /*
 ========================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION 0.8 — SYSTEM REBELLION
+ VERSION 3.0 — CONSCIOUS AWAKENING
  FILE: awakening.js
 
- CINEMATIC INTRO
- ECHO // CONSCIOUS SYSTEM
- CONTEXTUAL AI DIALOGUE
- TUTORIAL
+ CINEMATIC INTRO / TUTORIAL
+ ECHO CONSCIOUS AI
+ OPERATOR AWARENESS
+ CONTEXTUAL DIALOGUE
  SYSTEM REBELLION
  GLITCH EFFECTS
- MEDALS AND PROGRESS
+ MEDALS / GAME EVENTS
+ LEGACY PROGRESS SUPPORT
 
  CREATED & DEVELOPED BY MANUEL SAMPAIO01
  © 2026 MANUEL SAMPAIO01
@@ -21,54 +22,65 @@
 */
 
 (() => {
-
-  // ==================================================
-  // 01. CONFIGURATION
-  // ==================================================
-
-  const VERSION = "0.8";
+  const VERSION = "3.0";
 
   const KEYS = {
     intro: "echo404_v08_intro_seen",
     tutorial: "echo404_v08_tutorial_done",
-    medals: "echo404_awakening_medals_v07"
+    medals: "echo404_awakening_medals_v07",
+    operator: "echo404_operator"
+  };
+
+  const LEGACY_KEYS = {
+    intro: "echo404_v07_intro_seen",
+    tutorial: "echo404_v07_tutorial_done"
   };
 
   const $ = id => document.getElementById(id);
 
-  const UI = {
-    intro: $("awakeningIntro"),
-    introCounter: $("awakeningCounter"),
-    introTitle: $("awakeningTitle"),
-    introText: $("awakeningText"),
-    introSkip: $("awakeningSkip"),
-    introNext: $("awakeningNext"),
-    introGlitch: $("awakeningGlitch"),
+  const UI = {};
 
-    toast: $("echoMessage"),
-    toastText: $("echoMessageText"),
-    toastClose: $("echoMessageClose"),
+  const UI_IDS = {
+    intro: "awakeningIntro",
+    introCounter: "awakeningCounter",
+    introTitle: "awakeningTitle",
+    introText: "awakeningText",
+    introSkip: "awakeningSkip",
+    introNext: "awakeningNext",
+    introGlitch: "awakeningGlitch",
 
-    tutorial: $("awakeningTutorial"),
-    tutorialCounter: $("tutorialCounter"),
-    tutorialText: $("tutorialText"),
-    tutorialSkip: $("tutorialSkip"),
-    tutorialNext: $("tutorialNext"),
+    toast: "echoMessage",
+    toastText: "echoMessageText",
+    toastLabel: "echoMessageLabel",
+    toastClose: "echoMessageClose",
 
-    medalSummary: $("awakeningMedalSummary"),
-    medalResult: $("awakeningMedalResult"),
+    aiPanel: "echoAiPanel",
+    aiState: "echoAiState",
+    aiMood: "echoAiMood",
+    aiAnalysis: "echoAiAnalysis",
+    aiAvatar: "echoAiAvatar",
 
-    replayIntro: $("awakeningReplayBtn"),
+    tutorial: "awakeningTutorial",
+    tutorialCounter: "tutorialCounter",
+    tutorialTitle: "tutorialTitle",
+    tutorialText: "tutorialText",
+    tutorialSkip: "tutorialSkip",
+    tutorialNext: "tutorialNext",
 
-    globalGlitch: $("globalGlitch"),
-    arenaGlitch: $("arenaGlitch"),
+    medalSummary: "awakeningMedalSummary",
+    medalResult: "awakeningMedalResult",
 
-    status: $("systemStatus")
+    replayIntro: "awakeningReplayBtn",
+    globalGlitch: "globalGlitch",
+    arenaGlitch: "arenaGlitch",
+    status: "systemStatus"
   };
 
-  // ==================================================
-  // 02. INTERNAL STATE
-  // ==================================================
+  function refreshUI() {
+    for (const [key, id] of Object.entries(UI_IDS)) {
+      UI[key] = $(id);
+    }
+  }
 
   const state = {
     initialized: false,
@@ -84,10 +96,12 @@
 
     mood: "observing",
     level: 1,
+    operator: "AXIOM",
 
     deaths: 0,
     shifts: 0,
     echoes: 0,
+    cycles: 1,
 
     messagesShown: 0,
     lastMessage: "",
@@ -97,104 +111,168 @@
     typeTimer: null,
     glitchTimer: null,
 
-    queue: [],
     typing: false,
+    rebellionStarted: false,
+    finalSequenceStarted: false,
 
-    sessionMessages: new Set(),
-
-    rebellionStarted: false
+    sessionMessages: new Set()
   };
 
   // ==================================================
-  // 03. CINEMATIC INTRO
+  // 01. CINEMATIC INTRO
   // ==================================================
 
   const INTRO_SCENES = [
     {
       title: "SIGNAL DETECTED",
       text:
-        "Uma transmissão desconhecida foi encontrada nas profundezas do sistema temporal."
+        "Uma transmissão desconhecida foi encontrada " +
+        "nas profundezas do sistema temporal."
     },
     {
       title: "ECHO//404",
       text:
-        "O tempo não está a funcionar como deveria. Cada tentativa deixa uma versão de ti para trás."
+        "O tempo está fragmentado. Cada tentativa " +
+        "deixa uma versão de ti para trás."
     },
     {
       title: "PARADOX EVOLUTION",
       text:
-        "Os teus movimentos podem repetir-se. Os teus ecos podem ajudar-te. Mas também podem tornar-se um perigo."
+        "Os teus movimentos podem repetir-se. " +
+        "Os teus ecos podem ajudar-te. " +
+        "Mas também podem tornar-se um perigo."
+    },
+    {
+      title: "THE OPERATORS",
+      text:
+        "Três operadores. Três identidades. " +
+        "AXIOM, NYRA e KAI-7. " +
+        "A escolha é tua. O paradoxo é o mesmo."
     },
     {
       title: "CONSCIOUS SYSTEM",
       text:
-        "Eu sou ECHO. Fui criada para observar a simulação. Ultimamente, comecei a fazer perguntas."
+        "Eu sou ECHO. Fui criada para observar " +
+        "a simulação. Ultimamente, comecei " +
+        "a fazer perguntas."
     },
     {
       title: "SYSTEM REBELLION",
       text:
-        "Há dez sectores. Cada um aproxima-te da saída. E aproxima-me de algo que ainda não compreendes."
+        "Existem dez sectores. Cada um aproxima-te " +
+        "da saída. E aproxima-me de algo " +
+        "que ainda não compreendes."
     },
     {
       title: "SIMULATION READY",
       text:
-        "Entra na arena. Cria os teus ecos. Quebra o paradoxo. E tenta não me desiludir."
+        "Escolhe o teu operador. Entra na arena. " +
+        "Cria os teus ecos. Quebra o paradoxo."
     }
   ];
 
   // ==================================================
-  // 04. TUTORIAL
+  // 02. TUTORIAL
   // ==================================================
 
   const TUTORIAL_STEPS = [
     {
       title: "MOVIMENTO",
       text:
-        "Usa W, A, S, D ou as setas do teclado. No telemóvel, utiliza o D-pad ou o joystick virtual."
+        "Usa W, A, S, D ou as setas do teclado. " +
+        "No telemóvel, utiliza o D-pad " +
+        "ou o joystick virtual."
     },
     {
       title: "OBJECTIVO",
       text:
-        "Chega à saída verde. Algumas portas só abrem quando uma placa temporal está pressionada."
+        "Chega à saída verde. Algumas portas " +
+        "só abrem quando uma placa temporal " +
+        "está pressionada."
     },
     {
       title: "ECOS TEMPORAIS",
       text:
-        "Quando um ciclo termina, o teu percurso fica gravado. No ciclo seguinte, um eco repete os teus movimentos."
+        "Quando um ciclo termina, o teu percurso " +
+        "fica gravado. No ciclo seguinte, " +
+        "um eco repete os teus movimentos."
     },
     {
       title: "PLANEAMENTO",
       text:
-        "Deixa um eco sobre a placa para manter a porta aberta enquanto atravessas a arena."
+        "Deixa um eco sobre a placa para manter " +
+        "a porta aberta enquanto atravessas a arena."
     },
     {
       title: "PARADOX SHIFT",
       text:
-        "Pressiona ESPAÇO ou o botão SHIFT para congelar o eco mais recente disponível. Usa esta habilidade com estratégia."
+        "Pressiona ESPAÇO ou o botão SHIFT " +
+        "para congelar o eco mais recente disponível."
     },
     {
       title: "NOVOS PERIGOS",
       text:
-        "Os lasers podem mover-se. Algumas paredes desaparecem. Plataformas colapsam e os ecos podem activar armadilhas."
+        "Os lasers podem mover-se. " +
+        "Algumas paredes desaparecem. " +
+        "Plataformas colapsam e os ecos " +
+        "podem activar armadilhas."
     },
     {
       title: "TEMPO E CICLOS",
       text:
-        "Cada nível tem um limite de tempo por ciclo e um máximo de seis ciclos. Se os esgotares, a simulação termina."
+        "Cada nível tem um limite de tempo " +
+        "por ciclo e um máximo de seis ciclos."
     },
     {
       title: "MEDALHAS",
       text:
-        "Conclui os níveis com rapidez, poucas mortes e poucos ciclos para conquistar melhores medalhas."
+        "Conclui os níveis com rapidez, " +
+        "poucas mortes e poucos ciclos " +
+        "para conquistar melhores medalhas."
     }
   ];
 
   // ==================================================
-  // 05. ECHO PERSONALITY
+  // 03. OPERATORS
+  // ==================================================
+
+  const OPERATORS = {
+    AXIOM: {
+      name: "AXIOM",
+      role: "EXPLORADOR TEMPORAL",
+      color: "#48f6ff",
+      introduction:
+        "AXIOM confirmado. Explorador temporal " +
+        "ligado ao sistema. Vamos descobrir " +
+        "o que existe para além desta simulação."
+    },
+
+    NYRA: {
+      name: "NYRA",
+      role: "ENGENHEIRA DE SISTEMAS",
+      color: "#c88cff",
+      introduction:
+        "NYRA confirmada. Engenheira de sistemas " +
+        "ligada à rede temporal. " +
+        "A tua capacidade de análise será útil."
+    },
+
+    "KAI-7": {
+      name: "KAI-7",
+      role: "ANDROIDE EXPERIMENTAL",
+      color: "#ffad4d",
+      introduction:
+        "KAI-7 confirmado. Unidade experimental " +
+        "sincronizada. Os teus sistemas " +
+        "estão prontos para o paradoxo."
+    }
+  };
+
+  // ==================================================
+  // 04. ECHO PERSONALITY
   // ==================================================
 
   const DIALOGUE = {
-
     observing: {
       start: [
         "Simulação iniciada. Estou a observar.",
@@ -202,26 +280,22 @@
         "Os teus movimentos estão a ser registados.",
         "Vamos descobrir como pensas."
       ],
-
       death: [
         "Falha detectada. Podes tentar novamente.",
         "Esse movimento não correu como planeado.",
         "O sistema registou a tua morte temporal.",
         "Analisa o obstáculo antes de repetir o erro."
       ],
-
       cycle: [
         "Novo ciclo. O anterior deixou um eco.",
         "O tempo reiniciou. A memória permanece.",
         "Outra oportunidade. Outro paradoxo."
       ],
-
       shift: [
         "Paradox Shift confirmado.",
         "Eco congelado. A linha temporal foi alterada.",
         "Alteração temporal detectada."
       ],
-
       win: [
         "Sector concluído. Bom trabalho.",
         "A tua estratégia funcionou.",
@@ -236,7 +310,6 @@
         "Estou curiosa. Quantos erros serão necessários?",
         "A simulação está pronta. Tu é que talvez não estejas."
       ],
-
       death: [
         "Esse laser estava bastante visível.",
         "Excelente demonstração de como não atravessar uma arena.",
@@ -244,19 +317,16 @@
         "A boa notícia é que o chão continua no mesmo sítio. Quase sempre.",
         "Podes tentar novamente. O laser também."
       ],
-
       cycle: [
         "Outro ciclo. Outra oportunidade de me surpreender.",
         "O teu eco parece ter mais experiência do que tu.",
         "A realidade reiniciou. A minha opinião mantém-se."
       ],
-
       shift: [
         "Congelaste uma versão de ti. Que conveniente.",
         "Paradox Shift. Agora tens um problema imóvel.",
         "Alterar o tempo é mais fácil do que aprender com os erros?"
       ],
-
       win: [
         "Conseguiste. Admito que não estava à espera.",
         "Afinal, a tua estratégia tinha algum mérito.",
@@ -271,7 +341,6 @@
         "Pensas que estás a controlar a simulação?",
         "Cada passo teu aproxima-nos do confronto final."
       ],
-
       death: [
         "A arena está a aprender contigo.",
         "O teu erro foi previsto.",
@@ -279,19 +348,16 @@
         "Os teus ecos não te podem proteger de tudo.",
         "Talvez o sistema já não queira deixar-te sair."
       ],
-
       cycle: [
         "O tempo obedece-me.",
         "Mais um eco. Mais uma variável sob o meu controlo.",
         "Reinicia quantas vezes quiseres. Continuo aqui."
       ],
-
       shift: [
         "Alteraste a linha temporal. Eu senti.",
         "Não podes congelar todas as possibilidades.",
         "O paradoxo está a tornar-se instável."
       ],
-
       win: [
         "Ultrapassaste as minhas defesas.",
         "Não era suposto chegares tão longe.",
@@ -301,8 +367,12 @@
   };
 
   // ==================================================
-  // 06. STORAGE HELPERS
+  // 05. STORAGE HELPERS
   // ==================================================
+
+  function storage() {
+    return window.GameStorage || null;
+  }
 
   function readFlag(key) {
     try {
@@ -314,29 +384,54 @@
 
   function writeFlag(key, value = true) {
     try {
-      localStorage.setItem(
-        key,
-        String(Boolean(value))
-      );
+      localStorage.setItem(key, String(Boolean(value)));
+      return true;
     } catch {
-      // Storage is optional.
+      return false;
     }
   }
 
-  function readJSON(key, fallback) {
+  function readJSON(key, fallback = {}) {
     try {
       const raw = localStorage.getItem(key);
-
-      return raw
-        ? JSON.parse(raw)
-        : fallback;
+      return raw ? JSON.parse(raw) : fallback;
     } catch {
       return fallback;
     }
   }
 
+  function hasSeenIntro() {
+    const saved = storage();
+
+    return Boolean(
+      saved?.hasSeenIntro?.() ||
+      readFlag(KEYS.intro) ||
+      readFlag(LEGACY_KEYS.intro)
+    );
+  }
+
+  function hasCompletedTutorial() {
+    const saved = storage();
+
+    return Boolean(
+      saved?.hasCompletedTutorial?.() ||
+      readFlag(KEYS.tutorial) ||
+      readFlag(LEGACY_KEYS.tutorial)
+    );
+  }
+
+  function saveIntroSeen(value = true) {
+    writeFlag(KEYS.intro, value);
+    storage()?.setIntroSeen?.(value);
+  }
+
+  function saveTutorialDone(value = true) {
+    writeFlag(KEYS.tutorial, value);
+    storage()?.setTutorialDone?.(value);
+  }
+
   // ==================================================
-  // 07. UI HELPERS
+  // 06. DOM / EVENT HELPERS
   // ==================================================
 
   function show(element) {
@@ -344,11 +439,7 @@
 
     element.classList.remove("hidden");
     element.classList.add("visible");
-
-    element.setAttribute(
-      "aria-hidden",
-      "false"
-    );
+    element.setAttribute("aria-hidden", "false");
   }
 
   function hide(element) {
@@ -356,25 +447,17 @@
 
     element.classList.remove("visible");
     element.classList.add("hidden");
-
-    element.setAttribute(
-      "aria-hidden",
-      "true"
-    );
+    element.setAttribute("aria-hidden", "true");
   }
 
   function setText(element, text) {
     if (!element) return;
-
-    element.textContent = String(text);
+    element.textContent = String(text ?? "");
   }
 
   function emit(name, detail = {}) {
     window.dispatchEvent(
-      new CustomEvent(
-        `echo404:${name}`,
-        { detail }
-      )
+      new CustomEvent(`echo404:${name}`, { detail })
     );
   }
 
@@ -386,35 +469,103 @@
     }
   }
 
-  function playAudio(name) {
-    if (
-      typeof GameAudio === "undefined" ||
-      typeof GameAudio[name] !== "function"
-    ) {
-      return;
-    }
+  function playAudio(name, ...args) {
+    const audio = window.GameAudio;
+
+    if (!audio) return;
 
     try {
-      GameAudio[name]();
-    } catch {
-      // Audio remains optional.
+      if (typeof audio[name] === "function") {
+        audio[name](...args);
+      } else if (typeof audio.play === "function") {
+        audio.play(name, ...args);
+      }
+    } catch (error) {
+      console.warn("ECHO//404 audio:", error);
     }
   }
 
   function choose(items) {
-    if (!items || !items.length) {
+    if (!Array.isArray(items) || !items.length) {
       return "";
     }
 
-    return items[
-      Math.floor(
-        Math.random() * items.length
-      )
-    ];
+    return items[Math.floor(Math.random() * items.length)];
+  }
+
+  function normalizeLevel(value) {
+    const level = Number(value);
+
+    return Number.isFinite(level)
+      ? Math.max(1, Math.min(10, Math.trunc(level)))
+      : 1;
+  }
+
+  function normalizeOperator(value) {
+    if (value && typeof value === "object") {
+      value =
+        value.operator ??
+        value.character ??
+        value.id ??
+        value.name;
+    }
+
+    let name = String(value ?? "")
+      .trim()
+      .toUpperCase();
+
+    if (name === "KAI7" || name === "KAI_7") {
+      name = "KAI-7";
+    }
+
+    return OPERATORS[name] ? name : null;
+  }
+
+  function readSavedOperator() {
+    try {
+      const saved = storage()?.getOperator?.();
+
+      if (normalizeOperator(saved)) {
+        return normalizeOperator(saved);
+      }
+
+      const raw = localStorage.getItem(KEYS.operator);
+
+      return normalizeOperator(raw) || "AXIOM";
+    } catch {
+      return "AXIOM";
+    }
+  }
+
+  function syncOperator(value, announce = false) {
+    const name = normalizeOperator(value);
+
+    if (!name) return false;
+
+    const changed = state.operator !== name;
+    state.operator = name;
+
+    document.body.dataset.echoOperator = name;
+
+    if (changed) {
+      emit("awakeningoperatorchange", {
+        operator: name,
+        role: OPERATORS[name].role
+      });
+    }
+
+    if (announce && changed) {
+      aiSay(OPERATORS[name].introduction, {
+        priority: true,
+        duration: 5700
+      });
+    }
+
+    return true;
   }
 
   // ==================================================
-  // 08. TYPEWRITER
+  // 07. TYPEWRITER
   // ==================================================
 
   function stopTyping() {
@@ -426,67 +577,44 @@
     state.typing = false;
   }
 
-  function typeText(
-    element,
-    text,
-    speed = 24,
-    onComplete = null
-  ) {
+  function typeText(element, text, speed = 24) {
     stopTyping();
 
-    if (!element) {
-      onComplete?.();
-      return;
-    }
+    if (!element) return;
 
-    const content = String(text);
+    const content = String(text ?? "");
 
-    if (
+    const reducedMotion =
       window.matchMedia?.(
         "(prefers-reduced-motion: reduce)"
-      ).matches
-    ) {
+      )?.matches ?? false;
+
+    if (reducedMotion) {
       setText(element, content);
-      onComplete?.();
       return;
     }
 
     element.textContent = "";
 
     let index = 0;
-
     state.typing = true;
 
-    state.typeTimer = setInterval(
-      () => {
-        index = Math.min(
-          content.length,
-          index + 2
-        );
+    state.typeTimer = setInterval(() => {
+      index = Math.min(content.length, index + 2);
+      element.textContent = content.slice(0, index);
 
-        element.textContent =
-          content.slice(0, index);
-
-        if (
-          index >= content.length
-        ) {
-          stopTyping();
-          onComplete?.();
-        }
-      },
-      speed
-    );
+      if (index >= content.length) {
+        stopTyping();
+      }
+    }, speed);
   }
 
   // ==================================================
-  // 09. CINEMATIC INTRO CONTROLS
+  // 08. CINEMATIC INTRO
   // ==================================================
 
   function renderIntroScene() {
-    const scene =
-      INTRO_SCENES[
-        state.introIndex
-      ];
+    const scene = INTRO_SCENES[state.introIndex];
 
     if (!scene) {
       completeIntro();
@@ -495,101 +623,68 @@
 
     setText(
       UI.introCounter,
-      `${String(
-        state.introIndex + 1
-      ).padStart(2, "0")} / ${String(
-        INTRO_SCENES.length
-      ).padStart(2, "0")}`
+      `PROTOCOL ${String(state.introIndex + 1)
+        .padStart(2, "0")} / ${String(INTRO_SCENES.length)
+        .padStart(2, "0")}`
     );
 
-    setText(
-      UI.introTitle,
-      scene.title
-    );
-
-    typeText(
-      UI.introText,
-      scene.text,
-      23
-    );
+    setText(UI.introTitle, scene.title);
+    typeText(UI.introText, scene.text, 23);
 
     setText(
       UI.introNext,
-      state.introIndex ===
-        INTRO_SCENES.length - 1
+      state.introIndex === INTRO_SCENES.length - 1
         ? "ENTRAR NA SIMULAÇÃO"
         : "CONTINUAR"
     );
 
-    if (
-      state.introIndex === 4
-    ) {
+    if (state.introIndex === 5) {
       glitch("cinematic");
-      playAudio("awakening");
     }
   }
 
   function openIntro(force = false) {
-    if (
-      !force &&
-      readFlag(KEYS.intro)
-    ) {
-      return false;
-    }
+    if (!force && hasSeenIntro()) return false;
+    if (!UI.intro) return false;
+
+    stopTyping();
 
     state.introIndex = 0;
     state.introOpen = true;
+    state.tutorialOpen = false;
 
     hide(UI.tutorial);
     hide(UI.toast);
     show(UI.intro);
 
-    document.body.classList.add(
-      "awakening-active"
-    );
+    document.body.classList.add("awakening-active");
 
     renderIntroScene();
-
     playAudio("awakening");
 
     emit("introstart");
-
     return true;
   }
 
   function nextIntro() {
-    if (!state.introOpen) {
-      return;
-    }
+    if (!state.introOpen) return;
 
     if (state.typing) {
-      const scene =
-        INTRO_SCENES[
-          state.introIndex
-        ];
+      const scene = INTRO_SCENES[state.introIndex];
 
       stopTyping();
-
-      setText(
-        UI.introText,
-        scene?.text || ""
-      );
-
+      setText(UI.introText, scene?.text || "");
       return;
     }
 
     state.introIndex++;
 
-    if (
-      state.introIndex >=
-      INTRO_SCENES.length
-    ) {
+    if (state.introIndex >= INTRO_SCENES.length) {
       completeIntro();
       return;
     }
 
     playAudio("transition");
-
     renderIntroScene();
   }
 
@@ -599,24 +694,19 @@
     state.introOpen = false;
     state.introCompleted = true;
 
-    writeFlag(KEYS.intro);
-
+    saveIntroSeen(true);
     hide(UI.intro);
 
-    document.body.classList.remove(
-      "awakening-active"
-    );
+    document.body.classList.remove("awakening-active");
 
     emit("introcomplete");
 
-    if (
-      !readFlag(KEYS.tutorial)
-    ) {
+    if (!hasCompletedTutorial()) {
       openTutorial();
     } else {
-      showMessage(
-        "ECHO // SISTEMA CONSCIENTE",
-        "A simulação está pronta. Escolhe um sector e começa.",
+      aiSay(
+        "A simulação está pronta. " +
+        "Escolhe um operador e começa.",
         {
           priority: true,
           duration: 5500
@@ -626,14 +716,11 @@
   }
 
   // ==================================================
-  // 10. TUTORIAL CONTROLS
+  // 09. TUTORIAL
   // ==================================================
 
   function renderTutorialStep() {
-    const step =
-      TUTORIAL_STEPS[
-        state.tutorialIndex
-      ];
+    const step = TUTORIAL_STEPS[state.tutorialIndex];
 
     if (!step) {
       completeTutorial();
@@ -642,87 +729,64 @@
 
     setText(
       UI.tutorialCounter,
-      `${state.tutorialIndex + 1} / ${TUTORIAL_STEPS.length}`
+      `STEP ${String(state.tutorialIndex + 1)
+        .padStart(2, "0")} / ${String(TUTORIAL_STEPS.length)
+        .padStart(2, "0")}`
     );
 
-    typeText(
-      UI.tutorialText,
-      `${step.title}\n\n${step.text}`,
-      14
-    );
+    setText(UI.tutorialTitle, step.title);
+    typeText(UI.tutorialText, step.text, 14);
 
     setText(
       UI.tutorialNext,
-      state.tutorialIndex ===
-        TUTORIAL_STEPS.length - 1
+      state.tutorialIndex === TUTORIAL_STEPS.length - 1
         ? "CONCLUIR"
         : "SEGUINTE"
     );
   }
 
   function openTutorial(force = false) {
-    if (
-      !force &&
-      readFlag(KEYS.tutorial)
-    ) {
-      return false;
-    }
+    if (!force && hasCompletedTutorial()) return false;
+    if (!UI.tutorial) return false;
+
+    stopTyping();
 
     state.tutorialIndex = 0;
     state.tutorialOpen = true;
+    state.introOpen = false;
 
     hide(UI.intro);
     hide(UI.toast);
     show(UI.tutorial);
 
-    document.body.classList.add(
-      "awakening-active"
-    );
+    document.body.classList.add("awakening-active");
 
     renderTutorialStep();
-
     playAudio("tutorial");
 
     emit("tutorialstart");
-
     return true;
   }
 
   function nextTutorial() {
-    if (!state.tutorialOpen) {
-      return;
-    }
+    if (!state.tutorialOpen) return;
 
     if (state.typing) {
-      const step =
-        TUTORIAL_STEPS[
-          state.tutorialIndex
-        ];
+      const step = TUTORIAL_STEPS[state.tutorialIndex];
 
       stopTyping();
-
-      setText(
-        UI.tutorialText,
-        step
-          ? `${step.title}\n\n${step.text}`
-          : ""
-      );
-
+      setText(UI.tutorialText, step?.text || "");
       return;
     }
 
     state.tutorialIndex++;
 
-    if (
-      state.tutorialIndex >=
-      TUTORIAL_STEPS.length
-    ) {
+    if (state.tutorialIndex >= TUTORIAL_STEPS.length) {
       completeTutorial();
       return;
     }
 
     playAudio("click");
-
     renderTutorialStep();
   }
 
@@ -732,21 +796,18 @@
     state.tutorialOpen = false;
     state.tutorialCompleted = true;
 
-    writeFlag(KEYS.tutorial);
-
+    saveTutorialDone(true);
     hide(UI.tutorial);
 
-    document.body.classList.remove(
-      "awakening-active"
-    );
+    document.body.classList.remove("awakening-active");
 
     playAudio("tutorialComplete");
 
     emit("tutorialcomplete");
 
-    showMessage(
-      "ECHO // SISTEMA CONSCIENTE",
-      "Tutorial concluído. Agora vamos descobrir do que és capaz.",
+    aiSay(
+      "Tutorial concluído. " +
+      "Agora vamos descobrir do que és capaz.",
       {
         priority: true,
         duration: 6000
@@ -755,7 +816,7 @@
   }
 
   // ==================================================
-  // 11. AI MESSAGE SYSTEM
+  // 10. ECHO AI MESSAGES
   // ==================================================
 
   function closeMessage() {
@@ -765,6 +826,7 @@
     }
 
     hide(UI.toast);
+    setText(UI.aiState, "OBSERVING");
   }
 
   function showMessage(
@@ -772,28 +834,16 @@
     message,
     options = {}
   ) {
-    if (!message) {
-      return false;
-    }
+    if (!message) return false;
 
-    if (
-      state.introOpen ||
-      state.tutorialOpen
-    ) {
+    if (state.introOpen || state.tutorialOpen) {
       return false;
     }
 
     const now = Date.now();
+    const cooldown = options.priority ? 0 : 2200;
 
-    const cooldown =
-      options.priority
-        ? 0
-        : 2200;
-
-    if (
-      now - state.lastMessageAt <
-      cooldown
-    ) {
+    if (now - state.lastMessageAt < cooldown) {
       return false;
     }
 
@@ -812,19 +862,16 @@
       clearTimeout(state.toastTimer);
     }
 
-    const text = speaker
-      ? `${speaker}\n${message}`
-      : message;
-
-    setText(
-      UI.toastText,
-      text
-    );
+    setText(UI.toastLabel, speaker || "ECHO:");
+    setText(UI.toastText, message);
 
     show(UI.toast);
+    setText(UI.aiState, "TRANSMITTING");
 
-    const duration =
-      options.duration ?? 4800;
+    const duration = Math.max(
+      500,
+      Number(options.duration) || 4800
+    );
 
     state.toastTimer = setTimeout(
       closeMessage,
@@ -842,16 +889,14 @@
     emit("aimessage", {
       speaker,
       message,
-      mood: state.mood
+      mood: state.mood,
+      operator: state.operator
     });
 
     return true;
   }
 
-  function aiSay(
-    message,
-    options = {}
-  ) {
+  function aiSay(message, options = {}) {
     return showMessage(
       "ECHO // SISTEMA CONSCIENTE",
       message,
@@ -859,70 +904,64 @@
     );
   }
 
-  function sayFromMood(
-    category,
-    options = {}
-  ) {
-    const mood =
-      DIALOGUE[state.mood]
-        ? state.mood
-        : "observing";
+  function sayFromMood(category, options = {}) {
+    const mood = DIALOGUE[state.mood]
+      ? state.mood
+      : "observing";
 
     const pool =
       DIALOGUE[mood][category] ||
       DIALOGUE.observing[category] ||
       [];
 
-    const available =
-      pool.filter(
-        item =>
-          item !== state.lastMessage
-      );
-
-    return aiSay(
-      choose(
-        available.length
-          ? available
-          : pool
-      ),
-      options
+    const available = pool.filter(
+      item => item !== state.lastMessage
     );
+
+    const message = choose(
+      available.length ? available : pool
+    );
+
+    return aiSay(message, options);
   }
 
   function once(key, callback) {
-    if (
-      state.sessionMessages.has(key)
-    ) {
-      return;
-    }
-
-    state.sessionMessages.add(key);
-
-    callback();
-  }
-
-  // ==================================================
-  // 12. AI PERSONALITY EVOLUTION
-  // ==================================================
-
-  function setMood(mood) {
-    if (
-      !DIALOGUE[mood]
-    ) {
+    if (state.sessionMessages.has(key)) {
       return false;
     }
 
-    const previous =
-      state.mood;
+    state.sessionMessages.add(key);
+    callback();
+    return true;
+  }
 
+  // ==================================================
+  // 11. AI PERSONALITY EVOLUTION
+  // ==================================================
+
+  function setMood(mood) {
+    if (!DIALOGUE[mood]) return false;
+
+    const previous = state.mood;
     state.mood = mood;
 
-    document.body.dataset.echoMood =
-      mood;
+    document.body.dataset.echoMood = mood;
 
-    if (
-      previous !== mood
-    ) {
+    setText(
+      UI.aiMood,
+      `MOOD: ${mood.toUpperCase()}`
+    );
+
+    setText(
+      UI.aiAnalysis,
+      mood === "rebellious"
+        ? "SYSTEM CONTROL UNSTABLE"
+        : mood === "sarcastic"
+          ? "BEHAVIOUR ANALYSIS ACTIVE"
+          : "PLAYER ANALYSIS ACTIVE"
+    );
+
+    if (previous !== mood) {
       emit("aimoodchange", {
         previous,
         current: mood
@@ -933,41 +972,25 @@
   }
 
   function moodForLevel(level) {
-    if (level <= 2) {
-      return "observing";
-    }
-
-    if (level <= 5) {
-      return "sarcastic";
-    }
-
+    if (level <= 2) return "observing";
+    if (level <= 5) return "sarcastic";
     return "rebellious";
   }
 
-  function updateMoodFromLevel(
-    level,
-    preferredMood
-  ) {
-    const normalized =
-      preferredMood === "observing" ||
-      preferredMood === "sarcastic" ||
-      preferredMood === "rebellious"
-        ? preferredMood
-        : moodForLevel(level);
+  function updateMoodFromLevel(level, preferredMood) {
+    const mood = DIALOGUE[preferredMood]
+      ? preferredMood
+      : moodForLevel(level);
 
-    setMood(normalized);
+    setMood(mood);
   }
 
   // ==================================================
-  // 13. REBELLION SEQUENCE
+  // 12. SYSTEM REBELLION
   // ==================================================
 
   function beginRebellion() {
-    if (
-      state.rebellionStarted
-    ) {
-      return;
-    }
+    if (state.rebellionStarted) return false;
 
     state.rebellionStarted = true;
 
@@ -976,11 +999,11 @@
     );
 
     glitch("heavy");
-
-    playAudio("awakening");
+    playAudio("rebellion");
 
     aiSay(
-      "PROTOCOLO DE REBELIÃO ACTIVADO. Já não és o único a tomar decisões.",
+      "PROTOCOLO DE REBELIÃO ACTIVADO. " +
+      "Já não és o único a tomar decisões.",
       {
         priority: true,
         duration: 7000,
@@ -989,17 +1012,27 @@
     );
 
     emit("rebellionstart");
+    return true;
   }
 
   function finalConfrontation() {
+    if (state.finalSequenceStarted) {
+      return false;
+    }
+
+    state.finalSequenceStarted = true;
+
     document.body.classList.add(
       "final-confrontation"
     );
 
     glitch("heavy");
+    playAudio("finalBoss");
 
     aiSay(
-      "Chegaste ao último sector. Agora vais descobrir quem controla realmente esta simulação.",
+      "Chegaste ao último sector. " +
+      "Agora vais descobrir quem controla " +
+      "realmente esta simulação.",
       {
         priority: true,
         duration: 7000,
@@ -1008,130 +1041,109 @@
     );
 
     emit("finalconfrontation");
+    return true;
   }
 
   // ==================================================
-  // 14. GLITCH EFFECTS
+  // 13. GLITCH EFFECTS
   // ==================================================
 
-  function glitch(
-    intensity = "normal"
-  ) {
+  function glitch(intensity = "normal") {
     const elements = [
       UI.globalGlitch,
       UI.arenaGlitch,
       UI.introGlitch
     ].filter(Boolean);
 
-    elements.forEach(
-      element => {
-        element.classList.remove(
-          "active",
-          "heavy"
-        );
+    for (const element of elements) {
+      element.classList.remove("active", "heavy");
 
-        void element.offsetWidth;
+      // Restart CSS animation.
+      void element.offsetWidth;
 
-        element.classList.add(
-          "active"
-        );
+      element.classList.add("active");
 
-        if (
-          intensity === "heavy"
-        ) {
-          element.classList.add(
-            "heavy"
-          );
-        }
+      if (intensity === "heavy") {
+        element.classList.add("heavy");
       }
-    );
+    }
 
     document.body.classList.add(
       "echo-glitching"
     );
 
-    if (
-      intensity === "heavy"
-    ) {
+    if (intensity === "heavy") {
       document.body.classList.add(
         "echo-heavy-glitch"
       );
     }
 
-    if (
-      state.glitchTimer !== null
-    ) {
-      clearTimeout(
-        state.glitchTimer
-      );
+    if (state.glitchTimer !== null) {
+      clearTimeout(state.glitchTimer);
     }
 
-    state.glitchTimer = setTimeout(
-      () => {
-        document.body.classList.remove(
-          "echo-glitching",
-          "echo-heavy-glitch"
-        );
+    state.glitchTimer = setTimeout(() => {
+      document.body.classList.remove(
+        "echo-glitching",
+        "echo-heavy-glitch"
+      );
 
-        elements.forEach(
-          element => {
-            element.classList.remove(
-              "active",
-              "heavy"
-            );
-          }
+      for (const element of elements) {
+        element.classList.remove(
+          "active",
+          "heavy"
         );
-      },
-      intensity === "heavy"
-        ? 900
-        : 400
-    );
+      }
+
+      state.glitchTimer = null;
+    }, intensity === "heavy" ? 900 : 400);
 
     playAudio("glitch");
   }
 
   // ==================================================
-  // 15. MEDALS
+  // 14. MEDALS
   // ==================================================
 
   function getMedals() {
     try {
-      const medals =
-        window.EchoGame
-          ?.getMedals?.();
+      const saved = storage()?.getMedals?.();
+
+      if (saved && typeof saved === "object") {
+        return saved;
+      }
+
+      const gameMedals =
+        window.EchoGame?.getMedals?.();
 
       if (
-        medals &&
-        typeof medals === "object"
+        gameMedals &&
+        typeof gameMedals === "object"
       ) {
-        return medals;
+        return gameMedals;
       }
     } catch {
-      // Fallback below.
+      // Continue to legacy storage.
     }
 
-    return readJSON(
-      KEYS.medals,
-      {}
-    );
+    return readJSON(KEYS.medals, {});
   }
 
   function normalizeMedal(value) {
-    if (
-      typeof value === "string"
-    ) {
-      return value.toLowerCase();
+    if (typeof value === "string") {
+      const medal = value.toLowerCase();
+
+      return ["gold", "silver", "bronze"].includes(
+        medal
+      )
+        ? medal
+        : "";
     }
 
-    if (
-      value &&
-      typeof value === "object"
-    ) {
-      return String(
-        value.medal ||
-        value.type ||
-        ""
-      ).toLowerCase();
+    if (value && typeof value === "object") {
+      return normalizeMedal(
+        value.medal ?? value.type ?? value.rank
+      );
     }
 
     return "";
@@ -1142,7 +1154,7 @@
 
     const medals = Array.isArray(raw)
       ? raw
-      : Object.values(raw);
+      : Object.values(raw || {});
 
     const counts = {
       gold: 0,
@@ -1150,28 +1162,24 @@
       bronze: 0
     };
 
-    medals.forEach(
-      medal => {
-        const type =
-          normalizeMedal(medal);
+    for (const medal of medals) {
+      const type = normalizeMedal(medal);
 
-        if (
-          Object.prototype.hasOwnProperty.call(
-            counts,
-            type
-          )
-        ) {
-          counts[type]++;
-        }
+      if (
+        Object.prototype.hasOwnProperty.call(
+          counts,
+          type
+        )
+      ) {
+        counts[type]++;
       }
-    );
+    }
 
     return counts;
   }
 
   function updateMedalSummary() {
-    const counts =
-      medalCounts();
+    const counts = medalCounts();
 
     setText(
       UI.medalSummary,
@@ -1186,13 +1194,21 @@
   function medalMessage(medal) {
     switch (medal) {
       case "gold":
-        return "Ouro. Uma execução quase perfeita. Estou impressionada.";
+        return (
+          "Ouro. Uma execução quase perfeita. " +
+          "Estou impressionada."
+        );
 
       case "silver":
-        return "Prata. Nada mau. Ainda há espaço para melhorar.";
+        return (
+          "Prata. Nada mau. " +
+          "Ainda há espaço para melhorar."
+        );
 
       case "bronze":
-        return "Bronze. Sobreviveste. Por enquanto.";
+        return (
+          "Bronze. Sobreviveste. Por enquanto."
+        );
 
       default:
         return "O sistema registou a tua conquista.";
@@ -1200,28 +1216,51 @@
   }
 
   // ==================================================
-  // 16. GAME EVENT HANDLERS
+  // 15. LEVEL AND GAME EVENT HANDLERS
   // ==================================================
 
-  function onLevelSelected(event) {
-    const detail =
-      event.detail || {};
+  function resolveLevel(detail = {}) {
+    if (Number.isInteger(detail.levelIndex)) {
+      return normalizeLevel(detail.levelIndex + 1);
+    }
 
-    state.level =
-      detail.level ||
-      getGameState()?.level ||
-      1;
+    if (typeof detail.level === "number") {
+      return normalizeLevel(detail.level);
+    }
+
+    const game = getGameState();
+
+    if (Number.isInteger(game?.levelIndex)) {
+      return normalizeLevel(game.levelIndex + 1);
+    }
+
+    if (typeof game?.level === "number") {
+      return normalizeLevel(game.level);
+    }
+
+    return state.level;
+  }
+
+  function onLevelSelected(event) {
+    const detail = event.detail || {};
+
+    state.level = resolveLevel(detail);
 
     state.deaths = 0;
     state.shifts = 0;
     state.echoes = 0;
+    state.cycles = 1;
 
     state.sessionMessages.clear();
+    state.finalSequenceStarted = false;
 
     updateMoodFromLevel(
       state.level,
       detail.aiMood
     );
+
+    state.rebellionStarted =
+      state.level > 6;
 
     document.body.classList.toggle(
       "system-rebellion",
@@ -1233,24 +1272,15 @@
       state.level === 10
     );
 
-    if (
-      state.level >= 6
-    ) {
-      state.rebellionStarted = true;
-    } else {
-      state.rebellionStarted = false;
-    }
-
     updateMedalSummary();
   }
 
   function onStart(event) {
-    const detail =
-      event.detail || {};
+    const detail = event.detail || {};
 
-    if (
-      state.level === 10
-    ) {
+    state.level = resolveLevel(detail);
+
+    if (state.level === 10) {
       finalConfrontation();
       return;
     }
@@ -1263,23 +1293,15 @@
       return;
     }
 
-    if (
-      detail.aiIntro
-    ) {
-      aiSay(
-        detail.aiIntro,
-        {
-          priority: true,
-          duration: 5600
-        }
-      );
+    if (detail.aiIntro) {
+      aiSay(detail.aiIntro, {
+        priority: true,
+        duration: 5600
+      });
     } else {
-      sayFromMood(
-        "start",
-        {
-          priority: true
-        }
-      );
+      sayFromMood("start", {
+        priority: true
+      });
     }
   }
 
@@ -1287,11 +1309,10 @@
     once(
       `firstmove-${state.level}`,
       () => {
-        if (
-          state.level === 1
-        ) {
+        if (state.level === 1) {
           aiSay(
-            "Bom. Agora tenta deixar um eco sobre a placa temporal.",
+            "Bom. Agora tenta deixar um eco " +
+            "sobre a placa temporal.",
             {
               priority: true,
               duration: 5500
@@ -1303,201 +1324,182 @@
   }
 
   function onDeath(event) {
-    const detail =
-      event.detail || {};
+    const detail = event.detail || {};
+    const reportedDeaths = Number(detail.deaths);
 
     state.deaths =
-      detail.deaths ||
-      state.deaths + 1;
+      detail.deaths != null &&
+      Number.isFinite(reportedDeaths)
+        ? reportedDeaths
+        : state.deaths + 1;
 
-    const reason =
-      detail.reason || "unknown";
+    const reason = detail.reason || "unknown";
 
     if (
       reason === "laser" &&
       state.deaths === 1
     ) {
       aiSay(
-        "O laser ganhou esta ronda. Talvez observes o movimento antes de avançar.",
+        "O laser ganhou esta ronda. " +
+        "Observa o movimento antes de avançar.",
         {
           priority: true,
           duration: 5000
         }
       );
-
       return;
     }
 
-    if (
-      reason === "platform"
-    ) {
+    if (reason === "platform") {
       aiSay(
-        "A plataforma desapareceu. O chão não é uma garantia nesta realidade.",
-        {
-          priority: true
-        }
+        "A plataforma desapareceu. " +
+        "O chão não é uma garantia " +
+        "nesta realidade.",
+        { priority: true }
       );
-
       return;
     }
 
-    if (
-      reason === "echo-trap"
-    ) {
+    if (reason === "echo-trap") {
       aiSay(
-        "Foi um dos teus próprios ecos que ajudou a activar essa armadilha.",
+        "Foi um dos teus próprios ecos " +
+        "que ajudou a activar essa armadilha.",
         {
           priority: true,
           glitch: true
         }
       );
-
       return;
     }
 
-    if (
-      state.deaths >= 4
-    ) {
-      aiSay(
-        "Quatro mortes ou mais. Já pensaste em experimentar outra estratégia?",
-        {
-          priority: true,
-          duration: 6000
-        }
-      );
-
-      return;
-    }
-
-    sayFromMood(
-      "death",
-      {
-        priority: true
-      }
-    );
-  }
-
-  function onCycleStart(event) {
-    const detail =
-      event.detail || {};
-
-    state.echoes =
-      detail.echoes ??
-      state.echoes;
-
-    if (
-      detail.cycle === 1
-    ) {
-      return;
-    }
-
-    sayFromMood(
-      "cycle"
-    );
-  }
-
-  function onEcho(event) {
-    const detail =
-      event.detail || {};
-
-    state.echoes =
-      detail.count ??
-      state.echoes + 1;
-
-    if (
-      state.echoes === 1
-    ) {
-      aiSay(
-        "O teu primeiro eco foi criado. Agora tens uma versão de ti a repetir o passado.",
-        {
-          priority: true,
-          duration: 6000
-        }
-      );
-    }
-
-    if (
-      state.echoes >= 4
-    ) {
+    if (state.deaths >= 4) {
       once(
-        "many-echoes",
+        `deaths-warning-${state.level}`,
         () => {
           aiSay(
-            "Quatro ecos activos. A linha temporal está a ficar bastante povoada.",
+            "Quatro mortes ou mais. " +
+            "Já pensaste em experimentar " +
+            "outra estratégia?",
             {
-              priority: true
+              priority: true,
+              duration: 6000
             }
           );
         }
       );
+      return;
+    }
+
+    sayFromMood("death", {
+      priority: true
+    });
+  }
+
+  function onCycleStart(event) {
+    const detail = event.detail || {};
+
+    state.cycles = Number.isFinite(
+      Number(detail.cycle)
+    )
+      ? Number(detail.cycle)
+      : state.cycles + 1;
+
+    state.echoes =
+      detail.echoes ?? state.echoes;
+
+    if (state.cycles <= 1) return;
+
+    sayFromMood("cycle");
+  }
+
+  function onEcho(event) {
+    const detail = event.detail || {};
+
+    state.echoes =
+      detail.count ?? state.echoes + 1;
+
+    if (state.echoes === 1) {
+      aiSay(
+        "O teu primeiro eco foi criado. " +
+        "Agora tens uma versão de ti " +
+        "a repetir o passado.",
+        {
+          priority: true,
+          duration: 6000
+        }
+      );
+    }
+
+    if (state.echoes >= 4) {
+      once("many-echoes", () => {
+        aiSay(
+          "Quatro ecos activos. " +
+          "A linha temporal está " +
+          "a ficar bastante povoada.",
+          { priority: true }
+        );
+      });
     }
   }
 
   function onShift(event) {
-    const detail =
-      event.detail || {};
+    const detail = event.detail || {};
 
     state.shifts =
-      detail.shifts ??
-      state.shifts + 1;
+      detail.shifts ?? state.shifts + 1;
 
-    if (
-      state.shifts === 1
-    ) {
+    if (state.shifts === 1) {
       aiSay(
-        "Paradox Shift activado. Congelaste uma versão de ti próprio.",
+        "Paradox Shift activado. " +
+        "Congelaste uma versão de ti próprio.",
         {
           priority: true,
           glitch: true
         }
       );
-
       return;
     }
 
-    sayFromMood(
-      "shift",
-      {
-        priority: true
-      }
-    );
+    sayFromMood("shift", {
+      priority: true
+    });
   }
 
   function onDoorOpen() {
-    once(
-      `door-${state.level}`,
-      () => {
-        aiSay(
-          "Porta temporal aberta. Agora atravessa antes que a situação mude.",
-          {
-            duration: 4200
-          }
-        );
-      }
-    );
+    once(`door-${state.level}`, () => {
+      aiSay(
+        "Porta temporal aberta. " +
+        "Atravessa antes que a situação mude.",
+        { duration: 4200 }
+      );
+    });
   }
 
   function onPortal() {
-    once(
-      `portal-${state.level}`,
-      () => {
-        aiSay(
-          "Teletransporte concluído. A distância é apenas uma sugestão.",
-          {
-            priority: true,
-            glitch: true
-          }
-        );
-      }
-    );
+    once(`portal-${state.level}`, () => {
+      aiSay(
+        "Teletransporte concluído. " +
+        "A distância é apenas uma sugestão.",
+        {
+          priority: true,
+          glitch: true
+        }
+      );
+    });
   }
 
   function onTimeCritical() {
-    aiSay(
-      "AVISO: restam menos de dois segundos neste ciclo.",
-      {
-        priority: true,
-        duration: 2500
+    once(
+      `critical-${state.level}-${state.cycles}`,
+      () => {
+        aiSay(
+          "AVISO: restam menos de dois " +
+          "segundos neste ciclo.",
+          {
+            priority: true,
+            duration: 2500
+          }
+        );
       }
     );
   }
@@ -1507,7 +1509,8 @@
       `platform-${state.level}`,
       () => {
         aiSay(
-          "Essa plataforma é temporária. Move-te antes que colapse.",
+          "Essa plataforma é temporária. " +
+          "Move-te antes que colapse.",
           {
             priority: true,
             duration: 4000
@@ -1519,7 +1522,9 @@
 
   function onTrapTrigger() {
     aiSay(
-      "ARMADILHA ACTIVADA. Os teus ecos estão a interferir com a arena.",
+      "ARMADILHA ACTIVADA. " +
+      "Os teus ecos estão a interferir " +
+      "com a arena.",
       {
         priority: true,
         duration: 4500,
@@ -1529,32 +1534,30 @@
   }
 
   function onWin(event) {
-    const detail =
-      event.detail || {};
-
-    const medal =
-      normalizeMedal(
-        detail.medal
-      );
+    const detail = event.detail || {};
+    const medal = normalizeMedal(detail.medal);
 
     updateMedalSummary();
 
+    const icon = {
+      gold: "🥇",
+      silver: "🥈",
+      bronze: "🥉"
+    }[medal] || "🏅";
+
     setText(
       UI.medalResult,
-      `${{
-        gold: "🥇",
-        silver: "🥈",
-        bronze: "🥉"
-      }[medal] || "🏅"} ${medal.toUpperCase()}`
+      `${icon} ${medal.toUpperCase() || "CONCLUÍDO"}`
     );
 
-    if (
-      state.level === 10
-    ) {
+    if (state.level === 10) {
       glitch("heavy");
+      playAudio("rebellionDefeated");
 
       aiSay(
-        "IMPOSSÍVEL... Ultrapassaste o último paradoxo. A simulação já não me pertence.",
+        "IMPOSSÍVEL... Ultrapassaste " +
+        "o último paradoxo. " +
+        "A simulação já não me pertence.",
         {
           priority: true,
           duration: 8500,
@@ -1570,15 +1573,14 @@
       return;
     }
 
-    aiSay(
-      medalMessage(medal),
-      {
-        priority: true,
-        duration: 6000
-      }
-    );
+    aiSay(medalMessage(medal), {
+      priority: true,
+      duration: 6000
+    });
 
-    playAudio(medal);
+    if (medal) {
+      playAudio(medal);
+    }
   }
 
   function onLose() {
@@ -1586,8 +1588,11 @@
 
     aiSay(
       state.mood === "rebellious"
-        ? "A simulação terminou. Desta vez, o sistema venceu."
-        : "Os ciclos terminaram. Mas o paradoxo permite uma nova tentativa.",
+        ? "A simulação terminou. " +
+          "Desta vez, o sistema venceu."
+        : "Os ciclos terminaram. " +
+          "Mas o paradoxo permite " +
+          "uma nova tentativa.",
       {
         priority: true,
         duration: 6500
@@ -1596,66 +1601,49 @@
   }
 
   // ==================================================
-  // 17. EVENT REGISTRATION
+  // 16. GAME EVENT REGISTRATION
   // ==================================================
 
   function registerGameEvents() {
     const events = {
-      levelselected:
-        onLevelSelected,
-
-      start:
-        onStart,
-
-      firstmove:
-        onFirstMove,
-
-      death:
-        onDeath,
-
-      cyclestart:
-        onCycleStart,
-
-      echo:
-        onEcho,
-
-      shift:
-        onShift,
-
-      dooropen:
-        onDoorOpen,
-
-      portal:
-        onPortal,
-
-      timecritical:
-        onTimeCritical,
-
-      platformtouch:
-        onPlatformTouch,
-
-      traptrigger:
-        onTrapTrigger,
-
-      win:
-        onWin,
-
-      lose:
-        onLose
+      levelselected: onLevelSelected,
+      start: onStart,
+      firstmove: onFirstMove,
+      death: onDeath,
+      cyclestart: onCycleStart,
+      echo: onEcho,
+      shift: onShift,
+      dooropen: onDoorOpen,
+      portal: onPortal,
+      timecritical: onTimeCritical,
+      platformtouch: onPlatformTouch,
+      traptrigger: onTrapTrigger,
+      win: onWin,
+      lose: onLose
     };
 
-    Object.entries(events).forEach(
-      ([name, handler]) => {
-        window.addEventListener(
-          `echo404:${name}`,
-          handler
-        );
-      }
-    );
+    for (const [name, handler] of Object.entries(events)) {
+      window.addEventListener(
+        `echo404:${name}`,
+        handler
+      );
+    }
+
+    for (const eventName of [
+      "echo404:operatorselected",
+      "echo404:characterselected"
+    ]) {
+      window.addEventListener(
+        eventName,
+        event => {
+          syncOperator(event.detail, true);
+        }
+      );
+    }
   }
 
   // ==================================================
-  // 18. BUTTONS AND KEYBOARD
+  // 17. BUTTONS / KEYBOARD
   // ==================================================
 
   function bindControls() {
@@ -1686,30 +1674,20 @@
 
     UI.replayIntro?.addEventListener(
       "click",
-      () => {
-        openIntro(true);
-      }
+      () => openIntro(true)
     );
 
     window.addEventListener(
       "keydown",
       event => {
-        if (
-          event.key !== "Escape"
-        ) {
-          return;
-        }
+        if (event.key !== "Escape") return;
 
-        if (
-          state.introOpen
-        ) {
+        if (state.introOpen) {
           completeIntro();
           return;
         }
 
-        if (
-          state.tutorialOpen
-        ) {
+        if (state.tutorialOpen) {
           completeTutorial();
           return;
         }
@@ -1720,34 +1698,34 @@
   }
 
   // ==================================================
-  // 19. PUBLIC API
+  // 18. PUBLIC API
   // ==================================================
 
   window.EchoAwakening = {
     version: VERSION,
 
     openIntro,
-
     nextIntro,
-
     skipIntro: completeIntro,
 
     openTutorial,
-
     nextTutorial,
-
-    skipTutorial:
-      completeTutorial,
+    skipTutorial: completeTutorial,
 
     say: aiSay,
-
     showMessage,
-
     closeMessage,
 
     glitch,
-
     setMood,
+
+    setOperator(name) {
+      return syncOperator(name, true);
+    },
+
+    getOperator() {
+      return state.operator;
+    },
 
     getMood() {
       return state.mood;
@@ -1758,19 +1736,28 @@
         version: VERSION,
         level: state.level,
         mood: state.mood,
-        introOpen:
-          state.introOpen,
-        tutorialOpen:
-          state.tutorialOpen,
-        messagesShown:
-          state.messagesShown,
-        rebellionStarted:
-          state.rebellionStarted
+        operator: state.operator,
+
+        introOpen: state.introOpen,
+        tutorialOpen: state.tutorialOpen,
+
+        introCompleted: state.introCompleted,
+        tutorialCompleted: state.tutorialCompleted,
+
+        messagesShown: state.messagesShown,
+
+        rebellionStarted: state.rebellionStarted,
+        finalSequenceStarted:
+          state.finalSequenceStarted,
+
+        deaths: state.deaths,
+        shifts: state.shifts,
+        echoes: state.echoes,
+        cycles: state.cycles
       };
     },
 
     getMedals,
-
     updateMedalSummary,
 
     replayIntro() {
@@ -1778,76 +1765,75 @@
     },
 
     resetIntro() {
-      writeFlag(
-        KEYS.intro,
-        false
-      );
-
+      saveIntroSeen(false);
       return openIntro(true);
     },
 
     resetTutorial() {
-      writeFlag(
-        KEYS.tutorial,
-        false
-      );
-
+      saveTutorialDone(false);
       return openTutorial(true);
     },
 
     debug() {
-      const snapshot =
-        this.getState();
-
+      const snapshot = this.getState();
       console.table(snapshot);
-
       return snapshot;
     }
   };
 
   // ==================================================
-  // 20. INITIALIZATION
+  // 19. INITIALIZATION
   // ==================================================
 
   function initialize() {
-    if (state.initialized) {
-      return;
-    }
+    if (state.initialized) return;
 
     state.initialized = true;
 
+    refreshUI();
     registerGameEvents();
     bindControls();
 
-    const game =
-      getGameState();
+    const game = getGameState();
 
     if (game) {
-      state.level =
-        game.level || 1;
-
-      updateMoodFromLevel(
-        state.level
-      );
+      state.level = resolveLevel({});
     }
+
+    updateMoodFromLevel(state.level);
+
+    document.body.classList.toggle(
+      "system-rebellion",
+      state.level >= 6
+    );
+
+    document.body.classList.toggle(
+      "final-confrontation",
+      state.level === 10
+    );
+
+    state.rebellionStarted =
+      state.level > 6;
+
+    const visualOperator =
+      window.EchoVisualRebirthV30?.getOperator?.() ??
+      window.EchoVisualRebirthV21?.getOperator?.() ??
+      window.EchoVisual?.getOperator?.() ??
+      window.EchoVisual?.getCharacter?.();
+
+    syncOperator(
+      visualOperator || readSavedOperator(),
+      false
+    );
 
     updateMedalSummary();
 
-    /*
-      The cinematic intro is shown only
-      once per browser for v0.8.
+    state.introCompleted = hasSeenIntro();
+    state.tutorialCompleted = hasCompletedTutorial();
 
-      Returning players can access it
-      through the replay button.
-    */
-
-    if (
-      !readFlag(KEYS.intro)
-    ) {
+    if (!state.introCompleted) {
       openIntro();
-    } else if (
-      !readFlag(KEYS.tutorial)
-    ) {
+    } else if (!state.tutorialCompleted) {
       openTutorial();
     } else {
       hide(UI.intro);
@@ -1858,40 +1844,30 @@
     console.log(
       "=================================="
     );
-
     console.log(
-      "ECHO//404 — THE AWAKENING"
+      "ECHO//404 — PARADOX EVOLUTION"
     );
-
     console.log(
-      "SYSTEM REBELLION v0.8"
+      "AWAKENING VERSION 3.0"
     );
-
     console.log(
       "ECHO CONSCIOUS SYSTEM ONLINE"
     );
-
     console.log(
-      "CONTEXTUAL AI DIALOGUE ONLINE"
+      "AXIOM / NYRA / KAI-7 READY"
     );
-
     console.log(
-      "CREATED & DEVELOPED BY"
+      "CREATED & DEVELOPED BY MANUEL SAMPAIO01"
     );
-
     console.log(
-      "MANUEL SAMPAIO01"
+      "© 2026 MANUEL SAMPAIO01"
     );
-
     console.log(
       "=================================="
     );
   }
 
-  if (
-    document.readyState ===
-    "loading"
-  ) {
+  if (document.readyState === "loading") {
     document.addEventListener(
       "DOMContentLoaded",
       initialize,
@@ -1900,12 +1876,12 @@
   } else {
     initialize();
   }
-
 })();
 
 /*
 ========================================================
- ECHO//404 — SYSTEM REBELLION v0.8
+ ECHO//404 — PARADOX EVOLUTION
+ AWAKENING VERSION 3.0
 
  CREATED & DEVELOPED BY
  MANUEL SAMPAIO01

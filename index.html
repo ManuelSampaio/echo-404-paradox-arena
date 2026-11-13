@@ -3,30 +3,629 @@
 <html lang="pt-AO">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
-
-  <meta name="theme-color" content="#070b18">
-
-  <meta
-    name="description"
-    content="ECHO//404 — SYSTEM REBELLION. Um jogo futurista de puzzles temporais, ecos e paradoxos. Created & Developed by MANUEL SAMPAIO01."
-  >
-
-  <meta name="author" content="MANUEL SAMPAIO01">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050b17">
   <meta name="color-scheme" content="dark">
+  <meta name="author" content="MANUEL SAMPAIO01">
+  <meta name="description" content="ECHO//404 — PARADOX EVOLUTION. Um jogo de puzzles temporais, ecos, operadores e paradoxos.">
 
-  <title>ECHO//404 — SYSTEM REBELLION v0.9</title>
+  <title>ECHO//404 — WORLD INTEGRATION v3.1</title>
 
-  <link rel="stylesheet" href="style.css?v=080">
+  <link rel="stylesheet" href="style.css?v=310">
+
+  <style>
+    /* ==============================================
+       ECHO//404 — HTML COMPATIBILITY LAYER v3.1
+       ============================================== */
+
+    :root {
+      color-scheme: dark;
+      --vr-bg: #050b17;
+      --vr-panel: #0b1a2d;
+      --vr-border: #31516e;
+      --vr-cyan: #48f6ff;
+      --vr-purple: #c88cff;
+      --vr-muted: #9bb6cf;
+      --vr-white: #eef9ff;
+      --operator-color: #48f6ff;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--vr-bg);
+      scroll-behavior: smooth;
+    }
+
+    body.echo404-app {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--vr-white);
+      font-family: system-ui, Arial, sans-serif;
+      background:
+        radial-gradient(
+          ellipse at 50% 0%,
+          #153550,
+          transparent 55%
+        ),
+        var(--vr-bg);
+    }
+
+    .hidden,
+    [hidden] {
+      display: none !important;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    summary:focus-visible {
+      outline: 2px solid var(--vr-cyan);
+      outline-offset: 3px;
+    }
+
+    #app.app-container {
+      position: relative;
+      z-index: 1;
+      width: min(calc(100% - 24px), 1050px);
+      margin: 0 auto;
+      padding: 14px 0 30px;
+    }
+
+    .game-header,
+    .header-brand,
+    .header-actions,
+    .panel-heading,
+    .level-information-top,
+    .echo-ai-header,
+    .echo-ai-identity,
+    .echo-ai-footer,
+    .arena-status-bar,
+    .mobile-controls-heading,
+    .mobile-control-layout,
+    .game-actions,
+    .overlay-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .game-header,
+    .level-information-top,
+    .echo-ai-header,
+    .echo-ai-footer,
+    .arena-status-bar,
+    .mobile-controls-heading,
+    .mobile-control-layout {
+      justify-content: space-between;
+    }
+
+    .game-header {
+      padding: 12px 0 18px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #48f6ff22;
+    }
+
+    .game-logo {
+      margin: 0;
+      font-size: clamp(23px, 5vw, 32px);
+      letter-spacing: 2px;
+    }
+
+    .game-logo span,
+    .brand-mark,
+    .panel-overline {
+      color: var(--vr-cyan);
+    }
+
+    .brand-mark {
+      font-size: 27px;
+    }
+
+    .brand-overline,
+    .game-subtitle,
+    .system-status,
+    .hud-label,
+    .panel-overline {
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    .brand-overline,
+    .game-subtitle,
+    .hud-label,
+    .level-hint {
+      color: var(--vr-muted);
+    }
+
+    .system-status {
+      color: #7dffce;
+    }
+
+    .system-status-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      margin-right: 5px;
+      border-radius: 50%;
+      background: #7dffce;
+      box-shadow: 0 0 10px #7dffce;
+    }
+
+    .game-layout,
+    .game-main,
+    .gameplay-zone {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .game-sidebar {
+      display: grid;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .panel,
+    .hud-card,
+    .mobile-controls,
+    .vr-details {
+      border: 1px solid var(--vr-border);
+      border-radius: 15px;
+      background:
+        linear-gradient(145deg, #10263e, #081525);
+      box-shadow: 0 8px 28px #0003;
+    }
+
+    .panel {
+      padding: 15px;
+    }
+
+    .level-information h2 {
+      margin: 5px 0;
+    }
+
+    .level-hint {
+      margin-top: 6px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .game-hud {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 7px;
+    }
+
+    .hud-card {
+      min-width: 0;
+      padding: 11px 5px;
+      text-align: center;
+      border-radius: 11px;
+    }
+
+    .hud-label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .hud-value {
+      display: block;
+      font-size: clamp(12px, 3vw, 20px);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timer-progress-track {
+      height: 5px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #23324c;
+    }
+
+    .timer-progress-bar {
+      width: 100%;
+      height: 100%;
+      background: var(--vr-cyan);
+      transition: width .12s linear;
+    }
+
+    .timer-progress-bar.critical {
+      background: #ff4c69;
+    }
+
+    /* ==============================================
+       PIXIJS + CANVAS 2D ARENA
+       ============================================== */
+
+    .arena-section,
+    .arena-shell {
+      width: 100%;
+      min-width: 0;
+    }
+
+    #arenaShell {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      aspect-ratio: 8 / 5;
+      border: 1px solid #48f6ff77;
+      border-radius: 13px;
+      background: #06101e;
+    }
+
+    #echoWorldRenderer {
+      position: absolute;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    #echoWorldRenderer canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    #gameCanvas {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: transparent !important;
+    }
+
+    #vr-overlay,
+    #echo404CharacterOverlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    #vr-overlay {
+      z-index: 2;
+    }
+
+    #echo404CharacterOverlay {
+      z-index: 3;
+    }
+
+    #criticalWarning {
+      position: absolute;
+      z-index: 4;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 7px;
+      border-radius: 6px;
+      background: #531b2bdc;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .game-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      background: #050b19df;
+      text-align: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .overlay-content {
+      width: min(100%, 420px);
+      max-height: 100%;
+      overflow-y: auto;
+    }
+
+    .overlay-actions {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ==============================================
+       BUTTONS
+       ============================================== */
+
+    .btn {
+      padding: 10px 13px;
+      border: 1px solid #385572;
+      border-radius: 10px;
+      background: #192c46;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .btn-primary {
+      border-color: var(--vr-cyan);
+      background:
+        linear-gradient(120deg, #48f6ff, #26cde7);
+      color: #04131d;
+    }
+
+    .btn-shift {
+      border-color: #ba7cff;
+      background:
+        linear-gradient(120deg, #432465, #6b3b9e);
+    }
+
+    .game-actions {
+      flex-wrap: wrap;
+    }
+
+    .game-actions .btn {
+      flex: 1;
+      min-width: 110px;
+    }
+
+    /* ==============================================
+       MOBILE CONTROLS
+       ============================================== */
+
+    .mobile-controls {
+      width: 100%;
+      padding: 12px;
+    }
+
+    .mobile-dpad {
+      display: grid;
+      grid-template-columns: repeat(3, 50px);
+      grid-template-rows: repeat(3, 48px);
+      gap: 3px;
+    }
+
+    .dpad-btn {
+      border: 1px solid #427b99;
+      border-radius: 10px;
+      background: #17334c;
+      color: var(--vr-cyan);
+      font-size: 20px;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .dpad-up {
+      grid-area: 1 / 2;
+    }
+
+    .dpad-left {
+      grid-area: 2 / 1;
+    }
+
+    .dpad-right {
+      grid-area: 2 / 3;
+    }
+
+    .dpad-down {
+      grid-area: 3 / 2;
+    }
+
+    .dpad-center {
+      grid-area: 2 / 2;
+      display: grid;
+      place-items: center;
+    }
+
+    .mobile-action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .mobile-action-btn {
+      min-width: 96px;
+      min-height: 60px;
+      border: 1px solid #865bcb;
+      border-radius: 13px;
+      background: #35204e;
+      color: white;
+      touch-action: manipulation;
+    }
+
+    .mobile-action-btn span,
+    .mobile-action-btn small {
+      display: block;
+    }
+
+    .virtual-joystick {
+      width: 150px;
+      height: 150px;
+      touch-action: none;
+    }
+
+    .joystick-base {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      margin: auto;
+      border: 2px solid #457e9c;
+      border-radius: 50%;
+      background: #102b42;
+    }
+
+    .joystick-stick {
+      position: absolute;
+      top: calc(50% - 27.5px);
+      left: calc(50% - 27.5px);
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: #48f6ff99;
+    }
+
+    .mobile-control-options {
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    /* ==============================================
+       LEVELS / AI / FOOTER
+       ============================================== */
+
+    .vr-details {
+      overflow: hidden;
+    }
+
+    .vr-details > summary {
+      padding: 15px;
+      color: var(--vr-cyan);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .vr-details-body {
+      padding: 0 12px 12px;
+    }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+      margin: 12px 0;
+    }
+
+    .level-grid button {
+      min-height: 43px;
+      border: 1px solid #42617d;
+      border-radius: 9px;
+      background: #142a44;
+      color: white;
+    }
+
+    .level-grid button.selected {
+      border-color: var(--vr-cyan);
+    }
+
+    .level-grid button.completed {
+      background: #174d45;
+    }
+
+    .level-grid button.locked {
+      opacity: .4;
+    }
+
+    .echo-ai-panel {
+      border-color: #a67aff66;
+    }
+
+    .echo-ai-identity {
+      justify-content: flex-start;
+    }
+
+    .echo-ai-avatar {
+      color: var(--vr-purple);
+      font-size: 23px;
+    }
+
+    .echo-message {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 9px 0;
+    }
+
+    .echo-message-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .echo-message-content p {
+      margin: 3px 0;
+      line-height: 1.5;
+    }
+
+    .echo-message-close {
+      border: 0;
+      background: transparent;
+      color: white;
+      font-size: 20px;
+    }
+
+    #obstaclePanel {
+      display: none !important;
+    }
+
+    .game-footer {
+      margin-top: 28px;
+      padding: 18px 0;
+      border-top: 1px solid #48f6ff33;
+      color: var(--vr-muted);
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .footer-divider {
+      height: 1px;
+      margin: 12px 0;
+      background: var(--vr-border);
+    }
+
+    .awakening-intro,
+    .awakening-tutorial {
+      z-index: 9000;
+    }
+
+    @media (max-width: 600px) {
+      #app.app-container {
+        width: calc(100% - 14px);
+      }
+
+      .system-status,
+      .brand-overline,
+      .game-subtitle {
+        display: none;
+      }
+
+      .game-logo {
+        font-size: 23px;
+      }
+
+      .mobile-dpad {
+        grid-template-columns: repeat(3, 44px);
+        grid-template-rows: repeat(3, 43px);
+      }
+
+      .mobile-action-btn {
+        min-width: 84px;
+      }
+
+      .game-actions .btn {
+        min-width: 0;
+        padding: 10px 6px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
 </head>
 
 <body class="echo404-app">
 
-  <!-- BACKGROUND -->
+  <!-- ============================================
+       BACKGROUND EFFECTS
+       ============================================ -->
 
   <div class="background-grid" aria-hidden="true"></div>
   <div class="ambient-glow ambient-glow-one" aria-hidden="true"></div>
@@ -35,7 +634,9 @@
   <div class="screen-scanlines" aria-hidden="true"></div>
   <div id="globalGlitch" class="global-glitch" aria-hidden="true"></div>
 
-  <!-- CINEMATIC INTRO -->
+  <!-- ============================================
+       CINEMATIC INTRO
+       ============================================ -->
 
   <section
     id="awakeningIntro"
@@ -44,7 +645,6 @@
     aria-modal="true"
     aria-labelledby="awakeningTitle"
   >
-
     <div class="awakening-intro-backdrop"></div>
 
     <div class="awakening-intro-content">
@@ -53,7 +653,7 @@
         ECHO SYSTEM // INITIALIZING
       </div>
 
-      <div class="awakening-symbol" aria-hidden="true">◈</div>
+      <div class="awakening-symbol">◈</div>
 
       <div id="awakeningCounter" class="awakening-counter">
         PROTOCOL 01 / 04
@@ -65,45 +665,38 @@
 
       <p id="awakeningText" class="awakening-text">
         O tempo está a fragmentar-se.
-        Os teus ecos são a única forma
-        de restaurar a realidade.
       </p>
 
-      <div
-        id="awakeningGlitch"
-        class="awakening-glitch"
-        aria-hidden="true"
-      ></div>
+      <div id="awakeningGlitch" class="awakening-glitch"></div>
 
       <div class="awakening-intro-actions">
-
         <button
           id="awakeningSkip"
-          type="button"
           class="btn btn-secondary"
+          type="button"
         >
           SALTAR
         </button>
 
         <button
           id="awakeningNext"
-          type="button"
           class="btn btn-primary"
+          type="button"
         >
           CONTINUAR
         </button>
-
       </div>
 
       <div class="awakening-signature">
-        CREATED & DEVELOPED BY MANUEL SAMPAIO01
+        CREATED &amp; DEVELOPED BY MANUEL SAMPAIO01
       </div>
 
     </div>
-
   </section>
 
-  <!-- APPLICATION -->
+  <!-- ============================================
+       MAIN APPLICATION
+       ============================================ -->
 
   <div id="app" class="app-container">
 
@@ -112,11 +705,9 @@
     <header class="game-header">
 
       <div class="header-brand">
-
         <div class="brand-mark">◈</div>
 
         <div class="brand-information">
-
           <div class="brand-overline">
             PARADOX EVOLUTION
           </div>
@@ -126,222 +717,63 @@
           </h1>
 
           <div class="game-subtitle">
-            SYSTEM REBELLION
+            WORLD INTEGRATION v3.1
           </div>
-
         </div>
-
       </div>
 
       <div class="header-actions">
 
         <span id="systemStatus" class="system-status">
           <span class="system-status-dot"></span>
-          SYSTEM ONLINE
+          <span class="operator-status-label">
+            SYSTEM ONLINE
+          </span>
         </span>
 
         <button
           id="soundBtn"
+          class="btn btn-icon"
           type="button"
-          class="btn btn-icon sound-button"
-          aria-label="Activar ou desactivar som"
-          title="Activar ou desactivar som"
+          aria-label="Som"
         >
           🔊
         </button>
 
         <button
           id="fullscreenBtn"
+          class="btn btn-icon"
           type="button"
-          class="btn btn-icon fullscreen-button"
           aria-label="Ecrã completo"
-          title="Ecrã completo"
         >
           ⛶
         </button>
 
       </div>
-
     </header>
 
     <!-- SYSTEM BANNER -->
 
     <section class="system-banner">
-
       <div class="system-banner-left">
-
-        <span class="system-tag">v0.9</span>
-
+        <span class="system-tag">v3.1</span>
         <span class="system-banner-text">
-          TEMPORAL SIMULATION ACTIVE
+          WORLD INTEGRATION
         </span>
-
       </div>
 
       <div class="system-banner-right">
-
-        <span id="threatLevel" class="threat-level">
+        <span id="threatLevel">
           THREAT LEVEL: LOW
         </span>
-
       </div>
-
     </section>
 
-    <!-- MAIN LAYOUT -->
+    <!-- ==========================================
+         GAME LAYOUT
+         ========================================== -->
 
     <main class="game-layout">
-
-      <!-- SIDEBAR -->
-
-      <aside
-        class="game-sidebar"
-        aria-label="Selecção de níveis"
-      >
-
-        <!-- LEVEL SELECTION -->
-
-        <section class="panel levels-panel">
-
-          <div class="panel-heading">
-
-            <div>
-
-              <span class="panel-overline">
-                TEMPORAL SECTORS
-              </span>
-
-              <h2>SELECT LEVEL</h2>
-
-            </div>
-
-            <span class="panel-symbol">◈</span>
-
-          </div>
-
-          <div id="progress" class="level-progress">
-            0 / 10 COMPLETED
-          </div>
-
-          <div
-            id="levelGrid"
-            class="level-grid"
-            aria-label="Níveis disponíveis"
-          ></div>
-
-          <div class="level-legend">
-
-            <span>
-              <i class="legend-dot unlocked"></i>
-              AVAILABLE
-            </span>
-
-            <span>
-              <i class="legend-dot completed"></i>
-              COMPLETED
-            </span>
-
-            <span>
-              <i class="legend-dot locked"></i>
-              LOCKED
-            </span>
-
-          </div>
-
-        </section>
-
-        <!-- MEDALS -->
-
-        <section class="panel medals-panel">
-
-          <div class="panel-heading">
-
-            <div>
-
-              <span class="panel-overline">
-                PERFORMANCE
-              </span>
-
-              <h2>MEDAL COLLECTION</h2>
-
-            </div>
-
-            <span class="panel-symbol">★</span>
-
-          </div>
-
-          <div
-            id="awakeningMedalSummary"
-            class="medal-summary"
-          >
-            🥇 0 &nbsp; 🥈 0 &nbsp; 🥉 0
-          </div>
-
-        </section>
-
-        <!-- KEYBOARD GUIDE -->
-
-        <section class="panel controls-panel">
-
-          <div class="panel-heading">
-
-            <div>
-
-              <span class="panel-overline">
-                OPERATOR MANUAL
-              </span>
-
-              <h2>CONTROLS</h2>
-
-            </div>
-
-          </div>
-
-          <div class="controls-guide">
-
-            <div class="control-guide-row">
-
-              <span>MOVEMENT</span>
-
-              <span class="keyboard-group">
-                <kbd>W</kbd>
-                <kbd>A</kbd>
-                <kbd>S</kbd>
-                <kbd>D</kbd>
-              </span>
-
-            </div>
-
-            <div class="control-guide-row">
-
-              <span>ALTERNATIVE</span>
-
-              <span class="keyboard-group">
-                <kbd>↑</kbd>
-                <kbd>←</kbd>
-                <kbd>↓</kbd>
-                <kbd>→</kbd>
-              </span>
-
-            </div>
-
-            <div class="control-guide-row">
-              <span>PARADOX SHIFT</span>
-              <kbd>SPACE</kbd>
-            </div>
-
-            <div class="control-guide-row">
-              <span>RESTART</span>
-              <kbd>R</kbd>
-            </div>
-
-          </div>
-
-        </section>
-
-      </aside>
-
-      <!-- MAIN GAME -->
 
       <section class="game-main">
 
@@ -352,7 +784,6 @@
           <div class="level-information-top">
 
             <div>
-
               <span class="panel-overline">
                 CURRENT SIMULATION
               </span>
@@ -360,15 +791,14 @@
               <h2 id="levelName">
                 O Primeiro Eco
               </h2>
-
             </div>
 
-            <div
+            <span
               id="difficultyBadge"
               class="difficulty-badge"
             >
               INICIANTE
-            </div>
+            </span>
 
           </div>
 
@@ -378,119 +808,78 @@
 
         </section>
 
-        <!-- GAME HUD -->
+        <!-- HUD -->
 
-        <section
-          class="game-hud"
-          aria-label="Estatísticas da partida"
-        >
+        <section class="game-hud" aria-label="Indicadores do jogo">
 
           <div class="hud-card">
-
-            <span class="hud-label">CYCLE</span>
-
-            <strong id="cycle" class="hud-value">
-              1 / 6
-            </strong>
-
+            <span class="hud-label">CICLO</span>
+            <strong id="cycle" class="hud-value">1 / 6</strong>
           </div>
 
           <div id="timerCard" class="hud-card timer-card">
-
-            <span class="hud-label">TIME LEFT</span>
-
-            <strong id="timer" class="hud-value">
-              10.0
-            </strong>
-
+            <span class="hud-label">TEMPO</span>
+            <strong id="timer" class="hud-value">10.0</strong>
           </div>
 
           <div class="hud-card">
-
-            <span class="hud-label">ECHOES</span>
-
-            <strong id="ghosts" class="hud-value">
-              0
-            </strong>
-
+            <span class="hud-label">ECOS</span>
+            <strong id="ghosts" class="hud-value">0</strong>
           </div>
 
           <div class="hud-card">
-
-            <span class="hud-label">SCORE</span>
-
-            <strong id="score" class="hud-value">
-              0
-            </strong>
-
+            <span class="hud-label">PONTOS</span>
+            <strong id="score" class="hud-value">0</strong>
           </div>
 
           <div class="hud-card">
-
-            <span class="hud-label">BEST</span>
-
-            <strong id="best" class="hud-value">
-              0
-            </strong>
-
+            <span class="hud-label">RECORDE</span>
+            <strong id="best" class="hud-value">0</strong>
           </div>
 
         </section>
 
-        <!-- TIMER -->
-
         <div class="timer-progress-track">
-
-          <div
-            id="timerBar"
-            class="timer-progress-bar"
-          ></div>
-
+          <div id="timerBar" class="timer-progress-bar"></div>
         </div>
 
-        <!-- GAMEPLAY ZONE -->
+        <!-- ======================================
+             GAME ARENA
+             ====================================== -->
 
         <div class="gameplay-zone">
-
-          <!-- ARENA -->
 
           <section class="arena-section">
 
             <div id="arenaShell" class="arena-shell">
 
-              <div
-                class="arena-corner arena-corner-tl"
-                aria-hidden="true"
-              ></div>
+              <div class="arena-corner arena-corner-tl"></div>
+              <div class="arena-corner arena-corner-tr"></div>
+              <div class="arena-corner arena-corner-bl"></div>
+              <div class="arena-corner arena-corner-br"></div>
 
-              <div
-                class="arena-corner arena-corner-tr"
-                aria-hidden="true"
-              ></div>
-
-              <div
-                class="arena-corner arena-corner-bl"
-                aria-hidden="true"
-              ></div>
-
-              <div
-                class="arena-corner arena-corner-br"
-                aria-hidden="true"
-              ></div>
+              <!--
+                PixiJS World Renderer:
+                world-renderer.js creates #echoWorldRenderer
+                automatically behind the gameplay canvas.
+              -->
 
               <canvas
                 id="gameCanvas"
                 width="800"
                 height="500"
                 aria-label="Arena temporal ECHO//404"
-              >
-                O teu navegador não suporta HTML Canvas.
-              </canvas>
+              ></canvas>
+
+              <!--
+                visual-v1.js manages its own overlay canvases.
+                Do not duplicate their IDs.
+              -->
 
               <div
                 id="criticalWarning"
                 class="critical-warning hidden"
-                aria-live="polite"
+                role="alert"
               >
                 ⚠ TEMPORAL COLLAPSE IMMINENT
               </div>
@@ -516,7 +905,7 @@
                   </h2>
 
                   <p id="overlayMessage">
-                    Selecciona um nível e inicia a simulação.
+                    Escolhe um operador e inicia a simulação.
                   </p>
 
                   <div
@@ -525,37 +914,31 @@
                   ></div>
 
                   <div class="overlay-score">
-
                     <span>FINAL SCORE</span>
-
-                    <strong id="finalScore">
-                      0
-                    </strong>
-
+                    <strong id="finalScore">0</strong>
                   </div>
 
                   <div class="overlay-actions">
 
                     <button
                       id="playAgainBtn"
-                      type="button"
                       class="btn btn-primary"
+                      type="button"
                     >
-                      PLAY AGAIN
+                      JOGAR NOVAMENTE
                     </button>
 
                     <button
                       id="nextBtn"
-                      type="button"
                       class="btn btn-secondary"
+                      type="button"
                     >
-                      NEXT LEVEL
+                      PRÓXIMO NÍVEL
                     </button>
 
                   </div>
 
                 </div>
-
               </div>
 
             </div>
@@ -565,135 +948,108 @@
             <div class="arena-status-bar">
 
               <div class="arena-status-left">
-
                 <span class="status-indicator"></span>
-
                 <span id="status">
                   SYSTEM READY
                 </span>
-
               </div>
 
-              <div
+              <span
                 id="arenaThreatStatus"
                 class="arena-threat-status"
               >
                 NO ANOMALIES DETECTED
-              </div>
+              </span>
 
             </div>
 
           </section>
 
-          <!-- MOBILE CONTROLS
-               Placed immediately after arena.
-               CSS v0.9 will make this compact.
-          -->
+          <!-- ====================================
+               MOBILE CONTROLS
+               ==================================== -->
 
           <section
             id="mobileControls"
             class="mobile-controls mobile-gamepad"
-            aria-label="Controlos para dispositivos móveis"
+            aria-label="Controlos móveis"
           >
 
             <div class="mobile-controls-heading">
-
-              <span>TOUCH CONTROL SYSTEM</span>
-
+              <span>CONTROLOS</span>
               <span>MOBILE READY</span>
-
             </div>
 
             <div class="mobile-control-layout">
 
               <!-- D-PAD -->
 
-              <div
-                id="mobileDpad"
-                class="mobile-dpad"
-                aria-label="Direcções"
-              >
+              <div id="mobileDpad" class="mobile-dpad">
 
                 <button
                   id="moveUp"
-                  type="button"
                   class="dpad-btn dpad-up"
                   data-direction="up"
+                  type="button"
                   aria-label="Mover para cima"
-                >
-                  ▲
-                </button>
+                >▲</button>
 
                 <button
                   id="moveLeft"
-                  type="button"
                   class="dpad-btn dpad-left"
                   data-direction="left"
+                  type="button"
                   aria-label="Mover para a esquerda"
-                >
-                  ◀
-                </button>
+                >◀</button>
+
+                <button
+                  id="moveRight"
+                  class="dpad-btn dpad-right"
+                  data-direction="right"
+                  type="button"
+                  aria-label="Mover para a direita"
+                >▶</button>
+
+                <button
+                  id="moveDown"
+                  class="dpad-btn dpad-down"
+                  data-direction="down"
+                  type="button"
+                  aria-label="Mover para baixo"
+                >▼</button>
 
                 <div
                   class="dpad-center"
                   aria-hidden="true"
-                >
-                  ◈
-                </div>
-
-                <button
-                  id="moveRight"
-                  type="button"
-                  class="dpad-btn dpad-right"
-                  data-direction="right"
-                  aria-label="Mover para a direita"
-                >
-                  ▶
-                </button>
-
-                <button
-                  id="moveDown"
-                  type="button"
-                  class="dpad-btn dpad-down"
-                  data-direction="down"
-                  aria-label="Mover para baixo"
-                >
-                  ▼
-                </button>
+                >◈</div>
 
               </div>
 
-              <!-- JOYSTICK -->
+              <!-- VIRTUAL JOYSTICK -->
 
               <div
                 id="virtualJoystick"
                 class="virtual-joystick hidden"
-                aria-label="Joystick virtual"
               >
-
                 <div
                   id="joystickBase"
                   class="joystick-base"
                 >
-
                   <div
                     id="joystickStick"
                     class="joystick-stick"
                   ></div>
-
                 </div>
-
               </div>
 
-              <!-- ACTION BUTTONS -->
+              <!-- MOBILE ACTIONS -->
 
               <div class="mobile-action-buttons">
 
                 <button
                   id="mobileShiftBtn"
-                  type="button"
                   class="mobile-action-btn mobile-shift"
-                  aria-label="Activar Paradox Shift"
+                  type="button"
                 >
                   <span>◈</span>
                   <small>SHIFT</small>
@@ -701,12 +1057,11 @@
 
                 <button
                   id="mobileRestartBtn"
-                  type="button"
                   class="mobile-action-btn mobile-restart"
-                  aria-label="Reiniciar simulação"
+                  type="button"
                 >
                   <span>↻</span>
-                  <small>RESTART</small>
+                  <small>REINICIAR</small>
                 </button>
 
               </div>
@@ -714,61 +1069,56 @@
             </div>
 
             <div class="mobile-control-options">
-
               <button
                 id="controlModeBtn"
-                type="button"
                 class="btn btn-secondary"
-                aria-label="Alternar modo de controlo"
+                type="button"
               >
                 CONTROL MODE: D-PAD
               </button>
-
             </div>
 
           </section>
 
         </div>
 
-        <!-- MAIN ACTIONS -->
+        <!-- GAME ACTIONS -->
 
         <section class="game-actions">
 
           <button
             id="startBtn"
-            type="button"
             class="btn btn-primary"
+            type="button"
           >
-            ▶ START SIMULATION
+            ▶ INICIAR
           </button>
 
           <button
             id="restartBtn"
-            type="button"
             class="btn btn-secondary"
+            type="button"
           >
-            ↻ RESTART
+            ↻ REINICIAR
           </button>
 
           <button
             id="shiftBtn"
-            type="button"
             class="btn btn-shift"
+            type="button"
           >
             ◈ PARADOX SHIFT
           </button>
 
         </section>
 
-        <!-- ECHO AI
-             Retained for game integration.
-             CSS v0.9 will use a compact layout.
-        -->
+        <!-- ====================================
+             ECHO AI COMPANION
+             ==================================== -->
 
         <section
           id="echoAiPanel"
           class="panel echo-ai-panel echo-ai-compact"
-          aria-label="Sistema de inteligência ECHO"
         >
 
           <div class="echo-ai-header">
@@ -778,31 +1128,26 @@
               <div
                 id="echoAiAvatar"
                 class="echo-ai-avatar"
-                aria-hidden="true"
-              >
-                ◈
-              </div>
+              >◈</div>
 
               <div>
-
                 <span class="panel-overline">
-                  ARTIFICIAL CONSCIOUSNESS
+                  AI COMPANION
                 </span>
 
                 <h2>
                   ECHO // SISTEMA CONSCIENTE
                 </h2>
-
               </div>
 
             </div>
 
-            <div
+            <span
               id="echoAiState"
               class="echo-ai-state"
             >
               OBSERVING
-            </div>
+            </span>
 
           </div>
 
@@ -823,17 +1168,16 @@
               </span>
 
               <p id="echoMessageText">
-                Estou a observar os teus movimentos.
-                Tenta não me desiludir.
+                Estou pronta para te acompanhar.
               </p>
 
             </div>
 
             <button
               id="echoMessageClose"
-              type="button"
               class="echo-message-close"
-              aria-label="Fechar mensagem da ECHO"
+              type="button"
+              aria-label="Fechar mensagem"
             >
               ×
             </button>
@@ -842,17 +1186,11 @@
 
           <div class="echo-ai-footer">
 
-            <span
-              id="echoAiMood"
-              class="echo-ai-mood"
-            >
+            <span id="echoAiMood">
               MOOD: NEUTRAL
             </span>
 
-            <span
-              id="echoAiAnalysis"
-              class="echo-ai-analysis"
-            >
+            <span id="echoAiAnalysis">
               PLAYER ANALYSIS ACTIVE
             </span>
 
@@ -860,117 +1198,135 @@
 
         </section>
 
-        <!-- DYNAMIC HAZARDS
-             Hidden visually.
-             All IDs retained for game.js.
-        -->
+        <!-- ENGINE STATUS -->
 
         <section
           id="obstaclePanel"
           class="panel obstacle-panel"
-          style="display: none !important;"
+          hidden
+          aria-hidden="true"
         >
-
-          <div class="panel-heading">
-
-            <div>
-
-              <span class="panel-overline">
-                ARENA DEFENCE SYSTEM
-              </span>
-
-              <h2>DYNAMIC HAZARDS</h2>
-
-            </div>
-
-            <span
-              id="obstacleCount"
-              class="obstacle-count"
-            >
-              0 ACTIVE
-            </span>
-
-          </div>
-
-          <div class="obstacle-grid">
-
-            <div class="obstacle-item">
-
-              <span class="obstacle-icon">⚡</span>
-
-              <div>
-
-                <strong>MOVING LASERS</strong>
-
-                <small id="movingLaserStatus">
-                  STANDBY
-                </small>
-
-              </div>
-
-            </div>
-
-            <div class="obstacle-item">
-
-              <span class="obstacle-icon">▥</span>
-
-              <div>
-
-                <strong>PHASE WALLS</strong>
-
-                <small id="phaseWallStatus">
-                  STANDBY
-                </small>
-
-              </div>
-
-            </div>
-
-            <div class="obstacle-item">
-
-              <span class="obstacle-icon">◇</span>
-
-              <div>
-
-                <strong>TEMPORAL PLATFORMS</strong>
-
-                <small id="platformStatus">
-                  STANDBY
-                </small>
-
-              </div>
-
-            </div>
-
-            <div class="obstacle-item">
-
-              <span class="obstacle-icon">⟁</span>
-
-              <div>
-
-                <strong>ECHO TRAPS</strong>
-
-                <small id="echoTrapStatus">
-                  STANDBY
-                </small>
-
-              </div>
-
-            </div>
-
-          </div>
-
+          <span id="obstacleCount"></span>
+          <span id="movingLaserStatus"></span>
+          <span id="phaseWallStatus"></span>
+          <span id="platformStatus"></span>
+          <span id="echoTrapStatus"></span>
         </section>
 
       </section>
 
+      <!-- ======================================
+           SIDEBAR / PROGRESS
+           ====================================== -->
+
+      <aside class="game-sidebar">
+
+        <details
+          class="vr-details"
+          id="vrLevelDetails"
+        >
+
+          <summary>
+            ◈ NÍVEIS E PROGRESSO
+          </summary>
+
+          <div class="vr-details-body">
+
+            <section class="panel levels-panel">
+
+              <div class="panel-heading">
+                <h2>SELECCIONAR NÍVEL</h2>
+              </div>
+
+              <div
+                id="progress"
+                class="level-progress"
+              >
+                0 / 10 COMPLETED
+              </div>
+
+              <div
+                id="levelGrid"
+                class="level-grid"
+              ></div>
+
+              <div class="level-legend">
+                <span>Disponível · </span>
+                <span>Concluído · </span>
+                <span>Bloqueado</span>
+              </div>
+
+            </section>
+
+          </div>
+        </details>
+
+        <details class="vr-details">
+
+          <summary>
+            ★ MEDALHAS E CONTROLOS
+          </summary>
+
+          <div class="vr-details-body">
+
+            <section class="panel medals-panel">
+
+              <h2>MEDALHAS</h2>
+
+              <div
+                id="awakeningMedalSummary"
+                class="medal-summary"
+              >
+                🥇 0 · 🥈 0 · 🥉 0
+              </div>
+
+            </section>
+
+            <section class="panel controls-panel">
+
+              <h2>CONTROLOS</h2>
+
+              <div class="controls-guide">
+
+                <div class="control-guide-row">
+                  <span>Mover</span>
+
+                  <span>
+                    <kbd>W</kbd>
+                    <kbd>A</kbd>
+                    <kbd>S</kbd>
+                    <kbd>D</kbd>
+                  </span>
+                </div>
+
+                <div class="control-guide-row">
+                  <span>SHIFT</span>
+                  <kbd>E</kbd>
+                </div>
+
+                <div class="control-guide-row">
+                  <span>Reiniciar</span>
+                  <kbd>R</kbd>
+                </div>
+
+              </div>
+
+            </section>
+
+          </div>
+        </details>
+
+      </aside>
+
     </main>
 
-    <!-- TUTORIAL -->
+    <!-- ========================================
+         TUTORIAL
+         ======================================== -->
 
     <section
       id="awakeningTutorial"
-      class="awakening-tutorial"
+      class="awakening-tutorial hidden"
       role="dialog"
       aria-modal="false"
       aria-labelledby="tutorialTitle"
@@ -1001,24 +1357,23 @@
           id="tutorialText"
           class="tutorial-text"
         >
-          Aprende a controlar o tempo
-          e os teus próprios ecos.
+          Aprende a controlar os teus ecos.
         </p>
 
         <div class="tutorial-actions">
 
           <button
             id="tutorialSkip"
-            type="button"
             class="btn btn-secondary"
+            type="button"
           >
             SALTAR
           </button>
 
           <button
             id="tutorialNext"
-            type="button"
             class="btn btn-primary"
+            type="button"
           >
             SEGUINTE
           </button>
@@ -1026,25 +1381,23 @@
         </div>
 
       </div>
-
     </section>
 
-    <!-- FOOTER -->
+    <!-- ========================================
+         FOOTER / CREATOR
+         ======================================== -->
 
     <footer class="game-footer">
 
       <div class="footer-top">
 
         <div class="footer-brand">
-
           <strong>ECHO//404</strong>
-
-          <span>PARADOX EVOLUTION</span>
-
+          <span> — PARADOX EVOLUTION</span>
         </div>
 
         <div class="footer-version">
-          SYSTEM REBELLION // v0.9
+          WORLD INTEGRATION // v3.1
         </div>
 
       </div>
@@ -1054,7 +1407,7 @@
       <div class="footer-creator">
 
         <span class="footer-creator-label">
-          CREATED & DEVELOPED BY
+          CREATED &amp; DEVELOPED BY
         </span>
 
         <strong class="footer-creator-name">
@@ -1064,76 +1417,381 @@
       </div>
 
       <p class="footer-copyright">
-        © 2026 MANUEL SAMPAIO01.
-        ALL RIGHTS RESERVED.
+        © 2026 MANUEL SAMPAIO01. ALL RIGHTS RESERVED.
       </p>
 
     </footer>
 
   </div>
 
-  <!-- SCRIPTS
-       Preserve v0.8 JS integration.
-  -->
+  <!-- ============================================
+       SCRIPT LOADING ORDER
+       ============================================ -->
 
-  <script src="levels.js?v=080"></script>
-  <script src="storage.js?v=080"></script>
-  <script src="audio.js?v=080"></script>
-  <script src="game.js?v=080"></script>
-  <script src="visual-v1.js?v=100"></script>
-  <script src="awakening.js?v=080"></script>
+  <!-- PIXIJS -->
+  <script src="https://cdn.jsdelivr.net/npm/pixi.js@8.16.0/dist/pixi.min.js"></script>
 
-  <!-- FULLSCREEN SUPPORT -->
+  <!-- CORE ENGINE -->
+  <script src="levels.js?v=310"></script>
+  <script src="storage.js?v=310"></script>
+  <script src="audio.js?v=310"></script>
+  <script src="game.js?v=310"></script>
+
+  <!-- GAME EXPERIENCE -->
+  <script src="awakening.js?v=310"></script>
+  <script src="visual-v1.js?v=310"></script>
+
+  <!-- WORLD RENDERER -->
+  <script src="world-renderer.js?v=310"></script>
+
+  <!-- ============================================
+       INTERFACE INTEGRATION v3.1
+       ============================================ -->
 
   <script>
     "use strict";
 
     (() => {
 
-      const fullscreenBtn =
-        document.getElementById("fullscreenBtn");
+      const $ = id => document.getElementById(id);
 
-      if (!fullscreenBtn) return;
+      /* ========================================
+         FULLSCREEN
+         ======================================== */
 
-      fullscreenBtn.addEventListener(
+      const fullscreenButton = $("fullscreenBtn");
+
+      fullscreenButton?.addEventListener(
         "click",
         async () => {
-
           try {
-
             if (document.fullscreenElement) {
-
               await document.exitFullscreen();
-
             } else if (
               document.documentElement.requestFullscreen
             ) {
-
               await document.documentElement.requestFullscreen();
-
             }
-
           } catch (error) {
-
             console.warn(
-              "ECHO//404: fullscreen indisponível.",
+              "[ECHO//404] Fullscreen indisponível:",
               error
             );
-
           }
-
         }
       );
 
       document.addEventListener(
         "fullscreenchange",
         () => {
+          if (!fullscreenButton) return;
 
-          fullscreenBtn.textContent =
+          const active = Boolean(
             document.fullscreenElement
-              ? "⤢"
-              : "⛶";
+          );
 
+          fullscreenButton.textContent =
+            active ? "⤢" : "⛶";
+
+          fullscreenButton.setAttribute(
+            "aria-label",
+            active
+              ? "Sair do ecrã completo"
+              : "Ecrã completo"
+          );
+
+          window.EchoWorldRenderer?.resize?.();
+        }
+      );
+
+      /* ========================================
+         LEVEL MENU
+         ======================================== */
+
+      $("vrLevelDetails")?.addEventListener(
+        "toggle",
+        event => {
+          if (!event.target.open) return;
+
+          const reducedMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+          ).matches;
+
+          event.target.scrollIntoView({
+            behavior: reducedMotion
+              ? "auto"
+              : "smooth",
+            block: "nearest"
+          });
+        }
+      );
+
+      document.addEventListener(
+        "click",
+        event => {
+          if (!event.target?.closest?.("#vr-levels")) {
+            return;
+          }
+
+          const details = $("vrLevelDetails");
+
+          if (details) {
+            details.open = true;
+          }
+        }
+      );
+
+      /* ========================================
+         OPERATOR INTEGRATION
+         ======================================== */
+
+      const operators = {
+        AXIOM: {
+          name: "AXIOM",
+          color: "#48f6ff",
+          role: "TACTICAL OPERATOR"
+        },
+
+        NYRA: {
+          name: "NYRA",
+          color: "#c88cff",
+          role: "TEMPORAL SPECIALIST"
+        },
+
+        "KAI-7": {
+          name: "KAI-7",
+          color: "#ffad57",
+          role: "ANDROID UNIT"
+        }
+      };
+
+      window.addEventListener(
+        "echo404:operatorselected",
+        event => {
+
+          const detail = event.detail || {};
+
+          const rawOperator =
+            detail.operator ||
+            detail.character ||
+            detail.id ||
+            detail.name;
+
+          const rawName = String(
+            typeof rawOperator === "object" &&
+            rawOperator !== null
+              ? rawOperator.id ||
+                rawOperator.name ||
+                ""
+              : rawOperator || ""
+          );
+
+          const name = rawName
+            .trim()
+            .toUpperCase()
+            .replace(/_/g, "-")
+            .replace(/\s+/g, "-");
+
+          if (!name) return;
+
+          const operator = operators[name];
+
+          if (!operator) {
+            console.warn(
+              "[ECHO//404] Operador desconhecido:",
+              name
+            );
+            return;
+          }
+
+          /* Body identity */
+
+          document.body.dataset.operator =
+            name.toLowerCase();
+
+          document.documentElement.style.setProperty(
+            "--operator-color",
+            operator.color
+          );
+
+          /* System status */
+
+          const status = $("systemStatus");
+
+          if (status) {
+
+            status.dataset.operator =
+              name.toLowerCase();
+
+            status.title =
+              `Operador activo: ${operator.name} — ${operator.role}`;
+
+            let dot = status.querySelector(
+              ".system-status-dot"
+            );
+
+            if (!dot) {
+              dot = document.createElement("span");
+              dot.className = "system-status-dot";
+              status.prepend(dot);
+            }
+
+            let label = status.querySelector(
+              ".operator-status-label"
+            );
+
+            if (!label) {
+              label = document.createElement("span");
+              label.className = "operator-status-label";
+              status.appendChild(label);
+            }
+
+            label.textContent =
+              `${operator.name} // ONLINE`;
+
+            dot.style.background =
+              operator.color;
+
+            dot.style.boxShadow =
+              `0 0 12px ${operator.color}`;
+          }
+
+          /* Arena identity */
+
+          const arena = $("arenaShell");
+
+          if (arena) {
+            arena.dataset.operator =
+              name.toLowerCase();
+
+            arena.style.setProperty(
+              "--operator-color",
+              operator.color
+            );
+          }
+
+          /* Application identity */
+
+          const app = $("app");
+
+          if (app) {
+            app.dataset.activeOperator =
+              name.toLowerCase();
+          }
+
+          /* Notify other UI modules */
+
+          window.dispatchEvent(
+            new CustomEvent(
+              "echo404:operatoruiupdated",
+              {
+                detail: {
+                  operator: operator.name,
+                  role: operator.role,
+                  color: operator.color
+                }
+              }
+            )
+          );
+
+          console.info(
+            `[ECHO//404] OPERATOR ONLINE: ${operator.name}`
+          );
+        }
+      );
+
+      /* ========================================
+         MODULE VERIFICATION
+         ======================================== */
+
+      window.addEventListener(
+        "load",
+        () => {
+
+          const modules = {
+            pixi: Boolean(window.PIXI),
+
+            levels:
+              typeof GAME_LEVELS !== "undefined",
+
+            storage:
+              Boolean(window.GameStorage),
+
+            audio:
+              Boolean(window.GameAudio),
+
+            game:
+              Boolean(window.EchoGame),
+
+            awakening:
+              Boolean(window.EchoAwakening),
+
+            operators:
+              Boolean(
+                window.EchoVisualRebirthV30 ||
+                window.EchoVisualRebirthV21 ||
+                window.EchoVisual
+              ),
+
+            worldRenderer:
+              Boolean(window.EchoWorldRenderer)
+          };
+
+          const missing = Object.entries(modules)
+            .filter(([, loaded]) => !loaded)
+            .map(([name]) => name);
+
+          if (missing.length) {
+            console.warn(
+              "[ECHO//404] Módulos não detectados:",
+              missing.join(", ")
+            );
+          } else {
+            console.info(
+              "[ECHO//404] Todos os módulos detectados."
+            );
+          }
+
+          /* Renderer status */
+
+          const renderer =
+            window.EchoWorldRenderer;
+
+          const worldState =
+            renderer?.getState?.();
+
+          if (worldState?.initialized) {
+            console.info(
+              "[ECHO//404] WORLD RENDERER ONLINE",
+              worldState
+            );
+          } else {
+            console.warn(
+              "[ECHO//404] World Renderer ainda não está activo."
+            );
+          }
+
+          /* System diagnostics */
+
+          console.info(
+            "=================================="
+          );
+
+          console.info(
+            "ECHO//404 — PARADOX EVOLUTION"
+          );
+
+          console.info(
+            "VERSION 3.1 — WORLD INTEGRATION"
+          );
+
+          console.info(
+            "CREATED & DEVELOPED BY MANUEL SAMPAIO01"
+          );
+
+          console.info(
+            "=================================="
+          );
         }
       );
 
