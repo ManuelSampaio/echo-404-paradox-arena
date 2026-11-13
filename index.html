@@ -3,21 +3,17 @@
 <html lang="pt-AO">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#050b17">
   <meta name="color-scheme" content="dark">
   <meta name="author" content="MANUEL SAMPAIO01">
-  <meta name="description" content="ECHO//404 — PARADOX EVOLUTION. Um jogo de puzzles temporais, ecos e paradoxos.">
-
+  <meta name="description" content="ECHO//404 — PARADOX EVOLUTION. Jogo de puzzles temporais, ecos e paradoxos.">
   <title>ECHO//404 — PARADOX EVOLUTION v4.2</title>
-
-  <link rel="stylesheet" href="style.css?v=420">
+  <link rel="stylesheet" href="style.css?v=421">
 
   <style>
-    /* =====================================================
-       ECHO//404 — HTML INTEGRATION v4.2
-       CREATED & DEVELOPED BY MANUEL SAMPAIO01
-       ===================================================== */
+    /* ECHO//404 — MOBILE INTERFACE FIX v4.2.1
+       CREATED & DEVELOPED BY MANUEL SAMPAIO01 */
 
     :root {
       color-scheme: dark;
@@ -31,42 +27,19 @@
       --operator-color: #48f6ff;
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-
-    html {
-      background: var(--vr-bg);
-      scroll-behavior: smooth;
-    }
-
+    *, *::before, *::after { box-sizing: border-box; }
+    html { background: var(--vr-bg); scroll-behavior: smooth; }
     body.echo404-app {
       margin: 0;
       min-height: 100vh;
       overflow-x: hidden;
       color: var(--vr-white);
       font-family: system-ui, Arial, sans-serif;
-      background:
-        radial-gradient(
-          ellipse at 50% 0%,
-          #153550,
-          transparent 55%
-        ),
-        var(--vr-bg);
+      background: radial-gradient(ellipse at 50% 0%, #153550, transparent 55%), var(--vr-bg);
     }
-
-    .hidden,
-    [hidden] {
-      display: none !important;
-    }
-
-    button {
-      font: inherit;
-      cursor: pointer;
-    }
-
-    button:focus-visible,
-    summary:focus-visible {
+    .hidden, [hidden] { display: none !important; }
+    button { font: inherit; cursor: pointer; }
+    button:focus-visible, summary:focus-visible {
       outline: 2px solid var(--vr-cyan);
       outline-offset: 3px;
     }
@@ -75,34 +48,24 @@
       position: relative;
       z-index: 1;
       width: min(calc(100% - 24px), 1050px);
-      margin: 0 auto;
-      padding: 14px 0 30px;
+      margin: auto;
+      padding: 14px 0 40px;
     }
 
-    .game-header,
-    .header-brand,
-    .header-actions,
-    .panel-heading,
-    .level-information-top,
-    .echo-ai-header,
-    .echo-ai-identity,
-    .echo-ai-footer,
-    .arena-status-bar,
-    .mobile-controls-heading,
-    .mobile-control-layout,
-    .game-actions,
-    .overlay-actions {
+    .game-header, .header-brand, .header-actions,
+    .panel-heading, .level-information-top,
+    .echo-ai-header, .echo-ai-identity,
+    .echo-ai-footer, .arena-status-bar,
+    .mobile-controls-heading, .mobile-control-layout,
+    .game-actions, .overlay-actions {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .game-header,
-    .level-information-top,
-    .echo-ai-header,
-    .echo-ai-footer,
-    .arena-status-bar,
-    .mobile-controls-heading {
+    .game-header, .level-information-top,
+    .echo-ai-header, .echo-ai-footer,
+    .arena-status-bar, .mobile-controls-heading {
       justify-content: space-between;
     }
 
@@ -111,43 +74,23 @@
       margin-bottom: 10px;
       border-bottom: 1px solid #48f6ff22;
     }
-
     .game-logo {
       margin: 0;
       font-size: clamp(23px, 5vw, 32px);
       letter-spacing: 2px;
     }
-
-    .game-logo span,
-    .brand-mark,
-    .panel-overline {
+    .game-logo span, .brand-mark, .panel-overline {
       color: var(--vr-cyan);
     }
-
-    .brand-mark {
-      font-size: 27px;
-    }
-
-    .brand-overline,
-    .game-subtitle,
-    .system-status,
-    .hud-label,
-    .panel-overline {
+    .brand-mark { font-size: 27px; }
+    .brand-overline, .game-subtitle,
+    .system-status, .hud-label, .panel-overline {
       font-size: 10px;
       letter-spacing: 1px;
     }
-
-    .brand-overline,
-    .game-subtitle,
-    .hud-label,
-    .level-hint {
-      color: var(--vr-muted);
-    }
-
-    .system-status {
-      color: #7dffce;
-    }
-
+    .brand-overline, .game-subtitle,
+    .hud-label, .level-hint { color: var(--vr-muted); }
+    .system-status { color: #7dffce; }
     .system-status-dot {
       display: inline-block;
       width: 7px;
@@ -171,112 +114,61 @@
       font-size: 11px;
       letter-spacing: 1px;
     }
+    .system-banner-left { display: flex; gap: 10px; align-items: center; }
+    .system-tag { color: var(--vr-cyan); font-weight: 800; }
+    .system-banner-right { color: #ff9b9b; }
 
-    .system-banner-left {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .system-tag {
-      color: var(--vr-cyan);
-      font-weight: 800;
-    }
-
-    .system-banner-right {
-      color: #ff9b9b;
-    }
-
-    .game-layout,
-    .game-main,
-    .gameplay-zone {
+    .game-layout, .game-main, .gameplay-zone {
       display: flex;
       flex-direction: column;
       gap: 14px;
       width: 100%;
       min-width: 0;
     }
+    .game-sidebar { display: grid; gap: 12px; width: 100%; }
 
-    .game-sidebar {
-      display: grid;
-      gap: 12px;
-      width: 100%;
-    }
-
-    .panel,
-    .hud-card,
-    .mobile-controls,
-    .vr-details {
+    .panel, .hud-card, .mobile-controls, .vr-details {
       border: 1px solid var(--vr-border);
       border-radius: 15px;
       background: linear-gradient(145deg, #10263e, #081525);
       box-shadow: 0 8px 28px #0003;
     }
-
-    .panel {
-      padding: 15px;
-    }
-
-    .level-information h2 {
-      margin: 5px 0;
-    }
-
-    .level-hint {
-      margin-top: 6px;
-      font-size: 12px;
-      line-height: 1.5;
-    }
+    .panel { padding: 15px; }
+    .level-information h2 { margin: 5px 0; }
+    .level-hint { margin-top: 6px; font-size: 12px; line-height: 1.5; }
 
     .game-hud {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 7px;
     }
-
     .hud-card {
       min-width: 0;
       padding: 11px 5px;
       text-align: center;
       border-radius: 11px;
     }
-
-    .hud-label {
-      display: block;
-      margin-bottom: 5px;
-    }
-
+    .hud-label { display: block; margin-bottom: 5px; }
     .hud-value {
       display: block;
       font-size: clamp(12px, 3vw, 20px);
       font-variant-numeric: tabular-nums;
     }
-
     .timer-progress-track {
       height: 5px;
       overflow: hidden;
       border-radius: 10px;
       background: #23324c;
     }
-
     .timer-progress-bar {
       width: 100%;
       height: 100%;
       background: var(--vr-cyan);
       transition: width .12s linear;
     }
+    .timer-progress-bar.critical { background: #ff4c69; }
 
-    .timer-progress-bar.critical {
-      background: #ff4c69;
-    }
-
-    /* ARENA */
-
-    .arena-section,
-    .arena-shell {
-      width: 100%;
-      min-width: 0;
-    }
-
+    .arena-section, .arena-shell { width: 100%; min-width: 0; }
     #arenaShell {
       position: relative;
       isolation: isolate;
@@ -287,7 +179,6 @@
       background: #06101e;
       box-shadow: 0 0 25px #48f6ff18;
     }
-
     #echoWorldRenderer {
       position: absolute;
       inset: 0;
@@ -295,13 +186,11 @@
       pointer-events: none;
       overflow: hidden;
     }
-
     #echoWorldRenderer canvas {
       display: block;
       width: 100%;
       height: 100%;
     }
-
     #gameCanvas {
       position: relative;
       z-index: 1;
@@ -311,24 +200,15 @@
       object-fit: contain;
       background: transparent !important;
     }
-
-    #vr-overlay,
-    #echo404CharacterOverlay {
+    #vr-overlay, #echo404CharacterOverlay {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
     }
-
-    #vr-overlay {
-      z-index: 2;
-    }
-
-    #echo404CharacterOverlay {
-      z-index: 3;
-    }
-
+    #vr-overlay { z-index: 2; }
+    #echo404CharacterOverlay { z-index: 3; }
     #criticalWarning {
       position: absolute;
       z-index: 4;
@@ -341,7 +221,6 @@
       font-size: 10px;
       white-space: nowrap;
     }
-
     .game-overlay {
       position: absolute;
       inset: 0;
@@ -354,34 +233,19 @@
       text-align: center;
       backdrop-filter: blur(5px);
     }
-
     .overlay-content {
       width: min(100%, 420px);
       max-height: 100%;
       overflow-y: auto;
     }
-
-    .overlay-actions {
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .overlay-score {
-      margin: 14px 0;
-    }
-
-    .overlay-score span,
-    .overlay-score strong {
-      display: block;
-    }
-
+    .overlay-actions { flex-wrap: wrap; justify-content: center; }
+    .overlay-score { margin: 14px 0; }
+    .overlay-score span, .overlay-score strong { display: block; }
     .overlay-score strong {
       margin-top: 5px;
       font-size: 25px;
       color: var(--vr-cyan);
     }
-
-    /* BUTTONS */
 
     .btn {
       padding: 10px 13px;
@@ -392,45 +256,26 @@
       font-size: 11px;
       font-weight: 700;
     }
-
-    .btn:hover {
-      filter: brightness(1.14);
-    }
-
+    .btn:hover { filter: brightness(1.14); }
     .btn-primary {
       border-color: var(--vr-cyan);
       background: linear-gradient(120deg, #48f6ff, #26cde7);
       color: #04131d;
     }
-
     .btn-shift {
       border-color: #ba7cff;
       background: linear-gradient(120deg, #432465, #6b3b9e);
     }
+    .game-actions { flex-wrap: wrap; }
+    .game-actions .btn { flex: 1; min-width: 110px; }
 
-    .game-actions {
-      flex-wrap: wrap;
-    }
-
-    .game-actions .btn {
-      flex: 1;
-      min-width: 110px;
-    }
-
-    /* MOBILE CONTROLS */
-
-    .mobile-controls {
-      width: 100%;
-      padding: 12px;
-    }
-
+    .mobile-controls { width: 100%; padding: 12px; }
     .mobile-dpad {
       display: grid;
       grid-template-columns: repeat(3, 50px);
       grid-template-rows: repeat(3, 48px);
       gap: 3px;
     }
-
     .dpad-btn {
       border: 1px solid #427b99;
       border-radius: 10px;
@@ -440,28 +285,21 @@
       touch-action: none;
       user-select: none;
     }
-
-    .dpad-btn:active {
-      background: #2b6585;
-    }
-
+    .dpad-btn:active { background: #2b6585; }
     .dpad-up { grid-area: 1 / 2; }
     .dpad-left { grid-area: 2 / 1; }
     .dpad-right { grid-area: 2 / 3; }
     .dpad-down { grid-area: 3 / 2; }
-
     .dpad-center {
       grid-area: 2 / 2;
       display: grid;
       place-items: center;
     }
-
     .mobile-action-buttons {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-
     .mobile-action-btn {
       min-width: 96px;
       min-height: 60px;
@@ -471,18 +309,12 @@
       color: white;
       touch-action: manipulation;
     }
-
-    .mobile-action-btn span,
-    .mobile-action-btn small {
-      display: block;
-    }
-
+    .mobile-action-btn span, .mobile-action-btn small { display: block; }
     .virtual-joystick {
       width: 150px;
       height: 150px;
       touch-action: none;
     }
-
     .joystick-base {
       position: relative;
       width: 130px;
@@ -492,7 +324,6 @@
       border-radius: 50%;
       background: #102b42;
     }
-
     .joystick-stick {
       position: absolute;
       top: calc(50% - 27.5px);
@@ -502,36 +333,22 @@
       border-radius: 50%;
       background: #48f6ff99;
     }
+    .mobile-control-options { margin-top: 12px; text-align: center; }
 
-    .mobile-control-options {
-      margin-top: 12px;
-      text-align: center;
-    }
-
-    /* LEVELS, AI, FOOTER */
-
-    .vr-details {
-      overflow: hidden;
-    }
-
+    .vr-details { overflow: hidden; }
     .vr-details > summary {
       padding: 15px;
       color: var(--vr-cyan);
       font-weight: 800;
       cursor: pointer;
     }
-
-    .vr-details-body {
-      padding: 0 12px 12px;
-    }
-
+    .vr-details-body { padding: 0 12px 12px; }
     .level-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 7px;
       margin: 12px 0;
     }
-
     .level-grid button {
       min-height: 43px;
       border: 1px solid #42617d;
@@ -539,60 +356,28 @@
       background: #142a44;
       color: white;
     }
+    .level-grid button.selected { border-color: var(--vr-cyan); }
+    .level-grid button.completed { background: #174d45; }
+    .level-grid button.locked { opacity: .4; }
 
-    .level-grid button.selected {
-      border-color: var(--vr-cyan);
-    }
-
-    .level-grid button.completed {
-      background: #174d45;
-    }
-
-    .level-grid button.locked {
-      opacity: .4;
-    }
-
-    .echo-ai-panel {
-      border-color: #a67aff66;
-    }
-
-    .echo-ai-identity {
-      justify-content: flex-start;
-    }
-
-    .echo-ai-avatar {
-      color: var(--vr-purple);
-      font-size: 23px;
-    }
-
+    .echo-ai-panel { border-color: #a67aff66; }
+    .echo-ai-identity { justify-content: flex-start; }
+    .echo-ai-avatar { color: var(--vr-purple); font-size: 23px; }
     .echo-message {
       display: flex;
       align-items: center;
       gap: 8px;
       margin: 9px 0;
     }
-
-    .echo-message-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .echo-message-content p {
-      margin: 3px 0;
-      line-height: 1.5;
-    }
-
+    .echo-message-content { flex: 1; min-width: 0; }
+    .echo-message-content p { margin: 3px 0; line-height: 1.5; }
     .echo-message-close {
       border: 0;
       background: transparent;
       color: white;
       font-size: 20px;
     }
-
-    #obstaclePanel {
-      display: none !important;
-    }
-
+    #obstaclePanel { display: none !important; }
     .game-footer {
       margin-top: 28px;
       padding: 18px 0;
@@ -601,21 +386,33 @@
       text-align: center;
       font-size: 11px;
     }
-
     .footer-divider {
       height: 1px;
       margin: 12px 0;
       background: var(--vr-border);
     }
+    .awakening-intro, .awakening-tutorial { z-index: 9000; }
 
-    .awakening-intro,
-    .awakening-tutorial {
-      z-index: 9000;
+    /* NEW: MOBILE MENU AT TOP */
+    #echoMobileMenu {
+      display: none;
     }
 
-    @media (max-width: 600px) {
+    /* NEW: QUICK PLAY ACTIONS */
+    #echoMobileQuickActions {
+      display: none;
+    }
+
+    /* Prevent overlapping notifications */
+    #vr-toast {
+      max-width: calc(100vw - 24px);
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 768px) {
       #app.app-container {
         width: calc(100% - 14px);
+        padding-bottom: 110px;
       }
 
       .system-status,
@@ -624,22 +421,146 @@
         display: none;
       }
 
-      .game-logo {
-        font-size: 23px;
+      .game-logo { font-size: 23px; }
+      .game-header { gap: 8px; }
+      .header-brand { min-width: 0; }
+      .header-actions { flex-shrink: 0; }
+
+      .level-information {
+        overflow: hidden;
+      }
+      #levelName {
+        overflow-wrap: anywhere;
       }
 
       .mobile-dpad {
         grid-template-columns: repeat(3, 44px);
         grid-template-rows: repeat(3, 43px);
       }
+      .mobile-action-btn { min-width: 84px; }
 
-      .mobile-action-btn {
-        min-width: 84px;
+      /* Menu stays visible near top */
+      #echoMobileMenu {
+        position: fixed !important;
+        top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
+        right: 10px !important;
+        bottom: auto !important;
+        left: auto !important;
+        z-index: 8500 !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        min-width: 74px;
+        min-height: 40px;
+        padding: 8px 12px;
+        border: 1px solid #48f6ff99;
+        border-radius: 12px;
+        background: #071c30f2;
+        color: #c7faff;
+        font-size: 12px;
+        font-weight: 800;
+        box-shadow: 0 6px 24px #0008;
+        backdrop-filter: blur(12px);
       }
 
-      .game-actions .btn {
+      /* Old floating launch must not overlap AI */
+      #vr-launch {
+        position: fixed !important;
+        top: calc(env(safe-area-inset-top, 0px) + 58px) !important;
+        right: 10px !important;
+        bottom: auto !important;
+        left: auto !important;
+        z-index: 8400 !important;
+      }
+
+      /* Quick actions always reachable */
+      #echoMobileQuickActions {
+        position: fixed !important;
+        left: 50% !important;
+        right: auto !important;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 12px) !important;
+        transform: translateX(-50%) !important;
+        z-index: 8500 !important;
+        display: flex !important;
+        gap: 8px;
+        width: min(96vw, 400px);
+        padding: 8px;
+        border: 1px solid #31516e;
+        border-radius: 16px;
+        background: #071322f2;
+        box-shadow: 0 10px 35px #000a;
+        backdrop-filter: blur(14px);
+      }
+
+      #echoMobileQuickActions button {
+        flex: 1;
         min-width: 0;
+        min-height: 46px;
+        padding: 9px 6px;
+        border-radius: 10px;
+        border: 1px solid #48f6ff88;
+        background: #103049;
+        color: #dcfbff;
+        font-size: 11px;
+        font-weight: 800;
+        touch-action: manipulation;
+      }
+
+      #echoMobileQuickActions button:first-child {
+        background: #48f6ff;
+        color: #051521;
+      }
+
+      #echoMobileQuickActions button:last-child {
+        border-color: #a979f7;
+        background: #30204b;
+        color: white;
+      }
+
+      /* Make original buttons visible too */
+      .game-actions {
+        display: flex !important;
+        width: 100%;
+        gap: 8px;
+      }
+      .game-actions .btn {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        min-width: 0;
+        min-height: 44px;
         padding: 10px 6px;
+        font-size: 11px;
+      }
+
+      /* Move toast above quick actions */
+      #vr-toast {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 86px) !important;
+      }
+
+      .echo-ai-panel {
+        margin-bottom: 10px;
+      }
+
+      .game-overlay .overlay-actions .btn {
+        display: inline-flex !important;
+        min-height: 40px;
+      }
+
+      .game-overlay .overlay-content {
+        padding: 8px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      #echoMobileQuickActions button { font-size: 10px; }
+      .game-logo { font-size: 20px; }
+    }
+
+    @media (min-width: 769px) {
+      #echoMobileMenu,
+      #echoMobileQuickActions {
+        display: none !important;
       }
     }
 
@@ -656,7 +577,6 @@
 <body class="echo404-app">
 
   <!-- BACKGROUND EFFECTS -->
-
   <div class="background-grid" aria-hidden="true"></div>
   <div class="ambient-glow ambient-glow-one" aria-hidden="true"></div>
   <div class="ambient-glow ambient-glow-two" aria-hidden="true"></div>
@@ -665,195 +585,135 @@
   <div id="globalGlitch" class="global-glitch" aria-hidden="true"></div>
 
   <!-- CINEMATIC INTRO -->
-
-  <section
-    id="awakeningIntro"
-    class="awakening-intro hidden"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="awakeningTitle"
-  >
+  <section id="awakeningIntro" class="awakening-intro hidden"
+           role="dialog" aria-modal="true"
+           aria-labelledby="awakeningTitle">
     <div class="awakening-intro-backdrop"></div>
-
     <div class="awakening-intro-content">
-
       <div class="awakening-system-label">
         ECHO SYSTEM // INITIALIZING
       </div>
-
       <div class="awakening-symbol">◈</div>
-
       <div id="awakeningCounter" class="awakening-counter">
         PROTOCOL 01 / 04
       </div>
-
       <h1 id="awakeningTitle" class="awakening-title">
         THE AWAKENING
       </h1>
-
       <p id="awakeningText" class="awakening-text">
         O tempo está a fragmentar-se.
       </p>
-
       <div id="awakeningGlitch" class="awakening-glitch"></div>
-
       <div class="awakening-intro-actions">
         <button id="awakeningSkip" class="btn btn-secondary" type="button">
           SALTAR
         </button>
-
         <button id="awakeningNext" class="btn btn-primary" type="button">
           CONTINUAR
         </button>
       </div>
-
       <div class="awakening-signature">
         CREATED &amp; DEVELOPED BY MANUEL SAMPAIO01
       </div>
-
     </div>
   </section>
 
-  <!-- MAIN APPLICATION -->
+  <!-- NEW MOBILE TOP MENU -->
+  <button id="echoMobileMenu" type="button"
+          aria-label="Abrir menu de níveis e progresso">
+    ☰ MENU
+  </button>
 
+  <!-- NEW MOBILE QUICK ACTIONS -->
+  <nav id="echoMobileQuickActions"
+       aria-label="Ações rápidas do jogo">
+    <button id="echoQuickPlay" type="button">
+      ▶ JOGAR
+    </button>
+    <button id="echoQuickRestart" type="button">
+      ↻ REINICIAR
+    </button>
+    <button id="echoQuickLevels" type="button">
+      ☰ NÍVEIS
+    </button>
+  </nav>
+
+  <!-- MAIN APPLICATION -->
   <div id="app" class="app-container">
 
-    <!-- HEADER -->
-
     <header class="game-header">
-
       <div class="header-brand">
-
         <div class="brand-mark">◈</div>
-
         <div class="brand-information">
-
-          <div class="brand-overline">
-            PARADOX EVOLUTION
-          </div>
-
-          <h1 class="game-logo">
-            ECHO<span>//</span>404
-          </h1>
-
-          <div class="game-subtitle">
-            TEMPORAL ENGINE v4.2
-          </div>
-
+          <div class="brand-overline">PARADOX EVOLUTION</div>
+          <h1 class="game-logo">ECHO<span>//</span>404</h1>
+          <div class="game-subtitle">TEMPORAL ENGINE v4.2</div>
         </div>
       </div>
 
       <div class="header-actions">
-
         <span id="systemStatus" class="system-status">
           <span class="system-status-dot"></span>
-          <span class="operator-status-label">
-            SYSTEM ONLINE
-          </span>
+          <span class="operator-status-label">SYSTEM ONLINE</span>
         </span>
-
-        <button
-          id="soundBtn"
-          class="btn btn-icon"
-          type="button"
-          aria-label="Som"
-        >🔊</button>
-
-        <button
-          id="fullscreenBtn"
-          class="btn btn-icon"
-          type="button"
-          aria-label="Ecrã completo"
-        >⛶</button>
-
+        <button id="soundBtn" class="btn btn-icon" type="button"
+                aria-label="Som">🔊</button>
+        <button id="fullscreenBtn" class="btn btn-icon" type="button"
+                aria-label="Ecrã completo">⛶</button>
       </div>
     </header>
 
-    <!-- SYSTEM BANNER -->
-
     <section class="system-banner">
-
       <div class="system-banner-left">
         <span class="system-tag">v4.2</span>
-        <span class="system-banner-text">
-          PARADOX EVOLUTION
-        </span>
+        <span class="system-banner-text">PARADOX EVOLUTION</span>
       </div>
-
       <div class="system-banner-right">
-        <span id="threatLevel">
-          THREAT LEVEL: LOW
-        </span>
+        <span id="threatLevel">THREAT LEVEL: LOW</span>
       </div>
-
     </section>
 
-    <!-- GAME LAYOUT -->
-
     <main class="game-layout">
-
       <section class="game-main">
 
         <!-- LEVEL INFORMATION -->
-
         <section class="panel level-information">
-
           <div class="level-information-top">
-
             <div>
-              <span class="panel-overline">
-                CURRENT SIMULATION
-              </span>
-
-              <h2 id="levelName">
-                O Primeiro Eco
-              </h2>
+              <span class="panel-overline">CURRENT SIMULATION</span>
+              <h2 id="levelName">O Primeiro Eco</h2>
             </div>
-
-            <span
-              id="difficultyBadge"
-              class="difficulty-badge"
-            >
+            <span id="difficultyBadge" class="difficulty-badge">
               INICIANTE
             </span>
-
           </div>
-
           <div id="levelHint" class="level-hint">
             Utiliza os ecos temporais para abrir a porta.
           </div>
-
         </section>
 
         <!-- HUD -->
-
         <section class="game-hud" aria-label="Indicadores do jogo">
-
           <div class="hud-card">
             <span class="hud-label">CICLO</span>
             <strong id="cycle" class="hud-value">1 / 6</strong>
           </div>
-
           <div id="timerCard" class="hud-card timer-card">
             <span class="hud-label">TEMPO</span>
             <strong id="timer" class="hud-value">10.0</strong>
           </div>
-
           <div class="hud-card">
             <span class="hud-label">ECOS</span>
             <strong id="ghosts" class="hud-value">0</strong>
           </div>
-
           <div class="hud-card">
             <span class="hud-label">PONTOS</span>
             <strong id="score" class="hud-value">0</strong>
           </div>
-
           <div class="hud-card">
             <span class="hud-label">RECORDE</span>
             <strong id="best" class="hud-value">0</strong>
           </div>
-
         </section>
 
         <div class="timer-progress-track">
@@ -861,11 +721,8 @@
         </div>
 
         <!-- GAME ARENA -->
-
         <div class="gameplay-zone">
-
           <section class="arena-section">
-
             <div id="arenaShell" class="arena-shell">
 
               <div class="arena-corner arena-corner-tl"></div>
@@ -873,586 +730,296 @@
               <div class="arena-corner arena-corner-bl"></div>
               <div class="arena-corner arena-corner-br"></div>
 
-              <!--
-                world-renderer.js creates #echoWorldRenderer
-                automatically behind this canvas.
-              -->
+              <canvas id="gameCanvas" width="800" height="500"
+                      aria-label="Arena temporal ECHO//404"></canvas>
 
-              <canvas
-                id="gameCanvas"
-                width="800"
-                height="500"
-                aria-label="Arena temporal ECHO//404"
-              ></canvas>
-
-              <div
-                id="criticalWarning"
-                class="critical-warning hidden"
-                role="alert"
-              >
+              <div id="criticalWarning"
+                   class="critical-warning hidden" role="alert">
                 ⚠ TEMPORAL COLLAPSE IMMINENT
               </div>
 
-              <div
-                id="arenaGlitch"
-                class="arena-glitch"
-                aria-hidden="true"
-              ></div>
+              <div id="arenaGlitch" class="arena-glitch"
+                   aria-hidden="true"></div>
 
-              <!-- RESULT OVERLAY -->
-
+              <!-- GAME RESULT OVERLAY -->
               <div id="overlay" class="game-overlay">
-
                 <div class="overlay-content">
-
-                  <span class="overlay-overline">
-                    TEMPORAL PROTOCOL
-                  </span>
-
-                  <h2 id="overlayTitle">
-                    ECHO//404
-                  </h2>
-
+                  <span class="overlay-overline">TEMPORAL PROTOCOL</span>
+                  <h2 id="overlayTitle">ECHO//404</h2>
                   <p id="overlayMessage">
                     Escolhe um operador e inicia a simulação.
                   </p>
-
-                  <div
-                    id="awakeningMedalResult"
-                    class="medal-result"
-                  ></div>
-
+                  <div id="awakeningMedalResult"
+                       class="medal-result"></div>
                   <div class="overlay-score">
                     <span>FINAL SCORE</span>
                     <strong id="finalScore">0</strong>
                   </div>
-
                   <div class="overlay-actions">
-
-                    <button
-                      id="playAgainBtn"
-                      class="btn btn-primary"
-                      type="button"
-                    >
-                      JOGAR NOVAMENTE
-                    </button>
-
-                    <button
-                      id="nextBtn"
-                      class="btn btn-secondary"
-                      type="button"
-                    >
-                      PRÓXIMO NÍVEL
-                    </button>
-
+                    <button id="playAgainBtn" class="btn btn-primary"
+                            type="button">JOGAR NOVAMENTE</button>
+                    <button id="nextBtn" class="btn btn-secondary"
+                            type="button">PRÓXIMO NÍVEL</button>
                   </div>
                 </div>
               </div>
 
             </div>
 
-            <!-- ARENA STATUS -->
-
             <div class="arena-status-bar">
-
               <div class="arena-status-left">
                 <span class="status-indicator"></span>
                 <span id="status">SYSTEM READY</span>
               </div>
-
-              <span
-                id="arenaThreatStatus"
-                class="arena-threat-status"
-              >
+              <span id="arenaThreatStatus" class="arena-threat-status">
                 NO ANOMALIES DETECTED
               </span>
-
             </div>
-
           </section>
 
           <!-- MOBILE CONTROLS -->
-
-          <section
-            id="mobileControls"
-            class="mobile-controls mobile-gamepad"
-            aria-label="Controlos móveis"
-          >
-
+          <section id="mobileControls"
+                   class="mobile-controls mobile-gamepad"
+                   aria-label="Controlos móveis">
             <div class="mobile-controls-heading">
               <span>CONTROLOS</span>
               <span>MOBILE READY</span>
             </div>
 
             <div class="mobile-control-layout">
-
-              <!-- D-PAD -->
-
               <div id="mobileDpad" class="mobile-dpad">
-
-                <button
-                  id="moveUp"
-                  class="dpad-btn dpad-up"
-                  data-direction="up"
-                  type="button"
-                  aria-label="Mover para cima"
-                >▲</button>
-
-                <button
-                  id="moveLeft"
-                  class="dpad-btn dpad-left"
-                  data-direction="left"
-                  type="button"
-                  aria-label="Mover para a esquerda"
-                >◀</button>
-
-                <button
-                  id="moveRight"
-                  class="dpad-btn dpad-right"
-                  data-direction="right"
-                  type="button"
-                  aria-label="Mover para a direita"
-                >▶</button>
-
-                <button
-                  id="moveDown"
-                  class="dpad-btn dpad-down"
-                  data-direction="down"
-                  type="button"
-                  aria-label="Mover para baixo"
-                >▼</button>
-
-                <div
-                  class="dpad-center"
-                  aria-hidden="true"
-                >◈</div>
-
+                <button id="moveUp" class="dpad-btn dpad-up"
+                        data-direction="up" type="button"
+                        aria-label="Mover para cima">▲</button>
+                <button id="moveLeft" class="dpad-btn dpad-left"
+                        data-direction="left" type="button"
+                        aria-label="Mover para a esquerda">◀</button>
+                <button id="moveRight" class="dpad-btn dpad-right"
+                        data-direction="right" type="button"
+                        aria-label="Mover para a direita">▶</button>
+                <button id="moveDown" class="dpad-btn dpad-down"
+                        data-direction="down" type="button"
+                        aria-label="Mover para baixo">▼</button>
+                <div class="dpad-center" aria-hidden="true">◈</div>
               </div>
 
-              <!-- VIRTUAL JOYSTICK -->
-
-              <div
-                id="virtualJoystick"
-                class="virtual-joystick hidden"
-              >
-                <div
-                  id="joystickBase"
-                  class="joystick-base"
-                >
-                  <div
-                    id="joystickStick"
-                    class="joystick-stick"
-                  ></div>
+              <div id="virtualJoystick"
+                   class="virtual-joystick hidden">
+                <div id="joystickBase" class="joystick-base">
+                  <div id="joystickStick"
+                       class="joystick-stick"></div>
                 </div>
               </div>
 
-              <!-- MOBILE ACTIONS -->
-
               <div class="mobile-action-buttons">
-
-                <button
-                  id="mobileShiftBtn"
-                  class="mobile-action-btn mobile-shift"
-                  type="button"
-                >
+                <button id="mobileShiftBtn"
+                        class="mobile-action-btn mobile-shift"
+                        type="button">
                   <span>◈</span>
                   <small>SHIFT</small>
                 </button>
-
-                <button
-                  id="mobileRestartBtn"
-                  class="mobile-action-btn mobile-restart"
-                  type="button"
-                >
+                <button id="mobileRestartBtn"
+                        class="mobile-action-btn mobile-restart"
+                        type="button">
                   <span>↻</span>
                   <small>REINICIAR</small>
                 </button>
-
               </div>
             </div>
 
             <div class="mobile-control-options">
-              <button
-                id="controlModeBtn"
-                class="btn btn-secondary"
-                type="button"
-              >
+              <button id="controlModeBtn" class="btn btn-secondary"
+                      type="button">
                 CONTROL MODE: D-PAD
               </button>
             </div>
-
           </section>
-
         </div>
 
-        <!-- GAME ACTIONS -->
-
+        <!-- ORIGINAL GAME ACTIONS -->
         <section class="game-actions">
-
-          <button
-            id="startBtn"
-            class="btn btn-primary"
-            type="button"
-          >
-            ▶ INICIAR
-          </button>
-
-          <button
-            id="restartBtn"
-            class="btn btn-secondary"
-            type="button"
-          >
-            ↻ REINICIAR
-          </button>
-
-          <button
-            id="shiftBtn"
-            class="btn btn-shift"
-            type="button"
-          >
-            ◈ PARADOX SHIFT
-          </button>
-
+          <button id="startBtn" class="btn btn-primary"
+                  type="button">▶ INICIAR</button>
+          <button id="restartBtn" class="btn btn-secondary"
+                  type="button">↻ REINICIAR</button>
+          <button id="shiftBtn" class="btn btn-shift"
+                  type="button">◈ PARADOX SHIFT</button>
         </section>
 
-        <!-- ECHO AI COMPANION -->
-
-        <section
-          id="echoAiPanel"
-          class="panel echo-ai-panel echo-ai-compact"
-        >
-
+        <!-- ECHO AI -->
+        <section id="echoAiPanel"
+                 class="panel echo-ai-panel echo-ai-compact">
           <div class="echo-ai-header">
-
             <div class="echo-ai-identity">
-
-              <div
-                id="echoAiAvatar"
-                class="echo-ai-avatar"
-              >◈</div>
-
+              <div id="echoAiAvatar" class="echo-ai-avatar">◈</div>
               <div>
-                <span class="panel-overline">
-                  AI COMPANION
-                </span>
-
-                <h2>
-                  ECHO // SISTEMA CONSCIENTE
-                </h2>
+                <span class="panel-overline">AI COMPANION</span>
+                <h2>ECHO // SISTEMA CONSCIENTE</h2>
               </div>
-
             </div>
-
-            <span
-              id="echoAiState"
-              class="echo-ai-state"
-            >
+            <span id="echoAiState" class="echo-ai-state">
               OBSERVING
             </span>
-
           </div>
 
-          <div
-            id="echoMessage"
-            class="echo-message"
-            role="status"
-            aria-live="polite"
-          >
-
+          <div id="echoMessage" class="echo-message"
+               role="status" aria-live="polite">
             <div class="echo-message-content">
-
-              <span
-                id="echoMessageLabel"
-                class="echo-message-label"
-              >
-                ECHO:
-              </span>
-
+              <span id="echoMessageLabel"
+                    class="echo-message-label">ECHO:</span>
               <p id="echoMessageText">
                 Estou pronta para te acompanhar.
               </p>
-
             </div>
-
-            <button
-              id="echoMessageClose"
-              class="echo-message-close"
-              type="button"
-              aria-label="Fechar mensagem"
-            >
-              ×
-            </button>
-
+            <button id="echoMessageClose"
+                    class="echo-message-close" type="button"
+                    aria-label="Fechar mensagem">×</button>
           </div>
 
           <div class="echo-ai-footer">
-
-            <span id="echoAiMood">
-              MOOD: NEUTRAL
-            </span>
-
+            <span id="echoAiMood">MOOD: NEUTRAL</span>
             <span id="echoAiAnalysis">
               PLAYER ANALYSIS ACTIVE
             </span>
-
           </div>
-
         </section>
 
-        <!-- HIDDEN ENGINE STATUS -->
-
-        <section
-          id="obstaclePanel"
-          class="panel obstacle-panel"
-          hidden
-          aria-hidden="true"
-        >
+        <!-- ENGINE STATUS -->
+        <section id="obstaclePanel" class="panel obstacle-panel"
+                 hidden aria-hidden="true">
           <span id="obstacleCount"></span>
           <span id="movingLaserStatus"></span>
           <span id="phaseWallStatus"></span>
           <span id="platformStatus"></span>
           <span id="echoTrapStatus"></span>
         </section>
-
       </section>
 
-      <!-- SIDEBAR / PROGRESS -->
-
+      <!-- SIDEBAR -->
       <aside class="game-sidebar">
-
-        <details
-          class="vr-details"
-          id="vrLevelDetails"
-        >
-
-          <summary>
-            ◈ NÍVEIS E PROGRESSO
-          </summary>
-
+        <details class="vr-details" id="vrLevelDetails">
+          <summary>◈ NÍVEIS E PROGRESSO</summary>
           <div class="vr-details-body">
-
             <section class="panel levels-panel">
-
               <div class="panel-heading">
                 <h2>SELECCIONAR NÍVEL</h2>
               </div>
-
-              <div
-                id="progress"
-                class="level-progress"
-              >
+              <div id="progress" class="level-progress">
                 0 / 10 COMPLETED
               </div>
-
-              <div
-                id="levelGrid"
-                class="level-grid"
-              ></div>
-
+              <div id="levelGrid" class="level-grid"></div>
               <div class="level-legend">
                 <span>Disponível · </span>
                 <span>Concluído · </span>
                 <span>Bloqueado</span>
               </div>
-
             </section>
-
           </div>
         </details>
 
         <details class="vr-details">
-
-          <summary>
-            ★ MEDALHAS E CONTROLOS
-          </summary>
-
+          <summary>★ MEDALHAS E CONTROLOS</summary>
           <div class="vr-details-body">
-
             <section class="panel medals-panel">
-
               <h2>MEDALHAS</h2>
-
-              <div
-                id="awakeningMedalSummary"
-                class="medal-summary"
-              >
+              <div id="awakeningMedalSummary" class="medal-summary">
                 🥇 0 · 🥈 0 · 🥉 0
               </div>
-
             </section>
 
             <section class="panel controls-panel">
-
               <h2>CONTROLOS</h2>
-
               <div class="controls-guide">
-
                 <div class="control-guide-row">
                   <span>Mover</span>
                   <span>
-                    <kbd>W</kbd>
-                    <kbd>A</kbd>
-                    <kbd>S</kbd>
-                    <kbd>D</kbd>
+                    <kbd>W</kbd><kbd>A</kbd>
+                    <kbd>S</kbd><kbd>D</kbd>
                   </span>
                 </div>
-
                 <div class="control-guide-row">
-                  <span>SHIFT</span>
-                  <kbd>E</kbd>
+                  <span>SHIFT</span><kbd>E</kbd>
                 </div>
-
                 <div class="control-guide-row">
-                  <span>Reiniciar</span>
-                  <kbd>R</kbd>
+                  <span>Reiniciar</span><kbd>R</kbd>
                 </div>
-
               </div>
-
             </section>
-
           </div>
         </details>
-
       </aside>
-
     </main>
 
     <!-- TUTORIAL -->
-
-    <section
-      id="awakeningTutorial"
-      class="awakening-tutorial hidden"
-      role="dialog"
-      aria-modal="false"
-      aria-labelledby="tutorialTitle"
-    >
-
+    <section id="awakeningTutorial"
+             class="awakening-tutorial hidden"
+             role="dialog" aria-modal="false"
+             aria-labelledby="tutorialTitle">
       <div class="tutorial-content">
-
         <div class="tutorial-heading">
-
-          <span class="tutorial-overline">
-            OPERATOR TRAINING
-          </span>
-
-          <h2 id="tutorialTitle">
-            TEMPORAL TRAINING
-          </h2>
-
+          <span class="tutorial-overline">OPERATOR TRAINING</span>
+          <h2 id="tutorialTitle">TEMPORAL TRAINING</h2>
         </div>
-
-        <div
-          id="tutorialCounter"
-          class="tutorial-counter"
-        >
+        <div id="tutorialCounter" class="tutorial-counter">
           STEP 01 / 05
         </div>
-
-        <p
-          id="tutorialText"
-          class="tutorial-text"
-        >
+        <p id="tutorialText" class="tutorial-text">
           Aprende a controlar os teus ecos.
         </p>
-
         <div class="tutorial-actions">
-
-          <button
-            id="tutorialSkip"
-            class="btn btn-secondary"
-            type="button"
-          >
-            SALTAR
-          </button>
-
-          <button
-            id="tutorialNext"
-            class="btn btn-primary"
-            type="button"
-          >
-            SEGUINTE
-          </button>
-
+          <button id="tutorialSkip" class="btn btn-secondary"
+                  type="button">SALTAR</button>
+          <button id="tutorialNext" class="btn btn-primary"
+                  type="button">SEGUINTE</button>
         </div>
-
       </div>
     </section>
 
-    <!-- FOOTER -->
-
+    <!-- CREDITS -->
     <footer class="game-footer">
-
       <div class="footer-top">
-
         <div class="footer-brand">
           <strong>ECHO//404</strong>
           <span> — PARADOX EVOLUTION</span>
         </div>
-
         <div class="footer-version">
           TEMPORAL ENGINE // v4.2
         </div>
-
       </div>
 
       <div class="footer-divider"></div>
 
       <div class="footer-creator">
-
         <span class="footer-creator-label">
           CREATED &amp; DEVELOPED BY
         </span>
-
         <strong class="footer-creator-name">
           MANUEL SAMPAIO01
         </strong>
-
       </div>
 
       <p class="footer-copyright">
         © 2026 MANUEL SAMPAIO01. ALL RIGHTS RESERVED.
       </p>
-
     </footer>
-
   </div>
 
-  <!-- =====================================================
-       SCRIPT LOADING ORDER — v4.2
-       ===================================================== -->
-
-  <!-- PIXIJS 8 -->
+  <!-- EXTERNAL LIBRARIES -->
   <script src="https://cdn.jsdelivr.net/npm/pixi.js@8.16.0/dist/pixi.min.js"></script>
-
-  <!-- OPTIONAL VISUAL FILTERS -->
   <script src="https://cdn.jsdelivr.net/npm/pixi-filters@6.1.5/dist/pixi-filters.js"></script>
-
-  <!-- GSAP -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
 
-  <!-- CORE DATA -->
+  <!-- GAME MODULES -->
   <script src="levels.js?v=420"></script>
-  <script src="storage.js?v=310"></script>
+  <script src="storage.js?v=420"></script>
   <script src="audio.js?v=310"></script>
-
-  <!-- GAME ENGINE -->
   <script src="game.js?v=420"></script>
-
-  <!-- GAME EXPERIENCE -->
   <script src="awakening.js?v=310"></script>
   <script src="visual-v1.js?v=310"></script>
-
-  <!-- WORLD RENDERER: LOAD ONLY ONCE -->
   <script src="world-renderer.js?v=400"></script>
+  <script src="visual-effects.js?v=410"></script>
 
-  <!-- OPTIONAL CINEMATIC FX -->
-  <script src="visual-effects.js?v=400"></script>
-
-  <!-- =====================================================
-       INTERFACE INTEGRATION v4.2
-       ===================================================== -->
-
+  <!-- INTERFACE INTEGRATION -->
   <script>
     "use strict";
 
@@ -1477,94 +1044,139 @@
         }
       });
 
-      // --------------------------------------------------
       // FULLSCREEN
-      // --------------------------------------------------
-
       const fullscreenButton = $("fullscreenBtn");
 
-      fullscreenButton?.addEventListener(
-        "click",
-        async () => {
-          try {
-            if (document.fullscreenElement) {
-              await document.exitFullscreen();
-            } else if (
-              document.documentElement.requestFullscreen
-            ) {
-              await document.documentElement.requestFullscreen();
-            }
-          } catch (error) {
-            console.warn(
-              "[ECHO//404] Fullscreen indisponível:",
-              error
-            );
+      fullscreenButton?.addEventListener("click", async () => {
+        try {
+          if (document.fullscreenElement) {
+            await document.exitFullscreen();
+          } else if (document.documentElement.requestFullscreen) {
+            await document.documentElement.requestFullscreen();
           }
+        } catch (error) {
+          console.warn("[ECHO//404] Fullscreen indisponível:", error);
         }
-      );
+      });
 
-      document.addEventListener(
-        "fullscreenchange",
-        () => {
-          if (fullscreenButton) {
-            const active = Boolean(
-              document.fullscreenElement
-            );
-
-            fullscreenButton.textContent =
-              active ? "⤢" : "⛶";
-
-            fullscreenButton.setAttribute(
-              "aria-label",
-              active
-                ? "Sair do ecrã completo"
-                : "Ecrã completo"
-            );
-          }
-
-          window.EchoWorldRenderer?.resize?.();
+      document.addEventListener("fullscreenchange", () => {
+        if (fullscreenButton) {
+          const active = Boolean(document.fullscreenElement);
+          fullscreenButton.textContent = active ? "⤢" : "⛶";
+          fullscreenButton.setAttribute(
+            "aria-label",
+            active ? "Sair do ecrã completo" : "Ecrã completo"
+          );
         }
-      );
+        window.EchoWorldRenderer?.resize?.();
+      });
 
-      // --------------------------------------------------
       // LEVEL MENU
-      // --------------------------------------------------
+      const levelDetails = $("vrLevelDetails");
 
-      $("vrLevelDetails")?.addEventListener(
-        "toggle",
-        event => {
-          if (!event.target.open) return;
+      function openLevels() {
+        if (!levelDetails) return;
 
-          const reducedMotion = window.matchMedia(
-            "(prefers-reduced-motion: reduce)"
-          ).matches;
+        levelDetails.open = true;
 
-          event.target.scrollIntoView({
-            behavior: reducedMotion ? "auto" : "smooth",
+        const reducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        levelDetails.scrollIntoView({
+          behavior: reducedMotion ? "auto" : "smooth",
+          block: "start"
+        });
+      }
+
+      levelDetails?.addEventListener("toggle", () => {
+        if (levelDetails.open) {
+          levelDetails.scrollIntoView({
+            behavior: "smooth",
             block: "nearest"
           });
         }
-      );
+      });
 
-      document.addEventListener(
-        "click",
-        event => {
-          if (!event.target?.closest?.("#vr-levels")) {
-            return;
-          }
-
-          const details = $("vrLevelDetails");
-
-          if (details) {
-            details.open = true;
-          }
+      document.addEventListener("click", event => {
+        if (event.target?.closest?.("#vr-levels")) {
+          openLevels();
         }
-      );
+      });
 
-      // --------------------------------------------------
+      // NEW MOBILE MENU
+      $("echoMobileMenu")?.addEventListener("click", openLevels);
+      $("echoQuickLevels")?.addEventListener("click", openLevels);
+
+      // MOBILE QUICK ACTIONS
+      // Reuse original game buttons to avoid conflicting handlers.
+      function triggerOriginalButton(id) {
+        const button = $(id);
+
+        if (!button || button.disabled) {
+          console.warn("[ECHO//404] Botão indisponível:", id);
+          return false;
+        }
+
+        button.click();
+        return true;
+      }
+
+      $("echoQuickPlay")?.addEventListener("click", () => {
+        const overlay = $("overlay");
+        const playAgain = $("playAgainBtn");
+
+        // When the result overlay is open, use the
+        // existing replay action if it is available.
+        if (
+          overlay &&
+          !overlay.classList.contains("hidden") &&
+          playAgain &&
+          !playAgain.disabled
+        ) {
+          triggerOriginalButton("playAgainBtn");
+        } else {
+          triggerOriginalButton("startBtn");
+        }
+      });
+
+      $("echoQuickRestart")?.addEventListener("click", () => {
+        triggerOriginalButton("restartBtn");
+      });
+
+      // Update quick button label according to overlay.
+      function updateQuickPlayLabel() {
+        const overlay = $("overlay");
+        const button = $("echoQuickPlay");
+
+        if (!button || !overlay) return;
+
+        const overlayVisible =
+          !overlay.classList.contains("hidden") &&
+          getComputedStyle(overlay).display !== "none";
+
+        const title = ($("overlayTitle")?.textContent || "")
+          .toLowerCase();
+
+        const finished =
+          /vitória|vitoria|concluído|concluido|game over|derrota|completed|victory|failed|paradox/i
+            .test(title);
+
+        button.textContent =
+          overlayVisible && finished
+            ? "▶ JOGAR NOVAMENTE"
+            : "▶ JOGAR";
+      }
+
+      if ($("overlay")) {
+        const observer = new MutationObserver(updateQuickPlayLabel);
+        observer.observe($("overlay"), {
+          attributes: true,
+          attributeFilter: ["class", "style"]
+        });
+      }
+
       // OPERATOR INTEGRATION
-      // --------------------------------------------------
-
       function normalizeOperator(detail = {}) {
         const raw =
           detail.operator ??
@@ -1578,28 +1190,24 @@
             ? raw.id ?? raw.name ?? ""
             : raw;
 
-        return String(value)
+        let name = String(value)
           .trim()
           .toUpperCase()
           .replace(/_/g, "-")
           .replace(/\s+/g, "-");
+
+        if (name === "KAI7") name = "KAI-7";
+
+        return name;
       }
 
       function updateOperatorUI(name) {
         const operator = OPERATORS[name];
-
-        if (!operator) {
-          console.warn(
-            "[ECHO//404] Operador desconhecido:",
-            name
-          );
-          return;
-        }
+        if (!operator) return;
 
         const key = name.toLowerCase();
 
         document.body.dataset.operator = key;
-
         document.documentElement.style.setProperty(
           "--operator-color",
           operator.color
@@ -1609,43 +1217,31 @@
 
         if (status) {
           status.dataset.operator = key;
-
           status.title =
             `Operador activo: ${operator.name} — ${operator.role}`;
 
-          let dot = status.querySelector(
-            ".system-status-dot"
-          );
-
+          let dot = status.querySelector(".system-status-dot");
           if (!dot) {
             dot = document.createElement("span");
             dot.className = "system-status-dot";
             status.prepend(dot);
           }
 
-          let label = status.querySelector(
-            ".operator-status-label"
-          );
-
+          let label = status.querySelector(".operator-status-label");
           if (!label) {
             label = document.createElement("span");
             label.className = "operator-status-label";
             status.appendChild(label);
           }
 
-          label.textContent =
-            `${operator.name} // ONLINE`;
-
+          label.textContent = `${operator.name} // ONLINE`;
           dot.style.background = operator.color;
-          dot.style.boxShadow =
-            `0 0 12px ${operator.color}`;
+          dot.style.boxShadow = `0 0 12px ${operator.color}`;
         }
 
         const arena = $("arenaShell");
-
         if (arena) {
           arena.dataset.operator = key;
-
           arena.style.setProperty(
             "--operator-color",
             operator.color
@@ -1653,85 +1249,61 @@
         }
 
         const app = $("app");
-
-        if (app) {
-          app.dataset.activeOperator = key;
-        }
+        if (app) app.dataset.activeOperator = key;
 
         window.dispatchEvent(
-          new CustomEvent(
-            "echo404:operatoruiupdated",
-            {
-              detail: {
-                operator: operator.name,
-                role: operator.role,
-                color: operator.color
-              }
+          new CustomEvent("echo404:operatoruiupdated", {
+            detail: {
+              operator: operator.name,
+              role: operator.role,
+              color: operator.color
             }
-          )
-        );
-
-        console.info(
-          `[ECHO//404] OPERATOR ONLINE: ${operator.name}`
+          })
         );
       }
 
-      window.addEventListener(
-        "echo404:operatorselected",
-        event => {
-          const name = normalizeOperator(
-            event.detail || {}
-          );
+      window.addEventListener("echo404:operatorselected", event => {
+        const name = normalizeOperator(event.detail || {});
+        updateOperatorUI(name);
+      });
 
-          if (name) {
-            updateOperatorUI(name);
-          }
+      // RESTORE OPERATOR UI
+      try {
+        const savedOperator = window.GameStorage?.getOperator?.();
+        if (savedOperator) {
+          updateOperatorUI(normalizeOperator({
+            operator: savedOperator
+          }));
         }
-      );
+      } catch (error) {
+        console.warn("[ECHO//404] Operador:", error);
+      }
 
-      // --------------------------------------------------
-      // OPTIONAL UI HELPERS
-      // --------------------------------------------------
+      // ECHO AI MESSAGE
+      $("echoMessageClose")?.addEventListener("click", () => {
+        $("echoMessage")?.classList.add("hidden");
+      });
 
-      $("echoMessageClose")?.addEventListener(
-        "click",
-        () => {
-          $("echoMessage")?.classList.add("hidden");
-        }
-      );
-
-      // --------------------------------------------------
       // MODULE DIAGNOSTICS
-      // --------------------------------------------------
-
       function checkModules() {
         const modules = {
           pixi: Boolean(window.PIXI),
-
           levels: Boolean(
             window.EchoLevelsV42 ||
             window.GAME_LEVELS ||
             typeof GAME_LEVELS !== "undefined"
           ),
-
           storage: Boolean(window.GameStorage),
           audio: Boolean(window.GameAudio),
           game: Boolean(window.EchoGame),
           awakening: Boolean(window.EchoAwakening),
-
           operators: Boolean(
             window.EchoVisualRebirthV30 ||
             window.EchoVisualRebirthV21 ||
             window.EchoVisual
           ),
-
-          worldRenderer: Boolean(
-            window.EchoWorldRenderer
-          ),
-
-          visualEffects: Boolean(
-            window.EchoVisualEffects
-          )
+          worldRenderer: Boolean(window.EchoWorldRenderer),
+          visualEffects: Boolean(window.EchoVisualEffects)
         };
 
         const missing = Object.entries(modules)
@@ -1744,65 +1316,44 @@
             missing.join(", ")
           );
         } else {
-          console.info(
-            "[ECHO//404] Todos os módulos detectados."
-          );
+          console.info("[ECHO//404] Todos os módulos detectados.");
         }
 
-        const renderer =
-          window.EchoWorldRenderer;
-
         const worldState =
-          renderer?.getState?.();
+          window.EchoWorldRenderer?.getState?.();
 
         if (worldState?.initialized) {
           console.info(
             "[ECHO//404] WORLD RENDERER ONLINE",
             worldState
           );
-        } else {
-          console.warn(
-            "[ECHO//404] World Renderer ainda não está activo."
-          );
         }
 
-        if (
-          window.EchoLevelsV42 &&
-          typeof window.EchoLevelsV42.validate === "function"
-        ) {
-          window.EchoLevelsV42.validate();
+        try {
+          window.EchoLevelsV42?.validate?.();
+        } catch (error) {
+          console.warn("[ECHO//404] Validação:", error);
         }
 
+        updateQuickPlayLabel();
+
         console.info(
-          "=================================="
-        );
-        console.info(
-          "ECHO//404 — PARADOX EVOLUTION"
-        );
-        console.info(
-          "HTML INTEGRATION v4.2"
-        );
-        console.info(
-          "CREATED & DEVELOPED BY MANUEL SAMPAIO01"
-        );
-        console.info(
-          "=================================="
+          "ECHO//404 — PARADOX EVOLUTION\n" +
+          "MOBILE INTERFACE FIX v4.2.1\n" +
+          "CREATED & DEVELOPED BY MANUEL SAMPAIO01\n" +
+          "© 2026 MANUEL SAMPAIO01"
         );
       }
 
-      // Run diagnostics once, after all scripts and assets load.
       if (document.readyState === "complete") {
         checkModules();
       } else {
-        window.addEventListener(
-          "load",
-          checkModules,
-          { once: true }
-        );
+        window.addEventListener("load", checkModules, {
+          once: true
+        });
       }
 
     })();
   </script>
-
 </body>
 </html>
