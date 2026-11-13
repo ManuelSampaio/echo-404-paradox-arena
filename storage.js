@@ -4,14 +4,16 @@
 /*
 ========================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION 3.0 — PERSISTENT MEMORY
+ STORAGE SYSTEM v4.2
  FILE: storage.js
 
- PROGRESS / LEVEL UNLOCKS / MEDALS
+ PERSISTENT PROGRESS
+ LEVEL UNLOCKS / COMPLETION / MEDALS
  STATISTICS / OPERATOR SELECTION
  SOUND / MOBILE CONTROLS
  INTRO / TUTORIAL
  EXPORT / IMPORT / LEGACY MIGRATION
+ SAFE RESET / DATA VALIDATION
 
  CREATED & DEVELOPED BY MANUEL SAMPAIO01
  © 2026 MANUEL SAMPAIO01
@@ -24,10 +26,10 @@ const GameStorage = (() => {
   // 01. CONFIGURATION
   // ==================================================
 
-  const VERSION = "3.0";
+  const VERSION = "4.2";
   const TOTAL_LEVELS = 10;
 
-  // Preserve existing save keys.
+  // Keep original keys to preserve existing progress.
   const STORAGE_KEY = "echo404_paradox_v06";
   const MEDALS_KEY = "echo404_awakening_medals_v07";
 
@@ -36,9 +38,13 @@ const GameStorage = (() => {
 
   const LEGACY_INTRO_KEY = "echo404_v07_intro_seen";
   const LEGACY_TUTORIAL_KEY = "echo404_v07_tutorial_done";
-  const FALLBACK_PROGRESS_KEY = "echo404_v08_progress";
 
+  const FALLBACK_PROGRESS_KEY = "echo404_v08_progress";
   const OPERATOR_KEY = "echo404_operator";
+  const VISUAL_KEY = "echo404_visual_v1";
+
+  // Prevent deleted legacy data from being restored.
+  const RESET_MARKER_KEY = "echo404_storage_reset_v42";
 
   const OPERATORS = Object.freeze([
     "AXIOM",
@@ -67,11 +73,18 @@ const GameStorage = (() => {
   ]);
 
   // ==================================================
-  // 02. BASIC HELPERS
+  // 02. HELPERS
   // ==================================================
 
+  const memoryFallback = new Map();
+
   function safeNumber(value, fallback = 0) {
-    if (value === null || value === undefined || value === "") {
+    if (
+      value === null ||
+      value === undefined ||
+      value === "" ||
+      typeof value === "boolean"
+    ) {
       return fallback;
     }
 
@@ -90,76 +103,6 @@ const GameStorage = (() => {
     return Math.min(max, Math.max(min, value));
   }
 
-  function isValidDate(value) {
-    return (
-      typeof value === "string" &&
-      !Number.isNaN(Date.parse(value))
-    );
-  }
-
-  function nowISO() {
-    return new Date().toISOString();
-  }
-
-  function readRaw(key) {
-    try {
-      return localStorage.getItem(key);
-    } catch (error) {
-      console.warn("ECHO//404: Storage read failed", key, error);
-      return null;
-    }
-  }
-
-  function writeRaw(key, value) {
-    try {
-      localStorage.setItem(key, String(value));
-      return true;
-    } catch (error) {
-      console.warn("ECHO//404: Storage write failed", key, error);
-      return false;
-    }
-  }
-
-  function removeRaw(key) {
-    try {
-      localStorage.removeItem(key);
-      return true;
-    } catch (error) {
-      console.warn("ECHO//404: Storage removal failed", key, error);
-      return false;
-    }
-  }
-
-  function readJSON(key, fallback = null) {
-    const raw = readRaw(key);
-
-    if (raw === null) return fallback;
-
-    try {
-      return JSON.parse(raw);
-    } catch (error) {
-      console.warn("ECHO//404: Invalid saved JSON", key, error);
-      return fallback;
-    }
-  }
-
-  function writeJSON(key, value) {
-    try {
-      return writeRaw(key, JSON.stringify(value));
-    } catch (error) {
-      console.warn("ECHO//404: JSON serialization failed", error);
-      return false;
-    }
-  }
-
-  function readFlag(key) {
-    return readRaw(key) === "true";
-  }
-
-  function writeFlag(key, value = true) {
-    return writeRaw(key, Boolean(value));
-  }
-
   function isRecord(value) {
     return (
       value !== null &&
@@ -168,8 +111,126 @@ const GameStorage = (() => {
     );
   }
 
+  function isValidDate(value) {
+    return (
+      typeof value === "string" &&
+      value.trim() !== "" &&
+      Number.isFinite(Date.parse(value))
+    );
+  }
+
+  function nowISO() {
+    return new Date().toISOString();
+  }
+
+  function clone(value) {
+    return JSON.parse(JSON.stringify(value));
+  }
+
   // ==================================================
-  // 03. DEFAULT SAVE STRUCTURE
+  // 03. SAFE STORAGE
+  // ==================================================
+
+  function readRaw(key) {
+    if (memoryFallback.has(key)) {
+      return memoryFallback.get(key);
+    }
+
+    try {
+      return localStorage.getItem(key);
+    } catch (error) {
+      console.warn(
+        "[ECHO//404] Storage read unavailable:",
+        key,
+        error
+      );
+
+      return null;
+    }
+  }
+
+  function writeRaw(key, value) {
+    const text = String(value);
+
+    try {
+      localStorage.setItem(key, text);
+      memoryFallback.delete(key);
+      return true;
+    } catch (error) {
+      memoryFallback.set(key, text);
+
+      console.warn(
+        "[ECHO//404] Using temporary memory:",
+        key,
+        error
+      );
+
+      return false;
+    }
+  }
+
+  function removeRaw(key) {
+    memoryFallback.delete(key);
+
+    try {
+      localStorage.removeItem(key);
+      return true;
+    } catch (error) {
+      console.warn(
+        "[ECHO//404] Storage removal failed:",
+        key,
+        error
+      );
+
+      return false;
+    }
+  }
+
+  function readJSON(key, fallback = null) {
+    const raw = readRaw(key);
+
+    if (raw === null) {
+      return fallback;
+    }
+
+    try {
+      return JSON.parse(raw);
+    } catch (error) {
+      console.warn(
+        "[ECHO//404] Invalid JSON:",
+        key,
+        error
+      );
+
+      return fallback;
+    }
+  }
+
+  function writeJSON(key, value) {
+    try {
+      return writeRaw(key, JSON.stringify(value));
+    } catch (error) {
+      console.warn(
+        "[ECHO//404] JSON serialization failed:",
+        error
+      );
+
+      return false;
+    }
+  }
+
+  function readFlag(key) {
+    const value = readRaw(key);
+
+    return value === "true" || value === "1";
+  }
+
+  function writeFlag(key, value = true) {
+    return writeRaw(key, Boolean(value));
+  }
+
+  // ==================================================
+  // 04. DEFAULT SAVE DATA
   // ==================================================
 
   function defaults() {
@@ -177,6 +238,7 @@ const GameStorage = (() => {
 
     return {
       version: VERSION,
+
       createdAt: timestamp,
       updatedAt: timestamp,
 
@@ -216,11 +278,12 @@ const GameStorage = (() => {
   }
 
   // ==================================================
-  // 04. LEVEL INDEX HELPERS
+  // 05. LEVEL HELPERS
   // ==================================================
 
-  // Public API uses zero-based level indexes.
-  // Level 1 = 0, Level 10 = 9.
+  // Public level indexes are zero-based:
+  // Level 1 = index 0
+  // Level 10 = index 9
 
   function validIndex(index) {
     return (
@@ -235,15 +298,35 @@ const GameStorage = (() => {
   }
 
   function normalizeLevelIndex(value) {
-    const index = safeInteger(value, -1);
+    if (
+      typeof value === "boolean" ||
+      value === null ||
+      value === undefined ||
+      value === ""
+    ) {
+      return null;
+    }
 
-    return validIndex(index)
-      ? index
+    const number = Number(value);
+
+    return validIndex(number)
+      ? number
+      : null;
+  }
+
+  function normalizeLevelNumber(value) {
+    const number = safeInteger(value, -1);
+
+    return (
+      number >= 1 &&
+      number <= TOTAL_LEVELS
+    )
+      ? number
       : null;
   }
 
   // ==================================================
-  // 05. OPERATOR NORMALIZATION
+  // 06. OPERATOR NORMALIZATION
   // ==================================================
 
   function normalizeOperator(value) {
@@ -251,19 +334,57 @@ const GameStorage = (() => {
       return "AXIOM";
     }
 
-    const name = value.trim().toUpperCase();
+    const name = value
+      .trim()
+      .toUpperCase()
+      .replace(/\s+/g, "");
 
-    if (name === "KAI7" || name === "KAI_7") {
+    if (
+      name === "KAI7" ||
+      name === "KAI_7" ||
+      name === "KAI-7"
+    ) {
       return "KAI-7";
     }
 
-    return OPERATORS.includes(name)
-      ? name
-      : "AXIOM";
+    if (name === "NYRA") {
+      return "NYRA";
+    }
+
+    return "AXIOM";
+  }
+
+  function isValidOperator(value) {
+    if (typeof value !== "string") {
+      return false;
+    }
+
+    const name = value
+      .trim()
+      .toUpperCase()
+      .replace(/\s+/g, "");
+
+    return [
+      "AXIOM",
+      "NYRA",
+      "KAI7",
+      "KAI_7",
+      "KAI-7"
+    ].includes(name);
+  }
+
+  function operatorId(value) {
+    const normalized = normalizeOperator(value);
+
+    if (normalized === "KAI-7") {
+      return "kai7";
+    }
+
+    return normalized.toLowerCase();
   }
 
   // ==================================================
-  // 06. MEDAL NORMALIZATION
+  // 07. MEDAL NORMALIZATION
   // ==================================================
 
   function normalizeMedal(value) {
@@ -294,21 +415,32 @@ const GameStorage = (() => {
   function normalizeMedals(source) {
     const result = {};
 
-    if (!source || typeof source !== "object") {
+    if (
+      source === null ||
+      typeof source !== "object"
+    ) {
       return result;
     }
 
     const entries = Array.isArray(source)
-      ? source.map((value, index) => [String(index), value])
+      ? source.map((value, index) => [
+          String(index),
+          value
+        ])
       : Object.entries(source);
 
     for (const [key, value] of entries) {
-      const index = Number(key);
+      const index = normalizeLevelIndex(key);
 
-      if (!validIndex(index)) continue;
+      if (index === null) {
+        continue;
+      }
 
       const medal = normalizeMedal(value);
-      if (!medal) continue;
+
+      if (!medal) {
+        continue;
+      }
 
       const storageKey = levelKey(index);
       const previous = result[storageKey];
@@ -346,19 +478,24 @@ const GameStorage = (() => {
   }
 
   // ==================================================
-  // 07. COMPLETED LEVEL NORMALIZATION
+  // 08. COMPLETED LEVEL NORMALIZATION
   // ==================================================
 
   function normalizeCompleted(source) {
     const completed = new Set();
 
+    if (!isRecord(source)) {
+      return [];
+    }
+
     if (Array.isArray(source.completed)) {
       const values = source.completed;
 
-      // Support boolean arrays from older versions.
       const booleanArray =
         values.length > 0 &&
-        values.every(value => typeof value === "boolean");
+        values.every(
+          value => typeof value === "boolean"
+        );
 
       if (booleanArray) {
         values.forEach((done, index) => {
@@ -367,7 +504,6 @@ const GameStorage = (() => {
           }
         });
       } else {
-        // Original v0.8 representation: [0, 1, 2].
         values.forEach(value => {
           const index = normalizeLevelIndex(value);
 
@@ -378,14 +514,13 @@ const GameStorage = (() => {
       }
     }
 
-    // Legacy representation: [1, 2, 3].
+    // Legacy completedLevels uses 1-based values.
     if (Array.isArray(source.completedLevels)) {
       source.completedLevels.forEach(value => {
-        const levelNumber = safeInteger(value, 0);
-        const index = levelNumber - 1;
+        const level = normalizeLevelNumber(value);
 
-        if (validIndex(index)) {
-          completed.add(index);
+        if (level !== null) {
+          completed.add(level - 1);
         }
       });
     }
@@ -394,29 +529,42 @@ const GameStorage = (() => {
   }
 
   // ==================================================
-  // 08. BEST SCORE NORMALIZATION
+  // 09. BEST SCORES
   // ==================================================
 
   function normalizeBestScores(source) {
     const result = {};
 
-    const sources = [
+    if (!isRecord(source)) {
+      return result;
+    }
+
+    const candidates = [
       source.bestScores,
       source.best,
       source.scores
     ];
 
-    for (const candidate of sources) {
-      if (!candidate || typeof candidate !== "object") {
+    for (const candidate of candidates) {
+      if (
+        candidate === null ||
+        typeof candidate !== "object"
+      ) {
         continue;
       }
 
       for (const [key, value] of Object.entries(candidate)) {
-        const index = Number(key);
+        const index = normalizeLevelIndex(key);
 
-        if (!validIndex(index)) continue;
+        if (index === null) {
+          continue;
+        }
 
-        const score = Math.max(0, safeInteger(value));
+        const score = Math.max(
+          0,
+          safeInteger(value)
+        );
+
         const storageKey = levelKey(index);
 
         result[storageKey] = Math.max(
@@ -430,7 +578,7 @@ const GameStorage = (() => {
   }
 
   // ==================================================
-  // 09. SAVE NORMALIZATION
+  // 10. NORMALIZE SAVE
   // ==================================================
 
   function normalize(source, options = {}) {
@@ -460,19 +608,23 @@ const GameStorage = (() => {
 
     const sourceUnlocked = clamp(
       safeInteger(
-        source.unlocked ?? source.unlockedLevels,
+        source.unlocked ??
+        source.unlockedLevels,
         1
       ),
       1,
       TOTAL_LEVELS
     );
 
-    const nextUnlocked = completed.length
+    const completedUnlocked = completed.length
       ? Math.max(...completed) + 2
       : 1;
 
     const unlocked = clamp(
-      Math.max(sourceUnlocked, nextUnlocked),
+      Math.max(
+        sourceUnlocked,
+        completedUnlocked
+      ),
       1,
       TOTAL_LEVELS
     );
@@ -507,7 +659,10 @@ const GameStorage = (() => {
     result.stats.levelsCompleted = completed.length;
 
     result.stats.lastPlayedLevel = clamp(
-      safeInteger(stats.lastPlayedLevel, 1),
+      safeInteger(
+        stats.lastPlayedLevel,
+        1
+      ),
       1,
       TOTAL_LEVELS
     );
@@ -526,7 +681,10 @@ const GameStorage = (() => {
           : true;
 
     result.settings.volume = clamp(
-      safeNumber(settings.volume, 0.7),
+      safeNumber(
+        settings.volume,
+        0.7
+      ),
       0,
       1
     );
@@ -536,7 +694,10 @@ const GameStorage = (() => {
         ? "joystick"
         : "dpad";
 
-    const savedOperator = readRaw(OPERATOR_KEY);
+    const savedOperator =
+      options.ignoreExternalOperator === true
+        ? null
+        : readRaw(OPERATOR_KEY);
 
     result.settings.operator = normalizeOperator(
       savedOperator ||
@@ -549,14 +710,17 @@ const GameStorage = (() => {
   }
 
   // ==================================================
-  // 10. LOAD / SAVE / MUTATE
+  // 11. LOAD / SAVE
   // ==================================================
 
   function load() {
     let raw = readJSON(STORAGE_KEY, null);
 
-    // Only use fallback when primary save is absent.
-    if (!isRecord(raw)) {
+    // Migrate legacy data only if no reset was made.
+    if (
+      !isRecord(raw) &&
+      !readFlag(RESET_MARKER_KEY)
+    ) {
       const fallback = readJSON(
         FALLBACK_PROGRESS_KEY,
         null
@@ -579,69 +743,128 @@ const GameStorage = (() => {
     return data;
   }
 
-  function save(input) {
-    const data = normalize(input);
+  function save(input, options = {}) {
+    if (!isRecord(input)) {
+      console.warn(
+        "[ECHO//404] Save rejected: invalid data."
+      );
+
+      return false;
+    }
+
+    const data = normalize(input, {
+      mergeStoredMedals:
+        options.replaceMedals !== true,
+
+      ignoreExternalOperator:
+        options.ignoreExternalOperator === true
+    });
 
     data.version = VERSION;
     data.updatedAt = nowISO();
 
-    data.medals = mergeMedals(
-      data.medals,
-      readJSON(MEDALS_KEY, {})
+    if (options.replaceMedals !== true) {
+      data.medals = mergeMedals(
+        data.medals,
+        readJSON(MEDALS_KEY, {})
+      );
+    }
+
+    const mainSaved = writeJSON(
+      STORAGE_KEY,
+      data
     );
 
-    const mainSaved = writeJSON(STORAGE_KEY, data);
     const medalsSaved = writeJSON(
       MEDALS_KEY,
       data.medals
     );
 
     if (mainSaved) {
-      writeRaw(OPERATOR_KEY, data.settings.operator);
+      writeRaw(
+        OPERATOR_KEY,
+        data.settings.operator
+      );
     }
 
     return mainSaved && medalsSaved;
   }
 
   function mutate(callback) {
+    if (typeof callback !== "function") {
+      return false;
+    }
+
     const data = load();
 
-    callback(data);
+    try {
+      callback(data);
+    } catch (error) {
+      console.error(
+        "[ECHO//404] Storage mutation failed:",
+        error
+      );
+
+      return false;
+    }
 
     return save(data);
   }
 
   // ==================================================
-  // 11. LEVEL PROGRESS
+  // 12. LEVEL PROGRESS
   // ==================================================
 
   function isUnlocked(index) {
-    if (!validIndex(index)) return false;
+    if (!validIndex(index)) {
+      return false;
+    }
 
     return index < load().unlocked;
   }
 
   function isCompleted(index) {
-    if (!validIndex(index)) return false;
+    if (!validIndex(index)) {
+      return false;
+    }
 
     return load().completed.includes(index);
   }
 
   function getBestScore(index) {
-    if (!validIndex(index)) return 0;
+    if (!validIndex(index)) {
+      return 0;
+    }
 
-    return load().bestScores[levelKey(index)] || 0;
+    return (
+      load().bestScores[levelKey(index)] || 0
+    );
+  }
+
+  function unlockLevel(index) {
+    if (!validIndex(index)) {
+      return false;
+    }
+
+    return mutate(data => {
+      data.unlocked = Math.max(
+        data.unlocked,
+        index + 1
+      );
+    });
   }
 
   function win(index, score = 0) {
-    if (!validIndex(index)) return false;
+    if (!validIndex(index)) {
+      return false;
+    }
 
     const safeScore = Math.max(
       0,
       safeInteger(score)
     );
 
-    return mutate(data => {
+    const saved = mutate(data => {
       if (!data.completed.includes(index)) {
         data.completed.push(index);
         data.completed.sort((a, b) => a - b);
@@ -649,7 +872,10 @@ const GameStorage = (() => {
 
       data.unlocked = Math.max(
         data.unlocked,
-        Math.min(TOTAL_LEVELS, index + 2)
+        Math.min(
+          TOTAL_LEVELS,
+          index + 2
+        )
       );
 
       const key = levelKey(index);
@@ -667,39 +893,70 @@ const GameStorage = (() => {
         safeScore
       );
 
-      data.stats.levelsCompleted = data.completed.length;
+      data.stats.levelsCompleted =
+        data.completed.length;
+
       data.stats.lastPlayedLevel = index + 1;
       data.stats.lastPlayedAt = nowISO();
     });
+
+    if (saved) {
+      emit("echo404:progresssaved", {
+        type: "win",
+        level: index + 1,
+        score: safeScore
+      });
+    }
+
+    return saved;
   }
 
   // ==================================================
-  // 12. MEDALS
+  // 13. MEDALS
   // ==================================================
 
   function saveMedal(index, medal) {
-    if (!validIndex(index)) return false;
+    if (!validIndex(index)) {
+      return false;
+    }
 
     const normalized = normalizeMedal(medal);
-    if (!normalized) return false;
 
-    return mutate(data => {
+    if (!normalized) {
+      return false;
+    }
+
+    const saved = mutate(data => {
       const key = levelKey(index);
       const previous = data.medals[key];
 
       if (
         !previous ||
-        MEDAL_RANK[normalized] > MEDAL_RANK[previous]
+        MEDAL_RANK[normalized] >
+          MEDAL_RANK[previous]
       ) {
         data.medals[key] = normalized;
       }
     });
+
+    if (saved) {
+      emit("echo404:medalsaved", {
+        level: index + 1,
+        medal: getMedal(index)
+      });
+    }
+
+    return saved;
   }
 
   function getMedal(index) {
-    if (!validIndex(index)) return null;
+    if (!validIndex(index)) {
+      return null;
+    }
 
-    return load().medals[levelKey(index)] || null;
+    return (
+      load().medals[levelKey(index)] || null
+    );
   }
 
   function getMedals() {
@@ -717,7 +974,12 @@ const GameStorage = (() => {
     };
 
     for (const medal of medals) {
-      if (Object.prototype.hasOwnProperty.call(summary, medal)) {
+      if (
+        Object.prototype.hasOwnProperty.call(
+          MEDAL_RANK,
+          medal
+        )
+      ) {
         summary[medal]++;
         summary.total++;
       }
@@ -727,7 +989,7 @@ const GameStorage = (() => {
   }
 
   // ==================================================
-  // 13. STATISTICS
+  // 14. STATISTICS
   // ==================================================
 
   function registerAttempt(index = null) {
@@ -743,7 +1005,7 @@ const GameStorage = (() => {
   }
 
   function registerDeath(reason = null) {
-    return mutate(data => {
+    const saved = mutate(data => {
       data.stats.deaths++;
 
       if (reason === "laser") {
@@ -756,6 +1018,8 @@ const GameStorage = (() => {
 
       data.stats.lastPlayedAt = nowISO();
     });
+
+    return saved;
   }
 
   function registerShift() {
@@ -780,7 +1044,7 @@ const GameStorage = (() => {
   }
 
   // ==================================================
-  // 14. SETTINGS
+  // 15. SETTINGS
   // ==================================================
 
   function setSound(enabled) {
@@ -809,7 +1073,9 @@ const GameStorage = (() => {
 
   function setControlMode(mode) {
     const normalized =
-      mode === "joystick" ? "joystick" : "dpad";
+      mode === "joystick"
+        ? "joystick"
+        : "dpad";
 
     return mutate(data => {
       data.settings.controlMode = normalized;
@@ -821,50 +1087,56 @@ const GameStorage = (() => {
   }
 
   // ==================================================
-  // 15. OPERATOR SELECTION
+  // 16. OPERATOR SELECTION
   // ==================================================
 
   function getOperator() {
     const stored = readRaw(OPERATOR_KEY);
 
-    if (stored) {
+    if (
+      stored &&
+      isValidOperator(stored)
+    ) {
       return normalizeOperator(stored);
     }
 
     return load().settings.operator;
   }
 
-  function setOperator(operator) {
-    if (typeof operator !== "string") {
+  function setOperator(value) {
+    if (!isValidOperator(value)) {
       return false;
     }
 
-    const normalized = normalizeOperator(operator);
+    const normalized = normalizeOperator(value);
 
-    const valid =
-      OPERATORS.includes(operator.trim().toUpperCase()) ||
-      ["KAI7", "KAI_7"].includes(
-        operator.trim().toUpperCase()
-      );
+    const data = load();
+    data.settings.operator = normalized;
 
-    if (!valid) return false;
-
-    const saved = mutate(data => {
-      data.settings.operator = normalized;
+    const saved = save(data, {
+      ignoreExternalOperator: true
     });
 
-    if (saved && typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("echo404:operatorselected", {
-          detail: {
-            operator: normalized,
-            id: normalized
-          }
-        })
-      );
+    if (!saved) {
+      return false;
     }
 
-    return saved;
+    // Keep the existing visual selection synchronized.
+    const visualData = readJSON(VISUAL_KEY, {});
+
+    if (isRecord(visualData)) {
+      visualData.operator = operatorId(normalized);
+
+      writeJSON(VISUAL_KEY, visualData);
+    }
+
+    emit("echo404:operatorselected", {
+      operator: normalized,
+      character: normalized,
+      id: operatorId(normalized)
+    });
+
+    return true;
   }
 
   function getOperators() {
@@ -872,7 +1144,7 @@ const GameStorage = (() => {
   }
 
   // ==================================================
-  // 16. INTRO / TUTORIAL
+  // 17. INTRO / TUTORIAL
   // ==================================================
 
   function hasSeenIntro() {
@@ -883,7 +1155,10 @@ const GameStorage = (() => {
   }
 
   function setIntroSeen(value = true) {
-    return writeFlag(INTRO_KEY, value);
+    return writeFlag(
+      INTRO_KEY,
+      Boolean(value)
+    );
   }
 
   function hasCompletedTutorial() {
@@ -894,25 +1169,31 @@ const GameStorage = (() => {
   }
 
   function setTutorialDone(value = true) {
-    return writeFlag(TUTORIAL_KEY, value);
+    return writeFlag(
+      TUTORIAL_KEY,
+      Boolean(value)
+    );
   }
 
   // ==================================================
-  // 17. PROGRESS SUMMARY
+  // 18. PROGRESS SUMMARY
   // ==================================================
 
   function getProgress() {
     const data = load();
 
+    const completedCount =
+      data.completed.length;
+
     return {
       version: VERSION,
       unlocked: data.unlocked,
       completed: [...data.completed],
-      completedCount: data.completed.length,
+      completedCount,
       totalLevels: TOTAL_LEVELS,
 
       percentage: Math.round(
-        data.completed.length / TOTAL_LEVELS * 100
+        completedCount / TOTAL_LEVELS * 100
       ),
 
       medals: getMedalSummary()
@@ -924,15 +1205,22 @@ const GameStorage = (() => {
 
     return {
       ...data.stats,
-      completedLevels: data.completed.length,
-      unlockedLevels: data.unlocked,
-      medals: getMedalSummary(),
+
+      completedLevels:
+        data.completed.length,
+
+      unlockedLevels:
+        data.unlocked,
+
+      medals:
+        getMedalSummary(),
+
       version: VERSION
     };
   }
 
   // ==================================================
-  // 18. EXPORT / IMPORT
+  // 19. EXPORT PROGRESS
   // ==================================================
 
   function exportProgress() {
@@ -941,15 +1229,23 @@ const GameStorage = (() => {
         game: "ECHO//404",
         version: VERSION,
         exportedAt: nowISO(),
+
         progress: load(),
+
         introSeen: hasSeenIntro(),
-        tutorialDone: hasCompletedTutorial(),
+        tutorialDone:
+          hasCompletedTutorial(),
+
         operator: getOperator()
       },
       null,
       2
     );
   }
+
+  // ==================================================
+  // 20. IMPORT PROGRESS
+  // ==================================================
 
   function importProgress(input) {
     let parsed;
@@ -959,7 +1255,7 @@ const GameStorage = (() => {
         typeof input === "string"
           ? JSON.parse(input)
           : input;
-    } catch {
+    } catch (_) {
       return {
         success: false,
         message: "JSON inválido."
@@ -977,6 +1273,13 @@ const GameStorage = (() => {
       ? parsed.progress
       : parsed;
 
+    if (!isRecord(candidate)) {
+      return {
+        success: false,
+        message: "Progresso inválido."
+      };
+    }
+
     const hasProgress =
       Array.isArray(candidate.completed) ||
       Array.isArray(candidate.completedLevels) ||
@@ -986,17 +1289,21 @@ const GameStorage = (() => {
     if (!hasProgress) {
       return {
         success: false,
-        message: "O ficheiro não contém progresso válido."
+        message:
+          "O ficheiro não contém progresso válido."
       };
     }
 
     const current = load();
 
     const imported = normalize(candidate, {
-      mergeStoredMedals: false
+      mergeStoredMedals: false,
+      ignoreExternalOperator: true
     });
 
-    // Preserve the best existing achievements.
+    // Merge achievements instead of deleting
+    // progress already earned on this device.
+
     imported.medals = mergeMedals(
       current.medals,
       imported.medals
@@ -1014,37 +1321,90 @@ const GameStorage = (() => {
       ])
     ].sort((a, b) => a - b);
 
-    for (const [key, value] of Object.entries(current.bestScores)) {
+    for (const [key, value] of Object.entries(
+      current.bestScores
+    )) {
       imported.bestScores[key] = Math.max(
         imported.bestScores[key] || 0,
         value
       );
     }
 
-    const saved = save(imported);
+    imported.unlocked = clamp(
+      Math.max(
+        imported.unlocked,
+        imported.completed.length
+          ? Math.max(...imported.completed) + 2
+          : 1
+      ),
+      1,
+      TOTAL_LEVELS
+    );
 
-    if (saved && typeof parsed.introSeen === "boolean") {
-      setIntroSeen(parsed.introSeen);
+    imported.stats.levelsCompleted =
+      imported.completed.length;
+
+    // Keep the highest existing counters.
+    for (const key of STAT_KEYS) {
+      imported.stats[key] = Math.max(
+        current.stats[key] || 0,
+        imported.stats[key] || 0
+      );
     }
 
-    if (saved && typeof parsed.tutorialDone === "boolean") {
-      setTutorialDone(parsed.tutorialDone);
+    const requestedOperator =
+      typeof parsed.operator === "string"
+        ? parsed.operator
+        : candidate.settings?.operator;
+
+    if (isValidOperator(requestedOperator)) {
+      imported.settings.operator =
+        normalizeOperator(requestedOperator);
+    } else {
+      imported.settings.operator =
+        current.settings.operator;
     }
 
-    if (saved && typeof parsed.operator === "string") {
-      setOperator(parsed.operator);
+    const saved = save(imported, {
+      ignoreExternalOperator: true
+    });
+
+    if (!saved) {
+      return {
+        success: false,
+        message:
+          "Não foi possível guardar o progresso."
+      };
     }
+
+    // Do not undo completed intro/tutorial flags.
+    if (parsed.introSeen === true) {
+      setIntroSeen(true);
+    }
+
+    if (parsed.tutorialDone === true) {
+      setTutorialDone(true);
+    }
+
+    // Synchronize operator without overwriting progress.
+    if (isValidOperator(requestedOperator)) {
+      setOperator(requestedOperator);
+    }
+
+    emit("echo404:progressimported", {
+      completed: imported.completed.length,
+      unlocked: imported.unlocked
+    });
 
     return {
-      success: saved,
-      message: saved
-        ? "Progresso importado com sucesso."
-        : "Não foi possível guardar o progresso."
+      success: true,
+      message:
+        "Progresso importado com sucesso."
     };
   }
 
   // ==================================================
-  // 19. RESET PROGRESS
+  // 21. RESET PROGRESS
   // ==================================================
 
   function resetProgress(options = {}) {
@@ -1063,53 +1423,150 @@ const GameStorage = (() => {
       };
     }
 
-    // Clear medals before saving so they cannot
-    // be merged back into the fresh progress.
-    const medalsRemoved = removeRaw(MEDALS_KEY);
-    const fallbackRemoved = removeRaw(FALLBACK_PROGRESS_KEY);
+    const previousIntro = hasSeenIntro();
+    const previousTutorial =
+      hasCompletedTutorial();
+
+    // Block fallback migration before removing
+    // old save data.
+    const markerSaved = writeFlag(
+      RESET_MARKER_KEY,
+      true
+    );
+
+    const medalsRemoved =
+      removeRaw(MEDALS_KEY);
+
+    const fallbackRemoved =
+      removeRaw(FALLBACK_PROGRESS_KEY);
 
     if (!preserveIntro) {
       removeRaw(INTRO_KEY);
       removeRaw(TUTORIAL_KEY);
+
       removeRaw(LEGACY_INTRO_KEY);
       removeRaw(LEGACY_TUTORIAL_KEY);
     }
 
     if (!preserveSettings) {
       removeRaw(OPERATOR_KEY);
+      removeRaw(VISUAL_KEY);
     }
 
-    const saved = save(fresh);
+    const saved = save(fresh, {
+      replaceMedals: true,
+      ignoreExternalOperator: true
+    });
 
-    return saved && medalsRemoved && fallbackRemoved;
+    if (
+      saved &&
+      preserveIntro
+    ) {
+      if (previousIntro) {
+        setIntroSeen(true);
+      }
+
+      if (previousTutorial) {
+        setTutorialDone(true);
+      }
+    }
+
+    if (saved) {
+      emit("echo404:progressreset", {
+        preserveSettings,
+        preserveIntro
+      });
+    }
+
+    return (
+      saved &&
+      markerSaved &&
+      medalsRemoved &&
+      fallbackRemoved
+    );
   }
 
   // ==================================================
-  // 20. DEBUG
+  // 22. EVENTS
+  // ==================================================
+
+  function emit(name, detail = {}) {
+    if (
+      typeof window === "undefined" ||
+      typeof window.dispatchEvent !== "function"
+    ) {
+      return;
+    }
+
+    try {
+      window.dispatchEvent(
+        new CustomEvent(name, {
+          detail
+        })
+      );
+    } catch (error) {
+      console.warn(
+        "[ECHO//404] Event failed:",
+        name,
+        error
+      );
+    }
+  }
+
+  // ==================================================
+  // 23. DEBUG
   // ==================================================
 
   function debug() {
     const data = load();
 
-    console.group("ECHO//404 STORAGE v3.0");
-    console.log("Progress:", getProgress());
-    console.log("Statistics:", getStats());
-    console.log("Medals:", getMedals());
-    console.log("Settings:", data.settings);
-    console.log("Operator:", getOperator());
-    console.log("Raw save:", data);
+    console.group(
+      "ECHO//404 STORAGE v" + VERSION
+    );
+
+    console.log(
+      "Progress:",
+      getProgress()
+    );
+
+    console.log(
+      "Statistics:",
+      getStats()
+    );
+
+    console.log(
+      "Medals:",
+      getMedals()
+    );
+
+    console.log(
+      "Settings:",
+      data.settings
+    );
+
+    console.log(
+      "Operator:",
+      getOperator()
+    );
+
+    console.log(
+      "Raw save:",
+      clone(data)
+    );
+
     console.groupEnd();
 
     return data;
   }
 
   // ==================================================
-  // 21. PUBLIC API
+  // 24. PUBLIC API
   // ==================================================
 
   return Object.freeze({
     version: VERSION,
 
+    TOTAL_LEVELS,
     STORAGE_KEY,
     MEDALS_KEY,
     OPERATOR_KEY,
@@ -1124,6 +1581,7 @@ const GameStorage = (() => {
     save,
     win,
 
+    unlockLevel,
     isUnlocked,
     isCompleted,
     getBestScore,
@@ -1167,17 +1625,50 @@ const GameStorage = (() => {
 
 })();
 
+// ==================================================
+// 25. GLOBAL REGISTRATION
+// ==================================================
+
 if (typeof window !== "undefined") {
   window.GameStorage = GameStorage;
 }
 
-console.log("==================================");
-console.log("ECHO//404 — PARADOX EVOLUTION");
-console.log("STORAGE VERSION 3.0");
-console.log("PERSISTENT PROGRESS READY");
-console.log("10 LEVELS / MEDALS / STATISTICS");
-console.log("OPERATOR SELECTION ENABLED");
-console.log("LEGACY SAVE COMPATIBILITY");
-console.log("CREATED & DEVELOPED BY MANUEL SAMPAIO01");
-console.log("© 2026 MANUEL SAMPAIO01");
-console.log("==================================");
+console.log(
+  "=================================="
+);
+
+console.log(
+  "ECHO//404 — PARADOX EVOLUTION"
+);
+
+console.log(
+  "STORAGE SYSTEM v4.2"
+);
+
+console.log(
+  "PERSISTENT MEMORY READY"
+);
+
+console.log(
+  "10 LEVELS / MEDALS / STATISTICS"
+);
+
+console.log(
+  "AXIOM / NYRA / KAI-7"
+);
+
+console.log(
+  "LEGACY SAVE COMPATIBILITY"
+);
+
+console.log(
+  "CREATED & DEVELOPED BY MANUEL SAMPAIO01"
+);
+
+console.log(
+  "© 2026 MANUEL SAMPAIO01"
+);
+
+console.log(
+  "=================================="
+);

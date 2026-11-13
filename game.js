@@ -2,42 +2,36 @@
 "use strict";
 
 /*
-========================================================
+====================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION 3.1 — WORLD INTEGRATION
- FILE: game.js
+ GAME ENGINE v4.2
 
- MAIN GAME ENGINE
- PIXIJS WORLD RENDERER INTEGRATION
- 10 LEVELS / TEMPORAL ECHOES / PARADOX SHIFT
+ TEMPORAL ECHOES / PARADOX SHIFT
+ 10 LEVELS / PIXIJS WORLD INTEGRATION
  DESKTOP + MOBILE
- ADVANCED LEVEL MECHANICS
 
  CREATED & DEVELOPED BY MANUEL SAMPAIO01
  © 2026 MANUEL SAMPAIO01
-========================================================
+====================================================
 */
 
 (() => {
+  const VERSION = "4.2";
 
-  // ==================================================
-  // 01. CANVAS
-  // ==================================================
+  // ================================================
+  // CANVAS AND DEPENDENCIES
+  // ================================================
 
   const canvas = document.getElementById("gameCanvas");
 
   if (!canvas) {
-    throw new Error(
-      "ECHO//404: #gameCanvas not found."
-    );
+    throw new Error("ECHO//404: #gameCanvas not found");
   }
 
   const ctx = canvas.getContext("2d");
 
   if (!ctx) {
-    throw new Error(
-      "ECHO//404: Canvas 2D unavailable."
-    );
+    throw new Error("ECHO//404: Canvas 2D unavailable");
   }
 
   if (
@@ -45,7 +39,7 @@
     typeof GAME_LEVELS === "undefined"
   ) {
     throw new Error(
-      "ECHO//404: levels.js must load before game.js."
+      "ECHO//404: Load levels.js before game.js"
     );
   }
 
@@ -55,18 +49,9 @@
   const WIDTH = WORLD.width || 800;
   const HEIGHT = WORLD.height || 500;
 
-  const MAX_CYCLES = WORLD.maxCycles || 6;
-
   const PLAYER_SIZE = 20;
   const PLAYER_SPEED = WORLD.player?.speed || 230;
   const PLATE_RADIUS = 27;
-
-  canvas.width = WIDTH;
-  canvas.height = HEIGHT;
-
-  // ==================================================
-  // 02. COLORS
-  // ==================================================
 
   const COLORS = {
     cyan: "#00f5ff",
@@ -79,60 +64,61 @@
     dark: "#080d1c"
   };
 
-  // ==================================================
-  // 03. UI
-  // ==================================================
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
+
+  // ================================================
+  // USER INTERFACE
+  // ================================================
+
+  const $ = id => document.getElementById(id);
 
   const UI = {
-    cycle: document.getElementById("cycle"),
-    timer: document.getElementById("timer"),
-    ghosts: document.getElementById("ghosts"),
-    score: document.getElementById("score"),
-    best: document.getElementById("best"),
-    timerBar: document.getElementById("timerBar"),
-    status: document.getElementById("status"),
-    levelGrid: document.getElementById("levelGrid"),
-    progress: document.getElementById("progress"),
-    levelName: document.getElementById("levelName"),
+    cycle: $("cycle"),
+    timer: $("timer"),
+    ghosts: $("ghosts"),
+    score: $("score"),
+    best: $("best"),
+    timerBar: $("timerBar"),
+    status: $("status"),
+    levelGrid: $("levelGrid"),
+    progress: $("progress"),
+    levelName: $("levelName"),
 
-    overlay: document.getElementById("overlay"),
-    overlayTitle: document.getElementById("overlayTitle"),
-    overlayMessage: document.getElementById("overlayMessage"),
-    finalScore: document.getElementById("finalScore"),
+    overlay: $("overlay"),
+    overlayTitle: $("overlayTitle"),
+    overlayMessage: $("overlayMessage"),
+    finalScore: $("finalScore"),
 
-    startBtn: document.getElementById("startBtn"),
-    restartBtn: document.getElementById("restartBtn"),
-    shiftBtn: document.getElementById("shiftBtn"),
-    soundBtn: document.getElementById("soundBtn"),
-    playAgainBtn: document.getElementById("playAgainBtn"),
-    nextBtn: document.getElementById("nextBtn"),
+    startBtn: $("startBtn"),
+    restartBtn: $("restartBtn"),
+    shiftBtn: $("shiftBtn"),
+    soundBtn: $("soundBtn"),
+    playAgainBtn: $("playAgainBtn"),
+    nextBtn: $("nextBtn"),
 
-    mobileControls: document.getElementById("mobileControls"),
-    mobileShiftBtn: document.getElementById("mobileShiftBtn"),
-    mobileRestartBtn: document.getElementById("mobileRestartBtn"),
+    mobileShiftBtn: $("mobileShiftBtn"),
+    mobileRestartBtn: $("mobileRestartBtn"),
 
-    moveUp: document.getElementById("moveUp"),
-    moveDown: document.getElementById("moveDown"),
-    moveLeft: document.getElementById("moveLeft"),
-    moveRight: document.getElementById("moveRight")
+    moveUp: $("moveUp"),
+    moveDown: $("moveDown"),
+    moveLeft: $("moveLeft"),
+    moveRight: $("moveRight")
   };
 
-  // ==================================================
-  // 04. UTILITIES
-  // ==================================================
+  // ================================================
+  // UTILITIES
+  // ================================================
 
-  function clamp(value, min, max) {
-    return Math.max(min, Math.min(max, value));
-  }
+  const clamp = (v, min, max) =>
+    Math.max(min, Math.min(max, v));
 
-  function distance(a, b) {
-    return Math.hypot(
-      a.x - b.x,
-      a.y - b.y
-    );
-  }
+  const distance = (a, b) =>
+    Math.hypot(a.x - b.x, a.y - b.y);
 
   function intersects(a, b) {
+    if (!a || !b) return false;
+
     return (
       a.x < b.x + b.w &&
       a.x + a.w > b.x &&
@@ -165,54 +151,30 @@
     try {
       window.GameAudio?.play?.(name);
     } catch (error) {
-      console.warn(
-        "ECHO//404 audio:",
-        error
-      );
+      console.warn("[ECHO//404] Audio:", error);
     }
-  }
-
-  function emitEvent(name, detail = {}) {
-    window.dispatchEvent(
-      new CustomEvent(`echo404:${name}`, {
-        detail: {
-          levelIndex,
-          levelNumber: levelIndex + 1,
-          ...detail
-        }
-      })
-    );
-  }
-
-  function getStorage() {
-    return window.GameStorage || null;
   }
 
   function storageCall(method, ...args) {
-    const storage = getStorage();
-
-    if (
-      !storage ||
-      typeof storage[method] !== "function"
-    ) {
-      return undefined;
-    }
-
     try {
-      return storage[method](...args);
+      const storage = window.GameStorage;
+
+      if (typeof storage?.[method] === "function") {
+        return storage[method](...args);
+      }
     } catch (error) {
       console.warn(
-        `ECHO//404 storage.${method}:`,
+        `[ECHO//404] Storage ${method}:`,
         error
       );
-
-      return undefined;
     }
+
+    return undefined;
   }
 
-  // ==================================================
-  // 05. GAME STATE
-  // ==================================================
+  // ================================================
+  // GAME STATE
+  // ================================================
 
   let levelIndex = 0;
   let level = LEVELS[0];
@@ -248,18 +210,19 @@
   let firstMoveEmitted = false;
   let criticalEmitted = false;
 
+  let deathTriggered = false;
+
   const triggeredTraps = new Set();
   const touchedPlatforms = new Set();
 
-  // ==================================================
-  // 06. LEVEL SETTINGS
-  // ==================================================
+  // ================================================
+  // LEVEL CONFIGURATION
+  // ================================================
 
   function getCycleDuration() {
     const duration = Number(level?.timeLimit);
 
-    return Number.isFinite(duration) &&
-      duration > 0
+    return Number.isFinite(duration) && duration > 0
       ? duration
       : WORLD.cycleDuration || 10;
   }
@@ -267,10 +230,9 @@
   function getMaxCycles() {
     const count = Number(level?.maxCycles);
 
-    return Number.isFinite(count) &&
-      count > 0
+    return Number.isFinite(count) && count > 0
       ? Math.floor(count)
-      : MAX_CYCLES;
+      : WORLD.maxCycles || 6;
   }
 
   function getVisualTheme() {
@@ -286,6 +248,32 @@
     return theme && typeof theme === "object"
       ? theme
       : {};
+  }
+
+  function getThemeColor(key, fallback) {
+    const value = getVisualTheme()[key];
+
+    if (typeof value === "string") {
+      return value;
+    }
+
+    if (typeof value === "number") {
+      return "#" + value.toString(16).padStart(6, "0");
+    }
+
+    return fallback;
+  }
+
+  function emitEvent(name, detail = {}) {
+    window.dispatchEvent(
+      new CustomEvent(`echo404:${name}`, {
+        detail: {
+          levelIndex,
+          levelNumber: levelIndex + 1,
+          ...detail
+        }
+      })
+    );
   }
 
   function applyLevelTheme() {
@@ -305,33 +293,26 @@
 
     const renderer = window.EchoWorldRenderer;
 
-    if (
-      renderer &&
-      typeof renderer.setLevel === "function"
-    ) {
-      renderer.setLevel(levelIndex + 1);
+    if (typeof renderer?.setLevel === "function") {
+      try {
+        renderer.setLevel(levelIndex + 1);
+      } catch (error) {
+        console.warn(
+          "[ECHO//404] World theme:",
+          error
+        );
+      }
     }
   }
 
-  // ==================================================
-  // 07. WORLD RENDERER
-  // ==================================================
-
   function isWorldRendererActive() {
-    const renderer = window.EchoWorldRenderer;
-
-    if (
-      !renderer ||
-      typeof renderer.getState !== "function"
-    ) {
-      return false;
-    }
-
     try {
       return Boolean(
-        renderer.getState().initialized
+        window.EchoWorldRenderer
+          ?.getState?.()
+          ?.initialized
       );
-    } catch {
+    } catch (_) {
       return false;
     }
   }
@@ -341,185 +322,71 @@
       window.EchoVisualRebirthV30 ||
       window.EchoVisualRebirthV21;
 
-    if (
-      !renderer ||
-      typeof renderer.shouldHideOriginalPlayer !==
-        "function"
-    ) {
-      return false;
-    }
-
     try {
       return Boolean(
-        renderer.shouldHideOriginalPlayer()
+        renderer?.shouldHideOriginalPlayer?.()
       );
-    } catch {
+    } catch (_) {
       return false;
     }
   }
 
-  // ==================================================
-  // 08. PUBLIC API
-  // ==================================================
-
-  window.EchoGame = Object.assign(
-    window.EchoGame || {},
-    {
-      version: "3.1",
-
-      getState() {
-        return {
-          player: player ? { ...player } : null,
-          running,
-          finished,
-          levelIndex,
-          levelNumber: levelIndex + 1,
-          level,
-          cycle,
-          elapsed,
-          worldTime,
-          cycleDuration: getCycleDuration(),
-          maxCycles: getMaxCycles(),
-          score,
-          deaths,
-          shifts,
-          doorOpen,
-          shiftUsed,
-          ghosts: ghosts.map(
-            ghost => ({ ...ghost })
-          ),
-          recordingsCount: recordings.length,
-          width: WIDTH,
-          height: HEIGHT,
-          environment: getVisualTheme()
-        };
-      },
-
-      getCanvas() {
-        return canvas;
-      },
-
-      getLevel() {
-        return level;
-      },
-
-      getVisualTheme,
-
-      selectLevel(index) {
-        return selectLevel(index);
-      },
-
-      start() {
-        return startGame();
-      },
-
-      restart() {
-        return startGame();
-      },
-
-      shift() {
-        return paradoxShift();
-      },
-
-      getLaserPosition,
-
-      isLaserActive,
-
-      getWorldRendererState() {
-        return window.EchoWorldRenderer
-          ?.getState?.() || null;
-      }
-    }
-  );
-
-  // ==================================================
-  // 09. CONTROLS
-  // ==================================================
+  // ================================================
+  // CONTROLS
+  // ================================================
 
   const keys = new Set();
   const mobilePointers = new Map();
 
-  const mobileDirections = {
+  const directionButtons = {
     up: UI.moveUp,
     down: UI.moveDown,
     left: UI.moveLeft,
     right: UI.moveRight
   };
 
-  const movementKeys = new Set([
-    "w",
-    "a",
-    "s",
-    "d",
-    "arrowup",
-    "arrowdown",
-    "arrowleft",
-    "arrowright"
-  ]);
+  const keyboardDirections = {
+    up: ["w", "arrowup"],
+    down: ["s", "arrowdown"],
+    left: ["a", "arrowleft"],
+    right: ["d", "arrowright"]
+  };
 
   function isDirectionPressed(direction) {
-    const keyboardMap = {
-      up: ["w", "arrowup"],
-      down: ["s", "arrowdown"],
-      left: ["a", "arrowleft"],
-      right: ["d", "arrowright"]
-    };
-
-    const keyboard = keyboardMap[direction]
-      .some(key => keys.has(key));
-
-    const mobile = Array.from(
-      mobilePointers.values()
-    ).includes(direction);
-
-    return keyboard || mobile;
+    return (
+      keyboardDirections[direction].some(
+        key => keys.has(key)
+      ) ||
+      [...mobilePointers.values()].includes(direction)
+    );
   }
 
   function refreshMobileButtons() {
-    for (
-      const [direction, button]
-      of Object.entries(mobileDirections)
-    ) {
-      if (!button) continue;
+    for (const [direction, button] of
+      Object.entries(directionButtons)) {
 
-      button.classList.toggle(
+      button?.classList.toggle(
         "pressed",
-        Array.from(
-          mobilePointers.values()
-        ).includes(direction)
+        [...mobilePointers.values()].includes(direction)
       );
     }
   }
 
-  function clearMobileMovement() {
+  function clearAllMovement() {
+    keys.clear();
     mobilePointers.clear();
     refreshMobileButtons();
   }
 
-  function clearAllMovement() {
-    keys.clear();
-    clearMobileMovement();
-  }
+  // ================================================
+  // PARTICLES
+  // ================================================
 
-  // ==================================================
-  // 10. PARTICLES
-  // ==================================================
-
-  function emitParticles(
-    x,
-    y,
-    color,
-    amount = 15
-  ) {
+  function emitParticles(x, y, color, amount = 15) {
     for (let i = 0; i < amount; i++) {
-      const angle =
-        Math.random() * Math.PI * 2;
-
-      const speed =
-        30 + Math.random() * 120;
-
-      const life =
-        0.3 + Math.random() * 0.6;
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 30 + Math.random() * 120;
+      const life = 0.3 + Math.random() * 0.6;
 
       particles.push({
         x,
@@ -534,59 +401,45 @@
     }
 
     if (particles.length > 300) {
-      particles.splice(
-        0,
-        particles.length - 300
-      );
+      particles.splice(0, particles.length - 300);
     }
   }
 
   function updateParticles(dt) {
-    for (const particle of particles) {
-      particle.x += particle.vx * dt;
-      particle.y += particle.vy * dt;
-      particle.life -= dt;
+    for (const p of particles) {
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.life -= dt;
     }
 
-    particles = particles.filter(
-      particle => particle.life > 0
-    );
+    particles = particles.filter(p => p.life > 0);
   }
 
-  // ==================================================
-  // 11. LEVEL MENU
-  // ==================================================
+  // ================================================
+  // LEVEL PROGRESSION
+  // ================================================
 
   function isLevelCompleted(index) {
-    const storage = getStorage();
+    const storage = window.GameStorage;
 
-    if (
-      typeof storage?.isCompleted === "function"
-    ) {
-      return Boolean(
-        storage.isCompleted(index)
-      );
+    if (typeof storage?.isCompleted === "function") {
+      return Boolean(storageCall("isCompleted", index));
     }
 
     const data = storageCall("load") || {};
-    const completed = data.completed || [];
-
-    return completed.includes(index);
+    return (data.completed || []).includes(index);
   }
 
   function isLevelUnlocked(index) {
-    const storage = getStorage();
+    if (index === 0) return true;
 
-    if (
-      typeof storage?.isUnlocked === "function"
-    ) {
-      return Boolean(
-        storage.isUnlocked(index)
-      );
+    const storage = window.GameStorage;
+
+    if (typeof storage?.isUnlocked === "function") {
+      return Boolean(storageCall("isUnlocked", index));
     }
 
     const data = storageCall("load") || {};
-
     return index + 1 <= (data.unlocked || 1);
   }
 
@@ -595,14 +448,10 @@
       UI.levelGrid.innerHTML = "";
 
       LEVELS.forEach((item, index) => {
-        const button =
-          document.createElement("button");
+        const button = document.createElement("button");
 
-        const completed =
-          isLevelCompleted(index);
-
-        const unlocked =
-          isLevelUnlocked(index);
+        const completed = isLevelCompleted(index);
+        const unlocked = isLevelUnlocked(index);
 
         button.textContent = completed
           ? `✓${index + 1}`
@@ -619,14 +468,11 @@
           ? item.name
           : "Nível bloqueado";
 
-        button.addEventListener(
-          "click",
-          () => {
-            if (selectLevel(index)) {
-              playSound("click");
-            }
+        button.addEventListener("click", () => {
+          if (selectLevel(index)) {
+            playSound("click");
           }
-        );
+        });
 
         UI.levelGrid.appendChild(button);
       });
@@ -638,25 +484,13 @@
 
     if (UI.progress) {
       UI.progress.textContent =
-        `${completedCount} / ` +
-        `${LEVELS.length} CONCLUÍDOS`;
+        `${completedCount} / ${LEVELS.length} CONCLUÍDOS`;
     }
 
     if (UI.levelName) {
       UI.levelName.textContent =
-        `NÍVEL ${levelIndex + 1} — ` +
-        `${level.name} | ` +
-        `${level.difficulty} | ` +
-        `${level.hint}`;
-    }
-
-    if (UI.best) {
-      UI.best.textContent = formatScore(
-        storageCall(
-          "getBestScore",
-          levelIndex
-        ) || 0
-      );
+        `NÍVEL ${levelIndex + 1} — ${level.name} | ` +
+        `${level.difficulty || ""} | ${level.hint || ""}`;
     }
   }
 
@@ -679,7 +513,6 @@
     level = LEVELS[index];
 
     applyLevelTheme();
-
     resetGame();
 
     emitEvent("levelselected", {
@@ -693,9 +526,9 @@
     return true;
   }
 
-  // ==================================================
-  // 12. RESET
-  // ==================================================
+  // ================================================
+  // RESET AND START
+  // ================================================
 
   function resetGame() {
     if (animationId !== null) {
@@ -744,6 +577,7 @@
 
     firstMoveEmitted = false;
     criticalEmitted = false;
+    deathTriggered = false;
 
     triggeredTraps.clear();
     touchedPlatforms.clear();
@@ -751,8 +585,7 @@
     UI.overlay?.classList.add("hidden");
 
     if (UI.startBtn) {
-      UI.startBtn.textContent =
-        "INICIAR SIMULAÇÃO";
+      UI.startBtn.textContent = "INICIAR SIMULAÇÃO";
     }
 
     setStatus(level.hint || "");
@@ -760,10 +593,6 @@
     updateHUD();
     draw();
   }
-
-  // ==================================================
-  // 13. START
-  // ==================================================
 
   function startGame() {
     resetGame();
@@ -777,84 +606,64 @@
       cycle
     });
 
-    window.GameAudio?.init?.();
+    try {
+      window.GameAudio?.init?.();
+    } catch (_) {}
+
     playSound("start");
 
     if (UI.startBtn) {
-      UI.startBtn.textContent =
-        "REINICIAR SIMULAÇÃO";
+      UI.startBtn.textContent = "REINICIAR SIMULAÇÃO";
     }
 
     setStatus(
-      `NÍVEL ${levelIndex + 1}: ${level.hint}`
+      `NÍVEL ${levelIndex + 1}: ${level.hint || ""}`
     );
 
     updateHUD();
 
-    animationId = requestAnimationFrame(
-      gameLoop
-    );
+    animationId = requestAnimationFrame(gameLoop);
 
     return true;
   }
 
-  // ==================================================
-  // 14. HUD
-  // ==================================================
+  // ================================================
+  // HUD
+  // ================================================
 
   function updateHUD() {
     const duration = getCycleDuration();
-    const maxCycles = getMaxCycles();
-
-    const remaining = Math.max(
-      0,
-      duration - elapsed
-    );
+    const remaining = Math.max(0, duration - elapsed);
 
     if (UI.cycle) {
       UI.cycle.textContent =
-        `${cycle}/${maxCycles}`;
+        `${cycle}/${getMaxCycles()}`;
     }
 
     if (UI.timer) {
-      UI.timer.textContent =
-        remaining.toFixed(1);
+      UI.timer.textContent = remaining.toFixed(1);
     }
 
     if (UI.ghosts) {
-      UI.ghosts.textContent =
-        recordings.length;
+      UI.ghosts.textContent = recordings.length;
     }
 
     if (UI.score) {
-      UI.score.textContent =
-        formatScore(score);
+      UI.score.textContent = formatScore(score);
     }
 
     if (UI.best) {
-      UI.best.textContent =
-        formatScore(
-          storageCall(
-            "getBestScore",
-            levelIndex
-          ) || 0
-        );
+      UI.best.textContent = formatScore(
+        storageCall("getBestScore", levelIndex) || 0
+      );
     }
-
-    const percentage = clamp(
-      (remaining / duration) * 100,
-      0,
-      100
-    );
 
     if (UI.timerBar) {
       UI.timerBar.style.width =
-        `${percentage}%`;
+        `${clamp(remaining / duration * 100, 0, 100)}%`;
 
       UI.timerBar.style.background =
-        remaining < 2.5
-          ? COLORS.red
-          : COLORS.cyan;
+        remaining < 2.5 ? COLORS.red : COLORS.cyan;
     }
 
     const shiftDisabled =
@@ -863,28 +672,23 @@
       recordings.length === 0;
 
     if (UI.shiftBtn) {
-      UI.shiftBtn.disabled =
-        shiftDisabled;
+      UI.shiftBtn.disabled = shiftDisabled;
     }
 
     if (UI.mobileShiftBtn) {
-      UI.mobileShiftBtn.disabled =
-        shiftDisabled;
+      UI.mobileShiftBtn.disabled = shiftDisabled;
     }
   }
 
-  // ==================================================
-  // 15. RECORDING
-  // ==================================================
+  // ================================================
+  // TEMPORAL RECORDING
+  // ================================================
 
   function recordPlayer() {
     if (!player) return;
 
     currentRecording.push({
-      t: Math.min(
-        elapsed,
-        getCycleDuration()
-      ),
+      t: Math.min(elapsed, getCycleDuration()),
       x: player.x,
       y: player.y
     });
@@ -892,10 +696,7 @@
 
   function positionAt(frames, time) {
     if (!frames?.length) {
-      return {
-        x: WORLD.start.x,
-        y: WORLD.start.y
-      };
+      return { ...WORLD.start };
     }
 
     if (time <= frames[0].t) {
@@ -905,8 +706,7 @@
       };
     }
 
-    const last =
-      frames[frames.length - 1];
+    const last = frames[frames.length - 1];
 
     if (time >= last.t) {
       return {
@@ -919,13 +719,12 @@
     let high = frames.length - 1;
 
     while (low + 1 < high) {
-      const middle =
-        (low + high) >> 1;
+      const mid = (low + high) >> 1;
 
-      if (frames[middle].t <= time) {
-        low = middle;
+      if (frames[mid].t <= time) {
+        low = mid;
       } else {
-        high = middle;
+        high = mid;
       }
     }
 
@@ -933,11 +732,7 @@
     const b = frames[high];
 
     const factor = clamp(
-      (time - a.t) /
-        Math.max(
-          0.00001,
-          b.t - a.t
-        ),
+      (time - a.t) / Math.max(0.00001, b.t - a.t),
       0,
       1
     );
@@ -950,43 +745,27 @@
 
   function updateGhosts() {
     ghosts = recordings.map(
-      frames => positionAt(
-        frames,
-        elapsed
-      )
+      frames => positionAt(frames, elapsed)
     );
   }
 
-  // ==================================================
-  // 16. PARADOX SHIFT
-  // ==================================================
+  // ================================================
+  // PARADOX SHIFT
+  // ================================================
 
   function paradoxShift() {
     if (!running) return false;
 
-    if (
-      shiftUsed ||
-      recordings.length === 0
-    ) {
+    if (shiftUsed || recordings.length === 0) {
       playSound("error");
-
-      setStatus(
-        "PARADOX SHIFT INDISPONÍVEL."
-      );
-
+      setStatus("PARADOX SHIFT INDISPONÍVEL.");
       return false;
     }
 
-    const duration = getCycleDuration();
+    const index = recordings.length - 1;
+    const frames = recordings[index];
 
-    const index =
-      recordings.length - 1;
-
-    const frames =
-      recordings[index];
-
-    const position =
-      positionAt(frames, elapsed);
+    const position = positionAt(frames, elapsed);
 
     const past = frames.filter(
       frame => frame.t < elapsed
@@ -999,7 +778,7 @@
     });
 
     past.push({
-      t: duration,
+      t: getCycleDuration(),
       x: position.x,
       y: position.y
     });
@@ -1038,51 +817,37 @@
     return true;
   }
 
-  // ==================================================
-  // 17. TEMPORAL PLATES
-  // ==================================================
+  // ================================================
+  // TEMPORAL PLATES AND DOOR
+  // ================================================
 
   function isPlateActive(plate) {
-    if (
-      player &&
-      distance(player, plate) <
-        PLATE_RADIUS
-    ) {
-      return true;
-    }
-
-    return ghosts.some(
-      ghost =>
-        distance(ghost, plate) <
-        PLATE_RADIUS
+    return (
+      (player && distance(player, plate) < PLATE_RADIUS) ||
+      ghosts.some(
+        ghost => distance(ghost, plate) < PLATE_RADIUS
+      )
     );
   }
 
   function updateDoor() {
-    doorOpen = (
-      level.plates || []
-    ).every(isPlateActive);
+    doorOpen = (level.plates || []).every(
+      isPlateActive
+    );
 
-    if (
-      doorOpen !== previousDoorState
-    ) {
+    if (doorOpen !== previousDoorState) {
       if (doorOpen) {
         playSound("door");
 
         emitParticles(
-          WORLD.door.x +
-            WORLD.door.w / 2,
-          WORLD.door.y +
-            WORLD.door.h / 2,
+          WORLD.door.x + WORLD.door.w / 2,
+          WORLD.door.y + WORLD.door.h / 2,
           COLORS.green,
           25
         );
 
         emitEvent("dooropen");
-
-        setStatus(
-          "PORTA TEMPORAL ABERTA!"
-        );
+        setStatus("PORTA TEMPORAL ABERTA!");
       } else {
         emitEvent("doorclosed");
       }
@@ -1091,47 +856,65 @@
     previousDoorState = doorOpen;
   }
 
-  // ==================================================
-  // 18. PHASE WALLS
-  // ==================================================
+  // ================================================
+  // TIMED MECHANICS
+  // ================================================
 
-  function isPhaseWallActive(wall) {
-    if (
-      typeof window.isPhaseWallActive ===
-      "function"
-    ) {
-      return window.isPhaseWallActive(
-        wall,
-        worldTime
-      );
-    }
+  function timedActive(object, fallback = 3) {
+    const period = Number(object.period) || fallback;
 
-    const period =
-      Number(wall.period) || 3;
+    const on = object.on == null
+      ? period / 2
+      : Number(object.on);
 
-    const on =
-      Number(wall.on) ||
-      period / 2;
-
-    const offset =
-      Number(wall.offset) || 0;
+    const offset = Number(object.offset) || 0;
 
     const phase =
-      ((worldTime + offset) % period +
-        period) % period;
+      ((worldTime + offset) % period + period) %
+      period;
 
     return phase < on;
   }
 
+  function isPhaseWallActive(wall) {
+    if (typeof window.isPhaseWallActive === "function") {
+      return Boolean(
+        window.isPhaseWallActive(wall, worldTime)
+      );
+    }
+
+    return timedActive(wall);
+  }
+
+  function isPlatformActive(platform) {
+    if (
+      typeof window.isTemporalPlatformActive ===
+      "function"
+    ) {
+      return Boolean(
+        window.isTemporalPlatformActive(
+          platform,
+          worldTime
+        )
+      );
+    }
+
+    return timedActive(platform);
+  }
+
+  function isLaserActive(laser) {
+    return timedActive(laser, 2);
+  }
+
+  // ================================================
+  // COLLISIONS AND MOVEMENT
+  // ================================================
+
   function isBlocked(x, y) {
     const rect = playerRect(x, y);
 
-    for (
-      const wall of WORLD.walls || []
-    ) {
-      if (intersects(rect, wall)) {
-        return true;
-      }
+    for (const wall of WORLD.walls || []) {
+      if (intersects(rect, wall)) return true;
     }
 
     if (
@@ -1141,9 +924,7 @@
       return true;
     }
 
-    for (
-      const wall of level.phaseWalls || []
-    ) {
+    for (const wall of level.phaseWalls || []) {
       if (
         isPhaseWallActive(wall) &&
         intersects(rect, wall)
@@ -1155,33 +936,18 @@
     return false;
   }
 
-  // ==================================================
-  // 19. PLAYER MOVEMENT
-  // ==================================================
-
   function updatePlayer(dt) {
     let dx = 0;
     let dy = 0;
 
-    if (isDirectionPressed("up")) {
-      dy--;
-    }
-
-    if (isDirectionPressed("down")) {
-      dy++;
-    }
-
-    if (isDirectionPressed("left")) {
-      dx--;
-    }
-
-    if (isDirectionPressed("right")) {
-      dx++;
-    }
+    if (isDirectionPressed("up")) dy--;
+    if (isDirectionPressed("down")) dy++;
+    if (isDirectionPressed("left")) dx--;
+    if (isDirectionPressed("right")) dx++;
 
     const length = Math.hypot(dx, dy);
 
-    if (length === 0) return;
+    if (!length) return;
 
     dx /= length;
     dy /= length;
@@ -1195,45 +961,59 @@
       });
     }
 
-    const nextX = clamp(
-      player.x +
-        dx * player.speed * dt,
-      PLAYER_SIZE / 2,
-      WIDTH - PLAYER_SIZE / 2
+    const distanceX = dx * player.speed * dt;
+    const distanceY = dy * player.speed * dt;
+
+    // Move in small steps to prevent tunnelling
+    // through narrow walls during frame drops.
+    const steps = Math.max(
+      1,
+      Math.ceil(
+        Math.max(
+          Math.abs(distanceX),
+          Math.abs(distanceY)
+        ) / 5
+      )
     );
 
-    if (!isBlocked(nextX, player.y)) {
-      player.x = nextX;
-    }
+    for (let i = 0; i < steps; i++) {
+      const nextX = clamp(
+        player.x + distanceX / steps,
+        PLAYER_SIZE / 2,
+        WIDTH - PLAYER_SIZE / 2
+      );
 
-    const nextY = clamp(
-      player.y +
-        dy * player.speed * dt,
-      PLAYER_SIZE / 2,
-      HEIGHT - PLAYER_SIZE / 2
-    );
+      if (!isBlocked(nextX, player.y)) {
+        player.x = nextX;
+      }
 
-    if (!isBlocked(player.x, nextY)) {
-      player.y = nextY;
+      const nextY = clamp(
+        player.y + distanceY / steps,
+        PLAYER_SIZE / 2,
+        HEIGHT - PLAYER_SIZE / 2
+      );
+
+      if (!isBlocked(player.x, nextY)) {
+        player.y = nextY;
+      }
     }
   }
 
-  // ==================================================
-  // 20. PORTALS
-  // ==================================================
+  // ================================================
+  // PORTALS
+  // ================================================
 
   function getPortalPoints(portal) {
-    const a = portal.a || {
-      x: portal.x,
-      y: portal.y
+    return {
+      a: portal.a || {
+        x: portal.x,
+        y: portal.y
+      },
+      b: portal.b || {
+        x: portal.targetX,
+        y: portal.targetY
+      }
     };
-
-    const b = portal.b || {
-      x: portal.targetX,
-      y: portal.targetY
-    };
-
-    return { a, b };
   }
 
   function updatePortals(dt) {
@@ -1242,29 +1022,31 @@
       portalCooldown - dt
     );
 
-    if (portalCooldown > 0) {
-      return;
-    }
+    if (portalCooldown > 0) return;
 
-    for (
-      const portal of level.portals || []
-    ) {
-      const { a, b } =
-        getPortalPoints(portal);
+    for (const portal of level.portals || []) {
+      const { a, b } = getPortalPoints(portal);
 
       let destination = null;
 
-      if (
-        distance(player, a) < 19
-      ) {
+      if (distance(player, a) < 19) {
         destination = b;
-      } else if (
-        distance(player, b) < 19
-      ) {
+      } else if (distance(player, b) < 19) {
         destination = a;
       }
 
       if (!destination) continue;
+
+      if (
+        !Number.isFinite(destination.x) ||
+        !Number.isFinite(destination.y)
+      ) {
+        continue;
+      }
+
+      if (isBlocked(destination.x, destination.y)) {
+        continue;
+      }
 
       player.x = destination.x;
       player.y = destination.y;
@@ -1286,115 +1068,62 @@
       });
 
       playSound("portal");
-
-      setStatus(
-        "SALTO QUÂNTICO EXECUTADO!"
-      );
+      setStatus("SALTO QUÂNTICO EXECUTADO!");
 
       return;
     }
   }
 
-  // ==================================================
-  // 21. LASERS
-  // ==================================================
-
-  function isLaserActive(laser) {
-    const period =
-      Number(laser.period) || 2;
-
-    const on =
-      Number(laser.on) ||
-      period / 2;
-
-    const offset =
-      Number(laser.offset) || 0;
-
-    const phase =
-      ((worldTime + offset) % period +
-        period) % period;
-
-    return phase < on;
-  }
+  // ================================================
+  // LASERS
+  // ================================================
 
   function getLaserPosition(laser) {
     if (
-      typeof window.getLaserPosition ===
-      "function"
+      typeof window.getLaserPosition === "function"
     ) {
-      const result =
-        window.getLaserPosition(
-          laser,
-          worldTime
-        );
+      const position = window.getLaserPosition(
+        laser,
+        worldTime
+      );
 
-      if (result) return result;
+      if (position) return position;
     }
 
     const baseX = Number(
       laser.x ??
-      (
-        (Number(laser.x1) +
-          Number(laser.x2)) / 2
-      )
+      (Number(laser.x1) + Number(laser.x2)) / 2
     );
 
     const baseY = Number(
       laser.y ??
-      (
-        (Number(laser.y1) +
-          Number(laser.y2)) / 2
-      )
+      (Number(laser.y1) + Number(laser.y2)) / 2
     );
 
-    const moving = Boolean(
-      laser.moving
-    );
+    const range = Number(laser.movementRange) || 0;
+    const speed = Number(laser.movementSpeed) || 1;
+    const phase = Number(laser.movementPhase) || 0;
 
-    const range =
-      Number(laser.movementRange) || 0;
-
-    const speed =
-      Number(laser.movementSpeed) || 1;
-
-    const phase =
-      Number(laser.movementPhase) || 0;
-
-    const displacement = moving
-      ? Math.sin(
-          worldTime * speed + phase
-        ) * range
+    const displacement = laser.moving
+      ? Math.sin(worldTime * speed + phase) * range
       : 0;
 
-    const horizontal =
-      laser.movementAxis === "x";
-
     return {
-      x: baseX +
-        (horizontal ? displacement : 0),
-
-      y: baseY +
-        (!horizontal ? displacement : 0)
+      x: baseX + (
+        laser.movementAxis === "x"
+          ? displacement
+          : 0
+      ),
+      y: baseY + (
+        laser.movementAxis === "x"
+          ? 0
+          : displacement
+      )
     };
   }
 
   function getLaserSegment(laser) {
-    const position =
-      getLaserPosition(laser);
-
-    const baseX =
-      Number(laser.x) ||
-      (
-        Number(laser.x1) +
-        Number(laser.x2)
-      ) / 2;
-
-    const baseY =
-      Number(laser.y) ||
-      (
-        Number(laser.y1) +
-        Number(laser.y2)
-      ) / 2;
+    const position = getLaserPosition(laser);
 
     if (
       Number.isFinite(laser.x1) &&
@@ -1402,11 +1131,18 @@
       Number.isFinite(laser.x2) &&
       Number.isFinite(laser.y2)
     ) {
-      const dx =
-        position.x - baseX;
+      const baseX = Number(
+        laser.x ??
+        (laser.x1 + laser.x2) / 2
+      );
 
-      const dy =
-        position.y - baseY;
+      const baseY = Number(
+        laser.y ??
+        (laser.y1 + laser.y2) / 2
+      );
+
+      const dx = position.x - baseX;
+      const dy = position.y - baseY;
 
       return {
         x1: laser.x1 + dx,
@@ -1424,188 +1160,113 @@
     };
   }
 
-  function distanceToSegment(
-    px,
-    py,
-    segment
-  ) {
-    const vx =
-      segment.x2 - segment.x1;
+  function distanceToSegment(px, py, segment) {
+    const vx = segment.x2 - segment.x1;
+    const vy = segment.y2 - segment.y1;
 
-    const vy =
-      segment.y2 - segment.y1;
+    const wx = px - segment.x1;
+    const wy = py - segment.y1;
 
-    const wx =
-      px - segment.x1;
-
-    const wy =
-      py - segment.y1;
-
-    const lengthSquared =
-      vx * vx + vy * vy;
+    const lengthSquared = vx * vx + vy * vy;
 
     const t = lengthSquared > 0
       ? clamp(
-          (wx * vx + wy * vy) /
-            lengthSquared,
+          (wx * vx + wy * vy) / lengthSquared,
           0,
           1
         )
       : 0;
 
-    const closestX =
-      segment.x1 + t * vx;
-
-    const closestY =
-      segment.y1 + t * vy;
-
     return Math.hypot(
-      px - closestX,
-      py - closestY
+      px - (segment.x1 + t * vx),
+      py - (segment.y1 + t * vy)
     );
   }
 
-  function isLaserHit(laser) {
-    if (!isLaserActive(laser)) {
-      return false;
-    }
-
-    const segment =
-      getLaserSegment(laser);
-
-    const width =
-      Number(laser.width) || 5;
-
-    return distanceToSegment(
-      player.x,
-      player.y,
-      segment
-    ) < PLAYER_SIZE / 2 +
-        width / 2;
-  }
-
   function checkLasers() {
-    for (
-      const laser of level.lasers || []
-    ) {
-      if (!isLaserHit(laser)) {
-        continue;
+    for (const laser of level.lasers || []) {
+      if (!isLaserActive(laser)) continue;
+
+      const segment = getLaserSegment(laser);
+      const width = Number(laser.width) || 5;
+
+      if (
+        distanceToSegment(
+          player.x,
+          player.y,
+          segment
+        ) < PLAYER_SIZE / 2 + width / 2
+      ) {
+        killPlayer("laser");
+        return true;
       }
-
-      killPlayer("laser");
-
-      return true;
     }
 
     return false;
   }
 
-  // ==================================================
-  // 22. TEMPORAL PLATFORMS
-  // ==================================================
-
-  function isPlatformActive(platform) {
-    if (
-      typeof window.isTemporalPlatformActive ===
-      "function"
-    ) {
-      return window.isTemporalPlatformActive(
-        platform,
-        worldTime
-      );
-    }
-
-    const period =
-      Number(platform.period) || 3;
-
-    const on =
-      Number(platform.on) ||
-      period / 2;
-
-    const phase =
-      worldTime +
-      (Number(platform.offset) || 0);
-
-    return (
-      ((phase % period) + period) %
-      period
-    ) < on;
-  }
+  // ================================================
+  // TEMPORAL PLATFORMS
+  // ================================================
 
   function updatePlatforms() {
-    const platforms =
-      level.temporalPlatforms || [];
+    const platforms = level.temporalPlatforms || [];
 
-    platforms.forEach(
-      (platform, index) => {
-        const id =
-          platform.id || index;
+    for (let index = 0; index < platforms.length; index++) {
+      const platform = platforms[index];
+      const id = platform.id ?? index;
 
-        const inside = intersects(
-          playerRect(
-            player.x,
-            player.y
-          ),
-          platform
-        );
+      const inside = intersects(
+        playerRect(player.x, player.y),
+        platform
+      );
 
-        if (!inside) {
-          touchedPlatforms.delete(id);
-          return;
-        }
-
-        if (!touchedPlatforms.has(id)) {
-          touchedPlatforms.add(id);
-
-          emitEvent("platformtouch", {
-            platform: id
-          });
-        }
-
-        if (
-          !isPlatformActive(platform)
-        ) {
-          killPlayer("platform");
-        }
+      if (!inside) {
+        touchedPlatforms.delete(id);
+        continue;
       }
-    );
+
+      if (!touchedPlatforms.has(id)) {
+        touchedPlatforms.add(id);
+
+        emitEvent("platformtouch", {
+          platform: id
+        });
+      }
+
+      if (!isPlatformActive(platform)) {
+        killPlayer("platform");
+        return true;
+      }
+    }
+
+    return false;
   }
 
-  // ==================================================
-  // 23. ECHO TRAPS
-  // ==================================================
+  // ================================================
+  // ECHO TRAPS
+  // ================================================
 
   function updateTraps() {
-    const traps =
-      level.echoTraps || [];
+    const traps = level.echoTraps || [];
 
-    traps.forEach((trap, index) => {
-      const id =
-        trap.id || index;
+    for (let index = 0; index < traps.length; index++) {
+      const trap = traps[index];
+      const id = trap.id ?? index;
 
-      if (triggeredTraps.has(id)) {
-        return;
-      }
+      if (triggeredTraps.has(id)) continue;
 
-      const radius =
-        Number(trap.radius) || 22;
+      const radius = Number(trap.radius) || 22;
 
-      const activatedByGhost =
-        ghosts.some(
-          ghost =>
-            distance(ghost, trap) <
-            radius
-        );
+      const ghostTriggered = ghosts.some(
+        ghost => distance(ghost, trap) < radius
+      );
 
-      const activatedByPlayer =
-        distance(player, trap) <
-        radius;
+      const playerTriggered =
+        distance(player, trap) < radius;
 
-      if (
-        !activatedByGhost &&
-        !activatedByPlayer
-      ) {
-        return;
+      if (!ghostTriggered && !playerTriggered) {
+        continue;
       }
 
       triggeredTraps.add(id);
@@ -1623,27 +1284,28 @@
         20
       );
 
-      if (activatedByPlayer) {
+      if (playerTriggered) {
         killPlayer("trap");
+        return true;
       }
-    });
+    }
+
+    return false;
   }
 
-  // ==================================================
-  // 24. PLAYER DEATH
-  // ==================================================
+  // ================================================
+  // DEATH AND TEMPORAL CYCLES
+  // ================================================
 
   function killPlayer(reason) {
-    if (!running) return;
+    if (!running || deathTriggered) return;
 
+    deathTriggered = true;
     deaths++;
 
     storageCall("registerDeath");
 
-    score = Math.max(
-      0,
-      score - 150
-    );
+    score = Math.max(0, score - 150);
 
     emitParticles(
       player.x,
@@ -1660,54 +1322,43 @@
     });
 
     playSound(
-      reason === "laser"
-        ? "laser"
-        : "death"
+      reason === "laser" ? "laser" : "death"
     );
 
     endCycle(true);
   }
 
-  // ==================================================
-  // 25. END CYCLE
-  // ==================================================
-
   function endCycle(died = false) {
     if (!running) return;
 
-    const duration =
-      getCycleDuration();
+    const duration = getCycleDuration();
 
-    if (died) {
-      currentRecording.push({
-        t: Math.min(
-          elapsed,
-          duration
-        ),
-        x: WORLD.start.x,
-        y: WORLD.start.y
-      });
-    }
+    // Preserve the real trajectory until death.
+    // Do not create an impossible teleporting echo.
+    const lastPosition = {
+      x: player.x,
+      y: player.y
+    };
+
+    const endTime = Math.min(elapsed, duration);
+
+    currentRecording.push({
+      t: endTime,
+      x: lastPosition.x,
+      y: lastPosition.y
+    });
 
     currentRecording.push({
       t: duration,
-      x: died
-        ? WORLD.start.x
-        : player.x,
-      y: died
-        ? WORLD.start.y
-        : player.y
+      x: lastPosition.x,
+      y: lastPosition.y
     });
 
-    recordings.push(
-      currentRecording
-    );
+    recordings.push(currentRecording);
 
     storageCall("registerCycle");
 
-    if (
-      cycle >= getMaxCycles()
-    ) {
+    if (cycle >= getMaxCycles()) {
       finishGame(false);
       return;
     }
@@ -1718,6 +1369,10 @@
     portalCooldown = 0;
     lastTickSecond = null;
     criticalEmitted = false;
+    deathTriggered = false;
+
+    // One Paradox Shift per cycle.
+    shiftUsed = false;
 
     player.x = WORLD.start.x;
     player.y = WORLD.start.y;
@@ -1756,29 +1411,27 @@
       `CICLO ${cycle}: ` +
       `${recordings.length} ECOS ACTIVOS.`
     );
+
+    updateHUD();
   }
 
-  // ==================================================
-  // 26. GOAL
-  // ==================================================
+  // ================================================
+  // GOAL AND VICTORY
+  // ================================================
 
   function checkGoal() {
     if (
       intersects(
-        playerRect(
-          player.x,
-          player.y
-        ),
+        playerRect(player.x, player.y),
         WORLD.goal
       )
     ) {
       finishGame(true);
+      return true;
     }
-  }
 
-  // ==================================================
-  // 27. FINISH GAME
-  // ==================================================
+    return false;
+  }
 
   function finishGame(won) {
     if (finished) return;
@@ -1790,24 +1443,16 @@
 
     if (won) {
       const cycleBonus =
-        (
-          getMaxCycles() -
-          cycle + 1
-        ) * 1000;
+        (getMaxCycles() - cycle + 1) * 1000;
 
-      const timeBonus =
-        Math.floor(
-          (
-            getCycleDuration() -
-            elapsed
-          ) * 100
-        );
+      const timeBonus = Math.floor(
+        Math.max(0, getCycleDuration() - elapsed) * 100
+      );
 
-      const survivalBonus =
-        Math.max(
-          0,
-          1000 - deaths * 250
-        );
+      const survivalBonus = Math.max(
+        0,
+        1000 - deaths * 250
+      );
 
       score +=
         2000 +
@@ -1815,11 +1460,7 @@
         timeBonus +
         survivalBonus;
 
-      storageCall(
-        "win",
-        levelIndex,
-        score
-      );
+      storageCall("win", levelIndex, score);
 
       playSound("win");
 
@@ -1846,8 +1487,7 @@
 
       if (UI.nextBtn) {
         UI.nextBtn.style.display =
-          levelIndex <
-          LEVELS.length - 1
+          levelIndex < LEVELS.length - 1
             ? "inline-block"
             : "none";
       }
@@ -1876,8 +1516,7 @@
       }
 
       if (UI.nextBtn) {
-        UI.nextBtn.style.display =
-          "none";
+        UI.nextBtn.style.display = "none";
       }
 
       setStatus(
@@ -1890,30 +1529,22 @@
         `${formatScore(score)} PONTOS`;
     }
 
-    UI.overlay?.classList.remove(
-      "hidden"
-    );
+    UI.overlay?.classList.remove("hidden");
 
     if (UI.startBtn) {
-      UI.startBtn.textContent =
-        "JOGAR NOVAMENTE";
+      UI.startBtn.textContent = "JOGAR NOVAMENTE";
     }
 
     buildLevelMenu();
     updateHUD();
   }
 
-  // ==================================================
-  // 28. DRAW HELPERS
-  // ==================================================
+  // ================================================
+  // RENDER HELPERS
+  // ================================================
 
   function glowRect(
-    x,
-    y,
-    width,
-    height,
-    color,
-    blur = 15
+    x, y, width, height, color, blur = 15
   ) {
     ctx.save();
 
@@ -1921,73 +1552,30 @@
     ctx.shadowColor = color;
     ctx.shadowBlur = blur;
 
-    ctx.fillRect(
-      x,
-      y,
-      width,
-      height
-    );
+    ctx.fillRect(x, y, width, height);
 
     ctx.restore();
   }
 
-  function getThemeColor(
-    key,
-    fallback
-  ) {
-    const theme = getVisualTheme();
-
-    const value = theme[key];
-
-    if (typeof value === "string") {
-      return value;
-    }
-
-    if (typeof value === "number") {
-      return (
-        "#" +
-        value.toString(16).padStart(
-          6,
-          "0"
-        )
-      );
-    }
-
-    return fallback;
-  }
-
-  // ==================================================
-  // 29. FALLBACK GRID
-  // ==================================================
-
   function drawGrid() {
     ctx.save();
 
-    ctx.strokeStyle =
-      getThemeColor(
-        "grid",
-        "#19243d"
-      );
+    ctx.strokeStyle = getThemeColor(
+      "grid",
+      "#19243d"
+    );
 
     ctx.globalAlpha = 0.6;
     ctx.lineWidth = 1;
 
-    for (
-      let x = 0;
-      x <= WIDTH;
-      x += 40
-    ) {
+    for (let x = 0; x <= WIDTH; x += 40) {
       ctx.beginPath();
       ctx.moveTo(x, 0);
       ctx.lineTo(x, HEIGHT);
       ctx.stroke();
     }
 
-    for (
-      let y = 0;
-      y <= HEIGHT;
-      y += 40
-    ) {
+    for (let y = 0; y <= HEIGHT; y += 40) {
       ctx.beginPath();
       ctx.moveTo(0, y);
       ctx.lineTo(WIDTH, y);
@@ -1997,43 +1585,34 @@
     ctx.restore();
   }
 
-  // ==================================================
-  // 30. WALLS AND DOOR
-  // ==================================================
+  // ================================================
+  // DRAW WALLS AND DOOR
+  // ================================================
 
   function drawWalls() {
-    const wallColor =
-      getThemeColor(
-        "secondary",
-        "#35415e"
-      );
+    const wallColor = getThemeColor(
+      "secondary",
+      "#35415e"
+    );
 
     ctx.save();
 
-    for (
-      const wall of WORLD.walls || []
-    ) {
+    for (const wall of WORLD.walls || []) {
       ctx.fillStyle = "#101b2a";
 
       ctx.fillRect(
-        wall.x,
-        wall.y,
-        wall.w,
-        wall.h
+        wall.x, wall.y, wall.w, wall.h
       );
 
       ctx.strokeStyle = wallColor;
       ctx.lineWidth = 2;
 
       ctx.strokeRect(
-        wall.x,
-        wall.y,
-        wall.w,
-        wall.h
+        wall.x, wall.y, wall.w, wall.h
       );
 
-      ctx.fillStyle = wallColor;
       ctx.globalAlpha = 0.18;
+      ctx.fillStyle = wallColor;
 
       ctx.fillRect(
         wall.x + 3,
@@ -2052,18 +1631,12 @@
     if (doorOpen) {
       ctx.save();
 
-      ctx.strokeStyle =
-        COLORS.green;
-
+      ctx.strokeStyle = COLORS.green;
       ctx.lineWidth = 2;
-
       ctx.setLineDash([6, 6]);
 
       ctx.strokeRect(
-        door.x,
-        door.y,
-        door.w,
-        door.h
+        door.x, door.y, door.w, door.h
       );
 
       ctx.restore();
@@ -2079,56 +1652,41 @@
     }
   }
 
-  // ==================================================
-  // 31. PHASE WALLS
-  // ==================================================
+  // ================================================
+  // DRAW PHASE WALLS
+  // ================================================
 
   function drawPhaseWalls() {
-    for (
-      const wall of
-      level.phaseWalls || []
-    ) {
-      const active =
-        isPhaseWallActive(wall);
+    for (const wall of level.phaseWalls || []) {
+      const active = isPhaseWallActive(wall);
 
       ctx.save();
 
-      ctx.globalAlpha =
-        active ? 0.85 : 0.15;
+      ctx.globalAlpha = active ? 0.85 : 0.15;
 
-      ctx.fillStyle =
-        getThemeColor(
-          "primary",
-          COLORS.purple
-        );
+      ctx.fillStyle = getThemeColor(
+        "primary",
+        COLORS.purple
+      );
 
-      ctx.shadowColor =
-        COLORS.purple;
-
-      ctx.shadowBlur =
-        active ? 15 : 0;
+      ctx.shadowColor = COLORS.purple;
+      ctx.shadowBlur = active ? 15 : 0;
 
       ctx.fillRect(
-        wall.x,
-        wall.y,
-        wall.w,
-        wall.h
+        wall.x, wall.y, wall.w, wall.h
       );
 
       ctx.restore();
     }
   }
 
-  // ==================================================
-  // 32. PLATES
-  // ==================================================
+  // ================================================
+  // DRAW PLATES
+  // ================================================
 
   function drawPlates() {
-    (
-      level.plates || []
-    ).forEach((plate, index) => {
-      const active =
-        isPlateActive(plate);
+    (level.plates || []).forEach((plate, index) => {
+      const active = isPlateActive(plate);
 
       const color = active
         ? COLORS.green
@@ -2143,41 +1701,24 @@
       ctx.lineWidth = 3;
 
       ctx.beginPath();
-
       ctx.arc(
-        plate.x,
-        plate.y,
-        24,
-        0,
-        Math.PI * 2
+        plate.x, plate.y, 24, 0, Math.PI * 2
       );
-
       ctx.stroke();
 
       ctx.beginPath();
-
       ctx.arc(
-        plate.x,
-        plate.y,
-        10,
-        0,
-        Math.PI * 2
+        plate.x, plate.y, 10, 0, Math.PI * 2
       );
-
       ctx.fill();
 
       ctx.restore();
 
       ctx.save();
 
-      ctx.fillStyle =
-        COLORS.white;
-
-      ctx.font =
-        "11px monospace";
-
-      ctx.textAlign =
-        "center";
+      ctx.fillStyle = COLORS.white;
+      ctx.font = "11px monospace";
+      ctx.textAlign = "center";
 
       ctx.fillText(
         `PLACA ${index + 1}`,
@@ -2189,101 +1730,63 @@
     });
   }
 
-  // ==================================================
-  // 33. LASERS
-  // ==================================================
+  // ================================================
+  // DRAW LASERS
+  // ================================================
 
   function drawLasers() {
-    for (
-      const laser of
-      level.lasers || []
-    ) {
-      const active =
-        isLaserActive(laser);
-
-      const segment =
-        getLaserSegment(laser);
+    for (const laser of level.lasers || []) {
+      const active = isLaserActive(laser);
+      const segment = getLaserSegment(laser);
 
       ctx.save();
 
       ctx.beginPath();
-
-      ctx.moveTo(
-        segment.x1,
-        segment.y1
-      );
-
-      ctx.lineTo(
-        segment.x2,
-        segment.y2
-      );
+      ctx.moveTo(segment.x1, segment.y1);
+      ctx.lineTo(segment.x2, segment.y2);
 
       ctx.strokeStyle = active
         ? COLORS.red
         : "#50233a";
 
-      ctx.lineWidth = active
-        ? 5
-        : 2;
-
-      ctx.shadowColor =
-        COLORS.red;
-
-      ctx.shadowBlur = active
-        ? 20
-        : 0;
+      ctx.lineWidth = active ? 5 : 2;
+      ctx.shadowColor = COLORS.red;
+      ctx.shadowBlur = active ? 20 : 0;
 
       ctx.stroke();
-
       ctx.restore();
 
-      glowRect(
-        segment.x1 - 8,
-        segment.y1 - 8,
-        16,
-        16,
-        active
-          ? COLORS.red
-          : "#71324a",
-        8
-      );
-
-      glowRect(
-        segment.x2 - 8,
-        segment.y2 - 8,
-        16,
-        16,
-        active
-          ? COLORS.red
-          : "#71324a",
-        8
-      );
+      for (const point of [
+        { x: segment.x1, y: segment.y1 },
+        { x: segment.x2, y: segment.y2 }
+      ]) {
+        glowRect(
+          point.x - 8,
+          point.y - 8,
+          16,
+          16,
+          active ? COLORS.red : "#71324a",
+          8
+        );
+      }
     }
   }
 
-  // ==================================================
-  // 34. PORTALS
-  // ==================================================
+  // ================================================
+  // DRAW PORTALS
+  // ================================================
 
   function drawPortals() {
-    for (
-      const portal of
-      level.portals || []
-    ) {
-      const { a, b } =
-        getPortalPoints(portal);
+    for (const portal of level.portals || []) {
+      const { a, b } = getPortalPoints(portal);
 
       for (const point of [a, b]) {
         const radius =
-          15 +
-          Math.sin(
-            worldTime * 5
-          ) * 3;
+          15 + Math.sin(worldTime * 5) * 3;
 
         ctx.save();
 
         ctx.beginPath();
-
         ctx.arc(
           point.x,
           point.y,
@@ -2292,34 +1795,26 @@
           Math.PI * 2
         );
 
-        ctx.strokeStyle =
-          COLORS.blue;
-
+        ctx.strokeStyle = COLORS.blue;
         ctx.lineWidth = 4;
-
-        ctx.shadowColor =
-          COLORS.blue;
-
+        ctx.shadowColor = COLORS.blue;
         ctx.shadowBlur = 18;
 
         ctx.stroke();
-
         ctx.restore();
       }
     }
   }
 
-  // ==================================================
-  // 35. PLATFORMS
-  // ==================================================
+  // ================================================
+  // DRAW TEMPORAL PLATFORMS
+  // ================================================
 
   function drawPlatforms() {
-    for (
-      const platform of
-      level.temporalPlatforms || []
-    ) {
-      const active =
-        isPlatformActive(platform);
+    for (const platform of
+      level.temporalPlatforms || []) {
+
+      const active = isPlatformActive(platform);
 
       ctx.save();
 
@@ -2332,10 +1827,7 @@
         : COLORS.red;
 
       ctx.lineWidth = 2;
-
-      ctx.setLineDash(
-        active ? [] : [5, 5]
-      );
+      ctx.setLineDash(active ? [] : [5, 5]);
 
       ctx.fillRect(
         platform.x,
@@ -2355,27 +1847,19 @@
     }
   }
 
-  // ==================================================
-  // 36. TRAPS
-  // ==================================================
+  // ================================================
+  // DRAW TRAPS
+  // ================================================
 
   function drawTraps() {
-    (
-      level.echoTraps || []
-    ).forEach((trap, index) => {
-      const id =
-        trap.id || index;
-
-      const triggered =
-        triggeredTraps.has(id);
-
-      const radius =
-        Number(trap.radius) || 22;
+    (level.echoTraps || []).forEach((trap, index) => {
+      const id = trap.id ?? index;
+      const triggered = triggeredTraps.has(id);
+      const radius = Number(trap.radius) || 22;
 
       ctx.save();
 
       ctx.beginPath();
-
       ctx.arc(
         trap.x,
         trap.y,
@@ -2384,30 +1868,23 @@
         Math.PI * 2
       );
 
-      ctx.strokeStyle =
-        triggered
-          ? COLORS.red
-          : COLORS.purple;
+      ctx.strokeStyle = triggered
+        ? COLORS.red
+        : COLORS.purple;
 
       ctx.lineWidth = 2;
-
       ctx.setLineDash([4, 4]);
-
-      ctx.shadowColor =
-        COLORS.red;
-
-      ctx.shadowBlur =
-        triggered ? 18 : 5;
+      ctx.shadowColor = COLORS.red;
+      ctx.shadowBlur = triggered ? 18 : 5;
 
       ctx.stroke();
-
       ctx.restore();
     });
   }
 
-  // ==================================================
-  // 37. GOAL
-  // ==================================================
+  // ================================================
+  // DRAW GOAL
+  // ================================================
 
   function drawGoal() {
     const goal = WORLD.goal;
@@ -2421,25 +1898,20 @@
       22
     );
 
+    ctx.save();
+
     ctx.fillStyle = "#083324";
 
     ctx.fillRect(
       goal.x + 10,
       goal.y + 10,
-      goal.w - 20,
-      goal.h - 20
+      Math.max(0, goal.w - 20),
+      Math.max(0, goal.h - 20)
     );
 
-    ctx.save();
-
-    ctx.fillStyle =
-      COLORS.green;
-
-    ctx.font =
-      "12px monospace";
-
-    ctx.textAlign =
-      "center";
+    ctx.fillStyle = COLORS.green;
+    ctx.font = "12px monospace";
+    ctx.textAlign = "center";
 
     ctx.fillText(
       "SAÍDA",
@@ -2450,45 +1922,37 @@
     ctx.restore();
   }
 
-  // ==================================================
-  // 38. GHOSTS
-  // ==================================================
+  // ================================================
+  // DRAW GHOSTS
+  // ================================================
 
   function drawGhosts() {
-    ghosts.forEach(
-      (ghost, index) => {
-        ctx.save();
+    ghosts.forEach((ghost, index) => {
+      ctx.save();
 
-        ctx.globalAlpha =
-          0.5 +
-          Math.sin(
-            worldTime * 7 +
-            index
-          ) * 0.12;
+      ctx.globalAlpha =
+        0.5 +
+        Math.sin(worldTime * 7 + index) * 0.12;
 
-        glowRect(
-          ghost.x - 10,
-          ghost.y - 10,
-          20,
-          20,
-          COLORS.purple,
-          16
-        );
+      glowRect(
+        ghost.x - 10,
+        ghost.y - 10,
+        20,
+        20,
+        COLORS.purple,
+        16
+      );
 
-        ctx.restore();
-      }
-    );
+      ctx.restore();
+    });
   }
 
-  // ==================================================
-  // 39. PLAYER
-  // ==================================================
+  // ================================================
+  // DRAW PLAYER
+  // ================================================
 
   function drawPlayer() {
-    if (
-      !player ||
-      isOperatorRendererActive()
-    ) {
+    if (!player || isOperatorRendererActive()) {
       return;
     }
 
@@ -2501,8 +1965,7 @@
       20
     );
 
-    ctx.fillStyle =
-      "#ffffff";
+    ctx.fillStyle = COLORS.white;
 
     ctx.fillRect(
       player.x - 4,
@@ -2512,25 +1975,21 @@
     );
   }
 
-  // ==================================================
-  // 40. PARTICLES
-  // ==================================================
+  // ================================================
+  // DRAW PARTICLES
+  // ================================================
 
   function drawParticles() {
-    for (
-      const particle of particles
-    ) {
+    for (const particle of particles) {
       ctx.save();
 
       ctx.globalAlpha = clamp(
-        particle.life /
-          particle.maxLife,
+        particle.life / particle.maxLife,
         0,
         1
       );
 
-      ctx.fillStyle =
-        particle.color;
+      ctx.fillStyle = particle.color;
 
       ctx.fillRect(
         particle.x,
@@ -2543,46 +2002,35 @@
     }
   }
 
-  // ==================================================
-  // 41. ARENA LABELS
-  // ==================================================
+  // ================================================
+  // DRAW LEVEL LABELS
+  // ================================================
 
   function drawLabels() {
     ctx.save();
 
-    ctx.fillStyle =
-      getThemeColor(
-        "accent",
-        "#7083a4"
-      );
+    ctx.fillStyle = getThemeColor(
+      "accent",
+      "#7083a4"
+    );
 
     ctx.globalAlpha = 0.75;
-
-    ctx.font =
-      "12px monospace";
-
-    ctx.textAlign =
-      "left";
+    ctx.font = "12px monospace";
+    ctx.textAlign = "left";
 
     ctx.fillText(
-      `SECTOR ${String(
-        levelIndex + 1
-      ).padStart(2, "0")} // ` +
-      String(
-        getVisualTheme().id ||
-        "PARADOX"
-      ).toUpperCase(),
+      `SECTOR ${String(levelIndex + 1).padStart(2, "0")}` +
+      ` // ${String(
+        getVisualTheme().id || "PARADOX"
+      ).toUpperCase()}`,
       20,
       25
     );
 
-    ctx.textAlign =
-      "right";
+    ctx.textAlign = "right";
 
     ctx.fillText(
-      `LEVEL ${String(
-        levelIndex + 1
-      ).padStart(2, "0")}`,
+      `LEVEL ${String(levelIndex + 1).padStart(2, "0")}`,
       WIDTH - 20,
       25
     );
@@ -2590,27 +2038,15 @@
     ctx.restore();
   }
 
-  // ==================================================
-  // 42. MAIN RENDER
-  // ==================================================
+  // ================================================
+  // MAIN DRAW
+  // ================================================
 
   function draw() {
-    // Clear the 2D canvas.
-    ctx.clearRect(
-      0,
-      0,
-      WIDTH,
-      HEIGHT
-    );
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-    const pixiActive =
-      isWorldRendererActive();
-
-    // Only draw the old background
-    // when PixiJS is unavailable.
-    if (!pixiActive) {
-      const theme =
-        getVisualTheme();
+    if (!isWorldRendererActive()) {
+      const theme = getVisualTheme();
 
       const background =
         theme.background ||
@@ -2620,19 +2056,15 @@
       ctx.fillStyle =
         typeof background === "string"
           ? background
-          : COLORS.dark;
+          : typeof background === "number"
+            ? "#" + background.toString(16).padStart(6, "0")
+            : COLORS.dark;
 
-      ctx.fillRect(
-        0,
-        0,
-        WIDTH,
-        HEIGHT
-      );
+      ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
       drawGrid();
     }
 
-    // Gameplay objects stay on Canvas 2D.
     drawLabels();
     drawWalls();
     drawPhaseWalls();
@@ -2647,14 +2079,12 @@
     drawParticles();
   }
 
-  // ==================================================
-  // 43. COUNTDOWN
-  // ==================================================
+  // ================================================
+  // COUNTDOWN
+  // ================================================
 
   function updateCountdown() {
-    const remaining =
-      getCycleDuration() -
-      elapsed;
+    const remaining = getCycleDuration() - elapsed;
 
     if (
       remaining <= 2.5 &&
@@ -2667,8 +2097,7 @@
       });
     }
 
-    const second =
-      Math.ceil(remaining);
+    const second = Math.ceil(remaining);
 
     if (
       second <= 3 &&
@@ -2680,22 +2109,22 @@
     }
   }
 
-  // ==================================================
-  // 44. MAIN LOOP
-  // ==================================================
+  // ================================================
+  // GAME LOOP
+  // ================================================
 
   function gameLoop(timestamp) {
-    if (!running) return;
+    if (!running) {
+      animationId = null;
+      return;
+    }
 
     if (!lastFrame) {
       lastFrame = timestamp;
     }
 
     const dt = clamp(
-      (
-        timestamp -
-        lastFrame
-      ) / 1000,
+      (timestamp - lastFrame) / 1000,
       0,
       0.05
     );
@@ -2710,43 +2139,29 @@
 
     updatePlayer(dt);
     updatePortals(dt);
-
     updateDoor();
 
     recordPlayer();
     updateParticles(dt);
     updateCountdown();
 
-    let died = checkLasers();
+    let interrupted = checkLasers();
 
-    if (!died && running) {
-      const previousCycle = cycle;
-
-      updatePlatforms();
-
-      died = (
-        cycle !== previousCycle ||
-        !running
-      );
+    if (!interrupted && running) {
+      interrupted = updatePlatforms();
     }
 
-    if (!died && running) {
-      const previousCycle = cycle;
-
-      updateTraps();
-
-      died = (
-        cycle !== previousCycle ||
-        !running
-      );
+    if (!interrupted && running) {
+      interrupted = updateTraps();
     }
 
-    if (!died && running) {
+    if (!interrupted && running) {
       checkGoal();
     }
 
     if (
       running &&
+      !interrupted &&
       elapsed >= getCycleDuration()
     ) {
       endCycle();
@@ -2756,94 +2171,76 @@
     draw();
 
     if (running) {
-      animationId =
-        requestAnimationFrame(
-          gameLoop
-        );
+      animationId = requestAnimationFrame(gameLoop);
     } else {
       animationId = null;
     }
   }
 
-  // ==================================================
-  // 45. KEYBOARD
-  // ==================================================
+  // ================================================
+  // KEYBOARD CONTROLS
+  // ================================================
 
-  window.addEventListener(
-    "keydown",
-    event => {
-      const key =
-        event.key.toLowerCase();
+  const movementKeys = new Set([
+    "w", "a", "s", "d",
+    "arrowup", "arrowdown",
+    "arrowleft", "arrowright"
+  ]);
 
-      const target =
-        event.target;
+  window.addEventListener("keydown", event => {
+    const key = event.key.toLowerCase();
+    const target = event.target;
 
-      const typing =
-        target instanceof HTMLElement &&
-        (
-          target.isContentEditable ||
-          ["INPUT", "TEXTAREA", "SELECT"]
-            .includes(target.tagName)
-        );
-
-      if (typing) return;
-
-      if (
-        key.startsWith("arrow") ||
-        key === " "
-      ) {
-        event.preventDefault();
-      }
-
-      if (
-        key === "r" &&
-        !event.repeat
-      ) {
-        startGame();
-        return;
-      }
-
-      if (
-        key === "e" &&
-        !event.repeat
-      ) {
-        paradoxShift();
-        return;
-      }
-
-      if (
-        key === " " &&
-        !running &&
-        !event.repeat
-      ) {
-        startGame();
-        return;
-      }
-
-      if (
-        movementKeys.has(key)
-      ) {
-        keys.add(key);
-      }
-    }
-  );
-
-  window.addEventListener(
-    "keyup",
-    event => {
-      keys.delete(
-        event.key.toLowerCase()
+    const typing =
+      target instanceof HTMLElement &&
+      (
+        target.isContentEditable ||
+        ["INPUT", "TEXTAREA", "SELECT"].includes(
+          target.tagName
+        )
       );
-    }
-  );
 
-  window.addEventListener(
-    "blur",
-    () => {
-      clearAllMovement();
-      lastFrame = 0;
+    if (typing) return;
+
+    if (
+      key.startsWith("arrow") ||
+      key === " "
+    ) {
+      event.preventDefault();
     }
-  );
+
+    if (key === "r" && !event.repeat) {
+      startGame();
+      return;
+    }
+
+    if (key === "e" && !event.repeat) {
+      paradoxShift();
+      return;
+    }
+
+    if (
+      key === " " &&
+      !running &&
+      !event.repeat
+    ) {
+      startGame();
+      return;
+    }
+
+    if (movementKeys.has(key)) {
+      keys.add(key);
+    }
+  });
+
+  window.addEventListener("keyup", event => {
+    keys.delete(event.key.toLowerCase());
+  });
+
+  window.addEventListener("blur", () => {
+    clearAllMovement();
+    lastFrame = 0;
+  });
 
   document.addEventListener(
     "visibilitychange",
@@ -2855,21 +2252,17 @@
     }
   );
 
-  // ==================================================
-  // 46. MOBILE CONTROLS
-  // ==================================================
+  // ================================================
+  // MOBILE CONTROLS
+  // ================================================
 
   function setupMobileControls() {
-    for (
-      const [direction, button]
-      of Object.entries(
-        mobileDirections
-      )
-    ) {
+    for (const [direction, button] of
+      Object.entries(directionButtons)) {
+
       if (!button) continue;
 
-      button.style.touchAction =
-        "none";
+      button.style.touchAction = "none";
 
       button.addEventListener(
         "pointerdown",
@@ -2894,18 +2287,7 @@
       );
 
       const releasePointer = event => {
-        if (
-          !mobilePointers.has(
-            event.pointerId
-          )
-        ) {
-          return;
-        }
-
-        mobilePointers.delete(
-          event.pointerId
-        );
-
+        mobilePointers.delete(event.pointerId);
         refreshMobileButtons();
       };
 
@@ -2930,22 +2312,20 @@
       );
     }
 
-    UI.mobileShiftBtn
-      ?.addEventListener(
-        "click",
-        paradoxShift
-      );
+    UI.mobileShiftBtn?.addEventListener(
+      "click",
+      paradoxShift
+    );
 
-    UI.mobileRestartBtn
-      ?.addEventListener(
-        "click",
-        startGame
-      );
+    UI.mobileRestartBtn?.addEventListener(
+      "click",
+      startGame
+    );
   }
 
-  // ==================================================
-  // 47. BUTTONS
-  // ==================================================
+  // ================================================
+  // UI BUTTONS
+  // ================================================
 
   UI.startBtn?.addEventListener(
     "click",
@@ -2970,8 +2350,7 @@
   UI.nextBtn?.addEventListener(
     "click",
     () => {
-      const nextIndex =
-        levelIndex + 1;
+      const nextIndex = levelIndex + 1;
 
       if (
         nextIndex < LEVELS.length &&
@@ -2989,42 +2368,105 @@
         window.GameAudio?.toggle?.();
 
       UI.soundBtn.textContent =
-        enabled
-          ? "SOM: ON"
-          : "SOM: OFF";
+        enabled ? "SOM: ON" : "SOM: OFF";
     }
   );
 
-  // ==================================================
-  // 48. WORLD RENDERER EVENTS
-  // ==================================================
+  // ================================================
+  // WORLD RENDERER EVENTS
+  // ================================================
 
   window.addEventListener(
     "echo404:worldthemechange",
     () => {
-      // Redraw the gameplay layer
-      // after the PixiJS theme changes.
-      if (!running) {
-        draw();
+      if (!running) draw();
+    }
+  );
+
+  window.addEventListener(
+    "echo404:worldready",
+    () => {
+      draw();
+    }
+  );
+
+  // ================================================
+  // PUBLIC API
+  // ================================================
+
+  window.EchoGame = Object.assign(
+    window.EchoGame || {},
+    {
+      version: VERSION,
+
+      getState() {
+        return {
+          player: player ? { ...player } : null,
+          running,
+          finished,
+          levelIndex,
+          levelNumber: levelIndex + 1,
+          level,
+          cycle,
+          elapsed,
+          worldTime,
+          cycleDuration: getCycleDuration(),
+          maxCycles: getMaxCycles(),
+          score,
+          deaths,
+          shifts,
+          doorOpen,
+          shiftUsed,
+          ghosts: ghosts.map(g => ({ ...g })),
+          recordingsCount: recordings.length,
+          width: WIDTH,
+          height: HEIGHT,
+          environment: getVisualTheme()
+        };
+      },
+
+      getCanvas() {
+        return canvas;
+      },
+
+      getLevel() {
+        return level;
+      },
+
+      getVisualTheme,
+
+      selectLevel,
+
+      start: startGame,
+
+      restart: startGame,
+
+      shift: paradoxShift,
+
+      redraw: draw,
+
+      getLaserPosition,
+
+      isLaserActive,
+
+      getWorldRendererState() {
+        return window.EchoWorldRenderer
+          ?.getState?.() || null;
       }
     }
   );
 
-  // ==================================================
-  // 49. INITIALIZATION
-  // ==================================================
+  // ================================================
+  // INITIALIZATION
+  // ================================================
 
   function initialize() {
     if (UI.soundBtn) {
       const enabled =
-        window.GameAudio
-          ?.isEnabled?.() ??
-        true;
+        window.GameAudio?.isEnabled?.() ?? true;
 
       UI.soundBtn.textContent =
-        enabled
-          ? "SOM: ON"
-          : "SOM: OFF";
+        enabled ? "SOM: ON" : "SOM: OFF";
     }
 
     setupMobileControls();
@@ -3033,39 +2475,31 @@
     resetGame();
     buildLevelMenu();
 
-    console.log(
+    console.info(
       "=================================="
     );
-
-    console.log(
+    console.info(
       "ECHO//404 — PARADOX EVOLUTION"
     );
-
-    console.log(
-      "VERSION 3.1 — WORLD INTEGRATION"
+    console.info(
+      `GAME ENGINE v${VERSION}`
     );
-
-    console.log(
+    console.info(
       `${LEVELS.length} LEVELS LOADED`
     );
-
-    console.log(
-      "PIXIJS WORLD RENDERER COMPATIBLE"
-    );
-
-    console.log(
+    console.info(
       "TEMPORAL ECHOES / PARADOX SHIFT READY"
     );
-
-    console.log(
+    console.info(
+      "PIXIJS WORLD RENDERER COMPATIBLE"
+    );
+    console.info(
       "DESKTOP + MOBILE CONTROLS READY"
     );
-
-    console.log(
+    console.info(
       "CREATED & DEVELOPED BY MANUEL SAMPAIO01"
     );
-
-    console.log(
+    console.info(
       "=================================="
     );
   }
@@ -3075,11 +2509,9 @@
 })();
 
 /*
-========================================================
  ECHO//404 — PARADOX EVOLUTION
- GAME ENGINE v3.1 — WORLD INTEGRATION
+ GAME ENGINE v4.2
 
  CREATED & DEVELOPED BY MANUEL SAMPAIO01
  © 2026 MANUEL SAMPAIO01
-========================================================
 */

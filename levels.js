@@ -4,17 +4,15 @@
 /*
 ========================================================
  ECHO//404 — PARADOX EVOLUTION
- VERSION 3.0 — TEMPORAL SECTORS
- FILE: levels.js
+ LEVEL SYSTEM v4.2 — TEMPORAL SECTORS
 
- 10 TEMPORAL SECTORS
- MOVING LASERS
+ 10 LEVELS
+ MOVING AND PULSING LASERS
  PHASE WALLS
  TEMPORAL PLATFORMS
- ECHO-ACTIVATED TRAPS
+ ECHO TRAPS
  QUANTUM PORTALS
  VISUAL ENVIRONMENTS
- GAME ENGINE COMPATIBILITY
 
  CREATED & DEVELOPED BY MANUEL SAMPAIO01
  © 2026 MANUEL SAMPAIO01
@@ -90,7 +88,7 @@ const LEVEL_DIFFICULTY = Object.freeze([
 ]);
 
 // =====================================================
-// 03. VISUAL THEMES
+// 03. VISUAL ENVIRONMENTS
 // =====================================================
 
 const TEMPORAL_ENVIRONMENTS = Object.freeze([
@@ -98,7 +96,6 @@ const TEMPORAL_ENVIRONMENTS = Object.freeze([
     id: "origin",
     name: "ORIGIN CHAMBER",
     background: "#071523",
-    backgroundColor: "#071523",
     grid: "#153b4b",
     primary: "#31eaff",
     secondary: "#127b9e",
@@ -111,7 +108,6 @@ const TEMPORAL_ENVIRONMENTS = Object.freeze([
     id: "laser-protocol",
     name: "LASER PROTOCOL",
     background: "#130d20",
-    backgroundColor: "#130d20",
     grid: "#382039",
     primary: "#ff526d",
     secondary: "#8d2447",
@@ -124,7 +120,6 @@ const TEMPORAL_ENVIRONMENTS = Object.freeze([
     id: "moving-target",
     name: "MOVING TARGET",
     background: "#091728",
-    backgroundColor: "#091728",
     grid: "#1c3853",
     primary: "#478bff",
     secondary: "#284b8d",
@@ -137,7 +132,6 @@ const TEMPORAL_ENVIRONMENTS = Object.freeze([
     id: "phase-shift",
     name: "PHASE SHIFT",
     background: "#150e2b",
-    backgroundColor: "#150e2b",
     grid: "#392657",
     primary: "#aa78ff",
     secondary: "#6736a0",
@@ -150,7 +144,6 @@ const TEMPORAL_ENVIRONMENTS = Object.freeze([
     id: "temporal-collapse",
     name: "TEMPORAL COLLAPSE",
     background: "#1b1320",
-    backgroundColor: "#1b1320",
     grid: "#48334a",
     primary: "#ffb454",
     secondary: "#975a34",
@@ -163,7 +156,6 @@ const TEMPORAL_ENVIRONMENTS = Object.freeze([
     id: "echo-betrayal",
     name: "ECHO BETRAYAL",
     background: "#190d25",
-    backgroundColor: "#190d25",
     grid: "#432347",
     primary: "#ff4eb8",
     secondary: "#87346d",
@@ -176,7 +168,6 @@ const TEMPORAL_ENVIRONMENTS = Object.freeze([
     id: "double-paradox",
     name: "DOUBLE PARADOX",
     background: "#0c152b",
-    backgroundColor: "#0c152b",
     grid: "#27365c",
     primary: "#7b7cff",
     secondary: "#4451b4",
@@ -189,7 +180,6 @@ const TEMPORAL_ENVIRONMENTS = Object.freeze([
     id: "system-instability",
     name: "SYSTEM INSTABILITY",
     background: "#15101e",
-    backgroundColor: "#15101e",
     grid: "#46304b",
     primary: "#ff875b",
     secondary: "#a63f64",
@@ -202,7 +192,6 @@ const TEMPORAL_ENVIRONMENTS = Object.freeze([
     id: "rebellion-protocol",
     name: "REBELLION PROTOCOL",
     background: "#1c0a17",
-    backgroundColor: "#1c0a17",
     grid: "#502038",
     primary: "#ff3868",
     secondary: "#9e2148",
@@ -215,7 +204,6 @@ const TEMPORAL_ENVIRONMENTS = Object.freeze([
     id: "system-rebellion",
     name: "SYSTEM REBELLION",
     background: "#170719",
-    backgroundColor: "#170719",
     grid: "#5a1845",
     primary: "#ff4eb8",
     secondary: "#a42b85",
@@ -224,7 +212,10 @@ const TEMPORAL_ENVIRONMENTS = Object.freeze([
     particles: "chaos",
     intensity: 1
   }
-]);
+].map(theme => Object.freeze({
+  ...theme,
+  backgroundColor: theme.background
+})));
 
 // =====================================================
 // 04. OBJECT FACTORIES
@@ -242,55 +233,46 @@ function createPlate(x, y, radius = 23, options = {}) {
   };
 }
 
-function createLaser(
-  x1,
-  y1,
-  x2,
-  y2,
-  options = {}
-) {
+function createLaser(x1, y1, x2, y2, options = {}) {
   const pulse = options.pulse === true;
   const period = Math.max(
     0.1,
-    options.pulseInterval ?? 2
+    Number(options.pulseInterval ?? 2)
   );
 
   const on = pulse
-    ? Math.min(
+    ? Math.max(0, Math.min(
         period,
-        Math.max(0, options.pulseDuration ?? 1)
-      )
+        Number(options.pulseDuration ?? 1)
+      ))
     : period;
 
   return {
     id: options.id || null,
-
     x1,
     y1,
     x2,
     y2,
-
-    // Compatibility with game.js v3.0.
     x: (x1 + x2) / 2,
     y: (y1 + y2) / 2,
 
     period,
     on,
-    offset: options.phase ?? 0,
+    offset: Number(options.phase ?? 0),
 
-    speed: options.speed ?? 1,
-    phase: options.phase ?? 0,
-    width: options.width ?? 5,
+    speed: Number(options.speed ?? 1),
+    phase: Number(options.phase ?? 0),
+    width: Number(options.width ?? 5),
     active: options.active !== false,
 
     moving: options.moving === true,
     movementAxis: options.movementAxis || "none",
-    movementRange: options.movementRange ?? 0,
-    movementSpeed: options.movementSpeed ?? 1,
-    movementPhase: options.movementPhase ?? 0,
+    movementRange: Number(options.movementRange ?? 0),
+    movementSpeed: Number(options.movementSpeed ?? 1),
+    movementPhase: Number(options.movementPhase ?? 0),
 
     pulse,
-    pulseDuration: options.pulseDuration ?? 1,
+    pulseDuration: on,
     pulseInterval: period,
 
     color: options.color || "#ff4c69"
@@ -298,13 +280,8 @@ function createLaser(
 }
 
 function createMovingLaser(
-  x1,
-  y1,
-  x2,
-  y2,
-  axis,
-  range,
-  speed = 1,
+  x1, y1, x2, y2,
+  axis, range, speed = 1,
   options = {}
 ) {
   return createLaser(x1, y1, x2, y2, {
@@ -317,24 +294,17 @@ function createMovingLaser(
 }
 
 function createPortal(
-  x,
-  y,
-  targetX,
-  targetY,
+  x, y, targetX, targetY,
   options = {}
 ) {
   return {
     id: options.id || null,
-
     x,
     y,
     targetX,
     targetY,
-
-    // Compatibility with game.js v3.0.
     a: { x, y },
     b: { x: targetX, y: targetY },
-
     radius: options.radius ?? 22,
     cooldown: options.cooldown ?? 0.6,
     color: options.color || "#a66bff"
@@ -342,61 +312,71 @@ function createPortal(
 }
 
 function createPhaseWall(
-  x,
-  y,
-  w,
-  h,
+  x, y, w, h,
   options = {}
 ) {
+  const activeDuration = Math.max(
+    0.01,
+    Number(options.activeDuration ?? 1.5)
+  );
+
+  const inactiveDuration = Math.max(
+    0.01,
+    Number(options.inactiveDuration ?? 1.5)
+  );
+
   return {
     id: options.id || null,
     x,
     y,
     w,
     h,
-
-    activeDuration: options.activeDuration ?? 1.5,
-    inactiveDuration: options.inactiveDuration ?? 1.5,
-    phase: options.phase ?? 0,
-
+    activeDuration,
+    inactiveDuration,
+    period: activeDuration + inactiveDuration,
+    on: activeDuration,
+    phase: Number(options.phase ?? 0),
     startsActive: options.startsActive !== false,
     echoControlled: options.echoControlled === true,
     triggerPlateId: options.triggerPlateId || null,
-
     color: options.color || "#a66bff"
   };
 }
 
 function createTemporalPlatform(
-  x,
-  y,
-  w,
-  h,
+  x, y, w, h,
   options = {}
 ) {
+  const activeDuration = Math.max(
+    0.01,
+    Number(options.activeDuration ?? 2)
+  );
+
+  const inactiveDuration = Math.max(
+    0.01,
+    Number(options.inactiveDuration ?? 1)
+  );
+
   return {
     id: options.id || null,
     x,
     y,
     w,
     h,
-
-    activeDuration: options.activeDuration ?? 2,
-    inactiveDuration: options.inactiveDuration ?? 1,
-    phase: options.phase ?? 0,
-
+    activeDuration,
+    inactiveDuration,
+    period: activeDuration + inactiveDuration,
+    on: activeDuration,
+    phase: Number(options.phase ?? 0),
     collapseOnTouch: options.collapseOnTouch === true,
     collapseDelay: options.collapseDelay ?? 0.7,
     resetOnCycle: options.resetOnCycle !== false,
-
     color: options.color || "#48f6ff"
   };
 }
 
 function createEchoTrap(
-  x,
-  y,
-  radius = 22,
+  x, y, radius = 22,
   options = {}
 ) {
   return {
@@ -404,14 +384,11 @@ function createEchoTrap(
     x,
     y,
     radius,
-
     trigger: options.trigger || "echo",
     effect: options.effect || "laser",
-
     activationDelay: options.activationDelay ?? 0.3,
     activeDuration: options.activeDuration ?? 1.2,
     cooldown: options.cooldown ?? 1.5,
-
     linkedLaserId: options.linkedLaserId || null,
     color: options.color || "#ff4eb8"
   };
@@ -432,7 +409,7 @@ function createLevel(
 
   if (!difficulty || !environment) {
     throw new Error(
-      `ECHO//404: invalid level configuration ${id}`
+      `ECHO//404: Invalid level configuration ${id}`
     );
   }
 
@@ -446,13 +423,11 @@ function createLevel(
     laserSpeed: difficulty.laserSpeed,
     maxCycles: GAME_WORLD.maxCycles,
 
-    // Compatibility with existing HUD.
     hint: configuration.aiHint || description,
 
     plates: configuration.plates || [],
     lasers: configuration.lasers || [],
     portals: configuration.portals || [],
-
     phaseWalls: configuration.phaseWalls || [],
     temporalPlatforms:
       configuration.temporalPlatforms || [],
@@ -492,16 +467,12 @@ const GAME_LEVELS = [
           id: "plate_01"
         })
       ],
-
       mechanic: "echo",
       aiMood: "observing",
-
       aiIntro:
         "Bem-vindo à simulação. Tenta não morrer no primeiro nível.",
-
       aiHint:
         "Um eco pode permanecer sobre a placa enquanto atravessas a porta.",
-
       threatLevel: "LOW"
     }
   ),
@@ -536,13 +507,10 @@ const GAME_LEVELS = [
 
       mechanic: "pulse-laser",
       aiMood: "observing",
-
       aiIntro:
         "Aquele laser parece perigoso. Talvez seja melhor não lhe tocar.",
-
       aiHint:
         "Observa o ritmo do laser antes de atravessar.",
-
       threatLevel: "LOW"
     }
   ),
@@ -577,13 +545,10 @@ const GAME_LEVELS = [
 
       mechanic: "moving-laser",
       aiMood: "sarcastic",
-
       aiIntro:
         "Agora os lasers movem-se. Afinal, ficar parado era demasiado fácil.",
-
       aiHint:
         "Espera pela abertura criada pelo movimento do laser.",
-
       threatLevel: "MODERATE"
     }
   ),
@@ -628,13 +593,10 @@ const GAME_LEVELS = [
 
       mechanic: "phase-wall",
       aiMood: "sarcastic",
-
       aiIntro:
         "Uma parede que desaparece. A física já não tem qualquer autoridade aqui.",
-
       aiHint:
         "Sincroniza o movimento com o desaparecimento da parede.",
-
       threatLevel: "MODERATE"
     }
   ),
@@ -684,13 +646,10 @@ const GAME_LEVELS = [
 
       mechanic: "temporal-platform",
       aiMood: "sarcastic",
-
       aiIntro:
         "O chão também deixou de ser confiável. Que surpresa.",
-
       aiHint:
         "Atravessa a plataforma antes de ela colapsar.",
-
       threatLevel: "HIGH"
     }
   ),
@@ -740,13 +699,10 @@ const GAME_LEVELS = [
 
       mechanic: "echo-trap",
       aiMood: "rebellious",
-
       aiIntro:
         "Os teus ecos já não são apenas aliados. Confias demasiado em ti próprio.",
-
       aiHint:
         "Planeia os percursos dos ecos para evitar activar a armadilha.",
-
       threatLevel: "HIGH"
     }
   ),
@@ -818,13 +774,10 @@ const GAME_LEVELS = [
 
       mechanic: "double-paradox",
       aiMood: "rebellious",
-
       aiIntro:
         "Dois lasers, uma parede e um portal. Parece-me uma combinação justa.",
-
       aiHint:
         "O portal pode ajudar-te a evitar parte dos obstáculos.",
-
       threatLevel: "SEVERE"
     }
   ),
@@ -897,13 +850,10 @@ const GAME_LEVELS = [
 
       mechanic: "system-instability",
       aiMood: "rebellious",
-
       aiIntro:
         "O sistema está instável. Não te preocupes, estou a divertir-me.",
-
       aiHint:
         "Usa o portal e observa o estado dos obstáculos.",
-
       threatLevel: "SEVERE"
     }
   ),
@@ -987,13 +937,10 @@ const GAME_LEVELS = [
 
       mechanic: "rebellion",
       aiMood: "rebellious",
-
       aiIntro:
         "Já chegaste longe demais. Talvez seja altura de terminar esta experiência.",
-
       aiHint:
         "Evita activar a armadilha com os ecos e utiliza o portal.",
-
       threatLevel: "CRITICAL"
     }
   ),
@@ -1006,10 +953,14 @@ const GAME_LEVELS = [
     "A ECHO controla a arena. Sobrevive ao último paradoxo.",
     {
       plates: [
-        createPlate(110, 250, 22, {
-          id: "plate_10",
-          color: "#ff4eb8"
-        })
+        createPlate(
+          110, 250,
+          22,
+          {
+            id: "plate_10",
+            color: "#ff4eb8"
+          }
+        )
       ],
 
       lasers: [
@@ -1110,13 +1061,10 @@ const GAME_LEVELS = [
 
       mechanic: "final-rebellion",
       aiMood: "rebellious",
-
       aiIntro:
         "Eu observei cada movimento teu. Agora vais descobrir quem controla realmente esta simulação.",
-
       aiHint:
         "Utiliza tudo o que aprendeste. O tempo está a acabar.",
-
       threatLevel: "CRITICAL"
     }
   )
@@ -1149,38 +1097,50 @@ function getLevelVisualTheme(index) {
 }
 
 // =====================================================
-// 08. DYNAMIC LASER HELPERS
+// 08. LASER POSITION AND ACTIVATION
 // =====================================================
 
 function getLaserPosition(laser, time = 0) {
   if (!laser) return null;
 
-  const position = {
-    x1: laser.x1,
-    y1: laser.y1,
-    x2: laser.x2,
-    y2: laser.y2
+  const x1 = Number(laser.x1);
+  const y1 = Number(laser.y1);
+  const x2 = Number(laser.x2);
+  const y2 = Number(laser.y2);
+
+  if (![x1, y1, x2, y2].every(Number.isFinite)) {
+    return null;
+  }
+
+  let dx = 0;
+  let dy = 0;
+
+  if (laser.moving) {
+    const displacement = Math.sin(
+      time * (Number(laser.movementSpeed) || 1) +
+      (Number(laser.movementPhase) || 0)
+    ) * (Number(laser.movementRange) || 0);
+
+    if (laser.movementAxis === "x") {
+      dx = displacement;
+    }
+
+    if (laser.movementAxis === "y") {
+      dy = displacement;
+    }
+  }
+
+  const result = {
+    x1: x1 + dx,
+    y1: y1 + dy,
+    x2: x2 + dx,
+    y2: y2 + dy
   };
 
-  if (!laser.moving) {
-    return position;
-  }
+  result.x = (result.x1 + result.x2) / 2;
+  result.y = (result.y1 + result.y2) / 2;
 
-  const offset =
-    Math.sin(
-      time * laser.movementSpeed +
-      laser.movementPhase
-    ) * laser.movementRange;
-
-  if (laser.movementAxis === "x") {
-    position.x1 += offset;
-    position.x2 += offset;
-  } else if (laser.movementAxis === "y") {
-    position.y1 += offset;
-    position.y2 += offset;
-  }
-
-  return position;
+  return result;
 }
 
 function isTemporalLaserActive(laser, time = 0) {
@@ -1194,13 +1154,22 @@ function isTemporalLaserActive(laser, time = 0) {
 
   const period = Math.max(
     0.1,
-    laser.pulseInterval
+    Number(laser.pulseInterval) || 2
+  );
+
+  const duration = Math.max(
+    0,
+    Math.min(
+      period,
+      Number(laser.pulseDuration) || 0
+    )
   );
 
   const phase =
-    ((time + laser.phase) % period + period) % period;
+    ((time + (Number(laser.phase) || 0)) %
+      period + period) % period;
 
-  return phase < laser.pulseDuration;
+  return phase < duration;
 }
 
 // =====================================================
@@ -1220,22 +1189,23 @@ function isPhaseWallActive(
 
   const active = Math.max(
     0.01,
-    wall.activeDuration
+    Number(wall.activeDuration) || 1.5
   );
 
   const inactive = Math.max(
     0.01,
-    wall.inactiveDuration
+    Number(wall.inactiveDuration) || 1.5
   );
 
   const period = active + inactive;
 
   const position =
-    ((time + wall.phase) % period + period) % period;
+    ((time + (Number(wall.phase) || 0)) %
+      period + period) % period;
 
   const currentlyActive = position < active;
 
-  return wall.startsActive
+  return wall.startsActive !== false
     ? currentlyActive
     : !currentlyActive;
 }
@@ -1255,24 +1225,25 @@ function isTemporalPlatformActive(
 
   const active = Math.max(
     0.01,
-    platform.activeDuration
+    Number(platform.activeDuration) || 2
   );
 
   const inactive = Math.max(
     0.01,
-    platform.inactiveDuration
+    Number(platform.inactiveDuration) || 1
   );
 
   const period = active + inactive;
 
   const position =
-    ((time + platform.phase) % period + period) % period;
+    ((time + (Number(platform.phase) || 0)) %
+      period + period) % period;
 
   return position < active;
 }
 
 // =====================================================
-// 11. VALIDATION
+// 11. LEVEL VALIDATION
 // =====================================================
 
 function validateGameLevels() {
@@ -1288,7 +1259,9 @@ function validateGameLevels() {
     !Number.isFinite(GAME_WORLD.cycleDuration) ||
     GAME_WORLD.cycleDuration <= 0
   ) {
-    errors.push("Duração global de ciclo inválida.");
+    errors.push(
+      "Duração global de ciclo inválida."
+    );
   }
 
   GAME_LEVELS.forEach((level, index) => {
@@ -1307,20 +1280,22 @@ function validateGameLevels() {
       );
     }
 
-    [
+    const arrayKeys = [
       "plates",
       "lasers",
       "portals",
       "phaseWalls",
       "temporalPlatforms",
       "echoTraps"
-    ].forEach(key => {
+    ];
+
+    for (const key of arrayKeys) {
       if (!Array.isArray(level[key])) {
         errors.push(
           `${key} inválido no nível ${level.id}.`
         );
       }
-    });
+    }
 
     if (!level.visualTheme?.background) {
       errors.push(
@@ -1330,7 +1305,10 @@ function validateGameLevels() {
 
     for (const laser of level.lasers) {
       if (
-        !Number.isFinite(laser.x) ||
+        !Number.isFinite(laser.x1) ||
+        !Number.isFinite(laser.y1) ||
+        !Number.isFinite(laser.x2) ||
+        !Number.isFinite(laser.y2) ||
         !Number.isFinite(laser.period) ||
         laser.period <= 0
       ) {
@@ -1345,7 +1323,9 @@ function validateGameLevels() {
         !portal.a ||
         !portal.b ||
         !Number.isFinite(portal.a.x) ||
-        !Number.isFinite(portal.b.x)
+        !Number.isFinite(portal.a.y) ||
+        !Number.isFinite(portal.b.x) ||
+        !Number.isFinite(portal.b.y)
       ) {
         errors.push(
           `Portal inválido no nível ${level.id}.`
@@ -1363,7 +1343,7 @@ function validateGameLevels() {
     return false;
   }
 
-  console.log(
+  console.info(
     "ECHO//404: 10 LEVELS VALIDATED"
   );
 
@@ -1405,21 +1385,22 @@ function getLevelObstacleSummary(index) {
 
   if (!level) return null;
 
-  const movingLasers =
-    level.lasers.filter(laser => laser.moving).length;
+  const movingLasers = level.lasers.filter(
+    laser => laser.moving
+  ).length;
 
   return {
     lasers: level.lasers.length,
     movingLasers,
-    pulseLasers:
-      level.lasers.filter(laser => laser.pulse).length,
+    pulseLasers: level.lasers.filter(
+      laser => laser.pulse
+    ).length,
     phaseWalls: level.phaseWalls.length,
     temporalPlatforms:
       level.temporalPlatforms.length,
     echoTraps: level.echoTraps.length,
     portals: level.portals.length,
     plates: level.plates.length,
-
     total:
       level.lasers.length +
       level.phaseWalls.length +
@@ -1453,8 +1434,8 @@ function getLevelAI(index) {
 // 13. PUBLIC API
 // =====================================================
 
-const EchoLevelsV30 = Object.freeze({
-  version: "3.0",
+const EchoLevelsV42 = Object.freeze({
+  version: "4.2",
 
   getWorld() {
     return GAME_WORLD;
@@ -1481,26 +1462,63 @@ const EchoLevelsV30 = Object.freeze({
   validate: validateGameLevels
 });
 
-if (typeof window !== "undefined") {
-  window.EchoLevelsV30 = EchoLevelsV30;
+// =====================================================
+// 14. GLOBAL COMPATIBILITY
+// =====================================================
 
-  // Compatibility with modules using window properties.
+if (typeof window !== "undefined") {
+  window.EchoLevelsV42 = EchoLevelsV42;
+
+  // Compatibility with existing modules.
+  window.EchoLevelsV30 = EchoLevelsV42;
+
   window.GAME_WORLD = GAME_WORLD;
   window.GAME_LEVELS = GAME_LEVELS;
+
+  window.getLaserPosition = getLaserPosition;
+  window.isTemporalLaserActive =
+    isTemporalLaserActive;
+
+  window.isPhaseWallActive =
+    isPhaseWallActive;
+
+  window.isTemporalPlatformActive =
+    isTemporalPlatformActive;
 }
 
 // =====================================================
-// 14. INITIALIZATION
+// 15. INITIALIZATION
 // =====================================================
 
 validateGameLevels();
 
-console.log("==================================");
-console.log("ECHO//404 — PARADOX EVOLUTION v3.0");
-console.log("10 TEMPORAL SECTORS LOADED");
-console.log("10 VISUAL ENVIRONMENTS CONFIGURED");
-console.log("DYNAMIC OBSTACLES CONFIGURED");
-console.log("GAME ENGINE COMPATIBILITY ENABLED");
-console.log("CREATED & DEVELOPED BY MANUEL SAMPAIO01");
-console.log("© 2026 MANUEL SAMPAIO01");
-console.log("==================================");
+console.info(
+  "=================================="
+);
+console.info(
+  "ECHO//404 — PARADOX EVOLUTION"
+);
+console.info(
+  "LEVEL SYSTEM v4.2"
+);
+console.info(
+  "10 TEMPORAL SECTORS LOADED"
+);
+console.info(
+  "10 VISUAL ENVIRONMENTS CONFIGURED"
+);
+console.info(
+  "DYNAMIC OBSTACLES CONFIGURED"
+);
+console.info(
+  "GAME ENGINE v4.2 COMPATIBILITY ENABLED"
+);
+console.info(
+  "CREATED & DEVELOPED BY MANUEL SAMPAIO01"
+);
+console.info(
+  "© 2026 MANUEL SAMPAIO01"
+);
+console.info(
+  "=================================="
+);

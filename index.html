@@ -7,15 +7,17 @@
   <meta name="theme-color" content="#050b17">
   <meta name="color-scheme" content="dark">
   <meta name="author" content="MANUEL SAMPAIO01">
-  <meta name="description" content="ECHO//404 — PARADOX EVOLUTION. Um jogo de puzzles temporais, ecos, operadores e paradoxos.">
+  <meta name="description" content="ECHO//404 — PARADOX EVOLUTION. Um jogo de puzzles temporais, ecos e paradoxos.">
 
-  <title>ECHO//404 — WORLD INTEGRATION v3.1</title>
-<link rel="stylesheet" href="style.css?v=350">
+  <title>ECHO//404 — PARADOX EVOLUTION v4.2</title>
+
+  <link rel="stylesheet" href="style.css?v=420">
 
   <style>
-    /* ==============================================
-       ECHO//404 — HTML COMPATIBILITY LAYER v3.1
-       ============================================== */
+    /* =====================================================
+       ECHO//404 — HTML INTEGRATION v4.2
+       CREATED & DEVELOPED BY MANUEL SAMPAIO01
+       ===================================================== */
 
     :root {
       color-scheme: dark;
@@ -100,8 +102,7 @@
     .echo-ai-header,
     .echo-ai-footer,
     .arena-status-bar,
-    .mobile-controls-heading,
-    .mobile-control-layout {
+    .mobile-controls-heading {
       justify-content: space-between;
     }
 
@@ -157,6 +158,35 @@
       box-shadow: 0 0 10px #7dffce;
     }
 
+    .system-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      border: 1px solid #48f6ff33;
+      border-radius: 10px;
+      background: #08192c;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .system-banner-left {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .system-tag {
+      color: var(--vr-cyan);
+      font-weight: 800;
+    }
+
+    .system-banner-right {
+      color: #ff9b9b;
+    }
+
     .game-layout,
     .game-main,
     .gameplay-zone {
@@ -179,8 +209,7 @@
     .vr-details {
       border: 1px solid var(--vr-border);
       border-radius: 15px;
-      background:
-        linear-gradient(145deg, #10263e, #081525);
+      background: linear-gradient(145deg, #10263e, #081525);
       box-shadow: 0 8px 28px #0003;
     }
 
@@ -240,9 +269,7 @@
       background: #ff4c69;
     }
 
-    /* ==============================================
-       PIXIJS + CANVAS 2D ARENA
-       ============================================== */
+    /* ARENA */
 
     .arena-section,
     .arena-shell {
@@ -258,10 +285,12 @@
       border: 1px solid #48f6ff77;
       border-radius: 13px;
       background: #06101e;
+      box-shadow: 0 0 25px #48f6ff18;
     }
 
     #echoWorldRenderer {
       position: absolute;
+      inset: 0;
       z-index: 0;
       pointer-events: none;
       overflow: hidden;
@@ -306,7 +335,7 @@
       top: 10px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 7px;
+      padding: 7px 12px;
       border-radius: 6px;
       background: #531b2bdc;
       font-size: 10px;
@@ -337,9 +366,22 @@
       justify-content: center;
     }
 
-    /* ==============================================
-       BUTTONS
-       ============================================== */
+    .overlay-score {
+      margin: 14px 0;
+    }
+
+    .overlay-score span,
+    .overlay-score strong {
+      display: block;
+    }
+
+    .overlay-score strong {
+      margin-top: 5px;
+      font-size: 25px;
+      color: var(--vr-cyan);
+    }
+
+    /* BUTTONS */
 
     .btn {
       padding: 10px 13px;
@@ -351,17 +393,19 @@
       font-weight: 700;
     }
 
+    .btn:hover {
+      filter: brightness(1.14);
+    }
+
     .btn-primary {
       border-color: var(--vr-cyan);
-      background:
-        linear-gradient(120deg, #48f6ff, #26cde7);
+      background: linear-gradient(120deg, #48f6ff, #26cde7);
       color: #04131d;
     }
 
     .btn-shift {
       border-color: #ba7cff;
-      background:
-        linear-gradient(120deg, #432465, #6b3b9e);
+      background: linear-gradient(120deg, #432465, #6b3b9e);
     }
 
     .game-actions {
@@ -373,9 +417,7 @@
       min-width: 110px;
     }
 
-    /* ==============================================
-       MOBILE CONTROLS
-       ============================================== */
+    /* MOBILE CONTROLS */
 
     .mobile-controls {
       width: 100%;
@@ -399,21 +441,14 @@
       user-select: none;
     }
 
-    .dpad-up {
-      grid-area: 1 / 2;
+    .dpad-btn:active {
+      background: #2b6585;
     }
 
-    .dpad-left {
-      grid-area: 2 / 1;
-    }
-
-    .dpad-right {
-      grid-area: 2 / 3;
-    }
-
-    .dpad-down {
-      grid-area: 3 / 2;
-    }
+    .dpad-up { grid-area: 1 / 2; }
+    .dpad-left { grid-area: 2 / 1; }
+    .dpad-right { grid-area: 2 / 3; }
+    .dpad-down { grid-area: 3 / 2; }
 
     .dpad-center {
       grid-area: 2 / 2;
@@ -473,9 +508,7 @@
       text-align: center;
     }
 
-    /* ==============================================
-       LEVELS / AI / FOOTER
-       ============================================== */
+    /* LEVELS, AI, FOOTER */
 
     .vr-details {
       overflow: hidden;
@@ -622,9 +655,7 @@
 
 <body class="echo404-app">
 
-  <!-- ============================================
-       BACKGROUND EFFECTS
-       ============================================ -->
+  <!-- BACKGROUND EFFECTS -->
 
   <div class="background-grid" aria-hidden="true"></div>
   <div class="ambient-glow ambient-glow-one" aria-hidden="true"></div>
@@ -633,9 +664,7 @@
   <div class="screen-scanlines" aria-hidden="true"></div>
   <div id="globalGlitch" class="global-glitch" aria-hidden="true"></div>
 
-  <!-- ============================================
-       CINEMATIC INTRO
-       ============================================ -->
+  <!-- CINEMATIC INTRO -->
 
   <section
     id="awakeningIntro"
@@ -669,19 +698,11 @@
       <div id="awakeningGlitch" class="awakening-glitch"></div>
 
       <div class="awakening-intro-actions">
-        <button
-          id="awakeningSkip"
-          class="btn btn-secondary"
-          type="button"
-        >
+        <button id="awakeningSkip" class="btn btn-secondary" type="button">
           SALTAR
         </button>
 
-        <button
-          id="awakeningNext"
-          class="btn btn-primary"
-          type="button"
-        >
+        <button id="awakeningNext" class="btn btn-primary" type="button">
           CONTINUAR
         </button>
       </div>
@@ -693,9 +714,7 @@
     </div>
   </section>
 
-  <!-- ============================================
-       MAIN APPLICATION
-       ============================================ -->
+  <!-- MAIN APPLICATION -->
 
   <div id="app" class="app-container">
 
@@ -704,9 +723,11 @@
     <header class="game-header">
 
       <div class="header-brand">
+
         <div class="brand-mark">◈</div>
 
         <div class="brand-information">
+
           <div class="brand-overline">
             PARADOX EVOLUTION
           </div>
@@ -716,8 +737,9 @@
           </h1>
 
           <div class="game-subtitle">
-            WORLD INTEGRATION v3.1
+            TEMPORAL ENGINE v4.2
           </div>
+
         </div>
       </div>
 
@@ -735,18 +757,14 @@
           class="btn btn-icon"
           type="button"
           aria-label="Som"
-        >
-          🔊
-        </button>
+        >🔊</button>
 
         <button
           id="fullscreenBtn"
           class="btn btn-icon"
           type="button"
           aria-label="Ecrã completo"
-        >
-          ⛶
-        </button>
+        >⛶</button>
 
       </div>
     </header>
@@ -754,10 +772,11 @@
     <!-- SYSTEM BANNER -->
 
     <section class="system-banner">
+
       <div class="system-banner-left">
-        <span class="system-tag">v3.1</span>
+        <span class="system-tag">v4.2</span>
         <span class="system-banner-text">
-          WORLD INTEGRATION
+          PARADOX EVOLUTION
         </span>
       </div>
 
@@ -766,11 +785,10 @@
           THREAT LEVEL: LOW
         </span>
       </div>
+
     </section>
 
-    <!-- ==========================================
-         GAME LAYOUT
-         ========================================== -->
+    <!-- GAME LAYOUT -->
 
     <main class="game-layout">
 
@@ -842,9 +860,7 @@
           <div id="timerBar" class="timer-progress-bar"></div>
         </div>
 
-        <!-- ======================================
-             GAME ARENA
-             ====================================== -->
+        <!-- GAME ARENA -->
 
         <div class="gameplay-zone">
 
@@ -858,9 +874,8 @@
               <div class="arena-corner arena-corner-br"></div>
 
               <!--
-                PixiJS World Renderer:
                 world-renderer.js creates #echoWorldRenderer
-                automatically behind the gameplay canvas.
+                automatically behind this canvas.
               -->
 
               <canvas
@@ -869,11 +884,6 @@
                 height="500"
                 aria-label="Arena temporal ECHO//404"
               ></canvas>
-
-              <!--
-                visual-v1.js manages its own overlay canvases.
-                Do not duplicate their IDs.
-              -->
 
               <div
                 id="criticalWarning"
@@ -936,7 +946,6 @@
                     </button>
 
                   </div>
-
                 </div>
               </div>
 
@@ -948,9 +957,7 @@
 
               <div class="arena-status-left">
                 <span class="status-indicator"></span>
-                <span id="status">
-                  SYSTEM READY
-                </span>
+                <span id="status">SYSTEM READY</span>
               </div>
 
               <span
@@ -964,9 +971,7 @@
 
           </section>
 
-          <!-- ====================================
-               MOBILE CONTROLS
-               ==================================== -->
+          <!-- MOBILE CONTROLS -->
 
           <section
             id="mobileControls"
@@ -1064,7 +1069,6 @@
                 </button>
 
               </div>
-
             </div>
 
             <div class="mobile-control-options">
@@ -1111,9 +1115,7 @@
 
         </section>
 
-        <!-- ====================================
-             ECHO AI COMPANION
-             ==================================== -->
+        <!-- ECHO AI COMPANION -->
 
         <section
           id="echoAiPanel"
@@ -1197,7 +1199,7 @@
 
         </section>
 
-        <!-- ENGINE STATUS -->
+        <!-- HIDDEN ENGINE STATUS -->
 
         <section
           id="obstaclePanel"
@@ -1214,9 +1216,7 @@
 
       </section>
 
-      <!-- ======================================
-           SIDEBAR / PROGRESS
-           ====================================== -->
+      <!-- SIDEBAR / PROGRESS -->
 
       <aside class="game-sidebar">
 
@@ -1289,7 +1289,6 @@
 
                 <div class="control-guide-row">
                   <span>Mover</span>
-
                   <span>
                     <kbd>W</kbd>
                     <kbd>A</kbd>
@@ -1319,9 +1318,7 @@
 
     </main>
 
-    <!-- ========================================
-         TUTORIAL
-         ======================================== -->
+    <!-- TUTORIAL -->
 
     <section
       id="awakeningTutorial"
@@ -1382,9 +1379,7 @@
       </div>
     </section>
 
-    <!-- ========================================
-         FOOTER / CREATOR
-         ======================================== -->
+    <!-- FOOTER -->
 
     <footer class="game-footer">
 
@@ -1396,7 +1391,7 @@
         </div>
 
         <div class="footer-version">
-          WORLD INTEGRATION // v3.1
+          TEMPORAL ENGINE // v4.2
         </div>
 
       </div>
@@ -1423,40 +1418,68 @@
 
   </div>
 
-  <!-- ============================================
-       SCRIPT LOADING ORDER
-       ============================================ -->
+  <!-- =====================================================
+       SCRIPT LOADING ORDER — v4.2
+       ===================================================== -->
 
-  <!-- PIXIJS -->
+  <!-- PIXIJS 8 -->
   <script src="https://cdn.jsdelivr.net/npm/pixi.js@8.16.0/dist/pixi.min.js"></script>
 
-  <!-- CORE ENGINE -->
-  <script src="levels.js?v=310"></script>
+  <!-- OPTIONAL VISUAL FILTERS -->
+  <script src="https://cdn.jsdelivr.net/npm/pixi-filters@6.1.5/dist/pixi-filters.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+  <!-- CORE DATA -->
+  <script src="levels.js?v=420"></script>
   <script src="storage.js?v=310"></script>
   <script src="audio.js?v=310"></script>
-  <script src="game.js?v=310"></script>
+
+  <!-- GAME ENGINE -->
+  <script src="game.js?v=420"></script>
 
   <!-- GAME EXPERIENCE -->
   <script src="awakening.js?v=310"></script>
   <script src="visual-v1.js?v=310"></script>
 
-  <!-- WORLD RENDERER -->
-  <script src="world-renderer.js?v=310"></script>
+  <!-- WORLD RENDERER: LOAD ONLY ONCE -->
+  <script src="world-renderer.js?v=400"></script>
 
-  <!-- ============================================
-       INTERFACE INTEGRATION v3.1
-       ============================================ -->
+  <!-- OPTIONAL CINEMATIC FX -->
+  <script src="visual-effects.js?v=400"></script>
+
+  <!-- =====================================================
+       INTERFACE INTEGRATION v4.2
+       ===================================================== -->
 
   <script>
     "use strict";
 
     (() => {
-
       const $ = id => document.getElementById(id);
 
-      /* ========================================
-         FULLSCREEN
-         ======================================== */
+      const OPERATORS = Object.freeze({
+        AXIOM: {
+          name: "AXIOM",
+          color: "#48f6ff",
+          role: "TACTICAL OPERATOR"
+        },
+        NYRA: {
+          name: "NYRA",
+          color: "#c88cff",
+          role: "TEMPORAL SPECIALIST"
+        },
+        "KAI-7": {
+          name: "KAI-7",
+          color: "#ffad57",
+          role: "ANDROID UNIT"
+        }
+      });
+
+      // --------------------------------------------------
+      // FULLSCREEN
+      // --------------------------------------------------
 
       const fullscreenButton = $("fullscreenBtn");
 
@@ -1483,29 +1506,29 @@
       document.addEventListener(
         "fullscreenchange",
         () => {
-          if (!fullscreenButton) return;
+          if (fullscreenButton) {
+            const active = Boolean(
+              document.fullscreenElement
+            );
 
-          const active = Boolean(
-            document.fullscreenElement
-          );
+            fullscreenButton.textContent =
+              active ? "⤢" : "⛶";
 
-          fullscreenButton.textContent =
-            active ? "⤢" : "⛶";
-
-          fullscreenButton.setAttribute(
-            "aria-label",
-            active
-              ? "Sair do ecrã completo"
-              : "Ecrã completo"
-          );
+            fullscreenButton.setAttribute(
+              "aria-label",
+              active
+                ? "Sair do ecrã completo"
+                : "Ecrã completo"
+            );
+          }
 
           window.EchoWorldRenderer?.resize?.();
         }
       );
 
-      /* ========================================
-         LEVEL MENU
-         ======================================== */
+      // --------------------------------------------------
+      // LEVEL MENU
+      // --------------------------------------------------
 
       $("vrLevelDetails")?.addEventListener(
         "toggle",
@@ -1517,9 +1540,7 @@
           ).matches;
 
           event.target.scrollIntoView({
-            behavior: reducedMotion
-              ? "auto"
-              : "smooth",
+            behavior: reducedMotion ? "auto" : "smooth",
             block: "nearest"
           });
         }
@@ -1540,259 +1561,245 @@
         }
       );
 
-      /* ========================================
-         OPERATOR INTEGRATION
-         ======================================== */
+      // --------------------------------------------------
+      // OPERATOR INTEGRATION
+      // --------------------------------------------------
 
-      const operators = {
-        AXIOM: {
-          name: "AXIOM",
-          color: "#48f6ff",
-          role: "TACTICAL OPERATOR"
-        },
+      function normalizeOperator(detail = {}) {
+        const raw =
+          detail.operator ??
+          detail.character ??
+          detail.id ??
+          detail.name ??
+          "";
 
-        NYRA: {
-          name: "NYRA",
-          color: "#c88cff",
-          role: "TEMPORAL SPECIALIST"
-        },
+        const value =
+          typeof raw === "object" && raw !== null
+            ? raw.id ?? raw.name ?? ""
+            : raw;
 
-        "KAI-7": {
-          name: "KAI-7",
-          color: "#ffad57",
-          role: "ANDROID UNIT"
+        return String(value)
+          .trim()
+          .toUpperCase()
+          .replace(/_/g, "-")
+          .replace(/\s+/g, "-");
+      }
+
+      function updateOperatorUI(name) {
+        const operator = OPERATORS[name];
+
+        if (!operator) {
+          console.warn(
+            "[ECHO//404] Operador desconhecido:",
+            name
+          );
+          return;
         }
-      };
+
+        const key = name.toLowerCase();
+
+        document.body.dataset.operator = key;
+
+        document.documentElement.style.setProperty(
+          "--operator-color",
+          operator.color
+        );
+
+        const status = $("systemStatus");
+
+        if (status) {
+          status.dataset.operator = key;
+
+          status.title =
+            `Operador activo: ${operator.name} — ${operator.role}`;
+
+          let dot = status.querySelector(
+            ".system-status-dot"
+          );
+
+          if (!dot) {
+            dot = document.createElement("span");
+            dot.className = "system-status-dot";
+            status.prepend(dot);
+          }
+
+          let label = status.querySelector(
+            ".operator-status-label"
+          );
+
+          if (!label) {
+            label = document.createElement("span");
+            label.className = "operator-status-label";
+            status.appendChild(label);
+          }
+
+          label.textContent =
+            `${operator.name} // ONLINE`;
+
+          dot.style.background = operator.color;
+          dot.style.boxShadow =
+            `0 0 12px ${operator.color}`;
+        }
+
+        const arena = $("arenaShell");
+
+        if (arena) {
+          arena.dataset.operator = key;
+
+          arena.style.setProperty(
+            "--operator-color",
+            operator.color
+          );
+        }
+
+        const app = $("app");
+
+        if (app) {
+          app.dataset.activeOperator = key;
+        }
+
+        window.dispatchEvent(
+          new CustomEvent(
+            "echo404:operatoruiupdated",
+            {
+              detail: {
+                operator: operator.name,
+                role: operator.role,
+                color: operator.color
+              }
+            }
+          )
+        );
+
+        console.info(
+          `[ECHO//404] OPERATOR ONLINE: ${operator.name}`
+        );
+      }
 
       window.addEventListener(
         "echo404:operatorselected",
         event => {
-
-          const detail = event.detail || {};
-
-          const rawOperator =
-            detail.operator ||
-            detail.character ||
-            detail.id ||
-            detail.name;
-
-          const rawName = String(
-            typeof rawOperator === "object" &&
-            rawOperator !== null
-              ? rawOperator.id ||
-                rawOperator.name ||
-                ""
-              : rawOperator || ""
+          const name = normalizeOperator(
+            event.detail || {}
           );
 
-          const name = rawName
-            .trim()
-            .toUpperCase()
-            .replace(/_/g, "-")
-            .replace(/\s+/g, "-");
-
-          if (!name) return;
-
-          const operator = operators[name];
-
-          if (!operator) {
-            console.warn(
-              "[ECHO//404] Operador desconhecido:",
-              name
-            );
-            return;
+          if (name) {
+            updateOperatorUI(name);
           }
-
-          /* Body identity */
-
-          document.body.dataset.operator =
-            name.toLowerCase();
-
-          document.documentElement.style.setProperty(
-            "--operator-color",
-            operator.color
-          );
-
-          /* System status */
-
-          const status = $("systemStatus");
-
-          if (status) {
-
-            status.dataset.operator =
-              name.toLowerCase();
-
-            status.title =
-              `Operador activo: ${operator.name} — ${operator.role}`;
-
-            let dot = status.querySelector(
-              ".system-status-dot"
-            );
-
-            if (!dot) {
-              dot = document.createElement("span");
-              dot.className = "system-status-dot";
-              status.prepend(dot);
-            }
-
-            let label = status.querySelector(
-              ".operator-status-label"
-            );
-
-            if (!label) {
-              label = document.createElement("span");
-              label.className = "operator-status-label";
-              status.appendChild(label);
-            }
-
-            label.textContent =
-              `${operator.name} // ONLINE`;
-
-            dot.style.background =
-              operator.color;
-
-            dot.style.boxShadow =
-              `0 0 12px ${operator.color}`;
-          }
-
-          /* Arena identity */
-
-          const arena = $("arenaShell");
-
-          if (arena) {
-            arena.dataset.operator =
-              name.toLowerCase();
-
-            arena.style.setProperty(
-              "--operator-color",
-              operator.color
-            );
-          }
-
-          /* Application identity */
-
-          const app = $("app");
-
-          if (app) {
-            app.dataset.activeOperator =
-              name.toLowerCase();
-          }
-
-          /* Notify other UI modules */
-
-          window.dispatchEvent(
-            new CustomEvent(
-              "echo404:operatoruiupdated",
-              {
-                detail: {
-                  operator: operator.name,
-                  role: operator.role,
-                  color: operator.color
-                }
-              }
-            )
-          );
-
-          console.info(
-            `[ECHO//404] OPERATOR ONLINE: ${operator.name}`
-          );
         }
       );
 
-      /* ========================================
-         MODULE VERIFICATION
-         ======================================== */
+      // --------------------------------------------------
+      // OPTIONAL UI HELPERS
+      // --------------------------------------------------
 
-      window.addEventListener(
-        "load",
+      $("echoMessageClose")?.addEventListener(
+        "click",
         () => {
-
-          const modules = {
-            pixi: Boolean(window.PIXI),
-
-            levels:
-              typeof GAME_LEVELS !== "undefined",
-
-            storage:
-              Boolean(window.GameStorage),
-
-            audio:
-              Boolean(window.GameAudio),
-
-            game:
-              Boolean(window.EchoGame),
-
-            awakening:
-              Boolean(window.EchoAwakening),
-
-            operators:
-              Boolean(
-                window.EchoVisualRebirthV30 ||
-                window.EchoVisualRebirthV21 ||
-                window.EchoVisual
-              ),
-
-            worldRenderer:
-              Boolean(window.EchoWorldRenderer)
-          };
-
-          const missing = Object.entries(modules)
-            .filter(([, loaded]) => !loaded)
-            .map(([name]) => name);
-
-          if (missing.length) {
-            console.warn(
-              "[ECHO//404] Módulos não detectados:",
-              missing.join(", ")
-            );
-          } else {
-            console.info(
-              "[ECHO//404] Todos os módulos detectados."
-            );
-          }
-
-          /* Renderer status */
-
-          const renderer =
-            window.EchoWorldRenderer;
-
-          const worldState =
-            renderer?.getState?.();
-
-          if (worldState?.initialized) {
-            console.info(
-              "[ECHO//404] WORLD RENDERER ONLINE",
-              worldState
-            );
-          } else {
-            console.warn(
-              "[ECHO//404] World Renderer ainda não está activo."
-            );
-          }
-
-          /* System diagnostics */
-
-          console.info(
-            "=================================="
-          );
-
-          console.info(
-            "ECHO//404 — PARADOX EVOLUTION"
-          );
-
-          console.info(
-            "VERSION 3.1 — WORLD INTEGRATION"
-          );
-
-          console.info(
-            "CREATED & DEVELOPED BY MANUEL SAMPAIO01"
-          );
-
-          console.info(
-            "=================================="
-          );
+          $("echoMessage")?.classList.add("hidden");
         }
       );
+
+      // --------------------------------------------------
+      // MODULE DIAGNOSTICS
+      // --------------------------------------------------
+
+      function checkModules() {
+        const modules = {
+          pixi: Boolean(window.PIXI),
+
+          levels: Boolean(
+            window.EchoLevelsV42 ||
+            window.GAME_LEVELS ||
+            typeof GAME_LEVELS !== "undefined"
+          ),
+
+          storage: Boolean(window.GameStorage),
+          audio: Boolean(window.GameAudio),
+          game: Boolean(window.EchoGame),
+          awakening: Boolean(window.EchoAwakening),
+
+          operators: Boolean(
+            window.EchoVisualRebirthV30 ||
+            window.EchoVisualRebirthV21 ||
+            window.EchoVisual
+          ),
+
+          worldRenderer: Boolean(
+            window.EchoWorldRenderer
+          ),
+
+          visualEffects: Boolean(
+            window.EchoVisualEffects
+          )
+        };
+
+        const missing = Object.entries(modules)
+          .filter(([, loaded]) => !loaded)
+          .map(([name]) => name);
+
+        if (missing.length) {
+          console.warn(
+            "[ECHO//404] Módulos não detectados:",
+            missing.join(", ")
+          );
+        } else {
+          console.info(
+            "[ECHO//404] Todos os módulos detectados."
+          );
+        }
+
+        const renderer =
+          window.EchoWorldRenderer;
+
+        const worldState =
+          renderer?.getState?.();
+
+        if (worldState?.initialized) {
+          console.info(
+            "[ECHO//404] WORLD RENDERER ONLINE",
+            worldState
+          );
+        } else {
+          console.warn(
+            "[ECHO//404] World Renderer ainda não está activo."
+          );
+        }
+
+        if (
+          window.EchoLevelsV42 &&
+          typeof window.EchoLevelsV42.validate === "function"
+        ) {
+          window.EchoLevelsV42.validate();
+        }
+
+        console.info(
+          "=================================="
+        );
+        console.info(
+          "ECHO//404 — PARADOX EVOLUTION"
+        );
+        console.info(
+          "HTML INTEGRATION v4.2"
+        );
+        console.info(
+          "CREATED & DEVELOPED BY MANUEL SAMPAIO01"
+        );
+        console.info(
+          "=================================="
+        );
+      }
+
+      // Run diagnostics once, after all scripts and assets load.
+      if (document.readyState === "complete") {
+        checkModules();
+      } else {
+        window.addEventListener(
+          "load",
+          checkModules,
+          { once: true }
+        );
+      }
 
     })();
   </script>
