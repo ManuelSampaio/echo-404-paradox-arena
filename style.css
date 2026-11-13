@@ -983,3 +983,318 @@ body.echo-rebellion .echo-ai-panel {
 #overlay {
   z-index: 5;
 }
+
+
+/*
+====================================================
+ ECHO//404 — MOBILE FOCUS MODE v3.3
+ CREATED & DEVELOPED BY MANUEL SAMPAIO01
+====================================================
+*/
+
+@media (max-width: 767px) {
+
+  /* Base */
+  html,
+  body.echo404-app {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  #app.app-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 8px 8px 18px;
+    gap: 6px;
+  }
+
+  /* Header compacto */
+  .game-header {
+    padding: 4px 6px 8px;
+    margin: 0;
+    min-height: 42px;
+  }
+
+  .game-logo {
+    font-size: 20px !important;
+    letter-spacing: 1px;
+  }
+
+  .brand-mark {
+    font-size: 19px;
+  }
+
+  .brand-overline,
+  .game-subtitle,
+  .system-status,
+  .system-banner,
+  .background-grid,
+  .screen-noise {
+    display: none !important;
+  }
+
+  .header-actions {
+    gap: 6px;
+  }
+
+  .header-actions .btn {
+    padding: 7px;
+    min-width: 35px;
+  }
+
+  /* Compactar estrutura */
+  .game-layout,
+  .game-main,
+  .gameplay-zone {
+    gap: 6px !important;
+  }
+
+  .level-information {
+    padding: 5px 8px !important;
+    min-height: 0;
+  }
+
+  .level-information .panel-overline,
+  .level-information .level-hint,
+  .level-information .difficulty-badge {
+    display: none !important;
+  }
+
+  #levelName {
+    margin: 0 !important;
+    font-size: 12px !important;
+    font-weight: 700;
+    line-height: 1.3;
+    max-height: 32px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  /* HUD horizontal compacto */
+  .game-hud {
+    display: grid !important;
+    grid-template-columns: 1fr 1.1fr 1fr;
+    gap: 4px;
+  }
+
+  .hud-card {
+    padding: 5px 2px !important;
+    min-height: 36px;
+    border-radius: 7px;
+  }
+
+  .hud-card:nth-child(4),
+  .hud-card:nth-child(5) {
+    display: none !important;
+  }
+
+  .hud-label {
+    font-size: 8px !important;
+    margin-bottom: 2px;
+  }
+
+  .hud-value {
+    font-size: 14px !important;
+    line-height: 1.1;
+  }
+
+  .timer-progress-track {
+    height: 3px;
+    margin: 0;
+  }
+
+  /* Arena principal */
+  #arenaShell {
+    width: 100%;
+    margin: 0;
+    border-radius: 8px;
+  }
+
+  #gameCanvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .arena-status-bar {
+    padding: 2px 4px;
+    font-size: 9px;
+    line-height: 1.2;
+    min-height: 16px;
+  }
+
+  #arenaThreatStatus {
+    display: none !important;
+  }
+
+  #status {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* Controlos compactos */
+  #mobileControls {
+    padding: 6px 8px !important;
+    border-radius: 10px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .mobile-controls-heading,
+  .mobile-control-options {
+    display: none !important;
+  }
+
+  .mobile-control-layout {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mobile-dpad {
+    grid-template-columns: repeat(3, 38px) !important;
+    grid-template-rows: repeat(3, 35px) !important;
+    gap: 2px !important;
+  }
+
+  .dpad-btn {
+    font-size: 16px;
+    border-radius: 8px;
+  }
+
+  .mobile-action-buttons {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 9px;
+  }
+
+  #mobileShiftBtn {
+    width: 74px;
+    height: 74px;
+    min-width: 74px;
+    min-height: 74px;
+    border-radius: 50%;
+  }
+
+  #mobileRestartBtn {
+    width: 47px;
+    height: 47px;
+    min-width: 47px;
+    min-height: 47px;
+    border-radius: 50%;
+  }
+
+  .mobile-action-btn span {
+    font-size: 19px;
+  }
+
+  .mobile-action-btn small {
+    font-size: 9px;
+  }
+
+  #mobileRestartBtn small {
+    display: none;
+  }
+
+  /* Remover botões duplicados */
+  .game-actions {
+    display: none !important;
+  }
+
+  /* IA compacta */
+  #echoAiPanel {
+    padding: 4px 8px !important;
+    border-radius: 8px;
+    min-height: 0;
+  }
+
+  .echo-ai-header,
+  .echo-ai-footer {
+    display: none !important;
+  }
+
+  #echoMessage {
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    min-height: 0;
+  }
+
+  #echoMessageText {
+    margin: 0;
+    font-size: 10px;
+    line-height: 1.3;
+  }
+
+  /* Secções secundárias */
+  .game-sidebar,
+  .game-footer {
+    display: none !important;
+  }
+
+  /* Overlay de resultados */
+  .game-overlay {
+    padding: 8px !important;
+  }
+
+  .overlay-content {
+    width: min(100%, 310px);
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 8px;
+  }
+
+  #overlayTitle {
+    font-size: 19px !important;
+    margin: 5px 0;
+  }
+
+  #overlayMessage {
+    font-size: 11px;
+    line-height: 1.35;
+    margin: 6px 0;
+  }
+
+  .overlay-score {
+    font-size: 12px;
+  }
+
+  .overlay-actions {
+    gap: 6px;
+  }
+
+  .overlay-actions .btn {
+    padding: 8px;
+    font-size: 10px;
+  }
+}
+
+/* Telefones muito pequenos */
+@media (max-width: 380px) {
+  .mobile-dpad {
+    grid-template-columns: repeat(3, 34px) !important;
+    grid-template-rows: repeat(3, 32px) !important;
+  }
+
+  #mobileShiftBtn {
+    width: 65px;
+    height: 65px;
+    min-width: 65px;
+    min-height: 65px;
+  }
+
+  #mobileRestartBtn {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+  }
+}
