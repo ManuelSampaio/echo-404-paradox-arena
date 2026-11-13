@@ -1298,3 +1298,208 @@ body.echo-rebellion .echo-ai-panel {
     min-height: 42px;
   }
 }
+
+
+
+/*
+====================================================
+ ECHO//404 — MOBILE POLISH v3.4
+ CLEAN UI / COMPACT HUD / AI MESSAGE FIX
+ CREATED & DEVELOPED BY MANUEL SAMPAIO01
+====================================================
+*/
+
+@media (max-width: 767px) {
+
+  /* Remover alturas mínimas que criam espaço vazio */
+  #app,
+  .game-layout,
+  .game-main,
+  .gameplay-zone,
+  .game-sidebar {
+    min-height: 0 !important;
+  }
+
+  #app.app-container {
+    padding-bottom: 12px !important;
+  }
+
+  /* Título: mostrar apenas uma linha */
+  .level-information {
+    padding: 7px 10px !important;
+  }
+
+  #levelName {
+    display: block !important;
+    max-width: 100%;
+    max-height: none !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+  }
+
+  /* HUD sem espaço reservado para cartões ocultos */
+  .game-hud {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    width: 100%;
+  }
+
+  .game-hud .hud-card:nth-child(n+4) {
+    display: none !important;
+  }
+
+  /* Arena */
+  .arena-section {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #arenaShell {
+    aspect-ratio: 8 / 5 !important;
+    margin: 0 !important;
+  }
+
+  /* Controlos */
+  #mobileControls {
+    margin: 0 !important;
+    padding: 6px 8px !important;
+    min-height: 0 !important;
+  }
+
+  /* Uma única área compacta para a IA */
+  #echoAiPanel {
+    margin: 0 !important;
+    padding: 6px 10px !important;
+    min-height: 0 !important;
+  }
+
+  #echoAiPanel .echo-ai-header,
+  #echoAiPanel .echo-ai-footer {
+    display: none !important;
+  }
+
+  #echoMessage {
+    display: flex;
+    align-items: center;
+    min-height: 0 !important;
+    gap: 6px;
+  }
+
+  #echoMessageText {
+    font-size: 10px !important;
+    line-height: 1.3;
+  }
+
+  /* Ocultar notificações visuais redundantes */
+  .echo-ai-toast,
+  .echo-toast,
+  .ai-toast,
+  .echo-notification {
+    display: none !important;
+  }
+
+  /* Evitar que mensagens tapem os controlos */
+  #arenaGlitch,
+  #globalGlitch {
+    pointer-events: none;
+  }
+
+  /* Rodapé oculto durante o jogo mobile */
+  .game-footer {
+    display: none !important;
+  }
+
+  /* Menu acima dos elementos normais */
+  #mobileMenuBtn,
+  .mobile-menu-btn {
+    z-index: 50;
+  }
+}
+
+
+/* ECHO//404 — MOBILE HUD v3.4 */
+
+@media (max-width: 767px) {
+
+  .game-hud {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+    width: 100%;
+  }
+
+  .game-hud .hud-card:nth-child(-n+4) {
+    display: block !important;
+  }
+
+  /* Esconder apenas o recorde */
+  .game-hud .hud-card:nth-child(5) {
+    display: none !important;
+  }
+
+  .hud-card {
+    min-width: 0;
+    padding: 6px 2px !important;
+    border-radius: 7px;
+  }
+
+  .hud-label {
+    font-size: 8px !important;
+    letter-spacing: 0.4px;
+  }
+
+  .hud-value {
+    font-size: 14px !important;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+}
+
+
+/*
+========================================
+ ECHO//404 — MOBILE MENU TOP FIX v3.5
+ CREATED BY MANUEL SAMPAIO01
+========================================
+*/
+
+@media (max-width: 767px) {
+
+  /* Menu fixo no topo, sem tapar a IA ECHO */
+  #mobileMenuBtn,
+  .mobile-menu-btn {
+    position: fixed !important;
+
+    top: calc(env(safe-area-inset-top, 0px) + 12px) !important;
+    right: 12px !important;
+    bottom: auto !important;
+    left: auto !important;
+
+    width: auto !important;
+    min-width: 76px !important;
+    height: 38px !important;
+
+    padding: 0 12px !important;
+
+    border-radius: 10px !important;
+    background: rgba(5, 20, 35, 0.94) !important;
+    border: 1px solid #32d9ef !important;
+
+    color: #b7faff !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+
+    z-index: 1000 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Mensagens ECHO sem sobreposição do menu */
+  #echoAiPanel,
+  #echoMessage,
+  .echo-ai-toast,
+  .echo-notification {
+    max-width: 100% !important;
+  }
+}
