@@ -1,6 +1,7 @@
 
 <!DOCTYPE html>
 <html lang="pt-AO">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -572,6 +573,51 @@
       }
     }
   </style>
+  <style>
+/* ECHO//404 — MOBILE CLEANUP v4.2.2 */
+
+@media (max-width: 768px) {
+
+  /* Esconder menu antigo, manter o novo */
+  #vr-launch {
+    display: none !important;
+  }
+
+  /* Esconder controlos antigos duplicados */
+  .game-actions {
+    display: none !important;
+  }
+
+  /* Manter os novos botões rápidos */
+  #echoMobileQuickActions {
+    display: flex !important;
+  }
+
+  /* Manter apenas o novo menu superior */
+  #echoMobileMenu {
+    display: flex !important;
+  }
+
+  /* Corrigir título cortado */
+  .level-information,
+  .level-information-top {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  #levelName {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    font-size: 17px;
+    line-height: 1.4;
+  }
+
+  /* Espaço para os botões inferiores */
+  #app.app-container {
+    padding-bottom: 110px;
+  }
+}
+</style>
 </head>
 
 <body class="echo404-app">
