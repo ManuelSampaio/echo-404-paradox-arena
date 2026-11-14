@@ -1464,16 +1464,17 @@
         for(let y=w.y+10;y<w.y+w.h-5;y+=26)fill(solids,w.x+4,y,Math.max(2,w.w-8),8,primary,.18);
       }
     }
-    // The gate frame follows the actual door, not the old x=380.
-    const gate=arena.door;
+    // Independent gate frames match the actual engine geometry.
     const gateFrame=graphic("lighting");
-    stroke(gateFrame,gate.x-4,gate.y-4,gate.w+8,gate.h+8,primary,.85,3);
-    if(gate.w>gate.h){
-      fill(gateFrame,gate.x,gate.y-9,gate.w,4,primary,.6);
-      fill(gateFrame,gate.x,gate.y+gate.h+5,gate.w,4,primary,.6);
-    } else {
-      fill(gateFrame,gate.x-9,gate.y,4,gate.h,primary,.6);
-      fill(gateFrame,gate.x+gate.w+5,gate.y,4,gate.h,primary,.6);
+    for (const gate of arena.doors || [arena.door]) {
+      stroke(gateFrame,gate.x-4,gate.y-4,gate.w+8,gate.h+8,primary,.85,3);
+      if(gate.w>gate.h){
+        fill(gateFrame,gate.x,gate.y-9,gate.w,4,primary,.6);
+        fill(gateFrame,gate.x,gate.y+gate.h+5,gate.w,4,primary,.6);
+      }else{
+        fill(gateFrame,gate.x-9,gate.y,4,gate.h,primary,.6);
+        fill(gateFrame,gate.x+gate.w+5,gate.y,4,gate.h,primary,.6);
+      }
     }
     // Level-specific environmental storytelling, no fixed central overlays.
     const decor=graphic("machinery");
