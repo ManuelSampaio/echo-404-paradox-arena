@@ -1029,6 +1029,8 @@
           </button>
         </div>
 
+        <button type="button" class="vr-button" id="vr-replay-story" style="width:100%;margin:5px 0 10px;min-height:40px">◈ REVER INTRODUÇÃO CINEMATOGRÁFICA</button>
+
         <div class="vr-settings">
           <label>
             <input type="checkbox" id="vr-drone">
@@ -1079,6 +1081,10 @@
       });
     });
 
+    $("vr-replay-story")?.addEventListener("click", () => {
+      closeMenu();
+      window.EchoAwakening?.openIntro?.(true);
+    });
     $("vr-close").addEventListener("click", closeMenu);
     $("vr-close-top").addEventListener("click", closeMenu);
 
@@ -1662,29 +1668,22 @@
       say
     };
 
-    // Let the new ORIGIN prologue finish before showing the operator
-    // selection. The menu must not cover the cinematic on first visit.
+    // Show the operator menu only after the current cinematic chapter.
     let seenMenu = false;
     try { seenMenu = sessionStorage.getItem("echo404_v2_seen") === "1"; } catch (_) {}
     if (!seenMenu) {
       const reveal = () => {
-        if (document.body.classList.contains("awakening-active")) {
-          window.addEventListener("echo404:tutorialcomplete", reveal, {once:true});
-          return;
-        }
+        if (document.body.classList.contains("awakening-active")) return;
         openMenu();
         try { sessionStorage.setItem("echo404_v2_seen", "1"); } catch (_) {}
       };
-      let newIntroSeen = false;
-      try { newIntroSeen = localStorage.getItem("echo404_v82_collapse_prologue_seen") === "true"; } catch (_) {}
-      if (!newIntroSeen) {
-        window.addEventListener("echo404:introcomplete", () => {
-          window.setTimeout(reveal, 80);
-        }, {once:true});
-      } else if (document.body.classList.contains("awakening-active")) {
-        window.addEventListener("echo404:tutorialcomplete", reveal, {once:true});
+      let introSeen = false;
+      try { introSeen = localStorage.getItem("echo404_v831_origin_cinematic_seen") === "true"; } catch (_) {}
+      const forceStory = new URLSearchParams(window.location.search).get("story") === "1";
+      if (!introSeen || forceStory) {
+        window.addEventListener("echo404:introcomplete", () => window.setTimeout(reveal, 100), {once:true});
       } else {
-        reveal();
+        window.setTimeout(reveal, 100);
       }
     }
 

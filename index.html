@@ -1282,6 +1282,17 @@ body[data-echo-intro-tone="hope"] #echoOriginStage{border-color:#76ffd6}
  #vr-menu .vr-portrait{height:96px!important}
  #vr-menu .vr-abilities{display:none!important}
 }
+</style><style id="echo-v831-story-visibility">
+/* Make the cinematic dominant and the operator screen genuinely compact. */
+#awakeningIntro.visible{z-index:50000!important}
+@media(max-width:650px){
+ #vr-menu .vr-shell{padding-top:8px!important}
+ #vr-menu .vr-portrait{height:clamp(92px,25vw,126px)!important}
+ #vr-menu .vr-heading{margin-bottom:7px!important}
+ #vr-menu .vr-info p:nth-of-type(3){display:none!important}
+ #vr-menu .vr-abilities{gap:3px!important}
+ #vr-menu #vr-replay-story{min-height:36px!important;font-size:11px!important}
+}
 </style></head>
 
 <body class="echo404-app">
@@ -1722,8 +1733,8 @@ body[data-echo-intro-tone="hope"] #echoOriginStage{border-color:#76ffd6}
   <script src="dynamic-threats.js?v=540"></script>
   <script src="system-war.js?v=600"></script>
   <script src="game.js?v=810"></script>
-  <script src="awakening.js?v=830"></script>
-  <script src="visual-v1.js?v=830"></script>
+  <script src="awakening.js?v=831"></script>
+  <script src="visual-v1.js?v=831"></script>
   <script src="world-renderer.js?v=530"></script>
   <script src="visual-effects.js?v=410"></script>
 

@@ -25,7 +25,7 @@
   const VERSION = "8.2";
 
   const KEYS = {
-    intro: "echo404_v82_collapse_prologue_seen",
+    intro: "echo404_v831_origin_cinematic_seen",
     tutorial: "echo404_v08_tutorial_done",
     medals: "echo404_awakening_medals_v07",
     operator: "echo404_operator"
@@ -1844,10 +1844,13 @@
     updateMedalSummary();
 
     state.introCompleted = hasSeenIntro();
+    // Explicit preview link always plays the current cinematic chapter.
+    const forceStory = new URLSearchParams(window.location.search).get("story") === "1";
+    if (forceStory) state.introCompleted = false;
     state.tutorialCompleted = hasCompletedTutorial();
 
     if (!state.introCompleted) {
-      openIntro();
+      openIntro(forceStory);
     } else if (!state.tutorialCompleted) {
       openTutorial();
     } else {
