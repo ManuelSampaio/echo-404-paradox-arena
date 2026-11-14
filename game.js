@@ -1930,24 +1930,42 @@
   // DRAW GHOSTS
   // ================================================
 
+  // v7.1: time echoes are translucent operator silhouettes, never generic balls.
+  // The renderer shares the same proportions for every recorded movement.
+  function drawEchoOperator(x, y, index) {
+    const bob = Math.sin(worldTime * 7 + index * 1.9) * 1.2;
+    ctx.save();
+    ctx.translate(x, y + bob);
+    ctx.globalAlpha = 0.55 + Math.sin(worldTime * 5 + index) * 0.09;
+    ctx.shadowColor = "#bd84ff";
+    ctx.shadowBlur = 11;
+    // Boots, body, helmet and luminous visor: recognisable as a player clone.
+    ctx.fillStyle = "#6146a5";
+    ctx.fillRect(-7, 7, 5, 6);
+    ctx.fillRect(2, 7, 5, 6);
+    ctx.fillStyle = "#a47dff";
+    ctx.fillRect(-9, -4, 18, 13);
+    ctx.fillStyle = "#34235e";
+    ctx.fillRect(-7, -12, 14, 11);
+    ctx.fillStyle = "#d8baff";
+    ctx.fillRect(-5, -9, 10, 4);
+    ctx.fillStyle = "#e6d4ff";
+    ctx.fillRect(-3, -8, 6, 2);
+    ctx.fillStyle = "#7954d4";
+    ctx.fillRect(-12, -2, 3, 9);
+    ctx.fillRect(9, -2, 3, 9);
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = "#d2aaff";
+    ctx.lineWidth = 1.3;
+    ctx.strokeRect(-9, -4, 18, 13);
+    ctx.strokeRect(-7, -12, 14, 11);
+    ctx.restore();
+  }
+
   function drawGhosts() {
     ghosts.forEach((ghost, index) => {
-      ctx.save();
-
-      ctx.globalAlpha =
-        0.5 +
-        Math.sin(worldTime * 7 + index) * 0.12;
-
-      glowRect(
-        ghost.x - 10,
-        ghost.y - 10,
-        20,
-        20,
-        COLORS.purple,
-        16
-      );
-
-      ctx.restore();
+      if (!Number.isFinite(ghost?.x) || !Number.isFinite(ghost?.y)) return;
+      drawEchoOperator(ghost.x, ghost.y, index);
     });
   }
 
