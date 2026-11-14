@@ -1053,6 +1053,17 @@
  }
  #echoV80Hud{display:none}
 }
+</style><style id="echo-v80-survivors">
+#echoAbilityBtn,#echoHintBtn{border:1px solid #35d9e8;border-radius:10px;background:#0b2b40;color:#e2fdff;font:700 12px system-ui;min-height:42px;padding:7px 10px;touch-action:manipulation;user-select:none}
+#echoAbilityBtn[disabled]{opacity:.55}
+#echoSurvivorActions{display:flex;gap:7px;align-items:stretch;justify-content:space-between;margin:5px 0}
+#echoAbilityBtn{flex:1}
+#echoHintBtn{flex:0 0 auto}
+#echoAiPanel{position:relative}
+#echoAiAvatar{animation:echoPulse80 3s ease-in-out infinite}
+@keyframes echoPulse80{50%{filter:drop-shadow(0 0 10px #8b8aff);transform:scale(1.06)}}
+body.echo-immersive #echoSurvivorActions{margin:0!important;flex:0 0 auto}
+body.echo-immersive #echoSurvivorActions button{min-height:32px!important;padding:3px 8px!important}
 </style></head>
 
 <body class="echo404-app">
@@ -1492,9 +1503,9 @@
   <script src="audio.js?v=310"></script>
   <script src="dynamic-threats.js?v=540"></script>
   <script src="system-war.js?v=600"></script>
-  <script src="game.js?v=800"></script>
-  <script src="awakening.js?v=310"></script>
-  <script src="visual-v1.js?v=800"></script>
+  <script src="game.js?v=810"></script>
+  <script src="awakening.js?v=810"></script>
+  <script src="visual-v1.js?v=810"></script>
   <script src="world-renderer.js?v=530"></script>
   <script src="visual-effects.js?v=410"></script>
 
@@ -2041,6 +2052,66 @@ window.addEventListener("resize",()=>{if(window.innerWidth>768&&!modal.hidden)cl
   requestAnimationFrame(update);
  }
  requestAnimationFrame(update);
+})();
+</script><script id="echo-v80-survivor-ai">
+(()=>{
+ "use strict";
+ const zone=document.querySelector(".gameplay-zone");
+ if(!zone)return;
+ const actions=document.createElement("div");actions.id="echoSurvivorActions";
+ const ability=document.createElement("button");ability.id="echoAbilityBtn";ability.type="button";
+ const hint=document.createElement("button");hint.id="echoHintBtn";hint.type="button";hint.textContent="◈ PEDIR PISTA";
+ actions.append(ability,hint);
+ const controls=document.getElementById("mobileControls");
+ if(controls)controls.insertAdjacentElement("afterend",actions);
+ else zone.appendChild(actions);
+ let lastMessage="",lastHint=0;
+ const names={axiom:"AXIOM · PHASE WALK",nyra:"NYRA · DASH",kai7:"KAI-7 · OVERCHARGE"};
+ function speak(message){
+  if(!message||message===lastMessage)return;
+  lastMessage=message;
+  const panel=document.getElementById("echoAiAnalysis");
+  if(panel)panel.textContent="ECHO // "+message;
+  const text=document.getElementById("echoMessageText");
+  if(text)text.textContent=message;
+ }
+ function advise(s,requested){
+  if(!s?.level)return "Estou a recuperar o sinal. Inicia uma simulação.";
+  const plates=s.level.plates||[];
+  const active=plates.map(p=>Math.hypot(s.player.x-p.x,s.player.y-p.y)<27 || (s.ghosts||[]).some(g=>Math.hypot(g.x-p.x,g.y-p.y)<27));
+  const closed=(s.doorStates||[]).findIndex(open=>!open);
+  if(s.finished)return "A missão continua no próximo setor. Bom trabalho.";
+  if(!s.running)return "Escolhe o sobrevivente e inicia a missão. Estou contigo.";
+  if(!s.recordingsCount)return "Primeiro, pisa uma placa. O teu percurso ficará gravado como um eco no ciclo seguinte.";
+  if(closed>=0){
+   const p=plates[closed]||plates.find((_,i)=>!active[i]);
+   return p?"A porta "+(closed+1)+" está fechada. Leva um eco até à placa "+(closed+1)+" e atravessa enquanto ele a ativa.":"Observa as placas e sincroniza o teu percurso com o eco.";
+  }
+  if(requested)return "As portas estão abertas! Avança até à saída verde antes do fim do ciclo.";
+  return "Sincronização conseguida. Agora corre para a saída verde!";
+ }
+ ability.addEventListener("click",()=>window.EchoGame?.ability?.());
+ hint.addEventListener("click",()=>{
+  const s=window.EchoGame?.getState?.();
+  lastMessage="";speak(advise(s,true));lastHint=performance.now();
+ });
+ let lastLabel="",lastAuto=0;
+ function tick(now){
+  const s=window.EchoGame?.getState?.();
+  if(s){
+   const name=names[s.operator]||names.axiom;
+   const cooldown=s.abilityCooldown||0;
+   const label="✦ "+name+(cooldown>0?" · "+Math.ceil(cooldown)+"s":" · PRONTO");
+   if(label!==lastLabel){ability.textContent=label;lastLabel=label;}
+   ability.disabled=!s.running||cooldown>0;
+   if(s.running&&now-lastAuto>12000&&now-lastHint>8000){
+    lastAuto=now;
+    if(s.elapsed>3&&s.recordingsCount>0)speak(advise(s,false));
+   }
+  }
+  requestAnimationFrame(tick);
+ }
+ requestAnimationFrame(tick);
 })();
 </script></body>
 </html>
