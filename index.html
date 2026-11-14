@@ -2451,5 +2451,17 @@ window.addEventListener("resize",()=>{if(window.innerWidth>768&&!modal.hidden)cl
  }
  requestAnimationFrame(update);
 })();
+</script><style id="echo-v91-launch-style">
+#echoV91Launch{display:block;width:100%;margin:8px 0;padding:11px 14px;border:1px solid #4bdac3;border-radius:12px;background:linear-gradient(110deg,#104b55,#153b67);color:#eafffb;text-decoration:none;font:800 13px system-ui;text-align:center}
+#echoV91Launch small{display:block;font:500 10px system-ui;color:#b4e4e7;margin-top:3px}
+</style>
+<script id="echo-v91-launch">
+(()=>{
+const link=document.createElement("a");
+link.id="echoV91Launch";link.href="./origin-v91.html";
+link.innerHTML="▶ MISSÃO 01 — ORIGIN: ÚLTIMO SINAL <small>v9.1 · aventura lateral experimental · toque para jogar</small>";
+const target=document.getElementById("echoMobileQuickActions")||document.querySelector(".gameplay-zone")||document.getElementById("app");
+if(target)target.insertAdjacentElement("beforebegin",link);
+})();
 </script></body>
 </html>
