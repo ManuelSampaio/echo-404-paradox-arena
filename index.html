@@ -933,6 +933,21 @@
   #mobileRestartBtn { width:40px !important; height:40px !important; }
 }
 </style>
+<style id="echo-scroll-fix-v621">
+/* Allow native vertical page scrolling over the non-interactive arena. */
+@media (pointer:coarse) {
+  #arenaShell, #gameCanvas, #echoWorldRenderer, #echoWorldRenderer canvas {
+    touch-action:pan-y !important;
+    -webkit-overflow-scrolling:touch;
+  }
+  #mobileControls .dpad-btn,
+  #mobileControls #joystickBase,
+  #mobileControls #mobileShiftBtn,
+  #mobileControls #mobileRestartBtn { touch-action:none !important; }
+  #echoMobileQuickActions, #echoMobileQuickActions button,
+  #echoMobileMenu { touch-action:manipulation !important; }
+}
+</style>
 </head>
 
 <body class="echo404-app">
@@ -1804,44 +1819,6 @@
   })();
   </script>
   <script src="rebirth-guide.js?v=530"></script>
-<script id="echo-arena-touch-v620">
-/* Drag on the arena to steer. A tap alone never moves the player. */
-(() => {
-  const canvas=document.getElementById("gameCanvas");
-  if(!canvas)return;
-  let pointer=null,origin=null;
-  const active=new Set();
-  const keys={up:"ArrowUp",down:"ArrowDown",left:"ArrowLeft",right:"ArrowRight"};
-  const send=(key,down)=>window.dispatchEvent(new KeyboardEvent(down?"keydown":"keyup",{key,bubbles:true}));
-  function clear(){
-    for(const key of active)send(key,false);
-    active.clear();pointer=null;origin=null;
-  }
-  function move(e){
-    if(e.pointerId!==pointer||!origin)return;
-    e.preventDefault();
-    const dx=e.clientX-origin.x,dy=e.clientY-origin.y;
-    const threshold=16;
-    const wanted=new Set();
-    if(dx < -threshold)wanted.add(keys.left);
-    if(dx > threshold)wanted.add(keys.right);
-    if(dy < -threshold)wanted.add(keys.up);
-    if(dy > threshold)wanted.add(keys.down);
-    for(const key of [...active])if(!wanted.has(key)){send(key,false);active.delete(key);}
-    for(const key of wanted)if(!active.has(key)){send(key,true);active.add(key);}
-  }
-  canvas.style.touchAction="none";
-  canvas.addEventListener("pointerdown",e=>{
-    if(e.pointerType==="mouse"||pointer!==null||!window.EchoGame?.getState?.()?.running)return;
-    pointer=e.pointerId;origin={x:e.clientX,y:e.clientY};
-    try{canvas.setPointerCapture(pointer);}catch(_){}
-    e.preventDefault();
-  },{passive:false});
-  canvas.addEventListener("pointermove",move,{passive:false});
-  for(const event of ["pointerup","pointercancel","lostpointercapture"])canvas.addEventListener(event,e=>{if(e.pointerId===pointer)clear();});
-  window.addEventListener("blur",clear);
-  document.addEventListener("visibilitychange",()=>{if(document.hidden)clear();});
-})();
-</script>
+
 </body>
 </html>
