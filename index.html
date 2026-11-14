@@ -948,6 +948,19 @@
   #echoMobileMenu { touch-action:manipulation !important; }
 }
 </style>
+<style id="echo-mobile-selection-and-modes-v622">
+/* Block accidental text copying while preserving ordinary page scrolling. */
+@media (pointer:coarse) {
+  #app, #app * { -webkit-user-select:none !important; user-select:none !important; -webkit-touch-callout:none !important; }
+  #arenaShell, #gameCanvas { touch-action:pan-y !important; }
+  #mobileControls, #mobileControls button, #mobileControls #joystickBase,
+  #mobileControls #virtualJoystick, #mobileControls #mobileDpad {
+    touch-action:none !important;
+    -webkit-tap-highlight-color:transparent !important;
+  }
+  #controlModeBtn, #echoMobileQuickActions button, #echoMobileMenu { touch-action:manipulation !important; }
+}
+</style>
 </head>
 
 <body class="echo404-app">
@@ -1743,6 +1756,9 @@
     const active = new Set();
     let pointerId = null;
     let mode = "dpad";
+    let dragPointer = null;
+    let dragOrigin = null;
+    const canvas = $("gameCanvas");
 
     function releaseKeys() {
       for (const key of active) {
@@ -1754,13 +1770,18 @@
     function setMode(next) {
       releaseKeys();
       pointerId = null;
-      mode = next === "joystick" ? "joystick" : "dpad";
-      dpad.classList.toggle("hidden", mode === "joystick");
+      dragPointer = null;
+      dragOrigin = null;
+      mode = ["dpad","joystick","drag"].includes(next) ? next : "dpad";
+      dpad.classList.toggle("hidden", mode !== "dpad");
       joystick.classList.toggle("hidden", mode !== "joystick");
-      toggle.textContent = mode === "joystick"
-        ? "CONTROLO: JOYSTICK (TOCA PARA D-PAD)"
-        : "CONTROLO: D-PAD (TOCA PARA JOYSTICK)";
-      toggle.setAttribute("aria-pressed", String(mode === "joystick"));
+      if (canvas) canvas.style.setProperty("touch-action", mode === "drag" ? "none" : "pan-y", "important");
+      $("arenaShell")?.style.setProperty("touch-action", mode === "drag" ? "none" : "pan-y", "important");
+      toggle.textContent = mode === "dpad" ? "CONTROLO: D-PAD → JOYSTICK"
+        : mode === "joystick" ? "CONTROLO: JOYSTICK → ARRASTAR"
+        : "CONTROLO: ARRASTAR → D-PAD";
+      toggle.setAttribute("aria-label", "Alterar modo de controlo: " + mode);
+      toggle.setAttribute("aria-pressed", String(mode !== "dpad"));
       try { localStorage.setItem(storageKey, mode); } catch (_) {}
     }
     function movePointer(event) {
@@ -1806,10 +1827,42 @@
         releaseKeys();
       });
     }
-    toggle.addEventListener("click", () => setMode(mode === "dpad" ? "joystick" : "dpad"));
+    toggle.addEventListener("click", () => setMode(mode === "dpad" ? "joystick" : mode === "joystick" ? "drag" : "dpad"));
+    function updateDrag(event) {
+      if (mode !== "drag" || dragPointer !== event.pointerId || !dragOrigin) return;
+      event.preventDefault();
+      const dx = event.clientX - dragOrigin.x;
+      const dy = event.clientY - dragOrigin.y;
+      const wanted = new Set();
+      if (dx < -15) wanted.add(directionKeys.left);
+      if (dx > 15) wanted.add(directionKeys.right);
+      if (dy < -15) wanted.add(directionKeys.up);
+      if (dy > 15) wanted.add(directionKeys.down);
+      for (const key of [...active]) if (!wanted.has(key)) {
+        window.dispatchEvent(new KeyboardEvent("keyup",{key,bubbles:true})); active.delete(key);
+      }
+      for (const key of wanted) if (!active.has(key)) {
+        window.dispatchEvent(new KeyboardEvent("keydown",{key,bubbles:true})); active.add(key);
+      }
+    }
+    canvas?.addEventListener("pointerdown", event => {
+      if (mode !== "drag" || event.pointerType === "mouse" || dragPointer !== null) return;
+      if (!window.EchoGame?.getState?.()?.running) return;
+      dragPointer = event.pointerId;
+      dragOrigin = {x:event.clientX,y:event.clientY};
+      try {canvas.setPointerCapture(event.pointerId);} catch (_) {}
+      event.preventDefault();
+    }, {passive:false});
+    canvas?.addEventListener("pointermove", updateDrag, {passive:false});
+    for (const name of ["pointerup","pointercancel","lostpointercapture"]) {
+      canvas?.addEventListener(name, event => {
+        if (event.pointerId !== dragPointer) return;
+        dragPointer = null; dragOrigin = null; releaseKeys();
+      });
+    }
     window.addEventListener("blur", releaseKeys);
     document.addEventListener("visibilitychange", () => { if(document.hidden) releaseKeys(); });
-    for (const el of [$("arenaShell"),dpad,joystick]) {
+    for (const el of [$("arenaShell"),canvas,$("mobileControls"),dpad,joystick]) {
       el?.addEventListener("contextmenu", event => event.preventDefault());
       el?.addEventListener("selectstart", event => event.preventDefault());
     }
