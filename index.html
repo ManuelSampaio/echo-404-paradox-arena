@@ -883,6 +883,56 @@
   #mobileShiftBtn { width:60px !important; height:60px !important; }
 }
 </style>
+<style id="echo-mobile-viewport-v620">
+/* iPhone portrait: fit the entire play interface in one viewport. */
+@media (max-width:768px) and (orientation:portrait) {
+  body { overflow-x:hidden !important; }
+  #app.app-container { padding:4px 0 calc(env(safe-area-inset-bottom,0px) + 4px) !important; }
+  .game-header { min-height:34px !important; margin-bottom:3px !important; }
+  .game-logo { font-size:19px !important; }
+  .header-actions .btn-icon { min-width:30px !important; min-height:32px !important; }
+  #echoMobileMenu { min-height:32px !important; min-width:56px !important; font-size:10px !important; padding:4px !important; }
+  .game-layout,.game-main,.gameplay-zone { gap:3px !important; }
+  .level-information { padding:4px 8px !important; }
+  #levelName { font-size:11px !important; -webkit-line-clamp:1 !important; }
+  .game-hud { gap:3px !important; }
+  .game-hud .hud-card { padding:3px 2px !important; }
+  .hud-label { font-size:8px !important; margin:0 !important; }
+  .hud-value { font-size:14px !important; }
+  .timer-progress-track { height:3px !important; }
+  #rebirthGuide { display:flex !important; flex-wrap:wrap !important; align-items:center !important; padding:4px 7px !important; gap:3px 8px !important; margin:0 0 3px !important; }
+  #rebirthGuide .rebirth-top { flex:0 0 auto !important; min-height:0 !important; }
+  #rebirthTag { font-size:9px !important; }
+  #rebirthGuide strong { font-size:11px !important; }
+  #rebirthGuide p { flex:1 1 100% !important; font-size:10px !important; margin:0 !important; }
+  #rebirthProgress { display:none !important; }
+  #rebirthSkip { padding:2px 6px !important; font-size:9px !important; }
+  #rebirthToggle { padding:2px 6px !important; font-size:9px !important; }
+  #arenaShell { aspect-ratio:8/5 !important; }
+  .arena-status-bar { min-height:14px !important; font-size:9px !important; }
+  #mobileControls { padding:5px 7px !important; margin:0 !important; }
+  #mobileControls .mobile-control-layout { gap:4px !important; }
+  #mobileDpad { grid-template-columns:repeat(3,clamp(29px,9.5vw,38px)) !important; grid-template-rows:repeat(3,clamp(29px,9.5vw,38px)) !important; gap:2px !important; }
+  .dpad-btn { border-radius:7px !important; font-size:16px !important; }
+  #mobileShiftBtn { width:clamp(54px,15vw,64px) !important; height:clamp(54px,15vw,64px) !important; }
+  #mobileRestartBtn { width:clamp(40px,11vw,48px) !important; height:clamp(40px,11vw,48px) !important; }
+  .mobile-action-btn small { font-size:8px !important; }
+  .mobile-control-options { margin:2px 0 0 !important; }
+  #controlModeBtn { min-height:25px !important; font-size:9px !important; padding:2px 7px !important; }
+  #echoMobileQuickActions { margin:3px 0 0 !important; padding:3px !important; }
+  #echoMobileQuickActions button { min-height:35px !important; font-size:10px !important; padding:4px 1px !important; }
+  .arena-section { min-width:0; }
+}
+@media (max-width:768px) and (orientation:portrait) and (max-height:760px) {
+  #rebirthGuide p { display:none !important; }
+  #rebirthGuide { padding:3px 6px !important; }
+  .game-header { min-height:30px !important; }
+  .game-hud .hud-card { padding:2px !important; }
+  #mobileDpad { grid-template-columns:repeat(3,30px) !important; grid-template-rows:repeat(3,30px) !important; }
+  #mobileShiftBtn { width:50px !important; height:50px !important; }
+  #mobileRestartBtn { width:40px !important; height:40px !important; }
+}
+</style>
 </head>
 
 <body class="echo404-app">
@@ -1754,5 +1804,44 @@
   })();
   </script>
   <script src="rebirth-guide.js?v=530"></script>
+<script id="echo-arena-touch-v620">
+/* Drag on the arena to steer. A tap alone never moves the player. */
+(() => {
+  const canvas=document.getElementById("gameCanvas");
+  if(!canvas)return;
+  let pointer=null,origin=null;
+  const active=new Set();
+  const keys={up:"ArrowUp",down:"ArrowDown",left:"ArrowLeft",right:"ArrowRight"};
+  const send=(key,down)=>window.dispatchEvent(new KeyboardEvent(down?"keydown":"keyup",{key,bubbles:true}));
+  function clear(){
+    for(const key of active)send(key,false);
+    active.clear();pointer=null;origin=null;
+  }
+  function move(e){
+    if(e.pointerId!==pointer||!origin)return;
+    e.preventDefault();
+    const dx=e.clientX-origin.x,dy=e.clientY-origin.y;
+    const threshold=16;
+    const wanted=new Set();
+    if(dx < -threshold)wanted.add(keys.left);
+    if(dx > threshold)wanted.add(keys.right);
+    if(dy < -threshold)wanted.add(keys.up);
+    if(dy > threshold)wanted.add(keys.down);
+    for(const key of [...active])if(!wanted.has(key)){send(key,false);active.delete(key);}
+    for(const key of wanted)if(!active.has(key)){send(key,true);active.add(key);}
+  }
+  canvas.style.touchAction="none";
+  canvas.addEventListener("pointerdown",e=>{
+    if(e.pointerType==="mouse"||pointer!==null||!window.EchoGame?.getState?.()?.running)return;
+    pointer=e.pointerId;origin={x:e.clientX,y:e.clientY};
+    try{canvas.setPointerCapture(pointer);}catch(_){}
+    e.preventDefault();
+  },{passive:false});
+  canvas.addEventListener("pointermove",move,{passive:false});
+  for(const event of ["pointerup","pointercancel","lostpointercapture"])canvas.addEventListener(event,e=>{if(e.pointerId===pointer)clear();});
+  window.addEventListener("blur",clear);
+  document.addEventListener("visibilitychange",()=>{if(document.hidden)clear();});
+})();
+</script>
 </body>
 </html>
