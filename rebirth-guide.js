@@ -9,7 +9,7 @@
     { title: "MOVE-TE", detail: "Usa WASD, as setas ou o controlo no telemóvel.", target: "move" },
     { title: "PISA A PLACA", detail: "Procura o círculo luminoso e fica sobre ele.", target: "plate" },
     { title: "CRIA UM ECO", detail: "Espera pelo fim do ciclo. O teu percurso será repetido.", target: "echo" },
-    { title: "ATRAVESSA A PORTA", detail: "Deixa o eco na placa e segue para a saída verde.", target: "door" }
+    { title: "ABRE AS DUAS PORTAS", detail: "Usa os ecos para manter as duas placas ativas e chegar à saída.", target: "door" }
   ];
   let enabled = false;
   let step = 0;
@@ -51,7 +51,8 @@
   function objective(s) {
     if (!s?.running && !s?.finished) return {title:"PRONTO PARA JOGAR",detail:"Toca em JOGAR para começar. Procura a saída verde."};
     if (s?.finished) return {title:"SIMULAÇÃO TERMINADA",detail:"Toca em JOGAR NOVAMENTE ou escolhe outro nível."};
-    if (s?.doorOpen) return {title:"PORTA ABERTA",detail:"Segue para a saída verde!"};
+    if (s?.doorOpen) return {title:"PORTAS ABERTAS",detail:"Segue para a saída verde!"};
+    if (s?.doorStates?.length > 1) return {title:"ABRE AS DUAS PORTAS",detail:"Portas abertas: " + s.doorStates.filter(Boolean).length + "/2. Usa ecos nas placas para atravessar."};
     if ((s?.recordingsCount || 0) > 0) return {title:"USA O TEU ECO",detail:"Deixa o eco sobre a placa para abrir a porta."};
     return {title:"ATIVA A PLACA",detail:"Pisa a placa luminosa. O teu percurso será gravado."};
   }
