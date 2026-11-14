@@ -1444,6 +1444,9 @@
 
   function finishGame(won) {
     if (finished) return;
+    if (won && levelIndex === 9) {
+      window.EchoSystemBoss?.onVictory?.();
+    }
 
     running = false;
     finished = true;
@@ -2075,6 +2078,7 @@
     drawPortals();
     drawTraps();
     window.EchoDynamicThreats?.draw?.(ctx, {levelIndex, worldTime, level, running});
+    window.EchoSystemBoss?.draw?.(ctx, {levelIndex, worldTime, level, running, doorStates});
     drawGoal();
     drawGhosts();
     drawPlayer();
@@ -2156,6 +2160,11 @@
 
     if (!interrupted && running) {
       interrupted = updateTraps();
+    }
+
+    if (!interrupted && running && window.EchoSystemBoss?.collides?.({player, levelIndex, worldTime, level})) {
+      killPlayer("boss");
+      interrupted = true;
     }
 
     if (!interrupted && running && threatInvulnerability <= 0 &&
