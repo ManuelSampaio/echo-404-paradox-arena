@@ -618,6 +618,33 @@
   }
 }
 </style>
+
+  <style id="echo-mobile-menu-fix-v423">
+    /* Accessible fixed mobile menu; original desktop sidebar remains intact. */
+    @media (max-width: 768px) {
+      #vrLevelDetails[open] {
+        position: fixed !important;
+        top: calc(env(safe-area-inset-top, 0px) + 58px) !important;
+        left: 10px !important;
+        right: 10px !important;
+        bottom: auto !important;
+        width: auto !important;
+        max-height: min(70dvh, 550px) !important;
+        overflow-y: auto !important;
+        z-index: 8490 !important;
+        box-shadow: 0 16px 50px rgba(0,0,0,.9) !important;
+        background: #081b30 !important;
+      }
+      #echoMobileMenu { z-index: 8500 !important; }
+      #echoMobileQuickActions { z-index: 8500 !important; }
+      #echoMobileQuickActions button { touch-action: manipulation; }
+      #overlay:not(.hidden) .overlay-content {
+        max-height: 100%;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  </style>
 </head>
 
 <body class="echo404-app">
@@ -666,7 +693,7 @@
 
   <!-- NEW MOBILE TOP MENU -->
   <button id="echoMobileMenu" type="button"
-          aria-label="Abrir menu de níveis e progresso">
+          aria-label="Abrir menu de níveis e progresso" aria-controls="vrLevelDetails" aria-expanded="false">
     ☰ MENU
   </button>
 
@@ -679,7 +706,7 @@
     <button id="echoQuickRestart" type="button">
       ↻ REINICIAR
     </button>
-    <button id="echoQuickLevels" type="button">
+    <button id="echoQuickLevels" type="button" aria-controls="vrLevelDetails" aria-expanded="false">
       ☰ NÍVEIS
     </button>
   </nav>
@@ -1122,25 +1149,23 @@
 
       function openLevels() {
         if (!levelDetails) return;
-
+        const mobile = window.matchMedia("(max-width: 768px)").matches;
+        if (mobile) {
+          levelDetails.open = !levelDetails.open;
+          $("echoMobileMenu")?.setAttribute("aria-expanded", String(levelDetails.open));
+          $("echoQuickLevels")?.setAttribute("aria-expanded", String(levelDetails.open));
+          return;
+        }
         levelDetails.open = true;
-
-        const reducedMotion = window.matchMedia(
-          "(prefers-reduced-motion: reduce)"
-        ).matches;
-
-        levelDetails.scrollIntoView({
-          behavior: reducedMotion ? "auto" : "smooth",
-          block: "start"
-        });
+        levelDetails.scrollIntoView({ behavior: "smooth", block: "start" });
       }
 
-      levelDetails?.addEventListener("toggle", () => {
-        if (levelDetails.open) {
-          levelDetails.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest"
-          });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && levelDetails?.open &&
+            window.matchMedia("(max-width: 768px)").matches) {
+          levelDetails.open = false;
+          $("echoMobileMenu")?.setAttribute("aria-expanded", "false");
+          $("echoQuickLevels")?.setAttribute("aria-expanded", "false");
         }
       });
 
@@ -1175,6 +1200,7 @@
         // When the result overlay is open, use the
         // existing replay action if it is available.
         if (
+          window.EchoGame?.getState?.()?.finished === true &&
           overlay &&
           !overlay.classList.contains("hidden") &&
           playAgain &&
@@ -1204,9 +1230,7 @@
         const title = ($("overlayTitle")?.textContent || "")
           .toLowerCase();
 
-        const finished =
-          /vitória|vitoria|concluído|concluido|game over|derrota|completed|victory|failed|paradox/i
-            .test(title);
+        const finished = window.EchoGame?.getState?.()?.finished === true;
 
         button.textContent =
           overlayVisible && finished
