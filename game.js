@@ -2098,7 +2098,9 @@
     window.EchoDynamicThreats?.draw?.(ctx, {levelIndex, worldTime, level, running});
     window.EchoSystemBoss?.draw?.(ctx, {levelIndex, worldTime, level, running, doorStates});
     drawGoal();
-    drawGhosts();
+    // The visual overlay draws operator-matched echoes; keep a fallback
+    // for reduced/failed visual modules.
+    if (!document.getElementById("vr-overlay")) drawGhosts();
     drawPlayer();
     drawParticles();
   }
