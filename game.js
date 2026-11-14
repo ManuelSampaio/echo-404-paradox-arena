@@ -1561,6 +1561,10 @@
   }
 
   function drawGrid() {
+    if (window.EchoWorldRebirth?.draw) {
+      window.EchoWorldRebirth.draw(ctx, levelIndex, WIDTH, HEIGHT);
+      return;
+    }
     ctx.save();
 
     ctx.strokeStyle = getThemeColor(
