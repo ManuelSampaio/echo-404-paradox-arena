@@ -59,7 +59,7 @@ const progress=vm.runInContext('JSON.stringify(GameStorage.getProgress())',class
 const indexHtml=read('index.html');
 const index=environment(indexHtml);
 vm.runInContext(read('campaign-hub.js'),index.context);
-assert.equal(index.element('echoV91Launch').href,'./origin-v97.html');
+assert.equal(index.element('echoV91Launch').href,'./origin-reborn.html');
 assert.match(index.element('echoV91Launch').textContent,/COMEÇAR/);
 for(const name of [...missions,...legacy]) assert.ok(indexHtml.includes(`href="./${name}"`));
 assert.ok(indexHtml.includes('href="./classic.html"'));
@@ -82,13 +82,13 @@ function hubCase(flags, results={}) {
 for(let n=0;n<=missions.length;n++) {
  const flags=Object.fromEntries(saveKeys.slice(0,n).map(([key])=>[key,'true']));
  const env=hubCase(flags);
- assert.equal(env.element('echoV91Launch').href,'./'+missions[n===6?0:n]);
+ assert.equal(env.element('echoV91Launch').href,'./'+(n===0||n===6?'origin-reborn.html':missions[n]));
  assert.equal(env.element('echoCampaignProgress').textContent,`${n} / 6 missões concluídas`);
  if(n===6) assert.match(env.element('echoV91Launch').textContent,/REJOGAR/);
  for(let i=0;i<6;i++) assert.equal(env.element('echoMissionStatus'+(i+1)).textContent,i<n?'CONCLUÍDA':'POR CONCLUIR');
 }
 const gap=hubCase({[saveKeys[1][0]]:'true'});
-assert.equal(gap.element('echoV91Launch').href,'./origin-v97.html');
+assert.equal(gap.element('echoV91Launch').href,'./origin-reborn.html');
 for(const award of ['OURO','PRATA','BRONZE']) {
  const env=hubCase({[saveKeys[0][0]]:'1'},{[saveKeys[0][1]]:JSON.stringify({medal:award})});
  assert.equal(env.element('echoMissionStatus1').textContent,'CONCLUÍDA · MEDALHA '+award);
@@ -100,13 +100,13 @@ for(const invalid of ['{bad','null','{}','{"medal":"<script>"}']) {
 const unavailable=environment(indexHtml);
 unavailable.context.localStorage={getItem(){throw Error('unavailable');}};
 vm.runInContext(read('campaign-hub.js'),unavailable.context);
-assert.equal(unavailable.element('echoV91Launch').href,'./origin-v97.html');
+assert.equal(unavailable.element('echoV91Launch').href,'./origin-reborn.html');
 unavailable.context.localStorage={getItem:k=>k===saveKeys[0][0]?'true':null};
 unavailable.events.pageshow();
 assert.equal(unavailable.element('echoV91Launch').href,'./origin-v98.html');
 unavailable.context.localStorage={getItem:()=>null};
 unavailable.events.storage();
-assert.equal(unavailable.element('echoV91Launch').href,'./origin-v97.html');
+assert.equal(unavailable.element('echoV91Launch').href,'./origin-reborn.html');
 console.log('PASS: new/partial/full/gapped saves; all medals; malformed/blocked storage; saved values unchanged');
 for(let i=0;i<missions.length;i++) {
  const name=missions[i], html=read(name), env=environment(html);

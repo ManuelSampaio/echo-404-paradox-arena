@@ -9,3 +9,9 @@ header h1 small{font-size:11px;opacity:.8}
 footer a{display:inline-block;min-height:44px;padding:12px;color:var(--mission-accent)}
 button:focus-visible,a:focus-visible{outline:3px solid #ffe39c;outline-offset:3px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* Compact completion cards and unobtrusive in-mission messages. */
+#result{width:min(340px,calc(100% - 20px))!important;margin:10px auto!important;padding:14px!important}
+.result-card h2{font-size:20px!important;margin:5px 0!important}.result-card h3{font-size:14px!important;margin:8px 0!important}.result-card>small{font-size:9px!important}.result-card p{font-size:11px!important;line-height:1.4!important;margin:7px 0!important}
+.result-card>a{padding:10px 12px!important;margin:9px 0!important;max-width:100%!important;font-size:12px!important}.result-story{text-align:left;font-size:11px;color:#b7d9d1}.result-story summary{cursor:pointer;padding:7px 0}.result-card button{min-height:40px!important;font-size:11px!important}
+#transmission{max-width:380px!important;padding:7px 10px!important;gap:8px!important}.transmission-avatar{width:30px!important;height:34px!important;font-size:19px!important}.transmission-content p{font-size:11px!important;line-height:1.35!important}
