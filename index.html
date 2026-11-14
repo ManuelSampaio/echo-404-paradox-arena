@@ -1070,6 +1070,73 @@ body.echo-immersive #echoSurvivorActions button{min-height:32px!important;paddin
 #echoSurvivorActions{flex-wrap:wrap}
 #echoSurvivorActions #echoSelectOperator{flex:1 1 100%}
 body.echo-immersive #echoSurvivorActions #echoSelectOperator{flex:1 1 100%;min-height:32px!important}
+</style><style id="echo-v812-mobile-layout">
+/* Mobile layout pass: compact control dock, accessible buttons, no dead space. */
+@media(max-width:768px){
+ #app.app-container{padding-bottom:18px!important}
+ .gameplay-zone{display:flex!important;flex-direction:column!important;gap:5px!important;min-width:0!important}
+ .arena-section{margin:0!important;min-width:0!important}
+ #arenaShell{margin:0 auto!important}
+ #mobileControls{margin:0!important;padding:8px 10px 6px!important;min-height:0!important;border-radius:14px!important}
+ #mobileControls .mobile-controls-heading{display:none!important}
+ #mobileControls .mobile-control-layout{
+  display:flex!important;flex-wrap:nowrap!important;align-items:center!important;
+  justify-content:space-between!important;gap:8px!important;
+  min-height:0!important;height:clamp(108px,31vw,145px)!important;
+  padding:0!important;margin:0!important;
+ }
+ #mobileDpad:not(.hidden){
+  display:grid!important;grid-template-columns:repeat(3,clamp(33px,10vw,43px))!important;
+  grid-template-rows:repeat(3,clamp(33px,10vw,43px))!important;
+  flex:0 0 auto!important;margin:0!important
+ }
+ #mobileControls #virtualJoystick:not(.hidden){
+  flex:0 0 auto!important;min-height:0!important;
+  height:clamp(100px,28vw,125px)!important;width:clamp(100px,28vw,125px)!important;
+ }
+ #mobileControls #joystickBase{width:clamp(96px,27vw,120px)!important;height:clamp(96px,27vw,120px)!important;min-width:0!important;min-height:0!important}
+ #mobileControls .mobile-action-buttons{
+  display:flex!important;flex:0 0 auto!important;gap:8px!important;
+  align-items:center!important;justify-content:flex-end!important;margin-left:auto!important;
+ }
+ #mobileShiftBtn{min-width:0!important;min-height:0!important;width:clamp(60px,17vw,78px)!important;height:clamp(60px,17vw,78px)!important}
+ #mobileRestartBtn{min-width:0!important;min-height:0!important;width:clamp(48px,13vw,60px)!important;height:clamp(48px,13vw,60px)!important}
+ #mobileControls .mobile-control-options{display:block!important;margin:5px 0 0!important}
+ #controlModeBtn{min-height:35px!important;padding:5px 8px!important;font-size:11px!important}
+ #echoSurvivorActions{
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;
+  gap:5px!important;margin:2px 0!important;align-items:stretch!important;
+ }
+ #echoAbilityBtn{min-width:0!important;min-height:39px!important;font-size:11px!important;padding:6px 5px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+ #echoHintBtn{min-height:39px!important;font-size:11px!important;padding:6px 9px!important}
+ #echoSurvivorActions #echoSelectOperator{
+  grid-column:1/-1!important;min-height:37px!important;
+  padding:6px!important;font-size:11px!important
+ }
+ #echoMobileQuickActions{
+  position:static!important;inset:auto!important;transform:none!important;
+  width:100%!important;margin:3px 0 0!important;padding:5px!important;
+  gap:5px!important;border-radius:12px!important;
+ }
+ #echoMobileQuickActions button{min-height:42px!important;padding:6px 3px!important;font-size:11px!important}
+ .arena-status-bar{margin:2px 0!important}
+ #vr-launch{display:none!important}
+ .game-actions{display:none!important}
+}
+@media(max-width:380px){
+ #mobileControls{padding:5px!important}
+ #mobileControls .mobile-control-layout{gap:4px!important}
+ #mobileControls .mobile-action-buttons{gap:4px!important}
+ #mobileShiftBtn{width:54px!important;height:54px!important}
+ #mobileRestartBtn{width:44px!important;height:44px!important}
+ #echoHintBtn{font-size:10px!important}
+}
+@media(max-width:768px){
+ body.echo-immersive .gameplay-zone{justify-content:flex-start!important;gap:3px!important}
+ body.echo-immersive #mobileControls .mobile-control-layout{height:clamp(96px,23dvh,130px)!important}
+ body.echo-immersive #echoSurvivorActions #echoSelectOperator{min-height:29px!important}
+ body.echo-immersive #echoMobileQuickActions button{min-height:34px!important}
+}
 </style></head>
 
 <body class="echo404-app">
