@@ -774,6 +774,35 @@
   #rebirthGuide p { font-size:11px !important; }
 }
 </style>
+<style id="echo-mobile-controls-fix-v602">
+@media (max-width:768px) {
+  /* Controls must never be hidden behind action buttons. */
+  #echoMobileQuickActions {
+    position:static !important;
+    inset:auto !important;
+    left:auto !important;
+    right:auto !important;
+    top:auto !important;
+    bottom:auto !important;
+    transform:none !important;
+    width:100% !important;
+    max-width:none !important;
+    display:flex !important;
+    box-sizing:border-box !important;
+    margin:10px 0 0 !important;
+    padding:7px !important;
+    z-index:auto !important;
+    gap:7px !important;
+    box-shadow:none !important;
+  }
+  #echoMobileQuickActions button { flex:1 1 0 !important; min-width:0 !important; min-height:48px !important; }
+  #mobileControls { position:relative !important; z-index:1 !important; padding:10px !important; }
+  #mobileControls .mobile-control-layout { min-height:160px; align-items:center !important; }
+  #mobileDpad, #virtualJoystick, .mobile-action-buttons { position:relative; z-index:2; }
+  #app.app-container { padding-bottom:24px !important; }
+  #echoMobileMenu { z-index:8500 !important; }
+}
+</style>
 </head>
 
 <body class="echo404-app">
@@ -825,20 +854,6 @@
           aria-label="Abrir menu de níveis e progresso" aria-controls="vrLevelDetails" aria-expanded="false">
     ☰ MENU
   </button>
-
-  <!-- NEW MOBILE QUICK ACTIONS -->
-  <nav id="echoMobileQuickActions"
-       aria-label="Ações rápidas do jogo">
-    <button id="echoQuickPlay" type="button">
-      ▶ JOGAR
-    </button>
-    <button id="echoQuickRestart" type="button">
-      ↻ REINICIAR
-    </button>
-    <button id="echoQuickLevels" type="button" aria-controls="vrLevelDetails" aria-expanded="false">
-      ☰ NÍVEIS
-    </button>
-  </nav>
 
   <!-- MAIN APPLICATION -->
   <div id="app" class="app-container">
@@ -1036,6 +1051,20 @@
               </button>
             </div>
           </section>
+  <!-- NEW MOBILE QUICK ACTIONS -->
+  <nav id="echoMobileQuickActions"
+       aria-label="Ações rápidas do jogo">
+    <button id="echoQuickPlay" type="button">
+      ▶ JOGAR
+    </button>
+    <button id="echoQuickRestart" type="button">
+      ↻ REINICIAR
+    </button>
+    <button id="echoQuickLevels" type="button" aria-controls="vrLevelDetails" aria-expanded="false">
+      ☰ NÍVEIS
+    </button>
+  </nav>
+
         </div>
 
         <!-- ORIGINAL GAME ACTIONS -->
