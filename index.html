@@ -1208,6 +1208,43 @@ body[data-echo-intro-tone="hope"] #awakeningIntro .awakening-symbol{color:#80ffd
 @keyframes echoStoryScan{to{background-position:0 70px}}
 @media(prefers-reduced-motion:reduce){#awakeningIntro .awakening-symbol,#awakeningIntro .awakening-intro-backdrop{animation:none!important}}
 @media(max-width:768px){#awakeningIntro .awakening-intro-content{margin:auto!important}#awakeningIntro #awakeningText{min-height:9em!important}#awakeningIntro .awakening-intro-actions button{font-size:12px!important}}
+</style><style id="echo-v83-origin-scene">
+/* The story now happens in a visual scene, not a text-only slide. */
+#awakeningIntro .awakening-intro-content{width:min(100%,680px)!important;padding:clamp(12px,3vw,22px)!important}
+#awakeningIntro .awakening-symbol{display:none!important}
+#awakeningIntro #awakeningTitle{font-size:clamp(20px,5vw,29px)!important;margin:7px 0!important}
+#awakeningIntro #awakeningText{min-height:5.6em!important;max-width:55ch!important;margin:7px auto 12px!important;font-size:clamp(13px,3.5vw,16px)!important;line-height:1.5!important}
+#echoOriginStage{position:relative;width:100%;aspect-ratio:640/290;max-height:38dvh;margin:10px auto 8px;overflow:hidden;border:1px solid #28758d;border-radius:12px;background:#05111e;box-shadow:inset 0 0 40px #0009,0 0 24px #00dfff15}
+#echoOriginStage svg{display:block;width:100%;height:100%}
+#echoOriginStage #originCore{transform-origin:320px 143px;animation:originCoreSpin 12s linear infinite,originCorePulse 3s ease-in-out infinite}
+#echoOriginStage #originEcho{opacity:0;animation:originEchoAppear 2.5s ease-in-out infinite alternate}
+#echoOriginStage #originSparks{opacity:.12;animation:originFlicker .25s steps(2,end) infinite}
+#echoOriginStage #originWarning{opacity:0}
+#echoOriginStage .origin-stage-caption{position:absolute;top:7px;right:8px;display:flex;align-items:center;gap:6px;max-width:75%;padding:4px 7px;border:1px solid #3c9bb0;background:#031521cb;color:#aaf7ff;font:700 9px system-ui;letter-spacing:.07em;border-radius:5px}
+#echoOriginStage .origin-live-dot{width:6px;height:6px;border-radius:50%;background:#70f9df;box-shadow:0 0 8px #70f9df;flex:none}
+body[data-echo-intro-tone="danger"] #echoOriginStage{border-color:#fa6479;box-shadow:0 0 28px #fa35542c;animation:originShake .35s linear infinite}
+body[data-echo-intro-tone="danger"] #originWarning{opacity:1}
+body[data-echo-intro-tone="danger"] #originCore{animation:originCorePulse .45s ease-in-out infinite}
+body[data-echo-intro-tone="danger"] #originSparks{opacity:1}
+body[data-echo-intro-tone="echo"] #originEcho,body[data-echo-intro-tone="hope"] #originEcho,body[data-echo-intro-tone="mission"] #originEcho{opacity:1}
+body[data-echo-intro-tone="echo"] #originCore,body[data-echo-intro-tone="hope"] #originCore{opacity:.35}
+body[data-echo-intro-tone="survivors"] #originEcho{opacity:.7}
+body[data-echo-intro-tone="hope"] #echoOriginStage{border-color:#76ffd6}
+@keyframes originCoreSpin{to{transform:rotate(360deg)}}
+@keyframes originCorePulse{50%{opacity:.6;filter:brightness(1.5)}}
+@keyframes originEchoAppear{0%{filter:opacity(.55) drop-shadow(0 0 2px #45edff);transform:translate(320px,149px)}100%{filter:opacity(1) drop-shadow(0 0 10px #45edff);transform:translate(320px,141px)}}
+@keyframes originFlicker{50%{opacity:.15}}
+@keyframes originShake{25%{transform:translateX(2px)}75%{transform:translateX(-2px)}}
+@media(max-width:768px){
+ #awakeningIntro{padding:calc(env(safe-area-inset-top,0px) + 6px) 8px calc(env(safe-area-inset-bottom,0px) + 6px)!important}
+ #awakeningIntro .awakening-intro-content{padding:12px!important}
+ #awakeningIntro .awakening-system-label{font-size:9px!important}
+ #awakeningIntro #awakeningText{min-height:7em!important}
+ #awakeningIntro .awakening-intro-actions button{min-height:41px!important}
+ #awakeningIntro .awakening-signature{font-size:8px!important;margin-top:7px!important}
+ #echoOriginStage{max-height:34dvh}
+}
+@media(prefers-reduced-motion:reduce){#echoOriginStage,#echoOriginStage *{animation:none!important}body[data-echo-intro-tone="echo"] #originEcho,body[data-echo-intro-tone="hope"] #originEcho{opacity:1}}
 </style></head>
 
 <body class="echo404-app">
@@ -1648,7 +1685,7 @@ body[data-echo-intro-tone="hope"] #awakeningIntro .awakening-symbol{color:#80ffd
   <script src="dynamic-threats.js?v=540"></script>
   <script src="system-war.js?v=600"></script>
   <script src="game.js?v=810"></script>
-  <script src="awakening.js?v=820"></script>
+  <script src="awakening.js?v=830"></script>
   <script src="visual-v1.js?v=811"></script>
   <script src="world-renderer.js?v=530"></script>
   <script src="visual-effects.js?v=410"></script>
