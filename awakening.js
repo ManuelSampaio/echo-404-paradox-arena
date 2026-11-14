@@ -571,6 +571,59 @@
   // 08. CINEMATIC INTRO
   // ==================================================
 
+  // Lightweight SVG stage: no image downloads, no extra library, mobile-safe.
+  // Scene states follow the same seven beats as the story text.
+  function ensureOriginStage() {
+    if (!UI.intro || document.getElementById("echoOriginStage")) return;
+    const stage = document.createElement("div");
+    stage.id = "echoOriginStage";
+    stage.setAttribute("aria-hidden", "true");
+    stage.innerHTML = `
+      <svg viewBox="0 0 640 290" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="originFloor" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#102f45"/><stop offset="1" stop-color="#030913"/></linearGradient>
+          <radialGradient id="originCoreGlow"><stop stop-color="#d9ffff" stop-opacity=".95"/><stop offset=".28" stop-color="#50e8ff" stop-opacity=".65"/><stop offset="1" stop-color="#00d9ff" stop-opacity="0"/></radialGradient>
+          <filter id="originBlur"><feGaussianBlur stdDeviation="6"/></filter>
+        </defs>
+        <rect width="640" height="290" fill="#030b17"/>
+        <path d="M0 0H640V290H0Z" fill="url(#originFloor)"/>
+        <g stroke="#23546a" stroke-width="3" opacity=".8">
+          <path d="M0 28L164 75V228L0 290M640 28L476 75V228L640 290" fill="#091827"/>
+          <path d="M164 75H476V228H164Z" fill="#061522"/>
+          <path d="M0 230L164 193H476L640 230M0 278L164 213H476L640 278" fill="none"/>
+          <path d="M320 0V76M164 76L80 0M476 76L560 0M164 228L0 290M476 228L640 290"/>
+        </g>
+        <g stroke="#1b7892" opacity=".5"><path d="M20 270H620M55 248H585M100 227H540M320 190V290M240 194L178 290M400 194L462 290"/></g>
+        <g id="originSparks" stroke="#ff8464" stroke-width="2" stroke-linecap="round">
+          <path d="M205 70l-14 20 12-4-7 18M440 55l15 18-11 1 13 15"/>
+        </g>
+        <g id="originCore">
+          <circle cx="320" cy="143" r="108" fill="url(#originCoreGlow)" filter="url(#originBlur)"/>
+          <circle cx="320" cy="143" r="71" fill="none" stroke="#39d9ed" stroke-width="4" stroke-dasharray="25 10"/>
+          <circle cx="320" cy="143" r="53" fill="none" stroke="#9ef8ff" stroke-width="2"/>
+          <path d="M320 91L354 143 320 195 286 143Z" fill="#48dfff" fill-opacity=".35" stroke="#9efbff" stroke-width="4"/>
+          <path d="M320 110L341 143 320 176 299 143Z" fill="#d9ffff" fill-opacity=".8"/>
+        </g>
+        <g id="originEcho" transform="translate(320 145)">
+          <ellipse cx="0" cy="0" rx="89" ry="102" fill="#4af5ff" opacity=".12" filter="url(#originBlur)"/>
+          <path d="M-56 94Q-56 40-35 31L-24 24H24L35 31Q56 40 56 94Z" fill="#38ddf1" fill-opacity=".16" stroke="#77faff" stroke-width="3"/>
+          <path d="M-34-27Q-34-70 0-74Q34-70 34-27V0Q30 32 0 38Q-30 32-34 0Z" fill="#57f1ff" fill-opacity=".20" stroke="#9afcff" stroke-width="3"/>
+          <path d="M-22-9L-7-4M22-9L7-4" stroke="#e0ffff" stroke-width="5" stroke-linecap="round"/>
+          <path d="M-10 15Q0 22 10 15" stroke="#9afcff" stroke-width="2" fill="none"/>
+          <path d="M-48-46L-36-35M48-46L36-35" stroke="#63f9ff" stroke-width="3"/>
+          <path d="M-62 8H62M-53 44H53M-46 68H46" stroke="#75eaff" opacity=".35"/>
+        </g>
+        <g id="originWarning"><rect x="14" y="14" width="192" height="26" rx="4" fill="#4b1221"/><text x="26" y="32" fill="#ffb6bd" font-family="monospace" font-size="13">⚠ CONTAINMENT FAILURE</text></g>
+        <text x="18" y="274" fill="#77d9e9" font-family="monospace" font-size="11">ORIGIN // SECTOR 00</text>
+        <text x="622" y="274" text-anchor="end" fill="#77d9e9" font-family="monospace" font-size="11">ECHO SIGNAL // 89%</text>
+      </svg>
+      <div class="origin-stage-caption"><span class="origin-live-dot"></span><span id="originStageLabel">ESTAÇÃO ORIGIN // ONLINE</span></div>
+    `;
+    const content=UI.intro.querySelector(".awakening-intro-content");
+    const title=UI.introTitle;
+    if (content && title) content.insertBefore(stage,title);
+  }
+
   function renderIntroScene() {
     const scene = INTRO_SCENES[state.introIndex];
 
@@ -596,7 +649,10 @@
         : "CONTINUAR"
     );
 
+    ensureOriginStage();
     document.body.dataset.echoIntroTone = scene.tone || "calm";
+    const stageLabel = document.getElementById("originStageLabel");
+    if (stageLabel) stageLabel.textContent = scene.signal || "ORIGIN // TRANSMISSÃO";
     setText(UI.introGlitch, scene.signal || "");
     if (scene.tone === "danger") glitch("cinematic");
   }
