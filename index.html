@@ -716,6 +716,26 @@
     #gameCanvas, #echoWorldRenderer { max-width: 100%; }
   }
 </style>
+<style id="echo-mobile-v55">
+@media (max-width: 768px) {
+  body { overflow-x: hidden; }
+  #arenaShell { width:100% !important; max-width:100% !important; margin:0 auto !important; }
+  #gameCanvas { width:100% !important; height:auto !important; display:block; touch-action:none; }
+  #mobileControls { position:relative; z-index:10; width:100%; box-sizing:border-box; }
+  .mobile-control-layout { display:flex; align-items:center; justify-content:space-around; gap:12px; flex-wrap:wrap; }
+  #mobileDpad, #virtualJoystick { flex-shrink:0; touch-action:none; }
+  #mobileControls button { touch-action:none; -webkit-tap-highlight-color:transparent; }
+  #mobileShiftBtn, #mobileRestartBtn { min-width:64px; min-height:64px; }
+  #controlModeBtn { min-height:46px; }
+  #echoMobileQuickActions { position:relative !important; z-index:12; }
+  #rebirthGuide { max-width:100%; box-sizing:border-box; }
+}
+@media (max-width: 390px) {
+  #mobileControls { padding:6px !important; }
+  .mobile-control-layout { gap:5px !important; }
+  #mobileShiftBtn, #mobileRestartBtn { min-width:55px; min-height:55px; }
+}
+</style>
 </head>
 
 <body class="echo404-app">
@@ -1127,7 +1147,7 @@
           <span> — PARADOX EVOLUTION</span>
         </div>
         <div class="footer-version">
-          TEMPORAL ENGINE // v5.3
+          TEMPORAL ENGINE // v6.0
         </div>
       </div>
 
@@ -1158,7 +1178,9 @@
   <script src="world-layouts.js?v=530"></script>
   <script src="storage.js?v=420"></script>
   <script src="audio.js?v=310"></script>
-  <script src="game.js?v=530"></script>
+  <script src="dynamic-threats.js?v=540"></script>
+  <script src="system-war.js?v=600"></script>
+  <script src="game.js?v=600"></script>
   <script src="awakening.js?v=310"></script>
   <script src="visual-v1.js?v=310"></script>
   <script src="world-renderer.js?v=530"></script>
