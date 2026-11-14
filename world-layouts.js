@@ -36,26 +36,23 @@
     {axis:"h", at:255, gap:450, start:[90,410], plate:[170,410], goal:[695,80], cover:[[320,365,22,100],[580,90,130,22]]}
   ];
   const rect = (x,y,w,h) => ({x,y,w,h});
-  function build(spec, index) {
-    const vertical = spec.axis === "v";
-    const door = vertical
-      ? rect(spec.at, spec.gap, THICK, GAP)
-      : rect(spec.gap, spec.at, GAP, THICK);
-    const walls = vertical ? [
-      rect(spec.at,0,THICK,spec.gap),
-      rect(spec.at,spec.gap+GAP,THICK,H-spec.gap-GAP)
-    ] : [
-      rect(0,spec.at,spec.gap,THICK),
-      rect(spec.gap+GAP,spec.at,W-spec.gap-GAP,THICK)
-    ];
+  function build(spec,index){
+    const vertical=spec.axis==="v";
+    const door=vertical?rect(spec.at,spec.gap,THICK,GAP):rect(spec.gap,spec.at,GAP,THICK);
+    door.plateIndex=0;
+    const walls=vertical?[rect(spec.at,0,THICK,spec.gap),rect(spec.at,spec.gap+GAP,THICK,H-spec.gap-GAP)]:[rect(0,spec.at,spec.gap,THICK),rect(spec.gap+GAP,spec.at,W-spec.gap-GAP,THICK)];
+    const start={x:spec.start[0],y:spec.start[1]},goal=rect(spec.goal[0],spec.goal[1],48,58);
+    const secondAt=vertical?Math.round((spec.at+goal.x)/2):Math.round((spec.at+goal.y)/2);
+    const opening=vertical?70+(index*41)%290:65+(index*53)%310;
+    const second=vertical?rect(secondAt,opening,THICK,GAP):rect(opening,secondAt,GAP,THICK);
+    second.plateIndex=1;
+    if(vertical)walls.push(rect(secondAt,0,THICK,opening),rect(secondAt,opening+GAP,THICK,H-opening-GAP));
+    else walls.push(rect(0,secondAt,opening,THICK),rect(opening+GAP,secondAt,W-opening-GAP,THICK));
     walls.push(...spec.cover.map(v=>rect(...v)));
-    return {
-      start: {x:spec.start[0],y:spec.start[1]},
-      goal: rect(spec.goal[0],spec.goal[1],48,58),
-      door, walls, doors:[door],
-      theme: {name:themes[index][0],background:themes[index][1],wall:themes[index][2],accent:themes[index][3]},
-      scenery: spec.cover.map((v,i)=>({x:v[0],y:v[1],w:v[2],h:v[3],kind:i%2?"conduit":"console"}))
-    };
+    const plate2=vertical?{x:Math.round((spec.at+secondAt)/2),y:250}:{x:400,y:Math.round((spec.at+secondAt)/2)};
+    return {start,goal,door,walls,doors:[door,second],plate2,mazeRevolution:true,
+      theme:{name:themes[index][0],background:themes[index][1],wall:themes[index][2],accent:themes[index][3]},
+      scenery:spec.cover.map((v,i)=>({x:v[0],y:v[1],w:v[2],h:v[3],kind:i%2?"conduit":"console"}))};
   }
   function intersectsCircle(point, obstacle, radius=12) {
     const x=Math.max(obstacle.x,Math.min(point.x,obstacle.x+obstacle.w));
@@ -90,17 +87,21 @@
   const report=[];
   if(typeof GAME_LEVELS==="undefined")throw Error("WORLD REBIRTH: levels.js must load first");
   GAME_LEVELS.forEach((level,i)=>{
-    const spec=specs[i],arena=build(spec,i);
-    const plate={x:spec.plate[0],y:spec.plate[1]};
+    const spec=specs[i],arena=build(spec,i),plate={x:spec.plate[0],y:spec.plate[1]},plate2=arena.plate2;
     const errors=[];
-    if(!reachable(arena,arena.start,plate,true))errors.push("plate unreachable");
+    const door1=arena.doors[0],door2=arena.doors[1];
+    const secondClosed={...arena,walls:[...arena.walls,door2]};
+    if(!reachable(arena,arena.start,plate,true))errors.push("first plate unreachable");
+    if(!reachable(secondClosed,arena.start,plate2,false))errors.push("second plate unreachable");
     if(!reachable(arena,arena.start,arena.goal,false))errors.push("goal unreachable");
-    if(reachable(arena,arena.start,arena.goal,true))errors.push("door bypass possible");
-    if(errors.length)throw Error("WORLD REBIRTH sector "+(i+1)+": "+errors.join(", "));
+    if(reachable(arena,arena.start,arena.goal,true))errors.push("first gate bypass");
+    if(reachable(secondClosed,plate2,arena.goal,false))errors.push("second gate bypass");
+    if(errors.length)throw Error("MAZE REVOLUTION sector "+(i+1)+": "+errors.join(", "));
     level.arena=arena;
     if(level.plates?.[0])Object.assign(level.plates[0],plate);
-    level.worldRebirth={...arena.theme,orientation:spec.axis,layoutVersion:"5.1"};
-    report.push({sector:i+1,theme:arena.theme.name,door:arena.door,plate});
+    level.plates.splice(1,0,{...plate2,id:"maze_gate_2_"+(i+1),radius:24});
+    level.worldRebirth={...arena.theme,orientation:spec.axis,layoutVersion:"5.3"};
+    report.push({sector:i+1,theme:arena.theme.name,doors:arena.doors,plates:[plate,plate2]});
   });
   // Decorative geometry is drawn underneath actors and collision walls.
   // The existing PixiJS layer and particle engine remain operational.
@@ -121,6 +122,6 @@
     for(const s of arena.scenery){ctx.strokeRect(s.x-5,s.y-5,s.w+10,s.h+10);}
     ctx.restore();
   }
-  window.EchoWorldRebirth={version:"5.1",getLayouts:()=>report.map(v=>({...v})),validate:()=>report.length===10,draw};
-  console.info("ECHO//404 WORLD REBIRTH: 10 collision-validated sector layouts ready");
+  window.EchoWorldRebirth={version:"5.3",getLayouts:()=>report.map(v=>({...v})),validate:()=>report.length===10,draw};
+  console.info("ECHO//404 WORLD REBIRTH: 10 two-gate maze layouts validated");
 })();
