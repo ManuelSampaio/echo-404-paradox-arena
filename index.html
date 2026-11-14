@@ -11,6 +11,7 @@
   <meta name="description" content="ECHO//404 — PARADOX EVOLUTION. Jogo de puzzles temporais, ecos e paradoxos.">
   <title>ECHO//404 — THE LIVING PARADOX | ORIGIN</title>
   <link rel="stylesheet" href="style.css?v=421">
+  <link rel="stylesheet" href="campaign-hub.css?v=1030">
 
   <style>
     /* ECHO//404 — MOBILE INTERFACE FIX v4.2.1
@@ -1384,6 +1385,30 @@ body.echo-v90-free #timerBar{background:#65e3ca!important}
       </div>
     </section>
 
+    <section id="echoCampaignHub" aria-labelledby="echoCampaignTitle">
+      <div class="campaign-heading"><h2 id="echoCampaignTitle">CENTRAL DE MISSÕES</h2><span class="campaign-version">ECHO//404 · v10.3</span></div>
+      <p id="echoCampaignProgress" role="status">6 missões disponíveis</p>
+      <a id="echoV91Launch" href="./origin-v97.html">▶ COMEÇAR CAMPANHA · MISSÃO 01</a>
+      <p id="echoCampaignHint">Escolhe uma missão ou começa a campanha pela missão 01.</p>
+      <details id="echoCampaignMissions">
+        <summary>Escolher missão · 01 a 06</summary>
+        <ol class="campaign-missions">
+          <li><a href="./origin-v97.html"><b>MISSÃO 01 — ORIGIN: ÚLTIMO SINAL</b><span id="echoMissionStatus1">POR CONCLUIR</span></a></li>
+          <li><a href="./origin-v98.html"><b>MISSÃO 02 — NÚCLEO: SINAL FANTASMA</b><span id="echoMissionStatus2">POR CONCLUIR</span></a></li>
+          <li><a href="./origin-v99.html"><b>MISSÃO 03 — THE FORGOTTEN</b><span id="echoMissionStatus3">POR CONCLUIR</span></a></li>
+          <li><a href="./origin-v100.html"><b>MISSÃO 04 — THE TRUTH</b><span id="echoMissionStatus4">POR CONCLUIR</span></a></li>
+          <li><a href="./origin-v101.html"><b>MISSÃO 05 — THE ARCHITECT</b><span id="echoMissionStatus5">POR CONCLUIR</span></a></li>
+          <li><a href="./origin-v102.html"><b>MISSÃO 06 — PROJECT ARCA</b><span id="echoMissionStatus6">POR CONCLUIR</span></a></li>
+        </ol>
+      </details>
+      <a class="campaign-classic" href="#arenaShell">▶ JOGAR CLÁSSICO · CICLOS TEMPORAIS</a>
+      <details id="echoOriginArchive">
+        <summary>Versões anteriores de ORIGIN</summary>
+        <a href="./origin-v91.html">ORIGIN v9.1 — missão 01 original</a>
+        <a href="./origin-v961.html">ORIGIN v9.6.1 — missão 01 anterior</a>
+      </details>
+    </section>
+
     <main class="game-layout">
       <section class="game-main">
 
@@ -2451,26 +2476,7 @@ window.addEventListener("resize",()=>{if(window.innerWidth>768&&!modal.hidden)cl
  }
  requestAnimationFrame(update);
 })();
-</script><style id="echo-v91-launch-style">
-#echoV91Launch{display:block;width:100%;margin:8px 0;padding:11px 14px;border:1px solid #4bdac3;border-radius:12px;background:linear-gradient(110deg,#104b55,#153b67);color:#eafffb;text-decoration:none;font:800 13px system-ui;text-align:center}
-#echoV91Launch small{display:block;font:500 10px system-ui;color:#b4e4e7;margin-top:3px}
-#echoOriginArchive{margin:8px 0;color:#b4e4e7;font:500 12px system-ui}
-#echoOriginArchive summary{cursor:pointer;padding:8px}
-#echoOriginArchive a{display:block;padding:10px;color:#b4e4e7}
-</style>
-<script id="echo-v91-launch">
-(()=>{
-const link=document.createElement("a");
-link.id="echoV91Launch";link.href="./origin-v97.html";
-link.innerHTML="▶ MISSÃO 01 — ORIGIN: ÚLTIMO SINAL <small>Campanha · missão 01 atualizada · toque para jogar</small>";
-const target=document.getElementById("echoMobileQuickActions")||document.querySelector(".gameplay-zone")||document.getElementById("app");
-if(target){
- target.insertAdjacentElement("beforebegin",link);
- const archive=document.createElement("details");
- archive.id="echoOriginArchive";
- archive.innerHTML='<summary>Versões anteriores de ORIGIN</summary><a href="./origin-v91.html">ORIGIN v9.1 — missão 01 original</a><a href="./origin-v961.html">ORIGIN v9.6.1 — missão 01 anterior</a>';
- link.insertAdjacentElement("afterend",archive);
-}
-})();
-</script></body>
+</script>
+<script src="campaign-hub.js?v=1030"></script>
+</body>
 </html>

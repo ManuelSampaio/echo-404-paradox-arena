@@ -1,0 +1,16 @@
+/* Scoped to the mission hub; classic arena and controls keep their layout. */
+#echoCampaignHub{box-sizing:border-box;margin:16px 0;padding:18px;border:1px solid #377f8d;border-radius:16px;background:linear-gradient(130deg,#092b3c,#101d35);color:#eafffb;font:500 14px/1.5 system-ui}
+#echoCampaignHub *{box-sizing:border-box}
+#echoCampaignHub .campaign-heading{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center}
+#echoCampaignHub h2{margin:0;font-size:20px;color:#eafffb}
+#echoCampaignHub .campaign-version{color:#9ce4dc;font-size:12px;letter-spacing:1px}
+#echoCampaignHub p{margin:8px 0;color:#b4d7e1}
+#echoCampaignHub #echoV91Launch{display:block;min-height:48px;margin:14px 0 10px;padding:14px;border:1px solid #73f3d1;border-radius:12px;background:#124e53;color:#ecfffa;font-weight:800;text-align:center;text-decoration:none}
+#echoCampaignHub summary{cursor:pointer;min-height:44px;padding:12px 0;color:#c8eff0;font-weight:700}
+#echoCampaignHub .campaign-missions{list-style:none;padding:0;margin:6px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#echoCampaignHub .campaign-missions a{display:flex;flex-direction:column;justify-content:center;min-height:86px;height:100%;padding:12px;border:1px solid #31596d;border-radius:10px;background:#071c2d;color:#eafffb;text-decoration:none;overflow-wrap:anywhere}
+#echoCampaignHub .campaign-missions span{font-size:11px;color:#8fe4cd;margin-top:6px}
+#echoCampaignHub .campaign-classic,#echoCampaignHub #echoOriginArchive a{display:block;min-height:44px;padding:12px 0;color:#b4e4e7;text-decoration:underline}
+#echoCampaignHub a:focus-visible,#echoCampaignHub summary:focus-visible{outline:3px solid #ffe697;outline-offset:3px}
+#echoCampaignHub a:hover{filter:brightness(1.15)}
+@media(max-width:480px){#echoCampaignHub{padding:14px}#echoCampaignHub .campaign-missions{grid-template-columns:1fr}#echoCampaignHub h2{font-size:18px}}
