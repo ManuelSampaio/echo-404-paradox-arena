@@ -1422,6 +1422,25 @@
 
     ctx.restore();
 
+    // v7.1: operator-specific suit markings and animated energy straps.
+    ctx.save();
+    ctx.globalAlpha = 0.85;
+    ctx.strokeStyle = p.color;
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(-7,-9);ctx.lineTo(-4,-6);
+    ctx.moveTo(7,-9);ctx.lineTo(4,-6);
+    ctx.stroke();
+    ctx.fillStyle = p.color;
+    if (p.id === "axiom") {
+      ctx.fillRect(-6,3,3,2);ctx.fillRect(3,3,3,2);
+    } else if (p.id === "nyra") {
+      ctx.beginPath();ctx.arc(-5,4,1.8,0,Math.PI*2);ctx.arc(5,4,1.8,0,Math.PI*2);ctx.fill();
+    } else {
+      ctx.fillRect(-6,4,12,1.5);
+    }
+    ctx.restore();
+
     // Character-specific heads
     if (p.id === "axiom") {
       ctx.fillStyle = "#344d5d";
