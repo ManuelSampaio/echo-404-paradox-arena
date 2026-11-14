@@ -29,7 +29,7 @@ console.log('PASS: syntax of all JS files/inline scripts; all literal HTML link 
 const saved = new Map();
 const localStorage = {getItem:k=>saved.get(k)??null,setItem:(k,v)=>saved.set(k,String(v)),removeItem:k=>saved.delete(k)};
 function environment(html='') {
- const elements=new Map(),inserted=[];
+ const elements=new Map(),inserted=[],events={};
  const canvas = new Proxy({}, {get:(_,k)=>k==='createLinearGradient'||k==='createRadialGradient'?()=>({addColorStop(){}}):()=>{}});
  const element = id => {
   if(!elements.has(id)) elements.set(id,{
@@ -43,23 +43,65 @@ function environment(html='') {
  };
  for(const m of html.matchAll(/id="([^"]+)"([^>]*)/g)) element(m[1]).hidden=/\bhidden\b/.test(m[2]);
  const document={getElementById:element,createElement:()=>element(Symbol()),querySelector:()=>element('zone'),querySelectorAll:()=>[],body:element('body')};
- const context=vm.createContext({document,localStorage,console:{log(){},warn(){},group(){},groupEnd(){}},CustomEvent:class{},performance:{now:()=>0},requestAnimationFrame(){},setTimeout(){},clearTimeout(){},addEventListener(){},dispatchEvent(){}});
+ const context=vm.createContext({document,localStorage,console:{log(){},warn(){},group(){},groupEnd(){}},CustomEvent:class{},performance:{now:()=>0},requestAnimationFrame(){},setTimeout(){},clearTimeout(){},addEventListener(name,fn){events[name]=fn;},dispatchEvent(){}});
  context.window=context;
- return {context,element,inserted};
+ return {context,element,inserted,events};
 }
 const classic=environment();
 vm.runInContext(read('storage.js'),classic.context);
 vm.runInContext('GameStorage.win(0,1234);GameStorage.saveMedal(0,"gold");',classic.context);
 const snapshot=new Map(saved);
 const progress=vm.runInContext('JSON.stringify(GameStorage.getProgress())',classic.context);
-const index=environment();
-vm.runInContext(scripts(read('index.html')).find(m=>m[1].includes('id="echo-v91-launch"'))[2],index.context);
-assert.equal(index.inserted[0].href,'./origin-v97.html');
-assert.match(index.inserted[0].innerHTML,/missão 01 atualizada/);
-for(const name of legacy) assert.ok(index.inserted[1].innerHTML.includes(`href="./${name}"`));
-for(const node of index.inserted) for(const m of (node.innerHTML||'').matchAll(/href="\.\/([^"]+)"/g)) assert.ok(fs.existsSync(path.join(root,m[1])));
+const indexHtml=read('index.html');
+const index=environment(indexHtml);
+vm.runInContext(read('campaign-hub.js'),index.context);
+assert.equal(index.element('echoV91Launch').href,'./origin-v97.html');
+assert.match(index.element('echoV91Launch').textContent,/COMEÇAR/);
+for(const name of [...missions,...legacy]) assert.ok(indexHtml.includes(`href="./${name}"`));
+assert.ok(indexHtml.includes('href="#arenaShell"'));
+assert.ok(indexHtml.includes('id="arenaShell"'));
 assert.deepEqual(saved,snapshot);
-console.log('PASS: generated main entry targets mission 01 v9.7; both legacy versions accessible; navigation writes no saves');
+console.log('PASS: mission hub entry, six mission links, classic/legacy access; no save writes');
+// Existing flags drive continuation. Leave holes, malformed results and unavailable
+// storage in the matrix: no migration, hidden mission locks or invented medals.
+function hubCase(flags, results={}) {
+ const data=new Map([...snapshot,...Object.entries(flags),...Object.entries(results)]);
+ const before=new Map(data);
+ const env=environment(indexHtml);
+ env.context.localStorage={getItem:k=>data.get(k)??null,setItem(){throw Error('hub must not write');}};
+ vm.runInContext(read('campaign-hub.js'),env.context);
+ assert.deepEqual(data,before);
+ return env;
+}
+for(let n=0;n<=missions.length;n++) {
+ const flags=Object.fromEntries(saveKeys.slice(0,n).map(([key])=>[key,'true']));
+ const env=hubCase(flags);
+ assert.equal(env.element('echoV91Launch').href,'./'+missions[n===6?0:n]);
+ assert.equal(env.element('echoCampaignProgress').textContent,`${n} / 6 missões concluídas`);
+ if(n===6) assert.match(env.element('echoV91Launch').textContent,/REJOGAR/);
+ for(let i=0;i<6;i++) assert.equal(env.element('echoMissionStatus'+(i+1)).textContent,i<n?'CONCLUÍDA':'POR CONCLUIR');
+}
+const gap=hubCase({[saveKeys[1][0]]:'true'});
+assert.equal(gap.element('echoV91Launch').href,'./origin-v97.html');
+for(const award of ['OURO','PRATA','BRONZE']) {
+ const env=hubCase({[saveKeys[0][0]]:'1'},{[saveKeys[0][1]]:JSON.stringify({medal:award})});
+ assert.equal(env.element('echoMissionStatus1').textContent,'CONCLUÍDA · MEDALHA '+award);
+}
+for(const invalid of ['{bad','null','{}','{"medal":"<script>"}']) {
+ const env=hubCase({}, {[saveKeys[0][1]]:invalid});
+ assert.equal(env.element('echoMissionStatus1').textContent,'POR CONCLUIR');
+}
+const unavailable=environment(indexHtml);
+unavailable.context.localStorage={getItem(){throw Error('unavailable');}};
+vm.runInContext(read('campaign-hub.js'),unavailable.context);
+assert.equal(unavailable.element('echoV91Launch').href,'./origin-v97.html');
+unavailable.context.localStorage={getItem:k=>k===saveKeys[0][0]?'true':null};
+unavailable.events.pageshow();
+assert.equal(unavailable.element('echoV91Launch').href,'./origin-v98.html');
+unavailable.context.localStorage={getItem:()=>null};
+unavailable.events.storage();
+assert.equal(unavailable.element('echoV91Launch').href,'./origin-v97.html');
+console.log('PASS: new/partial/full/gapped saves; all medals; malformed/blocked storage; saved values unchanged');
 for(let i=0;i<missions.length;i++) {
  const name=missions[i], html=read(name), env=environment(html);
  // Export a test hook only inside this VM. Production HTML is unmodified.
