@@ -1293,6 +1293,15 @@ body[data-echo-intro-tone="hope"] #echoOriginStage{border-color:#76ffd6}
  #vr-menu .vr-abilities{gap:3px!important}
  #vr-menu #vr-replay-story{min-height:36px!important;font-size:11px!important}
 }
+</style><style id="echo-v90-temporal-mode">
+#echoV90Mode,#echoV90Record{border:1px solid #3c9fb3;border-radius:9px;background:#123449;color:#e7fbff;font:700 11px system-ui;min-height:39px;padding:7px 10px;touch-action:manipulation}
+#echoV90Mode{grid-column:1/-1}
+#echoV90Record{display:none}
+body.echo-v90-free #echoV90Record{display:block}
+body.echo-v90-free #echoMobileQuickActions #echoQuickPlay{background:#104c45!important}
+body.echo-v90-free #mobileShiftBtn{opacity:.75}
+body.echo-v90-free #timerBar{background:#65e3ca!important}
+@media(max-width:768px){#echoV90Record{width:100%;margin:3px 0}#echoV90Mode{width:100%}}
 </style></head>
 
 <body class="echo404-app">
@@ -1732,7 +1741,7 @@ body[data-echo-intro-tone="hope"] #echoOriginStage{border-color:#76ffd6}
   <script src="audio.js?v=310"></script>
   <script src="dynamic-threats.js?v=540"></script>
   <script src="system-war.js?v=600"></script>
-  <script src="game.js?v=810"></script>
+  <script src="game.js?v=900"></script>
   <script src="awakening.js?v=831"></script>
   <script src="visual-v1.js?v=831"></script>
   <script src="world-renderer.js?v=530"></script>
@@ -2408,6 +2417,39 @@ window.addEventListener("resize",()=>{if(window.innerWidth>768&&!modal.hidden)cl
   if(window.EchoAwakening?.openIntro)window.EchoAwakening.openIntro(true);
  });
  panel.appendChild(button);
+})();
+</script><script id="echo-v90-temporal-controls">
+(()=>{
+ const options=document.getElementById("echoMorePanel");
+ const zone=document.querySelector(".gameplay-zone");
+ if(!options||!zone)return;
+ const mode=document.createElement("button");mode.id="echoV90Mode";mode.type="button";
+ mode.textContent="◈ TESTAR EXPLORAÇÃO LIVRE v9";
+ options.appendChild(mode);
+ const record=document.createElement("button");record.id="echoV90Record";record.type="button";
+ record.textContent="● GRAVAR ECO (8s)";
+ const actions=document.getElementById("echoSurvivorActions");
+ if(actions)actions.insertAdjacentElement("afterend",record);else zone.appendChild(record);
+ mode.addEventListener("click",()=>{
+  const free=window.EchoGame?.toggleFreeExplore?.();
+  document.body.classList.toggle("echo-v90-free",Boolean(free));
+  options.hidden=true;
+  document.getElementById("echoMoreBtn")?.setAttribute("aria-expanded","false");
+ });
+ record.addEventListener("click",()=>window.EchoGame?.toggleCapture?.());
+ let last="";
+ function update(){
+  const s=window.EchoGame?.getState?.();
+  if(s){
+   const label=s.captureActive?"■ TERMINAR GRAVAÇÃO · "+s.captureRemaining.toFixed(1)+"s":"● GRAVAR ECO · "+s.freeEchoCount+"/2";
+   if(label!==last){record.textContent=label;last=label;}
+   record.disabled=!s.running;
+   mode.textContent=s.freeExplore?"↩ VOLTAR AOS CICLOS CLÁSSICOS":"◈ TESTAR EXPLORAÇÃO LIVRE v9";
+   document.body.classList.toggle("echo-v90-free",Boolean(s.freeExplore));
+  }
+  requestAnimationFrame(update);
+ }
+ requestAnimationFrame(update);
 })();
 </script></body>
 </html>
