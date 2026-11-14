@@ -2454,14 +2454,23 @@ window.addEventListener("resize",()=>{if(window.innerWidth>768&&!modal.hidden)cl
 </script><style id="echo-v91-launch-style">
 #echoV91Launch{display:block;width:100%;margin:8px 0;padding:11px 14px;border:1px solid #4bdac3;border-radius:12px;background:linear-gradient(110deg,#104b55,#153b67);color:#eafffb;text-decoration:none;font:800 13px system-ui;text-align:center}
 #echoV91Launch small{display:block;font:500 10px system-ui;color:#b4e4e7;margin-top:3px}
+#echoOriginArchive{margin:8px 0;color:#b4e4e7;font:500 12px system-ui}
+#echoOriginArchive summary{cursor:pointer;padding:8px}
+#echoOriginArchive a{display:block;padding:10px;color:#b4e4e7}
 </style>
 <script id="echo-v91-launch">
 (()=>{
 const link=document.createElement("a");
-link.id="echoV91Launch";link.href="./origin-v91.html";
-link.innerHTML="▶ MISSÃO 01 — ORIGIN: ÚLTIMO SINAL <small>v9.1 · aventura lateral experimental · toque para jogar</small>";
+link.id="echoV91Launch";link.href="./origin-v97.html";
+link.innerHTML="▶ MISSÃO 01 — ORIGIN: ÚLTIMO SINAL <small>Campanha · missão 01 atualizada · toque para jogar</small>";
 const target=document.getElementById("echoMobileQuickActions")||document.querySelector(".gameplay-zone")||document.getElementById("app");
-if(target)target.insertAdjacentElement("beforebegin",link);
+if(target){
+ target.insertAdjacentElement("beforebegin",link);
+ const archive=document.createElement("details");
+ archive.id="echoOriginArchive";
+ archive.innerHTML='<summary>Versões anteriores de ORIGIN</summary><a href="./origin-v91.html">ORIGIN v9.1 — missão 01 original</a><a href="./origin-v961.html">ORIGIN v9.6.1 — missão 01 anterior</a>';
+ link.insertAdjacentElement("afterend",archive);
+}
 })();
 </script></body>
 </html>
