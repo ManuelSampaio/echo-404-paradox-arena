@@ -236,6 +236,42 @@
   }
 
 
+  // v9.0 experimental temporal mode. Legacy cycles remain the default.
+  let freeExplore = false;
+  let captureActive = false;
+  let captureTime = 0;
+  let freeEchoes = [];
+  const CAPTURE_LIMIT = 8;
+  const FREE_ECHO_LIMIT = 2;
+  function toggleFreeExplore() {
+    freeExplore = !freeExplore;
+    startGame();
+    setStatus(freeExplore ? "EXPLORAÇÃO LIVRE: grava até 8s e cria ecos." : "MODO CLÁSSICO: ciclos temporais ativos.");
+    emitEvent("temporalmode",{freeExplore});
+    return freeExplore;
+  }
+  function toggleCapture() {
+    if (!freeExplore || !running) return false;
+    if (captureActive) {
+      captureActive = false;
+      if (currentRecording.length > 1) {
+        const frames = currentRecording.map(frame => ({...frame}));
+        freeEchoes.push({frames,startedAt:worldTime});
+        if (freeEchoes.length > FREE_ECHO_LIMIT) freeEchoes.shift();
+        recordings = freeEchoes.map(e => e.frames);
+        setStatus("ECO CRIADO! Usa-o para ativar mecanismos.");
+        emitEvent("echo",{cycle,echoes:freeEchoes.length});
+      }
+      currentRecording = [];
+      return true;
+    }
+    captureTime = 0;
+    currentRecording = [{t:0,x:player.x,y:player.y}];
+    captureActive = true;
+    setStatus("GRAVAÇÃO TEMPORAL INICIADA (MÁX. 8s).");
+    return true;
+  }
+
   let portalCooldown = 0;
   let lastFrame = 0;
   let animationId = null;
@@ -581,6 +617,9 @@
 
     recordings = [];
     ghosts = [];
+    freeEchoes = [];
+    captureActive = false;
+    captureTime = 0;
 
     currentRecording = [{
       t: 0,
@@ -672,7 +711,7 @@
 
   function updateHUD() {
     const duration = getCycleDuration();
-    const remaining = Math.max(0, duration - elapsed);
+    const remaining = freeExplore ? Math.max(0,CAPTURE_LIMIT-captureTime) : Math.max(0,duration-elapsed);
 
     if (UI.cycle) {
       UI.cycle.textContent =
@@ -680,7 +719,7 @@
     }
 
     if (UI.timer) {
-      UI.timer.textContent = remaining.toFixed(1);
+      UI.timer.textContent = freeExplore ? (captureActive ? remaining.toFixed(1) : "LIVRE") : remaining.toFixed(1);
     }
 
     if (UI.ghosts) {
@@ -699,16 +738,16 @@
 
     if (UI.timerBar) {
       UI.timerBar.style.width =
-        `${clamp(remaining / duration * 100, 0, 100)}%`;
+        `${clamp(remaining / (freeExplore ? CAPTURE_LIMIT : duration) * 100, 0, 100)}%`;
 
       UI.timerBar.style.background =
         remaining < 2.5 ? COLORS.red : COLORS.cyan;
     }
 
     const shiftDisabled =
-      !running ||
+      !freeExplore && (!running ||
       shiftUsed ||
-      recordings.length === 0;
+      recordings.length === 0);
 
     if (UI.shiftBtn) {
       UI.shiftBtn.disabled = shiftDisabled;
@@ -726,8 +765,9 @@
   function recordPlayer() {
     if (!player) return;
 
+    if (freeExplore && !captureActive) return;
     currentRecording.push({
-      t: Math.min(elapsed, getCycleDuration()),
+      t: freeExplore ? Math.min(captureTime,CAPTURE_LIMIT) : Math.min(elapsed, getCycleDuration()),
       x: player.x,
       y: player.y
     });
@@ -783,9 +823,7 @@
   }
 
   function updateGhosts() {
-    ghosts = recordings.map(
-      frames => positionAt(frames, elapsed)
-    );
+    ghosts = freeExplore ? freeEchoes.map(e => positionAt(e.frames, Math.min(worldTime-e.startedAt,e.frames[e.frames.length-1].t))) : recordings.map(frames => positionAt(frames, elapsed));
   }
 
   // ================================================
@@ -794,6 +832,7 @@
 
   function paradoxShift() {
     if (!running) return false;
+    if (freeExplore) return toggleCapture();
 
     if (shiftUsed || recordings.length === 0) {
       playSound("error");
@@ -2164,6 +2203,7 @@
   // ================================================
 
   function updateCountdown() {
+    if (freeExplore) return;
     const remaining = getCycleDuration() - elapsed;
 
     if (
@@ -2213,6 +2253,9 @@
 
     elapsed += dt;
     worldTime += dt;
+    if (freeExplore && captureActive) {
+      captureTime = Math.min(CAPTURE_LIMIT,captureTime+dt);
+    }
     threatInvulnerability = Math.max(0, threatInvulnerability - dt);
 
     updateGhosts();
@@ -2223,6 +2266,7 @@
     updateDoor();
 
     recordPlayer();
+    if (freeExplore && captureActive && captureTime >= CAPTURE_LIMIT) toggleCapture();
     updateParticles(dt);
     updateCountdown();
 
@@ -2255,7 +2299,7 @@
     if (
       running &&
       !interrupted &&
-      elapsed >= getCycleDuration()
+      !freeExplore && elapsed >= getCycleDuration()
     ) {
       endCycle();
     }
@@ -2495,6 +2539,10 @@
       getState() {
         return {
           relayAwarded,
+          freeExplore,
+          captureActive,
+          captureRemaining: Math.max(0,CAPTURE_LIMIT-captureTime),
+          freeEchoCount: freeEchoes.length,
           abilityCooldown: Math.max(0,abilityCooldownUntil-worldTime),
           abilityActive: worldTime < abilityUntil || worldTime < overchargeUntil,
           operator: currentOperator(),
@@ -2542,6 +2590,8 @@
       shift: paradoxShift,
 
       ability: activateAbility,
+      toggleFreeExplore,
+      toggleCapture,
 
       redraw: draw,
 
