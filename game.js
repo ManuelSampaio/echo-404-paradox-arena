@@ -16,7 +16,7 @@
 */
 
 (() => {
-  const VERSION = "4.2";
+  const VERSION = "8.0";
 
   // ================================================
   // CANVAS AND DEPENDENCIES
@@ -206,6 +206,35 @@
   let doorStates = [];
   let threatInvulnerability = 0;
   let shiftUsed = false;
+  let relayAwarded = false;
+  // Operator abilities: deterministic, short-lived, and reset per attempt.
+  let abilityUntil = 0;
+  let abilityCooldownUntil = 0;
+  let overchargePlate = -1;
+  let overchargeUntil = 0;
+  function currentOperator() {
+    let id = "";
+    try { id = String(localStorage.getItem("echo404_operator") || "").toLowerCase(); } catch (_) {}
+    return id.includes("nyra") ? "nyra" : id.includes("kai") ? "kai7" : "axiom";
+  }
+  function activateAbility() {
+    if (!running || worldTime < abilityCooldownUntil) return false;
+    const id = currentOperator();
+    if (id === "kai7") {
+      overchargePlate = (level.plates || []).findIndex(p => distance(player,p) < PLATE_RADIUS);
+      if (overchargePlate < 0) { setStatus("KAI-7: APROXIMA-TE DE UMA PLACA."); return false; }
+      overchargeUntil = worldTime + 3;
+      setStatus("OVERCHARGE: PLACA ENERGIZADA POR 3s");
+    } else {
+      abilityUntil = worldTime + (id === "nyra" ? 0.9 : 2.5);
+      setStatus(id === "nyra" ? "NYRA: DASH ATIVO!" : "AXIOM: PHASE WALK ATIVO!");
+    }
+    abilityCooldownUntil = worldTime + 9;
+    emitEvent("ability",{operator:id,cycle});
+    playSound("shift");
+    return true;
+  }
+
 
   let portalCooldown = 0;
   let lastFrame = 0;
@@ -577,6 +606,9 @@
     doorStates = [];
     threatInvulnerability = 0;
     shiftUsed = false;
+    relayAwarded = false;
+    abilityUntil = 0; abilityCooldownUntil = 0;
+    overchargePlate = -1; overchargeUntil = 0;
 
     portalCooldown = 0;
     lastFrame = 0;
@@ -833,7 +865,7 @@
       (player && distance(player, plate) < PLATE_RADIUS) ||
       ghosts.some(
         ghost => distance(ghost, plate) < PLATE_RADIUS
-      )
+      ) || (overchargePlate === (level.plates || []).indexOf(plate) && worldTime < overchargeUntil)
     );
   }
 
@@ -854,6 +886,21 @@
       return (level.plates || []).every(isPlateActive);
     });
     doorOpen = doorStates.every(Boolean);
+    // v8 cooperative relay: the living operator and a recorded echo
+    // must occupy different plates at the same instant. Reward once
+    // per cycle without altering existing gates or progression.
+    if (running && !relayAwarded && level.plates?.length >= 2 && ghosts.length) {
+      const playerPlate = level.plates.findIndex(p => player && distance(player,p) < PLATE_RADIUS);
+      const echoPlate = level.plates.findIndex((p,i) =>
+        i !== playerPlate && ghosts.some(g => distance(g,p) < PLATE_RADIUS));
+      if (playerPlate >= 0 && echoPlate >= 0) {
+        relayAwarded = true;
+        score += 250;
+        emitParticles(player.x,player.y,COLORS.purple,14);
+        emitEvent("echorelay",{cycle,playerPlate,echoPlate,bonus:250});
+        setStatus("SINCRONIA TEMPORAL! +250 PONTOS");
+      }
+    }
     doorStates.forEach((open, index) => {
       if (open && !previous[index]) {
         const gate = doors[index];
@@ -935,6 +982,7 @@
 
     for (const wall of level.phaseWalls || []) {
       if (
+        !(currentOperator() === "axiom" && worldTime < abilityUntil) &&
         isPhaseWallActive(wall) &&
         intersects(rect, wall)
       ) {
@@ -970,8 +1018,9 @@
       });
     }
 
-    const distanceX = dx * player.speed * dt;
-    const distanceY = dy * player.speed * dt;
+    const boost = currentOperator() === "nyra" && worldTime < abilityUntil ? 2.2 : 1;
+    const distanceX = dx * player.speed * boost * dt;
+    const distanceY = dy * player.speed * boost * dt;
 
     // Move in small steps to prevent tunnelling
     // through narrow walls during frame drops.
@@ -1382,6 +1431,9 @@
 
     // One Paradox Shift per cycle.
     shiftUsed = false;
+    relayAwarded = false;
+    abilityUntil = 0; abilityCooldownUntil = 0;
+    overchargePlate = -1; overchargeUntil = 0;
 
     player.x = arena().start.x;
     player.y = arena().start.y;
@@ -1724,8 +1776,10 @@
       ctx.font = "11px monospace";
       ctx.textAlign = "center";
 
+      const echoHere = ghosts.some(g => distance(g,plate) < PLATE_RADIUS);
+      const playerHere = player && distance(player,plate) < PLATE_RADIUS;
       ctx.fillText(
-        `PLACA ${index + 1}`,
+        (echoHere ? "ECO " : playerHere ? "TU " : "") + `PLACA ${index + 1}`,
         plate.x,
         plate.y - 36
       );
@@ -2098,7 +2152,9 @@
     window.EchoDynamicThreats?.draw?.(ctx, {levelIndex, worldTime, level, running});
     window.EchoSystemBoss?.draw?.(ctx, {levelIndex, worldTime, level, running, doorStates});
     drawGoal();
-    drawGhosts();
+    // The visual overlay draws operator-matched echoes; keep a fallback
+    // for reduced/failed visual modules.
+    if (!document.getElementById("vr-overlay")) drawGhosts();
     drawPlayer();
     drawParticles();
   }
@@ -2438,6 +2494,10 @@
 
       getState() {
         return {
+          relayAwarded,
+          abilityCooldown: Math.max(0,abilityCooldownUntil-worldTime),
+          abilityActive: worldTime < abilityUntil || worldTime < overchargeUntil,
+          operator: currentOperator(),
           player: player ? { ...player } : null,
           running,
           finished,
@@ -2480,6 +2540,8 @@
       restart: startGame,
 
       shift: paradoxShift,
+
+      ability: activateAbility,
 
       redraw: draw,
 

@@ -94,12 +94,12 @@
       {x:arena.goal.x+arena.goal.w/2,y:arena.goal.y+arena.goal.h/2}];
     const candidates=[];
     // Each sector uses a different pattern of alcoves, side rooms and bends.
-    for(let k=0;k<9;k++){
+    for(let k=0;k<18;k++){
       const seed=index*37+k*29;
       const x=55+(seed*47)%650;
       const y=48+(seed*31)%360;
-      const horizontal=(k+index)%3!==0;
-      const length=65+(seed%4)*25;
+      const horizontal=(k+index)%4!==0;
+      const length=50+(seed%4)*21;
       candidates.push(horizontal?rect(x,y,length,14):rect(x,y,14,length));
     }
     const intersects=(a,b,pad=0)=>a.x<b.x+b.w+pad&&a.x+a.w+pad>b.x&&a.y<b.y+b.h+pad&&a.y+a.h+pad>b.y;
@@ -114,11 +114,11 @@
     }
     let added=0;
     for(const w of candidates){
-      if(!safeFor(w))continue;
+      if(w.x<24||w.y<24||w.x+w.w>W-24||w.y+w.h>H-24||!safeFor(w))continue;
       arena.walls.push(w);
       if(!routesHold()){arena.walls.pop();continue;}
       added++;
-      if(added>=4+(index%3))break;
+      if(added>=6+(index%3))break;
     }
     arena.scenery.push(...arena.walls.slice(original.length).map((w,k)=>({...w,kind:k%2?"partition":"conduit"})));
     arena.layoutStyle=["LABYRINTH","CROSSROADS","VAULT","SPLIT PATH","REACTOR","FACTORY","GARDEN","RIFT","RUINS","CORE"][index];
@@ -142,7 +142,7 @@
     level.arena=arena;
     if(level.plates?.[0])Object.assign(level.plates[0],plate);
     level.plates.splice(1,0,{...plate2,id:"maze_gate_2_"+(i+1),radius:24});
-    level.worldRebirth={...arena.theme,orientation:spec.axis,layoutVersion:"7.0"};
+    level.worldRebirth={...arena.theme,orientation:spec.axis,layoutVersion:"8.0"};
     report.push({sector:i+1,theme:arena.theme.name,style:arena.layoutStyle,partitions:arena.extraPartitions,doors:arena.doors,plates:[plate,plate2]});
   });
   // Decorative geometry is drawn underneath actors and collision walls.
@@ -164,6 +164,6 @@
     for(const s of arena.scenery){ctx.strokeRect(s.x-5,s.y-5,s.w+10,s.h+10);}
     ctx.restore();
   }
-  window.EchoWorldRebirth={version:"7.0",getLayouts:()=>report.map(v=>({...v})),validate:()=>report.length===10,draw};
+  window.EchoWorldRebirth={version:"8.0",getLayouts:()=>report.map(v=>({...v})),validate:()=>report.length===10,draw};
   console.info("ECHO//404 WORLD REBIRTH: 10 two-gate maze layouts validated");
 })();

@@ -27,12 +27,12 @@
     {
       id: "axiom",
       name: "AXIOM",
-      role: "Explorador temporal",
+      role: "Alienígena de fase",
       color: "#48f6ff",
       dark: "#123b50",
-      description: "Precisão. Coragem. Controlo.",
+      description: "Um sobrevivente extraterrestre capaz de sentir fendas temporais.",
       abilities: [
-        "Manipulação temporal",
+        "PHASE WALK — atravessa barreiras de fase",
         "Adaptação estratégica",
         "Equilíbrio operacional"
       ]
@@ -40,12 +40,12 @@
     {
       id: "nyra",
       name: "NYRA",
-      role: "Engenheira de sistemas",
+      role: "Humana sobrevivente",
       color: "#c88cff",
       dark: "#43245e",
       description: "Inteligência. Instinto. Estratégia.",
       abilities: [
-        "Análise de sistemas",
+        "DASH — impulso de velocidade",
         "Sincronização temporal",
         "Equilíbrio operacional"
       ]
@@ -53,12 +53,12 @@
     {
       id: "kai7",
       name: "KAI-7",
-      role: "Androide experimental",
+      role: "Robô de manutenção",
       color: "#ffad4d",
       dark: "#57321c",
       description: "Evolução. Lógica. Resistência.",
       abilities: [
-        "Processamento avançado",
+        "OVERCHARGE — mantém placas energizadas",
         "Precisão mecânica",
         "Equilíbrio operacional"
       ]
@@ -239,96 +239,19 @@
 
     if (id === "axiom") {
       figure = `
-        <!-- Tactical explorer silhouette -->
-        <path d="M83 255 L48 285 L20 390 H320
-                 L292 285 L257 255 Z"
-              fill="#101e2e" stroke="${c}" stroke-width="2"/>
-
-        <!-- Shoulder armor -->
-        <path d="M89 257 L54 273 L31 334 L91 343
-                 L120 282 Z"
-              fill="url(#metal-${id})"
-              stroke="#7293a7" stroke-width="3"/>
-
-        <path d="M251 257 L286 273 L309 334 L249 343
-                 L220 282 Z"
-              fill="url(#metal-${id})"
-              stroke="#7293a7" stroke-width="3"/>
-
-        <path d="M54 285 L91 298 L79 322 L43 314"
-              fill="#183a4a" stroke="${c}" stroke-width="2"/>
-
-        <path d="M286 285 L249 298 L261 322 L297 314"
-              fill="#183a4a" stroke="${c}" stroke-width="2"/>
-
-        <!-- Torso -->
-        <path d="M115 250 L225 250 L249 296
-                 L227 390 H113 L91 296 Z"
-              fill="url(#metal-${id})"
-              stroke="#6e8b9e" stroke-width="3"/>
-
-        <path d="M125 276 L170 299 L215 276
-                 L225 345 L170 371 L115 345 Z"
-              fill="#101e2d" stroke="#4c7186" stroke-width="2"/>
-
-        <path d="M135 282 L170 310 L205 282"
-              fill="none" stroke="${c}" stroke-width="5"
-              filter="url(#glow-${id})"/>
-
-        <path d="M170 311 L181 329 L170 347 L159 329 Z"
-              fill="${c}" filter="url(#glow-${id})"/>
-
-        <!-- Helmet neck -->
-        <path d="M128 235 L212 235 L220 267
-                 L170 290 L120 267 Z"
-              fill="#152b3b" stroke="#678a9d" stroke-width="3"/>
-
-        <!-- Helmet shell -->
-        <path d="M116 90 Q170 54 224 90
-                 L244 128 L237 210
-                 Q222 249 170 259
-                 Q118 249 103 210
-                 L96 128 Z"
-              fill="url(#metal-${id})"
-              stroke="#789aaa" stroke-width="4"/>
-
-        <!-- Helmet top armor -->
-        <path d="M117 113 L133 82 L170 68
-                 L207 82 L223 113
-                 L203 125 H137 Z"
-              fill="#314c60" stroke="#8aa8b8" stroke-width="3"/>
-
-        <path d="M170 72 V112"
-              stroke="${c}" stroke-width="3"/>
-
-        <!-- Large panoramic visor -->
-        <path d="M101 137 Q170 112 239 137
-                 L235 190 Q170 210 105 190 Z"
-              fill="#051923" stroke="${c}" stroke-width="5"/>
-
-        <path d="M110 144 Q170 123 230 144
-                 L227 180 Q170 196 113 180 Z"
-              fill="url(#visor-${id})"
-              filter="url(#glow-${id})"/>
-
-        <path d="M122 150 Q170 138 218 150"
-              stroke="#f2ffff" stroke-width="4"
-              opacity=".8" fill="none"/>
-
-        <!-- Respirator -->
-        <path d="M131 200 L209 200 L198 232
-                 L170 244 L142 232 Z"
-              fill="#122c3d" stroke="#7797a8" stroke-width="3"/>
-
-        <path d="M150 214 H190 M155 222 H185"
-              stroke="${c}" stroke-width="3"/>
-
-        <!-- Side communication modules -->
-        <path d="M96 147 L81 153 L84 202 L102 207"
-              fill="#253f50" stroke="${c}" stroke-width="3"/>
-
-        <path d="M244 147 L259 153 L256 202 L238 207"
-              fill="#253f50" stroke="${c}" stroke-width="3"/>
+        <!-- AXIOM: unmistakably alien, elongated neck and bioluminescent skin -->
+        <path d="M88 267 L45 310 L23 390 H317 L295 310 L252 267 Z" fill="#0c2735" stroke="${c}" stroke-width="4"/>
+        <path d="M128 257 L212 257 L235 390 H105 Z" fill="#13404a" stroke="#61b8b6" stroke-width="4"/>
+        <path d="M144 230 L196 230 L202 283 L170 301 L138 283 Z" fill="#65cbb6" stroke="#c0ffeb" stroke-width="3"/>
+        <path d="M170 49 C103 45 76 113 101 185 C109 226 139 256 170 263 C201 256 231 226 239 185 C264 113 237 45 170 49Z" fill="#61bda9" stroke="#b5ffdf" stroke-width="5"/>
+        <path d="M105 154 Q129 119 162 156 Q148 192 111 185 Z" fill="#10183e" stroke="${c}" stroke-width="5"/>
+        <path d="M235 154 Q211 119 178 156 Q192 192 229 185 Z" fill="#10183e" stroke="${c}" stroke-width="5"/>
+        <path d="M115 162 L148 167 M225 162 L192 167" stroke="#e2fffc" stroke-width="4" opacity=".7"/>
+        <path d="M153 220 Q170 230 187 220" fill="none" stroke="#164a51" stroke-width="4"/>
+        <circle cx="170" cy="326" r="19" fill="#071f29" stroke="${c}" stroke-width="5"/>
+        <path d="M170 310 L182 326 L170 342 L158 326Z" fill="${c}" filter="url(#glow-${id})"/>
+        <path d="M111 96 L75 56 M229 96 L265 56" stroke="#69dfcc" stroke-width="8" stroke-linecap="round"/>
+        <circle cx="75" cy="56" r="9" fill="${c}"/><circle cx="265" cy="56" r="9" fill="${c}"/>
       `;
     }
 
@@ -1443,27 +1366,14 @@
 
     // Character-specific heads
     if (p.id === "axiom") {
-      ctx.fillStyle = "#344d5d";
-      ctx.strokeStyle = "#a4c4d0";
-
-      roundedRect(ctx, -9, -28, 18, 17, 5);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = "#071b2a";
-      ctx.strokeStyle = p.color;
-
-      roundedRect(ctx, -9, -23, 18, 8, 2);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.save();
-      ctx.shadowColor = p.color;
-      ctx.shadowBlur = 12;
-      ctx.fillStyle = p.color;
-      ctx.fillRect(-7, -20, 14, 3);
-      ctx.restore();
-
+      ctx.fillStyle = "#6ad0b5";
+      ctx.strokeStyle = "#c3ffed";
+      ctx.beginPath();ctx.ellipse(0,-20,11,13,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+      ctx.fillStyle = "#101b39";
+      ctx.beginPath();ctx.ellipse(-5,-21,4,6,-.35,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.ellipse(5,-21,4,6,.35,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle=p.color;ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(-7,-30);ctx.lineTo(-11,-36);ctx.moveTo(7,-30);ctx.lineTo(11,-36);ctx.stroke();
     } else if (p.id === "nyra") {
       ctx.fillStyle = "#24132f";
 
@@ -1597,6 +1507,23 @@
     ctx.clearRect(0, 0, w, h);
 
     drawAtmosphere(ctx, w, h, t);
+
+    // v8: each temporal echo wears the currently selected operator's suit.
+    // Reuse the exact same renderer as the player, tinted as a time projection.
+    if (Array.isArray(s.ghosts)) {
+      const currentMoving = moving;
+      s.ghosts.forEach((ghost, index) => {
+        if (!Number.isFinite(ghost?.x) || !Number.isFinite(ghost?.y)) return;
+        ctx.save();
+        ctx.globalAlpha = 0.48 + 0.09 * Math.sin(t * 4 + index);
+        ctx.shadowColor = "#a77cff";
+        ctx.shadowBlur = 8;
+        moving = Boolean(s.running);
+        drawOperator(ctx, ghost.x, ghost.y, operator(), t - index * 0.15);
+        ctx.restore();
+      });
+      moving = currentMoving;
+    }
 
     if (
       s.player &&

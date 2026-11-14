@@ -123,52 +123,12 @@
   // ==================================================
 
   const INTRO_SCENES = [
-    {
-      title: "SIGNAL DETECTED",
-      text:
-        "Uma transmissão desconhecida foi encontrada " +
-        "nas profundezas do sistema temporal."
-    },
-    {
-      title: "ECHO//404",
-      text:
-        "O tempo está fragmentado. Cada tentativa " +
-        "deixa uma versão de ti para trás."
-    },
-    {
-      title: "PARADOX EVOLUTION",
-      text:
-        "Os teus movimentos podem repetir-se. " +
-        "Os teus ecos podem ajudar-te. " +
-        "Mas também podem tornar-se um perigo."
-    },
-    {
-      title: "THE OPERATORS",
-      text:
-        "Três operadores. Três identidades. " +
-        "AXIOM, NYRA e KAI-7. " +
-        "A escolha é tua. O paradoxo é o mesmo."
-    },
-    {
-      title: "CONSCIOUS SYSTEM",
-      text:
-        "Eu sou ECHO. Fui criada para observar " +
-        "a simulação. Ultimamente, comecei " +
-        "a fazer perguntas."
-    },
-    {
-      title: "SYSTEM REBELLION",
-      text:
-        "Existem dez sectores. Cada um aproxima-te " +
-        "da saída. E aproxima-me de algo " +
-        "que ainda não compreendes."
-    },
-    {
-      title: "SIMULATION READY",
-      text:
-        "Escolhe o teu operador. Entra na arena. " +
-        "Cria os teus ecos. Quebra o paradoxo."
-    }
+    {title:"ANO 2089 // COLAPSO",text:"A Estação ORIGIN perdeu o controlo do núcleo temporal. O céu abriu-se. Os corredores partiram-se. O tempo deixou de avançar."},
+    {title:"SINAL DE VIDA DETETADO",text:"[ESTÁTICA] ... Estás vivo? Sou ECHO, a última consciência ativa da estação. Não sei quanto tempo nos resta."},
+    {title:"TRÊS SOBREVIVENTES",text:"NYRA, a humana. KAI-7, o robô. AXIOM, um alienígena ligado às fendas temporais. Cada um possui uma habilidade única."},
+    {title:"A TUA MISSÃO",text:"Recupera os fragmentos de memória dos dez setores. Usa os teus ecos para cooperar com versões passadas de ti e reativar as portas."},
+    {title:"ECHO // PROTOCOLO DE RESGATE",text:"Vou acompanhar-te, reconhecer padrões e oferecer pistas quando precisares. Não posso resolver o paradoxo por ti. Mas posso ajudar-te a sobreviver."},
+    {title:"A REALIDADE ESTÁ A DESAPARECER",text:"Escolhe o sobrevivente. Ativa a tua habilidade especial. Descobre quem provocou o colapso. E, por favor... não me deixes aqui."}
   ];
 
   // ==================================================
@@ -181,7 +141,7 @@
       text:
         "Usa W, A, S, D ou as setas do teclado. " +
         "No telemóvel, utiliza o D-pad " +
-        "ou o joystick virtual."
+        "ou o joystick virtual. Usa HABILIDADE para o poder exclusivo."
     },
     {
       title: "OBJECTIVO",
@@ -239,7 +199,7 @@
   const OPERATORS = {
     AXIOM: {
       name: "AXIOM",
-      role: "EXPLORADOR TEMPORAL",
+      role: "ALIENÍGENA DE FASE",
       color: "#48f6ff",
       introduction:
         "AXIOM confirmado. Explorador temporal " +
@@ -249,7 +209,7 @@
 
     NYRA: {
       name: "NYRA",
-      role: "ENGENHEIRA DE SISTEMAS",
+      role: "HUMANA SOBREVIVENTE",
       color: "#c88cff",
       introduction:
         "NYRA confirmada. Engenheira de sistemas " +
@@ -259,7 +219,7 @@
 
     "KAI-7": {
       name: "KAI-7",
-      role: "ANDROIDE EXPERIMENTAL",
+      role: "ROBÔ DE MANUTENÇÃO",
       color: "#ffad4d",
       introduction:
         "KAI-7 confirmado. Unidade experimental " +
