@@ -700,6 +700,22 @@
       #controlModeBtn { min-height: 44px; }
     }
   </style>
+<style id="rebirth-mobile-v52">
+  /* Small-screen play-first layout: avoid burying the arena below menus. */
+  @media (max-width: 768px) {
+    #rebirthGuide { padding: 7px 10px !important; margin: 4px 0 6px !important; gap: 3px !important; }
+    #rebirthGuide .rebirth-top { min-height: 22px; }
+    #rebirthGuide strong { font-size: 13px !important; }
+    #rebirthGuide p { font-size: 11px !important; line-height: 1.3 !important; }
+    #rebirthSkip { padding: 3px 8px !important; }
+    #rebirthToggle { padding: 4px 8px !important; font-size: 10px !important; }
+    #mobileControls { padding: 8px !important; }
+    #mobileControls .mobile-controls-heading { display: none !important; }
+    #mobileControls .mobile-control-layout { gap: 8px !important; }
+    #mobileControls .mobile-control-options { margin-top: 4px !important; }
+    #gameCanvas, #echoWorldRenderer { max-width: 100%; }
+  }
+</style>
 </head>
 
 <body class="echo404-app">
@@ -1111,7 +1127,7 @@
           <span> — PARADOX EVOLUTION</span>
         </div>
         <div class="footer-version">
-          TEMPORAL ENGINE // v5.1
+          TEMPORAL ENGINE // v5.2
         </div>
       </div>
 
@@ -1139,13 +1155,13 @@
 
   <!-- GAME MODULES -->
   <script src="levels.js?v=430"></script>
-  <script src="world-layouts.js?v=510"></script>
+  <script src="world-layouts.js?v=520"></script>
   <script src="storage.js?v=420"></script>
   <script src="audio.js?v=310"></script>
-  <script src="game.js?v=430"></script>
+  <script src="game.js?v=520"></script>
   <script src="awakening.js?v=310"></script>
   <script src="visual-v1.js?v=310"></script>
-  <script src="world-renderer.js?v=400"></script>
+  <script src="world-renderer.js?v=520"></script>
   <script src="visual-effects.js?v=410"></script>
 
   <!-- INTERFACE INTEGRATION -->
