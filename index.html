@@ -1025,6 +1025,34 @@
  #arenaShell,#gameCanvas{touch-action:pan-y!important}
  #arenaShell.echo-drag-enabled,#arenaShell.echo-drag-enabled #gameCanvas{touch-action:none!important}
 }
+</style><style id="echo-v80-mobile-immersive">
+@media(max-width:768px){
+ body.echo-immersive .gameplay-zone{
+  justify-content:space-between!important;
+  padding:calc(env(safe-area-inset-top,0px) + 44px) 6px calc(env(safe-area-inset-bottom,0px) + 6px)!important;
+  gap:4px!important;
+ }
+ body.echo-immersive #arenaShell{
+  max-height:min(56dvh,calc(100dvh - 280px))!important;
+  aspect-ratio:8/5!important;
+ }
+ body.echo-immersive #mobileControls .mobile-control-layout{
+  min-height:0!important;
+ }
+ body.echo-immersive #mobileControls .mobile-control-options{
+  margin-top:2px!important;
+ }
+ body.echo-immersive #controlModeBtn{min-height:30px!important;padding:3px 8px!important}
+ body.echo-immersive #mobileDpad{grid-template-columns:repeat(3,clamp(30px,10vw,44px))!important;grid-template-rows:repeat(3,clamp(30px,10vw,44px))!important}
+ body.echo-immersive #joystickBase{width:clamp(86px,25vw,110px)!important;height:clamp(86px,25vw,110px)!important;min-width:0!important;min-height:0!important}
+ body.echo-immersive #echoImmersiveClose{z-index:150!important;min-height:34px!important}
+ body.echo-immersive #echoV80Hud{
+  display:flex!important;gap:6px;justify-content:flex-start;align-items:center;
+  color:#c9fbff;font:700 11px system-ui;min-height:25px;flex:0 0 auto;
+  padding:2px 8px;background:#0b2539;border:1px solid #22768b;border-radius:8px;
+ }
+ #echoV80Hud{display:none}
+}
 </style></head>
 
 <body class="echo404-app">
@@ -1459,14 +1487,14 @@
 
   <!-- GAME MODULES -->
   <script src="levels.js?v=430"></script>
-  <script src="world-layouts.js?v=700"></script>
+  <script src="world-layouts.js?v=800"></script>
   <script src="storage.js?v=420"></script>
   <script src="audio.js?v=310"></script>
   <script src="dynamic-threats.js?v=540"></script>
   <script src="system-war.js?v=600"></script>
-  <script src="game.js?v=710"></script>
+  <script src="game.js?v=800"></script>
   <script src="awakening.js?v=310"></script>
-  <script src="visual-v1.js?v=710"></script>
+  <script src="visual-v1.js?v=800"></script>
   <script src="world-renderer.js?v=530"></script>
   <script src="visual-effects.js?v=410"></script>
 
@@ -1991,6 +2019,28 @@ modal.addEventListener("click",event=>{if(event.target===modal)close();});
 grid.addEventListener("click",event=>{if(event.target.closest("button"))close();});
 document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!modal.hidden)close();});
 window.addEventListener("resize",()=>{if(window.innerWidth>768&&!modal.hidden)close();});
+})();
+</script><script id="echo-v80-mobile-hud">
+(()=>{
+ const zone=document.querySelector(".gameplay-zone");
+ if(!zone)return;
+ const hud=document.createElement("div");hud.id="echoV80Hud";
+ hud.setAttribute("aria-label","Estado da partida");
+ zone.prepend(hud);
+ let previous="";
+ function update(){
+  if(document.body.classList.contains("echo-immersive")){
+   const s=window.EchoGame?.getState?.();
+   if(s){
+    const label="NÍVEL "+s.levelNumber+" · CICLO "+s.cycle+"/"+s.maxCycles+
+      " · "+Math.max(0,s.cycleDuration-s.elapsed).toFixed(1)+"s · ECOS "+s.recordingsCount+
+      (s.relayAwarded?" · SINCRONIA ✓":"");
+    if(label!==previous){hud.textContent=label;previous=label;}
+   }
+  }
+  requestAnimationFrame(update);
+ }
+ requestAnimationFrame(update);
 })();
 </script></body>
 </html>
