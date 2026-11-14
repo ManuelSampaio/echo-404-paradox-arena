@@ -1,4 +1,4 @@
-<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#06111e"><title>ECHO//404 v9.5 — ORIGIN: Cinematic Evolution</title><style>
+<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#06111e"><title>ECHO//404 v9.6 — ORIGIN: NULL Lockdown</title><style>
 *{box-sizing:border-box}html,body{margin:0;background:#030a14;color:#d9f9ff;font-family:system-ui,Arial,sans-serif;min-height:100%;overscroll-behavior:none}body{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 8px calc(12px + env(safe-area-inset-bottom))}header{width:min(100%,980px);display:flex;justify-content:space-between;align-items:center;gap:10px}h1{font-size:clamp(15px,3vw,22px);margin:0;letter-spacing:.09em;color:#75eaff}small{color:#9fb6c6}a{color:#9aeafc}.panel{width:min(100%,980px);border:1px solid #2c6477;border-radius:12px;background:#071b2c;padding:9px 12px}.stats{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;font-size:12px}.stage{position:relative;width:min(100%,980px);aspect-ratio:16/9;max-height:62dvh;background:#040d18;border:1px solid #39879c;border-radius:12px;overflow:hidden}canvas{width:100%;height:100%;display:block;touch-action:none}.message{min-height:44px;color:#b9e6f0;font-size:13px;line-height:1.4}.message strong{color:#8ef7ff}.controls{width:min(100%,980px);display:flex;justify-content:space-between;align-items:center;gap:8px;touch-action:none}.group{display:flex;gap:8px;align-items:center}button{background:#10354c;color:#e2fbff;border:1px solid #51b7ce;border-radius:12px;min-width:53px;min-height:52px;font-size:17px;font-weight:800;touch-action:none;user-select:none;-webkit-user-select:none}button:active,.pressed{background:#277c94}button.action{font-size:11px;min-width:66px;padding:4px}button.primary{background:#12675b;border-color:#6ff8c8}#restart{min-width:unset;min-height:34px;font-size:12px;padding:5px 10px}footer{font-size:10px;color:#7698ac;text-align:center}#intro{position:absolute;inset:0;z-index:3;display:grid;place-items:center;background:linear-gradient(140deg,#061220f7,#07182df5);padding:20px}#intro.hidden{display:none}.introbox{max-width:530px;text-align:center}.introbox h2{font-size:clamp(20px,4vw,38px);color:#8af0ff;letter-spacing:.12em}.introbox p{line-height:1.65;color:#d6eaf1}.introbox button{padding:0 20px;font-size:13px}.alert{color:#ff8b9c}@media(max-width:600px){body{gap:6px;padding:7px 5px}header{align-items:flex-start}h1{font-size:15px}.stage{aspect-ratio:1.65;max-height:51dvh}.controls button{min-height:56px;min-width:51px}.group{gap:5px}.controls button.action{min-width:58px;font-size:10px}.stats{font-size:10px;gap:5px}.message{font-size:12px;min-height:52px}.panel{padding:7px 9px}}
 </style><style id="v911-mobile-start-fix">
 /* Keep the mission action accessible even in short embedded iPhone browsers. */
@@ -112,12 +112,20 @@ footer a,footer a *{-webkit-user-select:none!important;user-select:none!importan
 .controls .jump-button{flex:none!important}
 @media(max-width:600px){.controls .movement{gap:5px!important}.controls .movement button{width:clamp(45px,13vw,55px)!important}.controls .right-hand{gap:5px!important}.controls .echo-actions{gap:4px!important}.controls .right-hand .echo-actions #record{width:clamp(58px,16vw,70px)!important;min-width:58px!important;height:clamp(60px,17vw,72px)!important;min-height:60px!important;font-size:12px!important}.controls .right-hand .echo-actions #resetEcho{width:38px!important;min-width:38px!important;height:52px!important}.controls .jump-button{width:clamp(62px,17vw,76px)!important;height:clamp(62px,17vw,76px)!important}}
 @media(max-width:355px){.controls{padding:4px!important}.controls .movement button{width:43px!important}.controls .right-hand .echo-actions #record{width:54px!important;min-width:54px!important}.controls .right-hand .echo-actions #resetEcho{width:34px!important;min-width:34px!important}.controls .jump-button{width:59px!important;height:59px!important}}
-</style></head><body><header><div><h1>ECHO//404 <small>v9.5 · CINEMATIC EVOLUTION</small></h1><small>MISSÃO 01 — ORIGIN: ÚLTIMO SINAL</small></div><button id="restart">REINICIAR</button></header>
+</style><style id="v96-gamepad">
+/* Balanced two-thumb controls; jump and echo have similarly usable targets. */
+.controls{justify-content:space-between!important;gap:8px!important;padding:7px!important}
+.controls .right-hand{display:flex!important;gap:7px!important;align-items:center!important}
+.controls .right-hand #record{width:clamp(56px,15vw,70px)!important;height:clamp(58px,16vw,70px)!important;min-width:0!important;min-height:0!important;border-radius:15px!important;font-size:13px!important;order:0}
+.controls .right-hand .jump-button{width:clamp(63px,17vw,78px)!important;height:clamp(63px,17vw,78px)!important;order:1}
+.controls .right-hand #resetEcho{order:2;width:clamp(36px,10vw,45px)!important;height:48px!important;min-width:0!important;min-height:0!important;font-size:22px!important;padding:2px!important}
+@media(max-width:390px){.controls .movement button{width:43px!important;height:55px!important}.controls .movement{gap:4px!important}.controls .right-hand{gap:4px!important}.controls .right-hand #record{width:54px!important;height:59px!important}.controls .right-hand .jump-button{width:62px!important;height:62px!important}.controls .right-hand #resetEcho{width:34px!important}}
+</style></head><body><header><div><h1>ECHO//404 <small>v9.6 · NULL LOCKDOWN</small></h1><small>MISSÃO 01 — ORIGIN: ÚLTIMO SINAL</small></div><button id="restart">REINICIAR</button></header>
 <div class="panel stats"><span id="objective">OBJETIVO: RESTAURAR ENERGIA</span><span id="echoes">ECOS: 0/2</span><span id="rec">GRAVAÇÃO: LIVRE</span><span id="life">INTEGRIDADE: 3</span></div>
 <div class="stage"><div id="transmission" hidden aria-live="polite"><div class="transmission-avatar" id="transmissionAvatar">◈</div><div class="transmission-content"><b id="transmissionName">ECHO</b><p id="transmissionText"></p></div></div><canvas id="game" width="960" height="540" aria-label="Missão lateral ORIGIN"></canvas><div id="intro"><div class="introbox"><small>ORIGIN // 2089 // SETOR 01</small><h2>ÚLTIMO SINAL</h2><p>O colapso destruiu a estação. ECHO encontrou o teu sinal vital. Recupera o registo do desastre, usa um eco para manter a porta aberta e escapa aos sistemas de segurança de NULL.</p><p><small>Move-te com ← →, salta com ↑ ou espaço. Grava um percurso de até 8 segundos e cria um eco para pressionar a placa.</small></p><button class="primary" id="begin" type="button">▶ INICIAR MISSÃO</button></div></div></div>
 <div class="panel message" id="dialog"><strong>ECHO:</strong> A aguardar ligação...</div>
 <section id="result" hidden aria-live="polite"><div class="result-card"><small>ORIGIN // REGISTO RECUPERADO</small><h2>MISSÃO CONCLUÍDA</h2><h3 id="resultMedal"></h3><p id="resultStats"></p><p id="endingStory">A gravação recuperada revela uma ordem interna de desativação. NULL controla agora o núcleo central.</p><p><b>ECHO:</b> O próximo sinal vem do núcleo. A minha memória está incompleta... e isso assusta-me.</p><p><b>NULL:</b> A tua sobrevivência não estava prevista.</p><button type="button" id="retryMission">↻ JOGAR NOVAMENTE</button></div></section>
-<div class="controls" aria-label="Controlos para duas mãos"><div class="group movement" aria-label="Mão esquerda: movimento"><button data-key="left" aria-label="Mover para esquerda">◀</button><button data-key="right" aria-label="Mover para direita">▶</button></div><div class="group right-hand" aria-label="Mão direita: salto e ecos"><div class="echo-actions"><button id="record" class="action primary" aria-label="Gravar ou terminar eco">● ECO</button><button id="resetEcho" class="action" aria-label="Limpar ecos">↺</button></div><button data-key="jump" class="jump-button" aria-label="Saltar">↑<span>SALTAR</span></button></div></div>
+<div class="controls" aria-label="Controlos para duas mãos"><div class="group movement" aria-label="Mão esquerda: movimento"><button data-key="left" aria-label="Mover para esquerda">◀</button><button data-key="right" aria-label="Mover para direita">▶</button></div><div class="group right-hand" aria-label="Mão direita: salto e ecos"><button id="record" class="action primary" aria-label="Gravar ou terminar eco">● ECO</button><button data-key="jump" class="jump-button" aria-label="Saltar">↑<span>SALTAR</span></button><button id="resetEcho" class="action" aria-label="Limpar ecos">↺</button></div></div>
 <footer>Protótipo experimental independente · Jogo clássico preservado · CREATED & DEVELOPED BY MANUEL SAMPAIO01 · <a href="./index.html">VOLTAR AO JOGO</a></footer>
 <script>
 "use strict";
@@ -134,6 +142,25 @@ const terminal={x:2420,y:408,w:38,h:47},exit={x:2850,y:380,w:62,h:75};
 let player,echoes,recording,recordFrames,recordTime,cam,integrity,started,ended,gateOpen,terminalDone,checkpoint,missionTime,noticeTimer,drone,laserTime,last=0,keys=new Set();
 let hostileAlert=0,droneMode="patrol",droneStun=0,laserWarning=false,impactSparks=[],alertAnnounced=false;
 let cameraShake=0,cinemaFlash=0,stepPhase=0,jumpBuffer=0,coyote=0,activePointers=new Map();
+let lockdown=false,lockdownTime=0,reinforcements=[],droneShotCooldown=0,projectiles=[],reinforcementWave=0,alarmScene=0,alarmShown=false;
+const LOCKDOWN_GRACE=42,reinforcementDoor={x:1945,y:365,w:46,h:90};
+function fireDrone(d){const from={x:d.x+17,y:d.y+12},tx=player.x+player.w/2,ty=player.y+player.h/2,dx=tx-from.x,dy=ty-from.y,len=Math.hypot(dx,dy)||1;projectiles.push({x:from.x,y:from.y,vx:dx/len*285,vy:dy/len*285,life:2.1});addSparks(from.x,from.y,"#ffb3bf")}
+function spawnReinforcement(){const i=reinforcements.length;reinforcements.push({x:reinforcementDoor.x+12+i*8,y:ground-48,dir:1,shot:1.2+i*.35});addSparks(reinforcementDoor.x+20,ground-55,"#ff748c")}
+function updateLockdown(dt){
+ if(!lockdown)return;
+ lockdownTime+=dt;alarmScene=Math.max(0,alarmScene-dt);
+ if(lockdownTime>=LOCKDOWN_GRACE&&reinforcementWave===0){reinforcementWave=1;spawnReinforcement();transmit("ECHO","REFORÇOS CHEGARAM! Mantém-te em movimento e procura o elevador!",4)}
+ if(lockdownTime>=LOCKDOWN_GRACE+14&&reinforcementWave===1){reinforcementWave=2;spawnReinforcement()}
+ if(lockdownTime>=LOCKDOWN_GRACE+30&&reinforcementWave===2){reinforcementWave=3;spawnReinforcement()}
+ for(const d of reinforcements){
+  const dx=player.x-d.x;d.dir=dx>=0?1:-1;
+  d.x=clamp(d.x+d.dir*92*dt,1660,2790);d.shot-=dt;
+  if(Math.abs(dx)<340&&d.shot<=0){fireDrone(d);d.shot=3.6}
+  if(Math.abs(dx)<30&&Math.abs(player.y-d.y)<58)hurt("Reforço de NULL");
+ }
+ for(const b of projectiles){b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt;if(b.life>0&&collide({x:b.x-4,y:b.y-4,w:8,h:8},player)){b.life=0;hurt("Laser do drone");addSparks(b.x,b.y)}}
+ projectiles=projectiles.filter(b=>b.life>0&&b.x>=0&&b.x<worldWidth&&b.y>0&&b.y<ground+30);
+}
 const patrolMin=1740,patrolMax=2130,droneRange=340;
 const laserPeriod=4.2,laserWarningAt=2.1,laserFireAt=2.85,laserEndAt=3.55;
 function addSparks(x,y,color="#ff647d"){cameraShake=Math.max(cameraShake,5);cinemaFlash=Math.max(cinemaFlash,.14);for(let i=0;i<15;i++){const a=Math.random()*Math.PI*2;impactSparks.push({x,y,vx:Math.cos(a)*(60+Math.random()*150),vy:Math.sin(a)*(60+Math.random()*150),t:.4+Math.random()*.35,color})}if(impactSparks.length>90)impactSparks.splice(0,impactSparks.length-90)}
@@ -144,13 +171,16 @@ function updateHostiles(dt){
  const firing=phase>=laserFireAt&&phase<laserEndAt;
  if(firing&&player.x+player.w>890&&player.x<916&&player.y+player.h>340&&player.y<ground){addSparks(player.x+12,player.y+22);hurt("Disparo laser")}
  const dx=player.x-drone.x;
- const canSee=Math.abs(dx)<droneRange&&player.x>1580&&player.inv<=0&&!coverBetween(drone.x,player.x)&&Math.abs(player.y-drone.y)<110;
- if(canSee){hostileAlert=Math.min(3,hostileAlert+dt*2);if(hostileAlert>=.6&&!alertAnnounced){say("NULL","ALVO IDENTIFICADO. UNIDADE DE CONTENÇÃO EM PERSEGUIÇÃO.");alertAnnounced=true}}
+ const canSee=Math.abs(dx)<droneRange&&player.x>1580&&!coverBetween(drone.x,player.x)&&Math.abs(player.y-drone.y)<155;
+ if(canSee){hostileAlert=Math.min(3,hostileAlert+dt*2);if(hostileAlert>=.6&&!alertAnnounced){transmit("NULL","INTRUSO DETETADO. PROTOCOLO LOCKDOWN INICIADO. REFORÇOS A CAMINHO.",5);alertAnnounced=true;
+ if(!lockdown){lockdown=true;lockdownTime=0;alarmScene=2.3;cameraShake=9;cinemaFlash=.22}}}
  else{hostileAlert=Math.max(0,hostileAlert-dt*.8);if(hostileAlert===0)alertAnnounced=false}
  droneMode=hostileAlert>=.6?"chase":hostileAlert>0?"search":"patrol";
  if(droneStun>0){droneStun-=dt;droneMode="stunned"}
  else if(droneMode==="chase"){drone.dir=dx>=0?1:-1;drone.x=clamp(drone.x+drone.dir*155*dt,patrolMin,patrolMax)}
  else{drone.x+=drone.dir*(droneMode==="search"?95:65)*dt;if(drone.x>=patrolMax){drone.x=patrolMax;drone.dir=-1}if(drone.x<=patrolMin){drone.x=patrolMin;drone.dir=1}}
+ droneShotCooldown-=dt;
+ if(droneMode==="chase"&&Math.abs(dx)<315&&droneShotCooldown<=0&&!coverBetween(drone.x,player.x)){fireDrone(drone);droneShotCooldown=2.8}
  if(Math.abs(player.x-drone.x)<38&&Math.abs(player.y-drone.y)<60){addSparks(player.x+12,player.y+10);hurt("Contacto com drone")}
  for(const s of impactSparks){s.x+=s.vx*dt;s.y+=s.vy*dt;s.vy+=280*dt;s.t-=dt}impactSparks=impactSparks.filter(s=>s.t>0);
 }
@@ -165,7 +195,7 @@ function storyOnce(key,condition,who,message){if(condition&&!storyTriggers.has(k
 
 function reset(){
  player={x:82,y:ground-38,w:24,h:38,vx:0,vy:0,onGround:false,inv:0};
- echoes=[];recording=false;recordFrames=[];recordTime=0;cam=0;integrity=3;started=false;ended=false;gateOpen=false;gate2Open=false;secondPlateHint=false;missionResult=null;storyTriggers=new Set();transmissionUntil=0;$("transmission").hidden=true;$("result").hidden=true;document.body.classList.remove("mission-finished");terminalDone=false;checkpoint=82;missionTime=0;noticeTimer=0;laserTime=0;hostileAlert=0;droneMode="patrol";droneStun=0;laserWarning=false;impactSparks=[];cameraShake=0;cinemaFlash=0;stepPhase=0;jumpBuffer=0;coyote=0;activePointers.clear();alertAnnounced=false;drone={x:1860,y:ground-50,dir:1};
+ echoes=[];recording=false;recordFrames=[];recordTime=0;cam=0;integrity=3;started=false;ended=false;gateOpen=false;gate2Open=false;secondPlateHint=false;missionResult=null;storyTriggers=new Set();transmissionUntil=0;$("transmission").hidden=true;$("result").hidden=true;document.body.classList.remove("mission-finished");terminalDone=false;checkpoint=82;missionTime=0;noticeTimer=0;laserTime=0;hostileAlert=0;droneMode="patrol";droneStun=0;laserWarning=false;impactSparks=[];cameraShake=0;cinemaFlash=0;stepPhase=0;jumpBuffer=0;coyote=0;activePointers.clear();lockdown=false;lockdownTime=0;reinforcements=[];droneShotCooldown=1.8;projectiles=[];reinforcementWave=0;alarmScene=0;alarmShown=false;alertAnnounced=false;drone={x:1860,y:ground-50,dir:1};
  $("intro").classList.remove("hidden");$("record").textContent="● ECO";keys.clear();updateHud();
 }
 function updateHud(){
@@ -221,7 +251,7 @@ function update(dt){
  gate2Open=open2;
  if(player.x>1960&&!secondPlateHint){secondPlateHint=true;say("ECHO","Outro bloqueio temporal. Grava o teu percurso até à segunda placa e cria um novo eco.")}
  if(player.x>1650&&checkpoint<1650){checkpoint=1660;say("NULL","Intruso localizado. Enviar unidade de contenção.");}
- updateHostiles(dt);
+ updateHostiles(dt);updateLockdown(dt);
  if(!terminalDone&&Math.abs(player.x-terminal.x)<55){terminalDone=true;say("REGISTO ORIGIN","PROTOCOLO NULL: contenção desativada por ordem interna. ECHO: alguém provocou o colapso.");}
  if(terminalDone&&collide(player,exit)){
  ended=true;missionResult={time:Math.round(missionTime),health:integrity,echoes:echoes.length,medal:integrity===3?"OURO":integrity===2?"PRATA":"BRONZE"};
@@ -262,6 +292,8 @@ function draw(){
  ctx.fillStyle=gate2Open?"#43edc1":"#ec5c78";ctx.fillRect(plate2.x,plate2.y,plate2.w,8);
  ctx.fillStyle="#07151d";ctx.fillRect(gate2.x,gate2.y,gate2.w,gate2.h);ctx.strokeStyle=gate2Open?"#40d9a6":"#f26b83";ctx.lineWidth=3;ctx.strokeRect(gate2.x,gate2.y,gate2.w,gate2.h);
  if(!gate2Open){ctx.fillStyle="#ff647d99";ctx.fillRect(gate2.x+8,gate2.y+8,14,gate2.h-16)}
+ ctx.fillStyle=lockdown?"#ff7a8b":"#32677c";ctx.fillRect(reinforcementDoor.x,reinforcementDoor.y,reinforcementDoor.w,reinforcementDoor.h);ctx.fillStyle="#071722";ctx.fillRect(reinforcementDoor.x+6,reinforcementDoor.y+7,reinforcementDoor.w-12,reinforcementDoor.h-14);
+ if(lockdown){ctx.fillStyle="#ff688c";ctx.fillRect(reinforcementDoor.x+9,reinforcementDoor.y+8,4,reinforcementDoor.h-16)}
  ctx.fillStyle="#71e4f8";ctx.fillRect(terminal.x,terminal.y,terminal.w,terminal.h);ctx.fillStyle="#061926";ctx.fillRect(terminal.x+5,terminal.y+7,terminal.w-10,22);
  ctx.fillStyle=terminalDone?"#6fffd1":"#e4a965";ctx.fillRect(exit.x,exit.y,exit.w,exit.h);ctx.fillStyle="#071724";ctx.fillRect(exit.x+8,exit.y+8,exit.w-16,exit.h-8);
  // Active turret.
@@ -274,6 +306,21 @@ function draw(){
  ctx.fillStyle=droneMode==="chase"?"#ff3f67":droneMode==="search"?"#df9c57":"#9d3e57";ctx.fillRect(drone.x,drone.y,34,20);
  if(droneMode==="chase"){ctx.strokeStyle="#ff627b88";ctx.lineWidth=2;ctx.beginPath();ctx.arc(drone.x+17,drone.y+10,30+Math.sin(missionTime*10)*4,0,Math.PI*2);ctx.stroke()}
  if(droneMode==="search"){ctx.strokeStyle="#ffd17977";ctx.beginPath();ctx.moveTo(drone.x+17,drone.y+15);ctx.lineTo(drone.x+17+drone.dir*125,drone.y+90);ctx.stroke()}ctx.strokeStyle="#ff9aaf";ctx.lineWidth=2;ctx.strokeRect(drone.x-.5,drone.y-.5,35,21);ctx.fillStyle="#ff597c";ctx.fillRect(drone.x+10,drone.y+4,12,5);ctx.fillStyle="#91b4c7";ctx.fillRect(drone.x-5,drone.y-6,44,5);
+ // Armored NULL security units and directed laser bolts.
+ function paintDrone(d,reinforcement=false){
+  const x=d.x,y=d.y,bob=Math.sin(missionTime*8+x)*2;
+  ctx.save();ctx.translate(x,y+bob);
+  ctx.fillStyle="#26364a";ctx.beginPath();ctx.moveTo(-7,6);ctx.lineTo(4,-7);ctx.lineTo(30,-7);ctx.lineTo(41,6);ctx.lineTo(30,22);ctx.lineTo(4,22);ctx.closePath();ctx.fill();
+  ctx.strokeStyle=reinforcement?"#ffafc1":"#f35d81";ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle="#a8c3d0";ctx.fillRect(-11,-5,17,5);ctx.fillRect(29,-5,17,5);
+  ctx.fillStyle="#ff436b";ctx.beginPath();ctx.arc(17,7,6,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#ffd4de";ctx.fillRect(15,5,4,3);
+  ctx.fillStyle="#e97489";ctx.fillRect(d.dir>=0?33:-11,12,12,6);
+  ctx.restore();
+ }
+ paintDrone(drone);
+ for(const d of reinforcements)paintDrone(d,true);
+ for(const b of projectiles){ctx.fillStyle="#ff4269";ctx.beginPath();ctx.arc(b.x,b.y,6,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#ffc2cc";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(b.x-b.vx*.045,b.y-b.vy*.045);ctx.lineTo(b.x,b.y);ctx.stroke()}
  // Echoes: replay and then hold their final position.
  for(const e of echoes){const p=pose(e.frames,Math.min(e.time,e.frames[e.frames.length-1].t));if(!p)continue;ctx.globalAlpha=.55;ctx.strokeStyle="#dbc6ff";ctx.lineWidth=2;ctx.strokeRect(p.x-1,p.y-1,26,40);ctx.fillStyle="#aa86ff";ctx.fillRect(p.x,p.y,24,38);ctx.fillStyle="#e0caff";ctx.fillRect(p.x+5,p.y+6,14,7);ctx.globalAlpha=1}
  // Operator silhouette.
@@ -286,6 +333,8 @@ function draw(){
  if(cinemaFlash>0){ctx.fillStyle="rgba(170,234,255,"+(cinemaFlash*1.3)+")";ctx.fillRect(0,0,W,H)}
  const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,"#03101b00");grad.addColorStop(1,"#020811bb");ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
  ctx.fillStyle="#90d5e7";ctx.font="bold 15px monospace";ctx.fillText("ORIGIN / SETOR 01",20,29);
+ if(lockdown){ctx.textAlign="center";ctx.font="bold 17px monospace";ctx.fillStyle="#ff9db0";ctx.fillText(lockdownTime<LOCKDOWN_GRACE?"REFORÇOS EM "+Math.ceil(LOCKDOWN_GRACE-lockdownTime)+"s":"LOCKDOWN // "+reinforcements.length+" REFORÇOS",W/2,29);ctx.textAlign="left"}
+ if(alarmScene>0){ctx.fillStyle="#160511cc";ctx.fillRect(100,130,760,175);ctx.textAlign="center";ctx.font="bold 30px monospace";ctx.fillStyle="#ff708c";ctx.fillText("NULL // PROTOCOLO LOCKDOWN",W/2,190);ctx.font="17px monospace";ctx.fillStyle="#fff0f3";ctx.fillText("PORTA DE SEGURANÇA ABERTA — DRONES A CAMINHO",W/2,232);ctx.textAlign="left"}
  ctx.font="bold 13px monospace";ctx.textAlign="right";ctx.fillStyle=droneMode==="chase"?"#ff7890":droneMode==="search"?"#ffd07e":"#88c9dc";ctx.fillText("NULL: "+(droneMode==="chase"?"ALERTA":droneMode==="search"?"PROCURA":"PATRULHA"),W-18,29);ctx.textAlign="left";
  if(ended){ctx.fillStyle="#03131dbb";ctx.fillRect(165,177,630,122);ctx.fillStyle="#78ffcf";ctx.textAlign="center";ctx.font="bold 30px monospace";ctx.fillText("REGISTO RECUPERADO",480,225);ctx.font="15px monospace";ctx.fillText("TRANSMISSÃO NULL INTERCETADA",480,260);ctx.textAlign="left"}
 }
