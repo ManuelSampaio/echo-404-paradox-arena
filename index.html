@@ -1969,7 +1969,8 @@ modal.setAttribute("role","dialog");modal.setAttribute("aria-modal","true");moda
 modal.innerHTML='<div class="echo-menu-inner"><div class="echo-menu-head"><span>◈ NÍVEIS E PROGRESSO</span><button class="echo-menu-close" type="button">✕ FECHAR</button></div><div id="echoMenuProgress"></div><div id="echoMenuLevels"></div><p style="color:#a5c6d8;font:12px system-ui">Escolhe um nível desbloqueado para jogar.</p></div>';
 document.body.appendChild(modal);
 const holder=modal.querySelector("#echoMenuLevels"),progress=modal.querySelector("#echoMenuProgress");
-const close=()=>{modal.hidden=true;menu.setAttribute("aria-expanded","false");document.body.style.removeProperty("overflow");};
+const originalGridParent=grid.parentNode, originalGridNext=grid.nextSibling;
+const close=()=>{modal.hidden=true;menu.setAttribute("aria-expanded","false");document.body.style.removeProperty("overflow");if(originalGridNext&&originalGridNext.parentNode===originalGridParent)originalGridParent.insertBefore(grid,originalGridNext);else originalGridParent.appendChild(grid);};
 function open(){if(window.innerWidth>768)return;holder.appendChild(grid);const p=document.getElementById("progress");if(p)progress.textContent=p.textContent;modal.hidden=false;document.body.style.overflow="hidden";menu.setAttribute("aria-expanded","true");modal.querySelector(".echo-menu-close").focus();}
 menu.addEventListener("click",event=>{if(window.innerWidth>768)return;event.preventDefault();event.stopImmediatePropagation();modal.hidden?open():close();},true);
 modal.querySelector(".echo-menu-close").addEventListener("click",close);
