@@ -645,6 +645,29 @@
       }
     }
   </style>
+
+  <style id="echo-mobile-input-v43">
+    /* Disable long-press selection/copy only inside the interactive game.
+       Keep normal text selection available in the rest of the page. */
+    #arenaShell, #gameCanvas, #mobileControls, #mobileControls *,
+    #echoMobileQuickActions, #echoMobileQuickActions *,
+    #echoMobileMenu, #virtualJoystick, #virtualJoystick * {
+      -webkit-user-select: none !important;
+      user-select: none !important;
+      -webkit-touch-callout: none !important;
+      touch-action: none;
+    }
+    #echoMobileQuickActions button, #echoMobileMenu { touch-action: manipulation !important; }
+    #gameCanvas { -webkit-tap-highlight-color: transparent; }
+    #controlModeBtn { min-height: 44px; }
+    #virtualJoystick:not(.hidden) { display: flex; align-items: center; justify-content: center; }
+    @media (max-width: 768px) {
+      #mobileControls { position: relative; }
+      #virtualJoystick { min-width: 155px; }
+      #joystickBase { touch-action: none; }
+      #controlModeBtn { width: 100%; }
+    }
+  </style>
 </head>
 
 <body class="echo404-app">
@@ -1083,10 +1106,10 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
 
   <!-- GAME MODULES -->
-  <script src="levels.js?v=420"></script>
+  <script src="levels.js?v=430"></script>
   <script src="storage.js?v=420"></script>
   <script src="audio.js?v=310"></script>
-  <script src="game.js?v=420"></script>
+  <script src="game.js?v=430"></script>
   <script src="awakening.js?v=310"></script>
   <script src="visual-v1.js?v=310"></script>
   <script src="world-renderer.js?v=400"></script>
@@ -1424,6 +1447,98 @@
       }
 
     })();
+  </script>
+
+  <script id="echo-mobile-joystick-v43">
+  (() => {
+    "use strict";
+    const $ = id => document.getElementById(id);
+    const joystick = $("virtualJoystick");
+    const base = $("joystickBase");
+    const stick = $("joystickStick");
+    const dpad = $("mobileDpad");
+    const toggle = $("controlModeBtn");
+    if (!joystick || !base || !stick || !dpad || !toggle) return;
+
+    const storageKey = "echo404_control_mode";
+    const directionKeys = {up:"ArrowUp",down:"ArrowDown",left:"ArrowLeft",right:"ArrowRight"};
+    const active = new Set();
+    let pointerId = null;
+    let mode = "dpad";
+
+    function releaseKeys() {
+      for (const key of active) {
+        window.dispatchEvent(new KeyboardEvent("keyup",{key,bubbles:true}));
+      }
+      active.clear();
+      stick.style.transform = "translate(0px, 0px)";
+    }
+    function setMode(next) {
+      releaseKeys();
+      pointerId = null;
+      mode = next === "joystick" ? "joystick" : "dpad";
+      dpad.classList.toggle("hidden", mode === "joystick");
+      joystick.classList.toggle("hidden", mode !== "joystick");
+      toggle.textContent = mode === "joystick"
+        ? "CONTROLO: JOYSTICK (TOCA PARA D-PAD)"
+        : "CONTROLO: D-PAD (TOCA PARA JOYSTICK)";
+      toggle.setAttribute("aria-pressed", String(mode === "joystick"));
+      try { localStorage.setItem(storageKey, mode); } catch (_) {}
+    }
+    function movePointer(event) {
+      if (event.pointerId !== pointerId) return;
+      event.preventDefault();
+      const rect = base.getBoundingClientRect();
+      const dx = event.clientX - (rect.left + rect.width/2);
+      const dy = event.clientY - (rect.top + rect.height/2);
+      const radius = Math.min(rect.width,rect.height)*0.30;
+      const length = Math.hypot(dx,dy) || 1;
+      const factor = Math.min(1,radius/length);
+      stick.style.transform = `translate(${dx*factor}px,${dy*factor}px)`;
+      const wanted = new Set();
+      const threshold = 16;
+      if (dx < -threshold) wanted.add("ArrowLeft");
+      if (dx > threshold) wanted.add("ArrowRight");
+      if (dy < -threshold) wanted.add("ArrowUp");
+      if (dy > threshold) wanted.add("ArrowDown");
+      for (const key of active) {
+        if (!wanted.has(key)) {
+          window.dispatchEvent(new KeyboardEvent("keyup",{key,bubbles:true}));
+          active.delete(key);
+        }
+      }
+      for (const key of wanted) {
+        if (!active.has(key)) {
+          window.dispatchEvent(new KeyboardEvent("keydown",{key,bubbles:true}));
+          active.add(key);
+        }
+      }
+    }
+    base.addEventListener("pointerdown", event => {
+      if (pointerId !== null) return;
+      pointerId = event.pointerId;
+      try { base.setPointerCapture(pointerId); } catch (_) {}
+      movePointer(event);
+    });
+    base.addEventListener("pointermove", movePointer);
+    for (const name of ["pointerup","pointercancel","lostpointercapture"]) {
+      base.addEventListener(name, event => {
+        if (event.pointerId !== pointerId) return;
+        pointerId = null;
+        releaseKeys();
+      });
+    }
+    toggle.addEventListener("click", () => setMode(mode === "dpad" ? "joystick" : "dpad"));
+    window.addEventListener("blur", releaseKeys);
+    document.addEventListener("visibilitychange", () => { if(document.hidden) releaseKeys(); });
+    for (const el of [$("arenaShell"),dpad,joystick]) {
+      el?.addEventListener("contextmenu", event => event.preventDefault());
+      el?.addEventListener("selectstart", event => event.preventDefault());
+    }
+    let saved = "dpad";
+    try { saved = localStorage.getItem(storageKey) || "dpad"; } catch (_) {}
+    setMode(saved);
+  })();
   </script>
 </body>
 </html>
