@@ -179,6 +179,9 @@
   let levelIndex = 0;
   let level = LEVELS[0];
 
+  // Per-sector geometry; retain GAME_WORLD as the legacy fallback.
+  const arena = () => level?.arena || WORLD;
+
   let player = null;
 
   let recordings = [];
@@ -539,8 +542,8 @@
     clearAllMovement();
 
     player = {
-      x: WORLD.start.x,
-      y: WORLD.start.y,
+      x: arena().start.x,
+      y: arena().start.y,
       size: PLAYER_SIZE,
       speed: PLAYER_SPEED
     };
@@ -696,7 +699,7 @@
 
   function positionAt(frames, time) {
     if (!frames?.length) {
-      return { ...WORLD.start };
+      return { ...arena().start };
     }
 
     if (time <= frames[0].t) {
@@ -840,8 +843,8 @@
         playSound("door");
 
         emitParticles(
-          WORLD.door.x + WORLD.door.w / 2,
-          WORLD.door.y + WORLD.door.h / 2,
+          arena().door.x + arena().door.w / 2,
+          arena().door.y + arena().door.h / 2,
           COLORS.green,
           25
         );
@@ -913,13 +916,13 @@
   function isBlocked(x, y) {
     const rect = playerRect(x, y);
 
-    for (const wall of WORLD.walls || []) {
+    for (const wall of arena().walls || []) {
       if (intersects(rect, wall)) return true;
     }
 
     if (
       !doorOpen &&
-      intersects(rect, WORLD.door)
+      intersects(rect, arena().door)
     ) {
       return true;
     }
@@ -1374,8 +1377,8 @@
     // One Paradox Shift per cycle.
     shiftUsed = false;
 
-    player.x = WORLD.start.x;
-    player.y = WORLD.start.y;
+    player.x = arena().start.x;
+    player.y = arena().start.y;
 
     currentRecording = [{
       t: 0,
@@ -1423,7 +1426,7 @@
     if (
       intersects(
         playerRect(player.x, player.y),
-        WORLD.goal
+        arena().goal
       )
     ) {
       finishGame(true);
@@ -1597,7 +1600,7 @@
 
     ctx.save();
 
-    for (const wall of WORLD.walls || []) {
+    for (const wall of arena().walls || []) {
       ctx.fillStyle = "#101b2a";
 
       ctx.fillRect(
@@ -1626,7 +1629,7 @@
 
     ctx.restore();
 
-    const door = WORLD.door;
+    const door = arena().door;
 
     if (doorOpen) {
       ctx.save();
@@ -1887,7 +1890,7 @@
   // ================================================
 
   function drawGoal() {
-    const goal = WORLD.goal;
+    const goal = arena().goal;
 
     glowRect(
       goal.x,
