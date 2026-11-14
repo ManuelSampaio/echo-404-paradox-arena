@@ -1137,6 +1137,48 @@ body.echo-immersive #echoSurvivorActions #echoSelectOperator{flex:1 1 100%;min-h
  body.echo-immersive #echoSurvivorActions #echoSelectOperator{min-height:29px!important}
  body.echo-immersive #echoMobileQuickActions button{min-height:34px!important}
 }
+</style><style id="echo-v813-focus-mobile">
+@media(max-width:768px){
+ /* Gameplay first: one primary action, secondary actions in a small drawer. */
+ #app.app-container{padding-bottom:12px!important}
+ .gameplay-zone{gap:4px!important}
+ #mobileControls{padding:5px 8px!important;margin:0!important}
+ #mobileControls .mobile-control-layout{height:clamp(102px,27vw,122px)!important;min-height:0!important;gap:4px!important}
+ #mobileDpad:not(.hidden){grid-template-columns:repeat(3,clamp(30px,9vw,38px))!important;grid-template-rows:repeat(3,clamp(30px,9vw,38px))!important}
+ #mobileControls #virtualJoystick:not(.hidden){width:clamp(90px,25vw,112px)!important;height:clamp(90px,25vw,112px)!important}
+ #mobileControls #joystickBase{width:clamp(90px,25vw,112px)!important;height:clamp(90px,25vw,112px)!important}
+ #mobileShiftBtn{width:clamp(52px,14vw,66px)!important;height:clamp(52px,14vw,66px)!important}
+ #mobileRestartBtn{display:none!important}
+ #mobileControls .mobile-control-options{margin:3px 0 0!important}
+ #controlModeBtn{min-height:30px!important;font-size:10px!important;padding:3px 6px!important}
+ #echoSurvivorActions{display:flex!important;gap:5px!important;margin:1px 0!important}
+ #echoAbilityBtn{flex:1 1 auto!important;min-height:36px!important;font-size:11px!important}
+ #echoHintBtn,#echoSelectOperator{display:none!important}
+ #echoMobileQuickActions{
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  margin:2px 0 0!important;padding:4px!important;gap:5px!important;
+ }
+ #echoMobileQuickActions #echoQuickPlay{min-height:42px!important;font-size:13px!important}
+ #echoMobileQuickActions #echoQuickRestart,
+ #echoMobileQuickActions #echoQuickLevels{display:none!important}
+ #echoMobileQuickActions #echoMoreBtn{display:block!important;min-height:42px!important;background:#18364b!important;color:#e0f9ff!important;border:1px solid #377d91!important;font-size:12px!important}
+ #echoMorePanel[hidden]{display:none!important}
+ #echoMorePanel{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:6px!important;padding:7px!important;margin:2px 0 0!important;
+  background:#0a2032!important;border:1px solid #276078!important;border-radius:12px!important;
+ }
+ #echoMorePanel button{display:block!important;min-height:40px!important;min-width:0!important;font:700 11px system-ui!important;padding:5px!important;border:1px solid #38778d!important;border-radius:9px!important;background:#17374e!important;color:#e1faff!important;touch-action:manipulation!important}
+ #echoMorePanel #echoSelectOperator{grid-column:1/-1!important}
+ .arena-status-bar{font-size:10px!important}
+ #rebirthGuide{padding:4px 7px!important;margin:2px 0!important}
+ #rebirthGuide p{display:none!important}
+ .level-information{padding:3px 7px!important}
+ #levelName{font-size:11px!important}
+ .game-hud .hud-card{padding:4px 2px!important}
+ body.echo-immersive #echoMorePanel{flex:0 0 auto!important}
+ body.echo-immersive #echoMobileQuickActions #echoMoreBtn{min-height:32px!important}
+}
 </style></head>
 
 <body class="echo404-app">
@@ -2203,6 +2245,41 @@ window.addEventListener("resize",()=>{if(window.innerWidth>768&&!modal.hidden)cl
  });
  if(actions)actions.appendChild(button);
  else quick.appendChild(button);
+})();
+</script><script id="echo-v813-focus-controller">
+(()=>{
+ const nav=document.getElementById("echoMobileQuickActions");
+ const zone=document.querySelector(".gameplay-zone");
+ if(!nav||!zone)return;
+ const more=document.createElement("button");
+ more.type="button";more.id="echoMoreBtn";more.textContent="☰ OPÇÕES";
+ more.setAttribute("aria-expanded","false");more.setAttribute("aria-controls","echoMorePanel");
+ nav.appendChild(more);
+ const panel=document.createElement("div");panel.id="echoMorePanel";panel.hidden=true;
+ panel.setAttribute("aria-label","Opções de jogo");
+ nav.insertAdjacentElement("afterend",panel);
+ const items=[
+  ["echoSelectOperator","👤 PERSONAGENS"],
+  ["echoQuickLevels","▦ NÍVEIS"],
+  ["echoQuickRestart","↻ REINICIAR"],
+  ["echoHintBtn","◈ PEDIR PISTA"]
+ ];
+ items.forEach(([id,label])=>{
+  const b=document.getElementById(id);
+  if(!b)return;
+  panel.appendChild(b);
+  b.textContent=label;
+  b.addEventListener("click",()=>{
+   panel.hidden=true;more.setAttribute("aria-expanded","false");
+  });
+ });
+ more.addEventListener("click",()=>{
+  panel.hidden=!panel.hidden;
+  more.setAttribute("aria-expanded",String(!panel.hidden));
+ });
+ document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&!panel.hidden){panel.hidden=true;more.setAttribute("aria-expanded","false");}
+ });
 })();
 </script></body>
 </html>
