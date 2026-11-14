@@ -1598,6 +1598,23 @@
 
     drawAtmosphere(ctx, w, h, t);
 
+    // v8: each temporal echo wears the currently selected operator's suit.
+    // Reuse the exact same renderer as the player, tinted as a time projection.
+    if (Array.isArray(s.ghosts)) {
+      const currentMoving = moving;
+      s.ghosts.forEach((ghost, index) => {
+        if (!Number.isFinite(ghost?.x) || !Number.isFinite(ghost?.y)) return;
+        ctx.save();
+        ctx.globalAlpha = 0.48 + 0.09 * Math.sin(t * 4 + index);
+        ctx.shadowColor = "#a77cff";
+        ctx.shadowBlur = 8;
+        moving = Boolean(s.running);
+        drawOperator(ctx, ghost.x, ghost.y, operator(), t - index * 0.15);
+        ctx.restore();
+      });
+      moving = currentMoving;
+    }
+
     if (
       s.player &&
       Number.isFinite(s.player.x) &&
