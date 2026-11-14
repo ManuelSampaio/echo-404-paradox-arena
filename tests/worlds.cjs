@@ -15,7 +15,8 @@ for(let id=1;id<=6;id++) {
   assert.ok(455-p.y<maxJump,`mission ${id}: platform reachable from ground`);
   // An elevated platform may not cross a locked gate or end close enough
   // before one to allow a full-height jump over its 130px wall.
-  for(const x of gates) assert.ok(p.x>x+30 || p.x+p.w<x-100,`mission ${id}: preserve echo gate at ${x}`);
+  // Ground jump travel is 172px; reserve 220px including the player width.
+  for(const x of gates) assert.ok(p.x>x+30 || p.x+p.w<x-220,`mission ${id}: preserve echo gate at ${x}`);
  }
  for(const x of m.zones)for(const plate of id===1?[1210,2110]:[1140,2060])assert.ok(Math.abs(x-plate)>120,'safe echo plate');
  assert.ok(m.guards.length>=2);
