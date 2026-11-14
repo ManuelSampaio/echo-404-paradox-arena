@@ -204,6 +204,7 @@
   let doorOpen = false;
   let previousDoorState = false;
   let doorStates = [];
+  let threatInvulnerability = 0;
   let shiftUsed = false;
 
   let portalCooldown = 0;
@@ -574,6 +575,7 @@
     doorOpen = false;
     previousDoorState = false;
     doorStates = [];
+    threatInvulnerability = 0;
     shiftUsed = false;
 
     portalCooldown = 0;
@@ -2072,6 +2074,7 @@
     drawLasers();
     drawPortals();
     drawTraps();
+    window.EchoDynamicThreats?.draw?.(ctx, {levelIndex, worldTime, level, running});
     drawGoal();
     drawGhosts();
     drawPlayer();
@@ -2132,6 +2135,7 @@
 
     elapsed += dt;
     worldTime += dt;
+    threatInvulnerability = Math.max(0, threatInvulnerability - dt);
 
     updateGhosts();
     updateDoor();
@@ -2152,6 +2156,13 @@
 
     if (!interrupted && running) {
       interrupted = updateTraps();
+    }
+
+    if (!interrupted && running && threatInvulnerability <= 0 &&
+        window.EchoDynamicThreats?.collides?.({player, levelIndex, worldTime, level})) {
+      threatInvulnerability = 1.2;
+      killPlayer("drone");
+      interrupted = true;
     }
 
     if (!interrupted && running) {
