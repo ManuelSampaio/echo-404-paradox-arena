@@ -1002,7 +1002,18 @@
   body.echo-immersive #mobileDpad { grid-template-columns:repeat(3,30px) !important; grid-template-rows:repeat(3,30px) !important; }
 }
 </style>
-</head>
+<style id="echo-mobile-menu-v701">@media(max-width:768px){
+#levelName{font-size:12px!important;line-height:1.2!important;display:-webkit-box!important;-webkit-line-clamp:1!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+.level-information{padding:5px 8px!important}
+.game-logo{font-size:clamp(17px,5vw,23px)!important}
+#fullscreenBtn{display:inline-flex!important}
+#echoMobileLevelPanel[hidden]{display:none!important}
+#echoMobileLevelPanel{position:fixed!important;z-index:12000!important;inset:0!important;display:flex!important;align-items:flex-start!important;justify-content:center!important;background:rgba(0,4,12,.9)!important;padding:calc(env(safe-area-inset-top,0px) + 12px) 10px calc(env(safe-area-inset-bottom,0px) + 12px)!important;box-sizing:border-box!important;overflow:auto!important}
+#echoMobileLevelPanel .echo-menu-inner{width:100%;max-width:520px;max-height:calc(100dvh - 35px);overflow-y:auto;background:#091c30;border:1px solid #36d9ec;border-radius:16px;padding:14px;box-sizing:border-box}
+#echoMobileLevelPanel .echo-menu-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#ddfaff;font:700 16px system-ui}
+#echoMobileLevelPanel .echo-menu-close{border:1px solid #36d9ec;border-radius:9px;background:#102b40;color:white;padding:9px 13px;min-height:42px}
+#echoMobileLevelPanel #levelGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+}</style></head>
 
 <body class="echo404-app">
 
@@ -1949,5 +1960,23 @@
   });
 })();
 </script>
-</body>
+<script id="echo-mobile-menu-controller-v701">
+(()=>{
+const menu=document.getElementById("echoMobileMenu"),grid=document.getElementById("levelGrid");
+if(!menu||!grid)return;
+const modal=document.createElement("section");modal.id="echoMobileLevelPanel";modal.hidden=true;
+modal.setAttribute("role","dialog");modal.setAttribute("aria-modal","true");modal.setAttribute("aria-label","Selecionar nível");
+modal.innerHTML='<div class="echo-menu-inner"><div class="echo-menu-head"><span>◈ NÍVEIS E PROGRESSO</span><button class="echo-menu-close" type="button">✕ FECHAR</button></div><div id="echoMenuProgress"></div><div id="echoMenuLevels"></div><p style="color:#a5c6d8;font:12px system-ui">Escolhe um nível desbloqueado para jogar.</p></div>';
+document.body.appendChild(modal);
+const holder=modal.querySelector("#echoMenuLevels"),progress=modal.querySelector("#echoMenuProgress");
+const close=()=>{modal.hidden=true;menu.setAttribute("aria-expanded","false");document.body.style.removeProperty("overflow");};
+function open(){if(window.innerWidth>768)return;holder.appendChild(grid);const p=document.getElementById("progress");if(p)progress.textContent=p.textContent;modal.hidden=false;document.body.style.overflow="hidden";menu.setAttribute("aria-expanded","true");modal.querySelector(".echo-menu-close").focus();}
+menu.addEventListener("click",event=>{if(window.innerWidth>768)return;event.preventDefault();event.stopImmediatePropagation();modal.hidden?open():close();},true);
+modal.querySelector(".echo-menu-close").addEventListener("click",close);
+modal.addEventListener("click",event=>{if(event.target===modal)close();});
+grid.addEventListener("click",event=>{if(event.target.closest("button"))close();});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!modal.hidden)close();});
+window.addEventListener("resize",()=>{if(window.innerWidth>768&&!modal.hidden)close();});
+})();
+</script></body>
 </html>
