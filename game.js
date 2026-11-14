@@ -16,7 +16,7 @@
 */
 
 (() => {
-  const VERSION = "4.2";
+  const VERSION = "8.0";
 
   // ================================================
   // CANVAS AND DEPENDENCIES
@@ -206,6 +206,7 @@
   let doorStates = [];
   let threatInvulnerability = 0;
   let shiftUsed = false;
+  let relayAwarded = false;
 
   let portalCooldown = 0;
   let lastFrame = 0;
@@ -577,6 +578,7 @@
     doorStates = [];
     threatInvulnerability = 0;
     shiftUsed = false;
+    relayAwarded = false;
 
     portalCooldown = 0;
     lastFrame = 0;
@@ -854,6 +856,21 @@
       return (level.plates || []).every(isPlateActive);
     });
     doorOpen = doorStates.every(Boolean);
+    // v8 cooperative relay: the living operator and a recorded echo
+    // must occupy different plates at the same instant. Reward once
+    // per cycle without altering existing gates or progression.
+    if (running && !relayAwarded && level.plates?.length >= 2 && ghosts.length) {
+      const playerPlate = level.plates.findIndex(p => player && distance(player,p) < PLATE_RADIUS);
+      const echoPlate = level.plates.findIndex((p,i) =>
+        i !== playerPlate && ghosts.some(g => distance(g,p) < PLATE_RADIUS));
+      if (playerPlate >= 0 && echoPlate >= 0) {
+        relayAwarded = true;
+        score += 250;
+        emitParticles(player.x,player.y,COLORS.purple,14);
+        emitEvent("echorelay",{cycle,playerPlate,echoPlate,bonus:250});
+        setStatus("SINCRONIA TEMPORAL! +250 PONTOS");
+      }
+    }
     doorStates.forEach((open, index) => {
       if (open && !previous[index]) {
         const gate = doors[index];
@@ -1382,6 +1399,7 @@
 
     // One Paradox Shift per cycle.
     shiftUsed = false;
+    relayAwarded = false;
 
     player.x = arena().start.x;
     player.y = arena().start.y;
@@ -1724,8 +1742,10 @@
       ctx.font = "11px monospace";
       ctx.textAlign = "center";
 
+      const echoHere = ghosts.some(g => distance(g,plate) < PLATE_RADIUS);
+      const playerHere = player && distance(player,plate) < PLATE_RADIUS;
       ctx.fillText(
-        `PLACA ${index + 1}`,
+        (echoHere ? "ECO " : playerHere ? "TU " : "") + `PLACA ${index + 1}`,
         plate.x,
         plate.y - 36
       );
@@ -2440,6 +2460,7 @@
 
       getState() {
         return {
+          relayAwarded,
           player: player ? { ...player } : null,
           running,
           finished,
