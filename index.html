@@ -961,6 +961,47 @@
   #controlModeBtn, #echoMobileQuickActions button, #echoMobileMenu { touch-action:manipulation !important; }
 }
 </style>
+<style id="echo-v7-immersive">
+/* Immersive gameplay is opt-in. The original page remains scrollable. */
+#echoImmersiveClose { display:none; }
+@media (max-width:768px) {
+  #echoImmersiveClose {
+    position:absolute; right:calc(env(safe-area-inset-right,0px) + 8px);
+    top:calc(env(safe-area-inset-top,0px) + 6px);
+    z-index:100; border:1px solid #37dff1; border-radius:10px;
+    background:#061827; color:#d9ffff; font:700 12px system-ui;
+    padding:8px 12px; min-height:38px; touch-action:manipulation;
+  }
+  body.echo-immersive { overflow:hidden !important; overscroll-behavior:none; }
+  body.echo-immersive .gameplay-zone {
+    position:fixed !important; inset:0 !important; z-index:9000 !important;
+    width:100vw !important; height:100dvh !important; max-height:100dvh !important;
+    box-sizing:border-box !important; overflow:hidden !important;
+    display:flex !important; flex-direction:column !important;
+    justify-content:center !important; gap:5px !important;
+    padding:calc(env(safe-area-inset-top,0px) + 46px) 8px
+      calc(env(safe-area-inset-bottom,0px) + 8px) !important;
+    background:#030e1b !important;
+  }
+  body.echo-immersive #echoImmersiveClose { display:block; }
+  body.echo-immersive .arena-section { width:100% !important; flex:0 1 auto !important; min-height:0 !important; }
+  body.echo-immersive #arenaShell {
+    width:100% !important; height:auto !important; aspect-ratio:8/5 !important;
+    max-height:min(59dvh,calc(100dvh - 225px)) !important; margin:auto !important;
+  }
+  body.echo-immersive #gameCanvas { width:100% !important; height:100% !important; }
+  body.echo-immersive #mobileControls {
+    width:100% !important; flex:0 0 auto !important; min-height:0 !important;
+    padding:5px !important; margin:0 !important;
+  }
+  body.echo-immersive #echoMobileQuickActions { flex:0 0 auto !important; margin:0 !important; }
+  body.echo-immersive .arena-status-bar { font-size:10px !important; }
+}
+@media (max-width:768px) and (max-height:650px) {
+  body.echo-immersive #arenaShell { max-height:48dvh !important; }
+  body.echo-immersive #mobileDpad { grid-template-columns:repeat(3,30px) !important; grid-template-rows:repeat(3,30px) !important; }
+}
+</style>
 </head>
 
 <body class="echo404-app">
@@ -1016,7 +1057,7 @@
         <div class="brand-information">
           <div class="brand-overline">PARADOX EVOLUTION</div>
           <h1 class="game-logo">ECHO<span>//</span>404</h1>
-          <div class="game-subtitle">TEMPORAL ENGINE v4.2</div>
+          <div class="game-subtitle">TEMPORAL ENGINE v7.0</div>
         </div>
       </div>
 
@@ -1395,7 +1436,7 @@
 
   <!-- GAME MODULES -->
   <script src="levels.js?v=430"></script>
-  <script src="world-layouts.js?v=530"></script>
+  <script src="world-layouts.js?v=700"></script>
   <script src="storage.js?v=420"></script>
   <script src="audio.js?v=310"></script>
   <script src="dynamic-threats.js?v=540"></script>
@@ -1873,5 +1914,40 @@
   </script>
   <script src="rebirth-guide.js?v=530"></script>
 
+<script id="echo-v7-immersive-controller">
+(() => {
+  "use strict";
+  const zone=document.querySelector(".gameplay-zone");
+  const button=document.getElementById("fullscreenBtn");
+  if(!zone||!button)return;
+  const close=document.createElement("button");
+  close.id="echoImmersiveClose";close.type="button";
+  close.textContent="✕ SAIR";close.setAttribute("aria-label","Sair do modo de jogo imersivo");
+  zone.appendChild(close);
+  let previousScroll=0;
+  function setImmersive(on){
+    if(on)previousScroll=window.scrollY;
+    document.body.classList.toggle("echo-immersive",on);
+    button.setAttribute("aria-pressed",String(on));
+    button.setAttribute("aria-label",on?"Sair do modo de jogo":"Modo de jogo em ecrã completo");
+    close.hidden=!on;
+    if(!on)window.scrollTo(0,previousScroll);
+    window.EchoWorldRenderer?.resize?.();
+  }
+  close.addEventListener("click",()=>setImmersive(false));
+  button.addEventListener("click",event=>{
+    if(!matchMedia("(max-width:768px)").matches)return;
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    setImmersive(!document.body.classList.contains("echo-immersive"));
+  },true);
+  window.addEventListener("keydown",event=>{
+    if(event.key==="Escape"&&document.body.classList.contains("echo-immersive"))setImmersive(false);
+  });
+  window.addEventListener("resize",()=>{
+    if(window.innerWidth>768&&document.body.classList.contains("echo-immersive"))setImmersive(false);
+  });
+})();
+</script>
 </body>
 </html>
