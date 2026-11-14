@@ -1070,6 +1070,43 @@ const GAME_LEVELS = [
   )
 ];
 
+/* v4.3 — Each sector has a distinct navigable route.
+   The central containment gate remains a puzzle mechanic, but its
+   opening, spawn, destination and surrounding cover change by sector. */
+const SECTOR_LAYOUTS = [
+  { gateY: 195, spawnY: 250, goalY: 90,  plateY: 250, cover: [{x:500,y:175,w:125,h:24}] },
+  { gateY: 105, spawnY: 370, goalY: 350, plateY: 125, cover: [{x:455,y:255,w:165,h:22}] },
+  { gateY: 285, spawnY: 95,  goalY: 80,  plateY: 345, cover: [{x:465,y:185,w:165,h:24}] },
+  { gateY: 165, spawnY: 405, goalY: 365, plateY: 100, cover: [{x:490,y:295,w:120,h:22}] },
+  { gateY: 285, spawnY: 100, goalY: 355, plateY: 365, cover: [{x:475,y:130,w:140,h:22}] },
+  { gateY: 105, spawnY: 380, goalY: 85,  plateY: 115, cover: [{x:465,y:300,w:155,h:24}] },
+  { gateY: 235, spawnY: 85,  goalY: 380, plateY: 355, cover: [{x:475,y:140,w:145,h:24}] },
+  { gateY: 115, spawnY: 410, goalY: 335, plateY: 115, cover: [{x:475,y:275,w:145,h:24}] },
+  { gateY: 295, spawnY: 100, goalY: 100, plateY: 365, cover: [{x:475,y:190,w:145,h:24}] },
+  { gateY: 185, spawnY: 400, goalY: 75,  plateY: 100, cover: [{x:480,y:295,w:145,h:24}] }
+];
+
+GAME_LEVELS.forEach((sector, index) => {
+  const config = SECTOR_LAYOUTS[index];
+  const gate = { x: 380, y: config.gateY, w: 20, h: 95 };
+  sector.arena = {
+    start: { x: 65, y: config.spawnY },
+    goal: { x: 720, y: config.goalY, w: 48, h: 65 },
+    door: gate,
+    walls: [
+      { x: 380, y: 0, w: 20, h: gate.y },
+      { x: 380, y: gate.y + gate.h, w: 20, h: 500 - gate.y - gate.h },
+      ...config.cover
+    ]
+  };
+  // The first pressure plate moves between sectors, creating
+  // a new echo route rather than a repeated straight line.
+  if (sector.plates[0]) {
+    sector.plates[0].x = 125 + (index % 3) * 20;
+    sector.plates[0].y = config.plateY;
+  }
+});
+
 // =====================================================
 // 07. TEMPORAL ENVIRONMENT HELPERS
 // =====================================================
