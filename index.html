@@ -1245,6 +1245,43 @@ body[data-echo-intro-tone="hope"] #echoOriginStage{border-color:#76ffd6}
  #echoOriginStage{max-height:34dvh}
 }
 @media(prefers-reduced-motion:reduce){#echoOriginStage,#echoOriginStage *{animation:none!important}body[data-echo-intro-tone="echo"] #originEcho,body[data-echo-intro-tone="hope"] #originEcho{opacity:1}}
+</style><style id="echo-v83-operator-mobile">
+/* Mobile character selector: one-screen overview, details remain scrollable. */
+@media(max-width:650px){
+ #vr-menu{overscroll-behavior:contain!important}
+ #vr-menu .vr-shell{width:calc(100% - 18px)!important;max-width:520px!important;padding:calc(env(safe-area-inset-top,0px) + 8px) 0 calc(env(safe-area-inset-bottom,0px) + 16px)!important}
+ #vr-menu .vr-topbar{margin-bottom:4px!important}
+ #vr-menu .vr-topbar .vr-button{min-height:34px!important;padding:5px 10px!important;font-size:11px!important}
+ #vr-menu .vr-heading{margin-bottom:10px!important}
+ #vr-menu .vr-kicker{font-size:9px!important;letter-spacing:2px!important}
+ #vr-menu .vr-logo{font-size:clamp(27px,8vw,39px)!important;line-height:1.05!important;margin:3px 0!important}
+ #vr-menu .vr-version{font-size:9px!important;letter-spacing:2px!important}
+ #vr-menu .vr-title{font-size:clamp(17px,5vw,23px)!important;margin:9px 0 3px!important}
+ #vr-menu .vr-subtitle{font-size:11px!important;margin:0!important}
+ #vr-menu .vr-characters{gap:6px!important}
+ #vr-menu .vr-character{padding:3px!important;border-radius:11px!important}
+ #vr-menu .vr-character.active{padding:2px!important}
+ #vr-menu .vr-portrait{height:clamp(100px,29vw,148px)!important;border-radius:7px!important}
+ #vr-menu .vr-character-name{font-size:clamp(14px,4vw,18px)!important;padding:5px 1px 1px!important}
+ #vr-menu .vr-character-role{font-size:9px!important;line-height:1.2!important;min-height:25px!important;padding:0 2px 3px!important}
+ #vr-menu .vr-selected-mark{font-size:8px!important;padding:4px!important;top:5px!important;right:5px!important}
+ #vr-menu .vr-info{display:block!important;margin-top:8px!important;padding:9px 11px!important}
+ #vr-menu .vr-info h3{font-size:19px!important;margin:0!important}
+ #vr-menu .vr-info p{font-size:11px!important;margin:3px 0!important;line-height:1.3!important}
+ #vr-menu .vr-abilities{display:flex!important;flex-wrap:wrap!important;gap:4px 10px!important;padding:5px 0 0!important;margin:4px 0 0!important;border:0!important}
+ #vr-menu .vr-ability{font-size:10px!important;line-height:1.25!important}
+ #vr-menu .vr-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;margin:9px 0!important}
+ #vr-menu #vr-play{grid-column:1/-1!important;grid-row:1!important;min-height:44px!important;font-size:14px!important}
+ #vr-menu #vr-levels,#vr-menu #vr-close{min-height:34px!important;font-size:11px!important}
+ #vr-menu #vr-levels{grid-column:1/3!important}
+ #vr-menu #vr-close{grid-column:3/4!important}
+ #vr-menu .vr-settings{font-size:11px!important;gap:10px!important;margin-top:6px!important}
+ #vr-menu .vr-footer{font-size:9px!important;margin-top:10px!important}
+}
+@media(max-width:380px){
+ #vr-menu .vr-portrait{height:96px!important}
+ #vr-menu .vr-abilities{display:none!important}
+}
 </style></head>
 
 <body class="echo404-app">
@@ -1686,7 +1723,7 @@ body[data-echo-intro-tone="hope"] #echoOriginStage{border-color:#76ffd6}
   <script src="system-war.js?v=600"></script>
   <script src="game.js?v=810"></script>
   <script src="awakening.js?v=830"></script>
-  <script src="visual-v1.js?v=811"></script>
+  <script src="visual-v1.js?v=830"></script>
   <script src="world-renderer.js?v=530"></script>
   <script src="visual-effects.js?v=410"></script>
 
