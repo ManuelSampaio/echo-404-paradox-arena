@@ -1416,6 +1416,84 @@
     }
   }
 
+  // WORLD REBIRTH v5.2: geometry-driven PixiJS environment.
+  // The v4 renderer painted a fixed central laboratory on every sector,
+  // hiding the new layouts underneath. Build visuals from the actual map.
+  function drawRebirthWorld() {
+    const arena = window.EchoGame?.getLevel?.()?.arena ||
+      window.GAME_LEVELS?.[state.level - 1]?.arena;
+    if (!arena?.theme) return false;
+    const t = state.theme;
+    const theme = arena.theme;
+    const primary = Number.parseInt(theme.accent.slice(1), 16);
+    const wall = Number.parseInt(theme.wall.slice(1), 16);
+    const bg = Number.parseInt(theme.background.slice(1), 16);
+    const base = graphic("sky");
+    fill(base, 0, 0, W, H, bg);
+    const floor = graphic("distant");
+    const kind = (state.level - 1) % 5;
+    const tile = [40, 32, 50, 60, 25][kind];
+    for (let x = 0; x < W; x += tile) {
+      for (let y = 0; y < H; y += tile) {
+        const n = (Math.floor(x/tile)*7 + Math.floor(y/tile)*11 + state.level*13) % 9;
+        fill(floor, x+2, y+2, tile-4, tile-4, n<3 ? wall : bg, n<3 ? .18 : .35);
+        if(n===0) stroke(floor,x+5,y+5,tile-10,tile-10,primary,.22,1);
+      }
+    }
+    // Distinct rooms and architectural footprints.
+    const arch = graphic("structure");
+    const axis = theme.orientation;
+    if (axis === "h") {
+      for (const [x,y,w,h] of [[20,20,170,105],[590,25,185,100],[30,350,190,125],[570,350,195,125]]) {
+        fill(arch,x,y,w,h,wall,.18);stroke(arch,x,y,w,h,primary,.3,2);
+      }
+    } else {
+      for (const [x,y,w,h] of [[20,20,190,140],[30,325,180,145],[590,20,180,145],[585,320,185,150]]) {
+        fill(arch,x,y,w,h,wall,.2);stroke(arch,x,y,w,h,primary,.28,2);
+      }
+    }
+    // Draw all collision walls in the same positions as the game engine.
+    const solids = graphic("machinery");
+    for (const w of arena.walls) {
+      fill(solids,w.x,w.y,w.w,w.h,0x050b15,.95);
+      fill(solids,w.x+2,w.y+2,Math.max(0,w.w-4),Math.max(0,w.h-4),wall,.85);
+      stroke(solids,w.x,w.y,w.w,w.h,primary,.85,2);
+      if(w.w>w.h) {
+        for(let x=w.x+10;x<w.x+w.w-5;x+=26)fill(solids,x,w.y+4,8,Math.max(2,w.h-8),primary,.18);
+      } else {
+        for(let y=w.y+10;y<w.y+w.h-5;y+=26)fill(solids,w.x+4,y,Math.max(2,w.w-8),8,primary,.18);
+      }
+    }
+    // The gate frame follows the actual door, not the old x=380.
+    const gate=arena.door;
+    const gateFrame=graphic("lighting");
+    stroke(gateFrame,gate.x-4,gate.y-4,gate.w+8,gate.h+8,primary,.85,3);
+    if(gate.w>gate.h){
+      fill(gateFrame,gate.x,gate.y-9,gate.w,4,primary,.6);
+      fill(gateFrame,gate.x,gate.y+gate.h+5,gate.w,4,primary,.6);
+    } else {
+      fill(gateFrame,gate.x-9,gate.y,4,gate.h,primary,.6);
+      fill(gateFrame,gate.x+gate.w+5,gate.y,4,gate.h,primary,.6);
+    }
+    // Level-specific environmental storytelling, no fixed central overlays.
+    const decor=graphic("machinery");
+    for (const s of arena.scenery || []) {
+      stroke(decor,s.x-8,s.y-8,s.w+16,s.h+16,primary,.32,2);
+    }
+    for(let i=0;i<state.level+3;i++){
+      const x=40+(i*127+state.level*31)%720;
+      const y=35+(i*83+state.level*47)%420;
+      if(arena.walls.some(w=>x>=w.x-10&&x<=w.x+w.w+10&&y>=w.y-10&&y<=w.y+w.h+10))continue;
+      if(kind===0) {ring(decor,x,y,13,primary,.22,2);circle(decor,x,y,3,primary,.45);}
+      else if(kind===1) {stroke(decor,x-15,y-10,30,20,primary,.3,2);line(decor,x-10,y,x+10,y,primary,.2);}
+      else if(kind===2) {line(decor,x-14,y-14,x+14,y+14,primary,.25,3);line(decor,x+14,y-14,x-14,y+14,primary,.25,3);}
+      else if(kind===3) {ring(decor,x,y,18,primary,.24,3);ring(decor,x,y,7,primary,.32,2);}
+      else {fill(decor,x-15,y-10,30,20,primary,.12);stroke(decor,x-15,y-10,30,20,primary,.26,1);}
+    }
+    createParticles();
+    return true;
+  }
+
   // ==========================================
   // REBUILD WORLD — v4.0
   // ==========================================
@@ -1427,26 +1505,17 @@
 
     clearWorld();
 
-    // Base environment
-    drawAtmosphere();
-    drawStructures();
-
-    // Individual level environment
-    if (state.level === 1) {
-      drawAwakeningLab();
-    } else {
-      drawOtherSector();
+    if (!drawRebirthWorld()) {
+      // Legacy fallback when no v5 map is available.
+      drawAtmosphere();
+      drawStructures();
+      if (state.level === 1) drawAwakeningLab();
+      else drawOtherSector();
+      drawWorldStory();
+      createAnimatedLights();
+      createParticles();
+      drawForeground();
     }
-
-    // New v4.0 environmental details
-    drawWorldStory();
-
-    // Dynamic effects
-    createAnimatedLights();
-    createParticles();
-
-    // Foreground
-    drawForeground();
   }
 
   // ==========================================
