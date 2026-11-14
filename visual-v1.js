@@ -1662,14 +1662,30 @@
       say
     };
 
-    // First visit in the current browser tab.
-    try {
-      if (!sessionStorage.getItem("echo404_v2_seen")) {
+    // Let the new ORIGIN prologue finish before showing the operator
+    // selection. The menu must not cover the cinematic on first visit.
+    let seenMenu = false;
+    try { seenMenu = sessionStorage.getItem("echo404_v2_seen") === "1"; } catch (_) {}
+    if (!seenMenu) {
+      const reveal = () => {
+        if (document.body.classList.contains("awakening-active")) {
+          window.addEventListener("echo404:tutorialcomplete", reveal, {once:true});
+          return;
+        }
         openMenu();
-        sessionStorage.setItem("echo404_v2_seen", "1");
+        try { sessionStorage.setItem("echo404_v2_seen", "1"); } catch (_) {}
+      };
+      let newIntroSeen = false;
+      try { newIntroSeen = localStorage.getItem("echo404_v82_collapse_prologue_seen") === "true"; } catch (_) {}
+      if (!newIntroSeen) {
+        window.addEventListener("echo404:introcomplete", () => {
+          window.setTimeout(reveal, 80);
+        }, {once:true});
+      } else if (document.body.classList.contains("awakening-active")) {
+        window.addEventListener("echo404:tutorialcomplete", reveal, {once:true});
+      } else {
+        reveal();
       }
-    } catch (_) {
-      openMenu();
     }
 
     console.log(
