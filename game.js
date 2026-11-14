@@ -203,6 +203,7 @@
 
   let doorOpen = false;
   let previousDoorState = false;
+  let doorStates = [];
   let shiftUsed = false;
 
   let portalCooldown = 0;
@@ -572,6 +573,7 @@
 
     doorOpen = false;
     previousDoorState = false;
+    doorStates = [];
     shiftUsed = false;
 
     portalCooldown = 0;
@@ -833,29 +835,34 @@
     );
   }
 
+  function getDoors() {
+    return arena().doors?.length ? arena().doors : [arena().door];
+  }
+
   function updateDoor() {
-    doorOpen = (level.plates || []).every(
-      isPlateActive
-    );
-
-    if (doorOpen !== previousDoorState) {
-      if (doorOpen) {
-        playSound("door");
-
-        emitParticles(
-          arena().door.x + arena().door.w / 2,
-          arena().door.y + arena().door.h / 2,
-          COLORS.green,
-          25
-        );
-
-        emitEvent("dooropen");
-        setStatus("PORTA TEMPORAL ABERTA!");
-      } else {
-        emitEvent("doorclosed");
+    const doors = getDoors();
+    const previous = doorStates;
+    doorStates = doors.map((gate, index) => {
+      // v5.3 gates each use their own pressure plate.
+      // Legacy levels keep the original all-plates requirement.
+      if (arena().mazeRevolution && gate.plateIndex != null) {
+        const plate = level.plates?.[gate.plateIndex];
+        return Boolean(plate && isPlateActive(plate));
       }
-    }
-
+      return (level.plates || []).every(isPlateActive);
+    });
+    doorOpen = doorStates.every(Boolean);
+    doorStates.forEach((open, index) => {
+      if (open && !previous[index]) {
+        const gate = doors[index];
+        playSound("door");
+        emitParticles(gate.x + gate.w / 2, gate.y + gate.h / 2, COLORS.green, 18);
+        emitEvent("dooropen", {doorIndex:index, totalDoors:doors.length});
+        setStatus("PORTA " + (index + 1) + " ABERTA!");
+      } else if (!open && previous[index]) {
+        emitEvent("doorclosed", {doorIndex:index});
+      }
+    });
     previousDoorState = doorOpen;
   }
 
@@ -920,10 +927,7 @@
       if (intersects(rect, wall)) return true;
     }
 
-    if (
-      !doorOpen &&
-      intersects(rect, arena().door)
-    ) {
+    if (getDoors().some((gate, index) => !doorStates[index] && intersects(rect, gate))) {
       return true;
     }
 
@@ -1633,30 +1637,18 @@
 
     ctx.restore();
 
-    const door = arena().door;
-
-    if (doorOpen) {
-      ctx.save();
-
-      ctx.strokeStyle = COLORS.green;
-      ctx.lineWidth = 2;
-      ctx.setLineDash([6, 6]);
-
-      ctx.strokeRect(
-        door.x, door.y, door.w, door.h
-      );
-
-      ctx.restore();
-    } else {
-      glowRect(
-        door.x,
-        door.y,
-        door.w,
-        door.h,
-        COLORS.red,
-        18
-      );
-    }
+    getDoors().forEach((door, index) => {
+      if (doorStates[index]) {
+        ctx.save();
+        ctx.strokeStyle = COLORS.green;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 6]);
+        ctx.strokeRect(door.x, door.y, door.w, door.h);
+        ctx.restore();
+      } else {
+        glowRect(door.x, door.y, door.w, door.h, COLORS.red, 18);
+      }
+    });
   }
 
   // ================================================
@@ -2423,6 +2415,7 @@
           deaths,
           shifts,
           doorOpen,
+          doorStates: [...doorStates],
           shiftUsed,
           ghosts: ghosts.map(g => ({ ...g })),
           recordingsCount: recordings.length,
