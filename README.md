@@ -1,4 +1,4 @@
-# ECHO//404 — Living Worlds v11.0
+# ECHO//404 — ORIGIN REBORN v12.0
 
 Created & developed by **MANUEL SAMPAIO01**.
 
@@ -11,7 +11,7 @@ A browser game with two connected modes:
 
 | Mission | Setting | Enemies and objectives |
 | --- | --- | --- |
-| 01 — Último Sinal | Frozen ORIGIN ruins | Drones, scouts, echo training and escape |
+| 01 — ORIGIN REBORN | Ruined dock, vertical silo, crane and roofs | Phaser pilot, dash, echo-powered crane and hidden memories |
 | 02 — Sinal Fantasma | Foundry | Heavy robots, turrets and timed steam |
 | 03 — The Forgotten | Overgrown biodome | Quadruped hunters, spores and NYRA rescue |
 | 04 — The Truth | NULL reactor | Sentinels, electric pulses and echo-powered boss overload |
@@ -59,3 +59,30 @@ ECHO_RENDER_DIR=/tmp/echo-worlds node tests/navigation.cjs
 This generates one mission frame per world; it does not replace browser, touch or physical-device playtesting.
 
 Progress remains in this browser's localStorage under the existing keys. No save migration or reset is required. Continue opens the next unfinished mission from its beginning; in-mission checkpoint positions are not saved between visits.
+
+## v12.0 — ORIGIN REBORN pilot
+
+`origin-reborn.html` is the new mission 01 and the first Phaser mission. Missions 02–06 keep their previous engine for now. `origin-v97.html` remains in the archive, and `classic.html` is unchanged.
+
+The new authored map climbs from a ruined dock through a switchback silo, an echo-powered crane and upper rooftops. Movement has acceleration/braking, variable-height jumps, jump buffering, coyote time and a short dash. A recorded echo replays once and holds its final pose; keeping it on the anchor powers the moving crane. Three required fragments lead to evacuation, with three optional memories, checkpoint recovery and bronze/silver/gold runs. Both the new pilot and the older missions use smaller completion cards with optional story details.
+
+The pilot uses the locally vendored **Phaser 3.90.0** distribution (MIT, `vendor/PHASER-LICENSE.md`). All images are served from this repository. No API key, runtime CDN or build step is needed. The original completion/result keys remain compatible, and completing the pilot cannot downgrade a previously saved gold medal or best time.
+
+New source files:
+
+- `origin-pilot-data.js`: map, replay interpolation, medal rules and compatible save handling.
+- `origin-pilot.js`: Phaser scene, Arcade movement/collisions, echo crane, controls, audio and patrols.
+- `origin-pilot.css`: responsive gameplay UI and compact notifications.
+- `scripts/create-origin-art.cjs`: reproducible explorer/patrol sprite sheets, terrain and backdrop.
+
+For the real Phaser physics and Canvas rendering checks:
+
+```sh
+npm ci
+npm test
+npm run test:phaser
+# Optional: export an actual Phaser-rendered frame.
+RENDER=/tmp/origin-reborn.png npm run test:phaser
+```
+
+The Phaser suite uses a DOM adapter and predecoded local art while running the actual Arcade solver. It checks every authored jump, the optional rooftop route, echo recording, crane carrying, movement, pause, recovery and victory. It is not a physical iPhone test or a browser asset-loader test.

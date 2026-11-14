@@ -1,8 +1,8 @@
-/* ECHO//404 v11.0 — reads existing mission saves without migrating or rewriting them. */
+/* ECHO//404 v12.0 — reads existing mission saves without migrating or rewriting them. */
 (() => {
   'use strict';
   const missions = [
-    ['origin-v97.html', 'echo404_v91_origin_mission_complete', 'echo404_v93_origin_result'],
+    ['origin-reborn.html', 'echo404_v91_origin_mission_complete', 'echo404_v93_origin_result'],
     ['origin-v98.html', 'echo404_v98_sector02_complete', 'echo404_v98_sector02_result'],
     ['origin-v99.html', 'echo404_v99_archive03_complete', 'echo404_v99_archive03_result'],
     ['origin-v100.html', 'echo404_v100_truth04_complete', 'echo404_v100_truth04_result'],

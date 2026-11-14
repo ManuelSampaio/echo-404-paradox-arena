@@ -1,0 +1,23 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path'),crypto=require('node:crypto');
+const root=path.resolve(__dirname,'..'),read=name=>fs.readFileSync(path.join(root,name),'utf8');
+const context=vm.createContext({Phaser:{Scene:class{}},ORIGIN_PILOT_NO_BOOT:true});context.window=context;
+vm.runInContext(read('origin-pilot-data.js'),context);vm.runInContext(read('origin-pilot.js'),context);
+const pilot=context.OriginPilot;
+assert.equal(pilot.data.fragments.length,3);assert.equal(pilot.data.secrets.length,3);assert.ok(new Set(pilot.data.platforms.map(p=>p.y)).size>=9,'real vertical architecture');
+assert.ok(pilot.data.spawn.y-pilot.data.exit.y>800,'ending is above the dock');
+assert.ok(pilot.data.anchor.y-pilot.data.platforms.find(p=>p.id==='sky-dock').y>700*700/3400,'unpowered crane cannot be bypassed by a normal jump');
+const frames=[{t:0,x:10,y:30,frame:0},{t:1,x:110,y:70,frame:5}];assert.equal(pilot.pose(frames,.5).x,60);assert.equal(pilot.pose(frames,100).x,110);assert.equal(pilot.pose([],0),null);
+assert.equal(pilot.groundedAt({x:1910,y:670},pilot.data.anchor),true);assert.equal(pilot.groundedAt({x:1910,y:600},pilot.data.anchor),false);
+const input=new context.OriginPilotInput();input.hold(1,'left',true);input.hold(2,'left',true);input.hold(1,'left',false);assert.equal(input.down('left'),true);input.hold(3,'jump',true);assert.equal(input.take('jump'),true);assert.equal(input.take('jump'),false);input.clear();assert.equal(input.down('left'),false);
+assert.equal(pilot.rank({deaths:0,secrets:2}),'OURO');assert.equal(pilot.rank({deaths:2,secrets:0}),'PRATA');assert.equal(pilot.rank({deaths:5,secrets:3}),'BRONZE');
+const saved=new Map([['echo404_paradox_v06','old classic'],['echo404_awakening_medals_v07','old medals'],['echo404_v93_origin_result',JSON.stringify({time:90,medal:'OURO'})]]);
+const storage={getItem:k=>saved.get(k)||null,setItem:(k,v)=>saved.set(k,v)};
+assert.equal(pilot.save(storage,{time:120,medal:'BRONZE'}),true);let result=JSON.parse(saved.get('echo404_v93_origin_result'));assert.equal(result.medal,'OURO');assert.equal(result.bestTime,90);assert.equal(saved.get('echo404_paradox_v06'),'old classic');assert.equal(saved.get('echo404_awakening_medals_v07'),'old medals');
+pilot.save(storage,{time:60,medal:'PRATA'});result=JSON.parse(saved.get('echo404_v93_origin_result'));assert.equal(result.bestTime,60);assert.equal(result.medal,'OURO');
+assert.equal(pilot.save({getItem(){throw Error('blocked');},setItem(){throw Error('blocked');}},{time:120,medal:'BRONZE'}),false);
+saved.set('echo404_v93_origin_result','broken json');assert.equal(pilot.save(storage,{time:80,medal:'PRATA'}),true);
+for(const name of ['origin-pilot.js','origin-pilot-data.js'])new vm.Script(read(name));
+for(const match of read('origin-reborn.html').matchAll(/(?:src|href)="([^"#]+)"/g)){const value=match[1].split('?')[0].replace(/^\.\//,'');assert.ok(fs.existsSync(path.join(root,value)),value+' exists');}
+assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'vendor/phaser-3.90.0.min.js'))).digest('hex'),'e92ddef111ba42e92d316979c732311757093688ea1810591cb7aa2858eba7a7');
+for(const html of ['origin-v97.html','origin-v98.html','origin-v99.html','origin-v100.html','origin-v101.html','origin-v102.html'])assert.match(read(html),/class="result-story"/);
+console.log('PASS: authored vertical map, echo replay/hold, input ownership, medal/time preservation, blocked/corrupt saves, local assets and verified Phaser distribution');
