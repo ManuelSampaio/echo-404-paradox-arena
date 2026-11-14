@@ -1064,6 +1064,12 @@
 @keyframes echoPulse80{50%{filter:drop-shadow(0 0 10px #8b8aff);transform:scale(1.06)}}
 body.echo-immersive #echoSurvivorActions{margin:0!important;flex:0 0 auto}
 body.echo-immersive #echoSurvivorActions button{min-height:32px!important;padding:3px 8px!important}
+</style><style id="echo-v811-operator-access">
+#echoSelectOperator{border:1px solid #36d8eb;border-radius:10px;background:#15334c;color:#e5faff;font:800 12px system-ui;min-height:42px;padding:7px 10px;touch-action:manipulation;user-select:none}
+#echoSelectOperator:focus-visible{outline:3px solid #76f4ff;outline-offset:2px}
+#echoSurvivorActions{flex-wrap:wrap}
+#echoSurvivorActions #echoSelectOperator{flex:1 1 100%}
+body.echo-immersive #echoSurvivorActions #echoSelectOperator{flex:1 1 100%;min-height:32px!important}
 </style></head>
 
 <body class="echo404-app">
@@ -1505,7 +1511,7 @@ body.echo-immersive #echoSurvivorActions button{min-height:32px!important;paddin
   <script src="system-war.js?v=600"></script>
   <script src="game.js?v=810"></script>
   <script src="awakening.js?v=810"></script>
-  <script src="visual-v1.js?v=810"></script>
+  <script src="visual-v1.js?v=811"></script>
   <script src="world-renderer.js?v=530"></script>
   <script src="visual-effects.js?v=410"></script>
 
@@ -2112,6 +2118,24 @@ window.addEventListener("resize",()=>{if(window.innerWidth>768&&!modal.hidden)cl
   requestAnimationFrame(tick);
  }
  requestAnimationFrame(tick);
+})();
+</script><script id="echo-v811-operator-access">
+(()=>{
+ const actions=document.getElementById("echoSurvivorActions");
+ const quick=document.getElementById("echoMobileQuickActions");
+ if(!actions&&!quick)return;
+ const button=document.createElement("button");
+ button.id="echoSelectOperator";button.type="button";
+ button.textContent="👤 PERSONAGENS · TROCAR OPERADOR";
+ button.setAttribute("aria-label","Escolher entre AXIOM alienígena, NYRA humana e KAI-7 robô");
+ button.addEventListener("click",()=>{
+  if(window.EchoVisual?.openMenu){window.EchoVisual.openMenu();return;}
+  const menu=document.getElementById("vr-menu");
+  if(menu){menu.classList.add("open");return;}
+  alert("O seletor ainda está a carregar. Atualiza a página e tenta novamente.");
+ });
+ if(actions)actions.appendChild(button);
+ else quick.appendChild(button);
 })();
 </script></body>
 </html>
