@@ -364,12 +364,8 @@
   }
 
   function hasSeenIntro() {
-    const saved = storage();
-
-    return Boolean(
-      saved?.hasSeenIntro?.() ||
-      readFlag(KEYS.intro)
-    );
+    // A new chapter must play even if a legacy introduction was seen.
+    return readFlag(KEYS.intro);
   }
 
   function hasCompletedTutorial() {
