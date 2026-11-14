@@ -90,9 +90,17 @@
    on(window,'keydown',e=>{if(keyMap[e.key]){e.preventDefault();this.control.hold('key:'+e.code,keyMap[e.key],true);}else if(!e.repeat&&['e','E','Shift'].includes(e.key)){e.preventDefault();this.control.press(e.key==='Shift'?'dash':'echo');}else if(e.key==='Escape'&&!e.repeat)this.setPaused(!this.pausedByUser);});
    on(window,'keyup',e=>{if(keyMap[e.key]){e.preventDefault();this.control.hold('key:'+e.code,keyMap[e.key],false);}});
    for(const b of document.querySelectorAll('[data-hold],[data-action]')){
-    on(b,'pointerdown',e=>{e.preventDefault();try{b.setPointerCapture(e.pointerId);}catch(_){}if(b.dataset.hold)this.control.hold('pointer:'+e.pointerId,b.dataset.hold,true);else this.control.press(b.dataset.action);b.classList.add('pressed');});
+    let pointerActivation=false;
+    on(b,'pointerdown',e=>{pointerActivation=true;e.preventDefault();try{b.setPointerCapture(e.pointerId);}catch(_){}if(b.dataset.hold)this.control.hold('pointer:'+e.pointerId,b.dataset.hold,true);else this.control.press(b.dataset.action);b.classList.add('pressed');});
     const release=e=>{this.control.hold('pointer:'+e.pointerId,b.dataset.hold,false);b.classList.remove('pressed');};
-    on(b,'pointerup',release);on(b,'pointercancel',release);on(b,'lostpointercapture',release);
+    on(b,'pointerup',release);on(b,'pointercancel',e=>{release(e);pointerActivation=false;});on(b,'lostpointercapture',release);
+    // Assistive technology and keyboard activation can emit only a click.
+    // Consume the synthetic click after a real pointer press to avoid duplicates.
+    on(b,'click',()=>{if(pointerActivation){pointerActivation=false;return;}
+     if(b.dataset.action)this.control.press(b.dataset.action);
+     else if(b.dataset.hold==='jump')this.control.press('jump');
+     else{const token='click:'+b.dataset.hold;this.control.hold(token,b.dataset.hold,true);this.time.delayedCall(180,()=>this.control.hold(token,b.dataset.hold,false));}
+    });
    }
    on(window,'blur',()=>{this.control.clear();if(this.running&&!this.finished)this.setPaused(true);});
    on(document,'visibilitychange',()=>{if(document.hidden&&this.running&&!this.finished)this.setPaused(true);});

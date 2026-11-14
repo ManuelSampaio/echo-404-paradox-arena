@@ -22,6 +22,9 @@ const root=path.resolve(__dirname,'..');
  tick(3);assert.equal(scene.player.body.blocked.down,true);assert.equal(scene.player.y,1320);
  tick(1);assert.equal(scene.lift.body.width,180);assert.equal(scene.lift.body.height,24);
  const input=scene.control;
+ w.document.getElementById('echoAction').click();assert.equal(input.take('echo'),true,'assistive click triggers echo');
+ w.document.querySelector('[data-hold="jump"]').click();assert.equal(input.take('jump'),true,'assistive click triggers jump');
+
  input.hold('touch-a','left',true);input.hold('touch-b','jump',true);input.hold('touch-b','jump',false);assert.equal(input.down('left'),true);input.clear();
  place(200,1320);tick(2);input.hold('test','right',true);tick(5);assert.ok(scene.player.body.velocity.x>0&&scene.player.body.velocity.x<310);tick(25);assert.equal(scene.player.body.velocity.x,310);input.clear();tick(15);assert.equal(scene.player.body.velocity.x,0);
  const jumpHeight=short=>{place(200,1320);tick(2);input.hold('jump','jump',true);tick(short?3:1);if(short)input.hold('jump','jump',false);let lowest=scene.player.y;for(let i=0;i<60;i++){tick();lowest=Math.min(lowest,scene.player.y);}input.clear();return 1320-lowest;};
