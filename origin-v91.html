@@ -1,4 +1,4 @@
-<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#06111e"><title>ECHO//404 v9.4 — ORIGIN: NULL Awakens</title><style>
+<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#06111e"><title>ECHO//404 v9.5 — ORIGIN: Cinematic Evolution</title><style>
 *{box-sizing:border-box}html,body{margin:0;background:#030a14;color:#d9f9ff;font-family:system-ui,Arial,sans-serif;min-height:100%;overscroll-behavior:none}body{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 8px calc(12px + env(safe-area-inset-bottom))}header{width:min(100%,980px);display:flex;justify-content:space-between;align-items:center;gap:10px}h1{font-size:clamp(15px,3vw,22px);margin:0;letter-spacing:.09em;color:#75eaff}small{color:#9fb6c6}a{color:#9aeafc}.panel{width:min(100%,980px);border:1px solid #2c6477;border-radius:12px;background:#071b2c;padding:9px 12px}.stats{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;font-size:12px}.stage{position:relative;width:min(100%,980px);aspect-ratio:16/9;max-height:62dvh;background:#040d18;border:1px solid #39879c;border-radius:12px;overflow:hidden}canvas{width:100%;height:100%;display:block;touch-action:none}.message{min-height:44px;color:#b9e6f0;font-size:13px;line-height:1.4}.message strong{color:#8ef7ff}.controls{width:min(100%,980px);display:flex;justify-content:space-between;align-items:center;gap:8px;touch-action:none}.group{display:flex;gap:8px;align-items:center}button{background:#10354c;color:#e2fbff;border:1px solid #51b7ce;border-radius:12px;min-width:53px;min-height:52px;font-size:17px;font-weight:800;touch-action:none;user-select:none;-webkit-user-select:none}button:active,.pressed{background:#277c94}button.action{font-size:11px;min-width:66px;padding:4px}button.primary{background:#12675b;border-color:#6ff8c8}#restart{min-width:unset;min-height:34px;font-size:12px;padding:5px 10px}footer{font-size:10px;color:#7698ac;text-align:center}#intro{position:absolute;inset:0;z-index:3;display:grid;place-items:center;background:linear-gradient(140deg,#061220f7,#07182df5);padding:20px}#intro.hidden{display:none}.introbox{max-width:530px;text-align:center}.introbox h2{font-size:clamp(20px,4vw,38px);color:#8af0ff;letter-spacing:.12em}.introbox p{line-height:1.65;color:#d6eaf1}.introbox button{padding:0 20px;font-size:13px}.alert{color:#ff8b9c}@media(max-width:600px){body{gap:6px;padding:7px 5px}header{align-items:flex-start}h1{font-size:15px}.stage{aspect-ratio:1.65;max-height:51dvh}.controls button{min-height:56px;min-width:51px}.group{gap:5px}.controls button.action{min-width:58px;font-size:10px}.stats{font-size:10px;gap:5px}.message{font-size:12px;min-height:52px}.panel{padding:7px 9px}}
 </style><style id="v911-mobile-start-fix">
 /* Keep the mission action accessible even in short embedded iPhone browsers. */
@@ -82,12 +82,33 @@ footer a,footer a *{-webkit-user-select:none!important;user-select:none!importan
 .controls .right-hand button.action{min-width:0!important;width:clamp(38px,10vw,54px)!important;height:clamp(45px,12vw,58px)!important;min-height:0!important;font-size:11px!important;padding:3px!important}
 .controls .right-hand #resetEcho{font-size:24px!important}
 @media(max-width:390px){.controls{gap:5px!important;padding:5px!important}.controls .movement,.controls .right-hand{gap:4px!important}.controls .movement button{width:46px!important;height:52px!important}.controls .jump-button{width:56px!important;height:58px!important}.controls .right-hand button.action{width:37px!important;height:49px!important}}
-</style></head><body><header><div><h1>ECHO//404 <small>v9.4 · NULL AWAKENS</small></h1><small>MISSÃO 01 — ORIGIN: ÚLTIMO SINAL</small></div><button id="restart">REINICIAR</button></header>
+</style><style id="v95-cinematic-controls">
+/* Two distinct thumb zones with a large, isolated jump target. */
+.controls{padding:10px 12px!important;gap:12px!important;background:linear-gradient(130deg,#081c2c,#0b2435)!important}
+.controls .movement{gap:10px!important}
+.controls .movement button{width:clamp(56px,14vw,72px)!important;height:clamp(60px,14vw,72px)!important;border-radius:18px!important;font-size:26px!important}
+.controls .right-hand{gap:12px!important}
+.controls .echo-actions{display:flex;flex-direction:column;gap:4px}
+.controls .right-hand .echo-actions button.action{width:56px!important;height:33px!important;min-height:33px!important;border-radius:8px!important;font-size:10px!important}
+.controls .right-hand .echo-actions #resetEcho{font-size:19px!important}
+.controls .jump-button{width:clamp(72px,19vw,92px)!important;height:clamp(72px,19vw,92px)!important;border-radius:50%!important;font-size:34px!important;box-shadow:0 0 0 4px #2c7c7640,inset 0 2px 10px #58bda433!important}
+.controls .jump-button span{font-size:10px!important}
+.controls button:active,.controls button.pressed{filter:brightness(1.4)!important;border-color:#e2ffff!important}
+.stage{background:radial-gradient(ellipse at 45% 20%,#0a354a,#030a14 75%)!important}
+@media(max-width:600px){
+ .controls{padding:7px!important;gap:6px!important}
+ .controls .movement{gap:6px!important}
+ .controls .movement button{width:clamp(49px,14vw,60px)!important;height:clamp(57px,15vw,67px)!important}
+ .controls .right-hand{gap:6px!important}
+ .controls .right-hand .echo-actions button.action{width:45px!important;height:30px!important;min-height:30px!important;font-size:9px!important}
+ .controls .jump-button{width:clamp(65px,18vw,80px)!important;height:clamp(65px,18vw,80px)!important}
+}
+</style></head><body><header><div><h1>ECHO//404 <small>v9.5 · CINEMATIC EVOLUTION</small></h1><small>MISSÃO 01 — ORIGIN: ÚLTIMO SINAL</small></div><button id="restart">REINICIAR</button></header>
 <div class="panel stats"><span id="objective">OBJETIVO: RESTAURAR ENERGIA</span><span id="echoes">ECOS: 0/2</span><span id="rec">GRAVAÇÃO: LIVRE</span><span id="life">INTEGRIDADE: 3</span></div>
 <div class="stage"><div id="transmission" hidden aria-live="polite"><div class="transmission-avatar" id="transmissionAvatar">◈</div><div class="transmission-content"><b id="transmissionName">ECHO</b><p id="transmissionText"></p></div></div><canvas id="game" width="960" height="540" aria-label="Missão lateral ORIGIN"></canvas><div id="intro"><div class="introbox"><small>ORIGIN // 2089 // SETOR 01</small><h2>ÚLTIMO SINAL</h2><p>O colapso destruiu a estação. ECHO encontrou o teu sinal vital. Recupera o registo do desastre, usa um eco para manter a porta aberta e escapa aos sistemas de segurança de NULL.</p><p><small>Move-te com ← →, salta com ↑ ou espaço. Grava um percurso de até 8 segundos e cria um eco para pressionar a placa.</small></p><button class="primary" id="begin" type="button">▶ INICIAR MISSÃO</button></div></div></div>
 <div class="panel message" id="dialog"><strong>ECHO:</strong> A aguardar ligação...</div>
 <section id="result" hidden aria-live="polite"><div class="result-card"><small>ORIGIN // REGISTO RECUPERADO</small><h2>MISSÃO CONCLUÍDA</h2><h3 id="resultMedal"></h3><p id="resultStats"></p><p id="endingStory">A gravação recuperada revela uma ordem interna de desativação. NULL controla agora o núcleo central.</p><p><b>ECHO:</b> O próximo sinal vem do núcleo. A minha memória está incompleta... e isso assusta-me.</p><p><b>NULL:</b> A tua sobrevivência não estava prevista.</p><button type="button" id="retryMission">↻ JOGAR NOVAMENTE</button></div></section>
-<div class="controls" aria-label="Controlos para duas mãos"><div class="group movement" aria-label="Mão esquerda: movimento"><button data-key="left" aria-label="Mover para esquerda">◀</button><button data-key="right" aria-label="Mover para direita">▶</button></div><div class="group right-hand" aria-label="Mão direita: ações"><button id="record" class="action primary" aria-label="Gravar ou terminar eco">● ECO</button><button id="resetEcho" class="action" aria-label="Limpar ecos">↺</button><button data-key="jump" class="jump-button" aria-label="Saltar">↑<span>SALTAR</span></button></div></div>
+<div class="controls" aria-label="Controlos para duas mãos"><div class="group movement" aria-label="Mão esquerda: movimento"><button data-key="left" aria-label="Mover para esquerda">◀</button><button data-key="right" aria-label="Mover para direita">▶</button></div><div class="group right-hand" aria-label="Mão direita: salto e ecos"><div class="echo-actions"><button id="record" class="action primary" aria-label="Gravar ou terminar eco">● ECO</button><button id="resetEcho" class="action" aria-label="Limpar ecos">↺</button></div><button data-key="jump" class="jump-button" aria-label="Saltar">↑<span>SALTAR</span></button></div></div>
 <footer>Protótipo experimental independente · Jogo clássico preservado · CREATED & DEVELOPED BY MANUEL SAMPAIO01 · <a href="./index.html">VOLTAR AO JOGO</a></footer>
 <script>
 "use strict";
@@ -103,9 +124,10 @@ let gate2Open=false,secondPlateHint=false,missionResult=null,storyTriggers=new S
 const terminal={x:2420,y:408,w:38,h:47},exit={x:2850,y:380,w:62,h:75};
 let player,echoes,recording,recordFrames,recordTime,cam,integrity,started,ended,gateOpen,terminalDone,checkpoint,missionTime,noticeTimer,drone,laserTime,last=0,keys=new Set();
 let hostileAlert=0,droneMode="patrol",droneStun=0,laserWarning=false,impactSparks=[],alertAnnounced=false;
+let cameraShake=0,cinemaFlash=0,stepPhase=0,jumpBuffer=0,coyote=0,activePointers=new Map();
 const patrolMin=1740,patrolMax=2130,droneRange=340;
 const laserPeriod=4.2,laserWarningAt=2.1,laserFireAt=2.85,laserEndAt=3.55;
-function addSparks(x,y,color="#ff647d"){for(let i=0;i<15;i++){const a=Math.random()*Math.PI*2;impactSparks.push({x,y,vx:Math.cos(a)*(60+Math.random()*150),vy:Math.sin(a)*(60+Math.random()*150),t:.4+Math.random()*.35,color})}if(impactSparks.length>90)impactSparks.splice(0,impactSparks.length-90)}
+function addSparks(x,y,color="#ff647d"){cameraShake=Math.max(cameraShake,5);cinemaFlash=Math.max(cinemaFlash,.14);for(let i=0;i<15;i++){const a=Math.random()*Math.PI*2;impactSparks.push({x,y,vx:Math.cos(a)*(60+Math.random()*150),vy:Math.sin(a)*(60+Math.random()*150),t:.4+Math.random()*.35,color})}if(impactSparks.length>90)impactSparks.splice(0,impactSparks.length-90)}
 function coverBetween(a,b){return blocks.some(o=>o.x>Math.min(a,b)&&o.x<Math.max(a,b)&&player.y+player.h>o.y+8)}
 function updateHostiles(dt){
  const phase=laserTime%laserPeriod;
@@ -134,7 +156,7 @@ function storyOnce(key,condition,who,message){if(condition&&!storyTriggers.has(k
 
 function reset(){
  player={x:82,y:ground-38,w:24,h:38,vx:0,vy:0,onGround:false,inv:0};
- echoes=[];recording=false;recordFrames=[];recordTime=0;cam=0;integrity=3;started=false;ended=false;gateOpen=false;gate2Open=false;secondPlateHint=false;missionResult=null;storyTriggers=new Set();transmissionUntil=0;$("transmission").hidden=true;$("result").hidden=true;document.body.classList.remove("mission-finished");terminalDone=false;checkpoint=82;missionTime=0;noticeTimer=0;laserTime=0;hostileAlert=0;droneMode="patrol";droneStun=0;laserWarning=false;impactSparks=[];alertAnnounced=false;drone={x:1860,y:ground-50,dir:1};
+ echoes=[];recording=false;recordFrames=[];recordTime=0;cam=0;integrity=3;started=false;ended=false;gateOpen=false;gate2Open=false;secondPlateHint=false;missionResult=null;storyTriggers=new Set();transmissionUntil=0;$("transmission").hidden=true;$("result").hidden=true;document.body.classList.remove("mission-finished");terminalDone=false;checkpoint=82;missionTime=0;noticeTimer=0;laserTime=0;hostileAlert=0;droneMode="patrol";droneStun=0;laserWarning=false;impactSparks=[];cameraShake=0;cinemaFlash=0;stepPhase=0;jumpBuffer=0;coyote=0;activePointers.clear();alertAnnounced=false;drone={x:1860,y:ground-50,dir:1};
  $("intro").classList.remove("hidden");$("record").textContent="● ECO";keys.clear();updateHud();
 }
 function updateHud(){
@@ -166,10 +188,13 @@ function update(dt){
  storyOnce("first-gate",player.x>1090,"ECHO","Uma placa temporal. Grava o percurso até ela e deixa um eco a sustentar o circuito.");
  storyOnce("null-contact",player.x>1700,"NULL","Reconheço essa assinatura temporal. Não devias ter acordado.");
  storyOnce("second-lock",player.x>2000,"ECHO","Duas fechaduras. Os teus ecos são a única forma de manter o caminho aberto.");
- player.inv=Math.max(0,player.inv-dt);
+ player.inv=Math.max(0,player.inv-dt);cameraShake=Math.max(0,cameraShake-24*dt);cinemaFlash=Math.max(0,cinemaFlash-dt);jumpBuffer=Math.max(0,jumpBuffer-dt);
  const left=keys.has("left"),right=keys.has("right");
  player.vx=(right?235:0)-(left?235:0);
- if(keys.has("jump")&&player.onGround){player.vy=-530;player.onGround=false;keys.delete("jump")}
+ if(player.onGround)coyote=.11;else coyote=Math.max(0,coyote-dt);
+ if(keys.has("jump")){jumpBuffer=.13;keys.delete("jump")}
+ if(jumpBuffer>0&&coyote>0){player.vy=-530;player.onGround=false;coyote=0;jumpBuffer=0;addSparks(player.x+12,player.y+37,"#68e7ff")}
+ stepPhase+=Math.abs(player.vx)*dt/17;
  const prevY=player.y;player.x=clamp(player.x+player.vx*dt,0,worldWidth-player.w);player.vy+=gravity*dt;player.y+=player.vy*dt;player.onGround=false;
  if(player.y+player.h>=ground){player.y=ground-player.h;player.vy=0;player.onGround=true}
  for(const p of [...platforms,...blocks])if(player.vy>=0&&player.x+player.w>p.x&&player.x<p.x+p.w&&prevY+player.h<=p.y+10&&player.y+player.h>=p.y){player.y=p.y-player.h;player.vy=0;player.onGround=true}
@@ -205,6 +230,10 @@ function update(dt){
 function draw(){
  // World-space atmosphere and subtle silhouettes for more legible geometry.
  ctx.fillStyle="#04111e";ctx.fillRect(0,0,W,H);
+ // Emergency lights and drifting industrial haze.
+ const glow=ctx.createRadialGradient(480+Math.sin(missionTime*.7)*160,110,15,480,150,650);
+ glow.addColorStop(0,"#0e587044");glow.addColorStop(1,"#06111e00");ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+ ctx.save();if(cameraShake>0)ctx.translate((Math.random()-.5)*cameraShake,(Math.random()-.5)*cameraShake);
  // Multi-layer parallax, icy industrial station.
  for(let layer=0;layer<3;layer++){
   const speed=[.12,.3,.55][layer],step=[160,210,125][layer];
@@ -239,10 +268,13 @@ function draw(){
  // Echoes: replay and then hold their final position.
  for(const e of echoes){const p=pose(e.frames,Math.min(e.time,e.frames[e.frames.length-1].t));if(!p)continue;ctx.globalAlpha=.55;ctx.strokeStyle="#dbc6ff";ctx.lineWidth=2;ctx.strokeRect(p.x-1,p.y-1,26,40);ctx.fillStyle="#aa86ff";ctx.fillRect(p.x,p.y,24,38);ctx.fillStyle="#e0caff";ctx.fillRect(p.x+5,p.y+6,14,7);ctx.globalAlpha=1}
  // Operator silhouette.
- if(player.inv===0||Math.floor(player.inv*12)%2===0){ctx.strokeStyle="#b7f5ff";ctx.lineWidth=1.5;ctx.strokeRect(player.x-1,player.y-1,player.w+2,player.h+2);ctx.fillStyle="#42b9df";ctx.fillRect(player.x,player.y+12,player.w,26);ctx.fillStyle="#133a54";ctx.fillRect(player.x+3,player.y,18,16);ctx.fillStyle="#d2faff";ctx.fillRect(player.x+5,player.y+5,14,5);ctx.fillStyle="#73edfa";ctx.fillRect(player.x+3,player.y+35,7,4);ctx.fillRect(player.x+15,player.y+35,7,4)}
+ if(player.inv===0||Math.floor(player.inv*12)%2===0){ctx.strokeStyle="#b7f5ff";ctx.lineWidth=1.5;ctx.strokeRect(player.x-1,player.y-1,player.w+2,player.h+2);ctx.fillStyle="#42b9df";ctx.fillRect(player.x,player.y+12,player.w,26);
+ if(Math.abs(player.vx)>0&&player.onGround){ctx.fillStyle="#a4f5ff";ctx.fillRect(player.x+3,player.y+34+Math.sin(stepPhase)*2,7,4);ctx.fillRect(player.x+15,player.y+34-Math.sin(stepPhase)*2,7,4)}ctx.fillStyle="#133a54";ctx.fillRect(player.x+3,player.y,18,16);ctx.fillStyle="#d2faff";ctx.fillRect(player.x+5,player.y+5,14,5);ctx.fillStyle="#73edfa";ctx.fillRect(player.x+3,player.y+35,7,4);ctx.fillRect(player.x+15,player.y+35,7,4)}
  if(recording){ctx.strokeStyle="#ff667c";ctx.lineWidth=2;ctx.strokeRect(player.x-4,player.y-4,player.w+8,player.h+8)}
  for(const s of impactSparks){ctx.globalAlpha=Math.min(1,s.t*2);ctx.fillStyle=s.color;ctx.fillRect(s.x,s.y,3,3)}ctx.globalAlpha=1;
  ctx.restore();
+ ctx.restore();
+ if(cinemaFlash>0){ctx.fillStyle="rgba(170,234,255,"+(cinemaFlash*1.3)+")";ctx.fillRect(0,0,W,H)}
  const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,"#03101b00");grad.addColorStop(1,"#020811bb");ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
  ctx.fillStyle="#90d5e7";ctx.font="bold 15px monospace";ctx.fillText("ORIGIN / SETOR 01",20,29);
  ctx.font="bold 13px monospace";ctx.textAlign="right";ctx.fillStyle=droneMode==="chase"?"#ff7890":droneMode==="search"?"#ffd07e":"#88c9dc";ctx.fillText("NULL: "+(droneMode==="chase"?"ALERTA":droneMode==="search"?"PROCURA":"PATRULHA"),W-18,29);ctx.textAlign="left";
@@ -254,12 +286,13 @@ function bind(){
  const map={arrowleft:"left",a:"left",arrowright:"right",d:"right",arrowup:"jump",w:"jump"," ":"jump"};
  window.addEventListener("keydown",e=>{if(map[e.key.toLowerCase()]){e.preventDefault();keys.add(map[e.key.toLowerCase()])}if(e.key.toLowerCase()==="e"&&!e.repeat)record()});
  window.addEventListener("keyup",e=>{if(map[e.key.toLowerCase()])keys.delete(map[e.key.toLowerCase()])});
- window.addEventListener("blur",()=>keys.clear());
+ window.addEventListener("blur",()=>{keys.clear();activePointers.clear()});
+ // Pointer ownership prevents releasing one finger from cancelling the other.
  for(const b of document.querySelectorAll("[data-key]")){
   const key=b.dataset.key;
-  b.addEventListener("pointerdown",e=>{e.preventDefault();b.setPointerCapture(e.pointerId);keys.add(key);b.classList.add("pressed")});
-  const release=e=>{e.preventDefault();keys.delete(key);b.classList.remove("pressed")};
-  b.addEventListener("pointerup",release);b.addEventListener("pointercancel",release);b.addEventListener("lostpointercapture",()=>{keys.delete(key);b.classList.remove("pressed")});
+  b.addEventListener("pointerdown",e=>{e.preventDefault();try{b.setPointerCapture(e.pointerId)}catch(_){}activePointers.set(e.pointerId,key);keys.add(key);b.classList.add("pressed")});
+  const release=e=>{e.preventDefault();activePointers.delete(e.pointerId);if(![...activePointers.values()].includes(key))keys.delete(key);b.classList.remove("pressed")};
+  b.addEventListener("pointerup",release);b.addEventListener("pointercancel",release);b.addEventListener("lostpointercapture",e=>{activePointers.delete(e.pointerId);if(![...activePointers.values()].includes(key))keys.delete(key);b.classList.remove("pressed")});
  }
  $("begin").addEventListener("click",start);
  $("restart").addEventListener("click",reset);
