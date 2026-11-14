@@ -668,6 +668,38 @@
       #controlModeBtn { width: 100%; }
     }
   </style>
+
+  <style id="rebirth-phase1-style">
+    .rebirth-guide {
+      position: relative; z-index: 5; display: grid; gap: 6px;
+      margin: 0 0 12px; padding: 12px 15px;
+      background: linear-gradient(110deg, rgba(7,30,48,.96),rgba(18,15,47,.95));
+      border: 1px solid rgba(72,246,255,.42); border-radius: 12px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.2); color: #e8faff;
+      font: 500 13px/1.4 system-ui, sans-serif;
+    }
+    .rebirth-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    #rebirthTag { font-size: 10px; letter-spacing: .12em; color: #69f5ff; }
+    .rebirth-guide strong { font-size: 17px; letter-spacing: .03em; }
+    .rebirth-guide p { margin: 0; color: #c5d9eb; }
+    .rebirth-progress { color: #69f5ff; font-size: 12px; letter-spacing: 3px; }
+    #rebirthToggle, #rebirthSkip {
+      cursor: pointer; color: #baf9ff; border: 1px solid rgba(72,246,255,.35);
+      border-radius: 7px; background: rgba(72,246,255,.09); padding: 7px 10px;
+      touch-action: manipulation;
+    }
+    #rebirthToggle:disabled { opacity: .55; cursor: default; }
+    #rebirthSkip { justify-self: start; font-size: 11px; }
+    #rebirthSkip[hidden] { display: none; }
+    @media (max-width: 768px) {
+      .rebirth-guide { padding: 10px 12px; gap: 4px; margin-bottom: 8px; }
+      .rebirth-guide strong { font-size: 15px; }
+      .rebirth-guide p { font-size: 12px; }
+      #mobileControls { scroll-margin-top: 12px; }
+      #echoMobileQuickActions button { min-height: 44px; }
+      #controlModeBtn { min-height: 44px; }
+    }
+  </style>
 </head>
 
 <body class="echo404-app">
@@ -1540,5 +1572,6 @@
     setMode(saved);
   })();
   </script>
+  <script src="rebirth-guide.js?v=500"></script>
 </body>
 </html>
