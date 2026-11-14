@@ -31,7 +31,7 @@ a{-webkit-touch-callout:default!important;user-select:text!important;-webkit-use
 #result{position:relative;width:min(100%,980px);border:2px solid #69ddc6;border-radius:14px;padding:12px;background:linear-gradient(140deg,#0a2533,#102b40);box-shadow:0 0 30px #2bdac42a}
 .result-card{text-align:center}.result-card h2{font-size:clamp(18px,4vw,26px);color:#9fffdc;margin:5px}.result-card h3{color:#ffd887;margin:5px}.result-card p{font-size:13px;line-height:1.45;margin:8px}.result-card button{font-size:12px;padding:7px 15px;min-height:42px}
 footer,footer *{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
-footer a{display:inline-block;min-height:36px;padding:8px 4px;touch-action:manipulation!important;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
+footer a{display:inline-block;min-height:30px;padding:6px 4px;touch-action:manipulation!important;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
 </style><style id="v94-cinematic">
 header h1{font-size:clamp(14px,3vw,20px);line-height:1.2;letter-spacing:.04em}
 header h1 small{display:inline;font-size:.65em;letter-spacing:.05em}
@@ -50,6 +50,28 @@ body.mission-finished .stage{order:0}
 @keyframes signal-in{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes holo-pulse{from{opacity:.6;filter:brightness(.8)}to{opacity:1;filter:brightness(1.5)}}
 @media(max-width:600px){header h1{font-size:14px}header h1 small{font-size:10px}#transmission{padding:6px;gap:7px;top:5px;left:5px;right:5px}.transmission-avatar{width:35px;height:39px;font-size:22px}.transmission-content p{font-size:10px}}
+</style><style id="v941-compact-controls">
+/* Compact, thumb-friendly dock: no controls cover the actual canvas. */
+.controls{background:#071b2c;border:1px solid #315f77;border-radius:14px;padding:6px 8px;gap:8px;box-shadow:0 3px 15px #0004}
+.controls .group{gap:6px;min-width:0}
+.controls button{min-width:48px;min-height:46px;border-radius:11px;font-size:18px;line-height:1.1;box-shadow:none!important;transform:none!important}
+.controls button.action{min-width:65px;min-height:46px;font-size:10px;padding:4px 7px}
+.controls button:active,.controls button.pressed{background:#2c7990!important;filter:brightness(1.2)}
+#dialog{min-height:0;padding:7px 10px;font-size:12px;line-height:1.3}
+body.mission-finished #transmission{display:none!important}
+body.mission-finished #result{margin-top:4px}
+footer{font-size:10px;line-height:1.4}
+footer a,footer a *{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
+@media(max-width:600px){
+ body{gap:5px}
+ .controls{padding:5px 6px;border-radius:12px;gap:4px}
+ .controls .group{gap:4px}
+ .controls button{min-width:42px;min-height:43px;font-size:17px;border-radius:9px}
+ .controls button.action{min-width:54px;min-height:43px;font-size:9px;padding:3px 4px}
+ #dialog{font-size:11px;padding:6px 9px;min-height:0}
+ footer{font-size:9px}
+}
+@media(max-width:360px){.controls button{min-width:37px}.controls button.action{min-width:48px}}
 </style></head><body><header><div><h1>ECHO//404 <small>v9.4 · NULL AWAKENS</small></h1><small>MISSÃO 01 — ORIGIN: ÚLTIMO SINAL</small></div><button id="restart">REINICIAR</button></header>
 <div class="panel stats"><span id="objective">OBJETIVO: RESTAURAR ENERGIA</span><span id="echoes">ECOS: 0/2</span><span id="rec">GRAVAÇÃO: LIVRE</span><span id="life">INTEGRIDADE: 3</span></div>
 <div class="stage"><div id="transmission" hidden aria-live="polite"><div class="transmission-avatar" id="transmissionAvatar">◈</div><div class="transmission-content"><b id="transmissionName">ECHO</b><p id="transmissionText"></p></div></div><canvas id="game" width="960" height="540" aria-label="Missão lateral ORIGIN"></canvas><div id="intro"><div class="introbox"><small>ORIGIN // 2089 // SETOR 01</small><h2>ÚLTIMO SINAL</h2><p>O colapso destruiu a estação. ECHO encontrou o teu sinal vital. Recupera o registo do desastre, usa um eco para manter a porta aberta e escapa aos sistemas de segurança de NULL.</p><p><small>Move-te com ← →, salta com ↑ ou espaço. Grava um percurso de até 8 segundos e cria um eco para pressionar a placa.</small></p><button class="primary" id="begin" type="button">▶ INICIAR MISSÃO</button></div></div></div>
