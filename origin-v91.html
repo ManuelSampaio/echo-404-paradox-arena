@@ -10,6 +10,22 @@
 #intro #begin{display:block!important;visibility:visible!important;position:relative!important;z-index:10!important;flex:none!important;min-height:44px!important;min-width:185px!important;padding:10px 18px!important;margin:4px auto 0!important;font-size:13px!important;cursor:pointer}
 @media(max-width:600px){#intro .introbox{gap:5px!important}#intro .introbox p{font-size:11px!important}#intro #begin{min-height:43px!important}}
 @media(max-height:650px){#intro{padding:6px 10px!important}#intro .introbox{gap:3px!important}#intro .introbox h2{font-size:18px!important}#intro .introbox p{font-size:10px!important;line-height:1.22!important}#intro #begin{min-height:38px!important}}
+</style><style id="v912-mobile-game-polish">
+/* Keep long-press selection/callouts out of the gameplay surface on iOS. */
+html,body,.stage,.controls,.panel,header,footer,button,canvas,#intro,#dialog{
+ -webkit-user-select:none!important;user-select:none!important;
+ -webkit-touch-callout:none!important;
+ -webkit-tap-highlight-color:transparent!important;
+}
+button,canvas,.stage,.controls{touch-action:none!important}
+button{cursor:pointer;outline-offset:3px}
+button:focus-visible{outline:2px solid #9efaff}
+a{-webkit-touch-callout:default!important;user-select:text!important;-webkit-user-select:text!important}
+.stage{border:2px solid #4e9ab1!important;box-shadow:inset 0 0 0 1px #14364a,0 0 25px #0a405044!important}
+.panel{border-color:#397c92!important;box-shadow:inset 0 1px 0 #73b7cc1a}
+.controls button{border:2px solid #5ba9bd!important;box-shadow:inset 0 1px 0 #b1efff24,0 4px 0 #071726}
+.controls button.primary{border-color:#79e9c7!important}
+.controls button:active,.controls button.pressed{transform:translateY(2px);box-shadow:inset 0 1px 5px #0008}
 </style></head><body><header><div><h1>ECHO//404 <small>v9.1 · WORLD REBORN</small></h1><small>MISSÃO 01 — ORIGIN: ÚLTIMO SINAL</small></div><button id="restart">REINICIAR</button></header>
 <div class="panel stats"><span id="objective">OBJETIVO: RESTAURAR ENERGIA</span><span id="echoes">ECOS: 0/2</span><span id="rec">GRAVAÇÃO: LIVRE</span><span id="life">INTEGRIDADE: 3</span></div>
 <div class="stage"><canvas id="game" width="960" height="540" aria-label="Missão lateral ORIGIN"></canvas><div id="intro"><div class="introbox"><small>ORIGIN // 2089 // SETOR 01</small><h2>ÚLTIMO SINAL</h2><p>O colapso destruiu a estação. ECHO encontrou o teu sinal vital. Recupera o registo do desastre, usa um eco para manter a porta aberta e escapa aos sistemas de segurança de NULL.</p><p><small>Move-te com ← →, salta com ↑ ou espaço. Grava um percurso de até 8 segundos e cria um eco para pressionar a placa.</small></p><button class="primary" id="begin" type="button">▶ INICIAR MISSÃO</button></div></div></div>
@@ -81,6 +97,7 @@ function update(dt){
  cam=clamp(player.x-310,0,worldWidth-W);updateHud();
 }
 function draw(){
+ // World-space atmosphere and subtle silhouettes for more legible geometry.
  ctx.fillStyle="#04111e";ctx.fillRect(0,0,W,H);
  // Multi-layer parallax, icy industrial station.
  for(let layer=0;layer<3;layer++){
@@ -92,22 +109,22 @@ function draw(){
  ctx.save();ctx.translate(-cam,0);
  ctx.fillStyle="#172f40";ctx.fillRect(0,ground,worldWidth,H-ground);ctx.fillStyle="#36768c";ctx.fillRect(0,ground,worldWidth,5);
  for(let x=0;x<worldWidth;x+=75){ctx.fillStyle="#0b1d2a";ctx.fillRect(x,ground+16,60,30);ctx.strokeStyle="#214658";ctx.strokeRect(x,ground+16,60,30)}
- for(const p of platforms){ctx.fillStyle="#234b60";ctx.fillRect(p.x,p.y,p.w,p.h);ctx.fillStyle="#64a5b3";ctx.fillRect(p.x,p.y,p.w,4)}
- for(const b of blocks){ctx.fillStyle="#193b4c";ctx.fillRect(b.x,b.y,b.w,b.h);ctx.strokeStyle="#56859a";ctx.strokeRect(b.x,b.y,b.w,b.h)}
+ for(const p of platforms){ctx.fillStyle="#234b60";ctx.fillRect(p.x,p.y,p.w,p.h);ctx.strokeStyle="#75bdcd";ctx.lineWidth=2;ctx.strokeRect(p.x+.5,p.y+.5,p.w-1,p.h-1);ctx.fillStyle="#8de1e7";ctx.fillRect(p.x,p.y,p.w,4)}
+ for(const b of blocks){ctx.fillStyle="#193b4c";ctx.fillRect(b.x,b.y,b.w,b.h);ctx.strokeStyle="#77b9cc";ctx.lineWidth=2;ctx.strokeRect(b.x+.5,b.y+.5,b.w-1,b.h-1)}
  // Signal plate and gate.
  ctx.fillStyle=gateOpen?"#43edc1":"#ec5c78";ctx.fillRect(plate.x,plate.y,plate.w,8);
- ctx.fillStyle="#07151d";ctx.fillRect(gate.x,gate.y,gate.w,gate.h);ctx.strokeStyle=gateOpen?"#40d9a6":"#f26b83";ctx.lineWidth=3;ctx.strokeRect(gate.x,gate.y,gate.w,gate.h);
+ ctx.fillStyle="#07151d";ctx.fillRect(gate.x,gate.y,gate.w,gate.h);ctx.strokeStyle=gateOpen?"#40d9a6":"#f26b83";ctx.lineWidth=3;ctx.strokeRect(gate.x,gate.y,gate.w,gate.h);ctx.strokeStyle="#b7e8ee66";ctx.lineWidth=1;ctx.strokeRect(gate.x-4,gate.y-4,gate.w+8,gate.h+8);
  if(!gateOpen){ctx.fillStyle="#ff647d99";ctx.fillRect(gate.x+8,gate.y+8,14,gate.h-16)}
  ctx.fillStyle="#71e4f8";ctx.fillRect(terminal.x,terminal.y,terminal.w,terminal.h);ctx.fillStyle="#061926";ctx.fillRect(terminal.x+5,terminal.y+7,terminal.w-10,22);
  ctx.fillStyle=terminalDone?"#6fffd1":"#e4a965";ctx.fillRect(exit.x,exit.y,exit.w,exit.h);ctx.fillStyle="#071724";ctx.fillRect(exit.x+8,exit.y+8,exit.w-16,exit.h-8);
  // Active turret.
  const beamOn=(laserTime%3.6)<1.4;ctx.fillStyle="#a83e5a";ctx.fillRect(888,315,26,27);if(beamOn){ctx.fillStyle="#ff4c7399";ctx.fillRect(898,340,7,ground-340);ctx.fillStyle="#ff96a9";ctx.fillRect(900,340,3,ground-340)}
  // Drone.
- ctx.fillStyle="#9d3e57";ctx.fillRect(drone.x,drone.y,34,20);ctx.fillStyle="#ff597c";ctx.fillRect(drone.x+10,drone.y+4,12,5);ctx.fillStyle="#91b4c7";ctx.fillRect(drone.x-5,drone.y-6,44,5);
+ ctx.fillStyle="#9d3e57";ctx.fillRect(drone.x,drone.y,34,20);ctx.strokeStyle="#ff9aaf";ctx.lineWidth=2;ctx.strokeRect(drone.x-.5,drone.y-.5,35,21);ctx.fillStyle="#ff597c";ctx.fillRect(drone.x+10,drone.y+4,12,5);ctx.fillStyle="#91b4c7";ctx.fillRect(drone.x-5,drone.y-6,44,5);
  // Echoes: replay and then hold their final position.
- for(const e of echoes){const p=pose(e.frames,Math.min(e.time,e.frames[e.frames.length-1].t));if(!p)continue;ctx.globalAlpha=.55;ctx.fillStyle="#aa86ff";ctx.fillRect(p.x,p.y,24,38);ctx.fillStyle="#e0caff";ctx.fillRect(p.x+5,p.y+6,14,7);ctx.globalAlpha=1}
+ for(const e of echoes){const p=pose(e.frames,Math.min(e.time,e.frames[e.frames.length-1].t));if(!p)continue;ctx.globalAlpha=.55;ctx.strokeStyle="#dbc6ff";ctx.lineWidth=2;ctx.strokeRect(p.x-1,p.y-1,26,40);ctx.fillStyle="#aa86ff";ctx.fillRect(p.x,p.y,24,38);ctx.fillStyle="#e0caff";ctx.fillRect(p.x+5,p.y+6,14,7);ctx.globalAlpha=1}
  // Operator silhouette.
- if(player.inv===0||Math.floor(player.inv*12)%2===0){ctx.fillStyle="#42b9df";ctx.fillRect(player.x,player.y+12,player.w,26);ctx.fillStyle="#133a54";ctx.fillRect(player.x+3,player.y,18,16);ctx.fillStyle="#d2faff";ctx.fillRect(player.x+5,player.y+5,14,5);ctx.fillStyle="#73edfa";ctx.fillRect(player.x+3,player.y+35,7,4);ctx.fillRect(player.x+15,player.y+35,7,4)}
+ if(player.inv===0||Math.floor(player.inv*12)%2===0){ctx.strokeStyle="#b7f5ff";ctx.lineWidth=1.5;ctx.strokeRect(player.x-1,player.y-1,player.w+2,player.h+2);ctx.fillStyle="#42b9df";ctx.fillRect(player.x,player.y+12,player.w,26);ctx.fillStyle="#133a54";ctx.fillRect(player.x+3,player.y,18,16);ctx.fillStyle="#d2faff";ctx.fillRect(player.x+5,player.y+5,14,5);ctx.fillStyle="#73edfa";ctx.fillRect(player.x+3,player.y+35,7,4);ctx.fillRect(player.x+15,player.y+35,7,4)}
  if(recording){ctx.strokeStyle="#ff667c";ctx.lineWidth=2;ctx.strokeRect(player.x-4,player.y-4,player.w+8,player.h+8)}
  ctx.restore();
  const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,"#03101b00");grad.addColorStop(1,"#020811bb");ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
