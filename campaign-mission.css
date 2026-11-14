@@ -1,0 +1,11 @@
+:root{--mission-accent:#8be8ff;--mission-sky:#0a1c36}
+body{background:var(--mission-sky)!important}
+header{background:linear-gradient(110deg,var(--mission-sky),#101827)!important;border-color:var(--mission-accent)!important}
+.stage{border-color:var(--mission-accent)!important;box-shadow:0 8px 40px #0008}
+.introbox{border:1px solid var(--mission-accent)!important;background:linear-gradient(140deg,var(--mission-sky),#08121ef5)!important}
+.introbox h2{color:var(--mission-accent)!important}
+.introbox p{line-height:1.55}
+header h1 small{font-size:11px;opacity:.8}
+footer a{display:inline-block;min-height:44px;padding:12px;color:var(--mission-accent)}
+button:focus-visible,a:focus-visible{outline:3px solid #ffe39c;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

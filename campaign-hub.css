@@ -14,3 +14,19 @@
 #echoCampaignHub a:focus-visible,#echoCampaignHub summary:focus-visible{outline:3px solid #ffe697;outline-offset:3px}
 #echoCampaignHub a:hover{filter:brightness(1.15)}
 @media(max-width:480px){#echoCampaignHub{padding:14px}#echoCampaignHub .campaign-missions{grid-template-columns:1fr}#echoCampaignHub h2{font-size:18px}}
+/* v11.0: campaign first; the classic engine lives at classic.html. */
+.campaign-home{margin:0;background:radial-gradient(ellipse at 20% 0,#19364b,transparent 55%),#080f19;color:#e7f0ee;font:16px/1.6 system-ui,-apple-system,sans-serif}
+.campaign-home *{box-sizing:border-box}
+.campaign-shell{max-width:1120px;margin:auto;padding:0 26px}
+.home-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:28px 0;border-bottom:1px solid #355064;font-size:11px;letter-spacing:1px;color:#93b7c0}
+.wordmark{font-size:29px;letter-spacing:-1px;color:#edfaff;text-decoration:none;font-weight:900}.wordmark span{color:#77ddce}
+.game-modes{display:flex;gap:12px;margin:24px 0}.game-modes a{flex:1;padding:14px 18px;border:1px solid #365064;border-radius:10px;text-decoration:none;color:#a6c2cc;font-weight:800}.game-modes small{display:block;font-size:10px;font-weight:500;letter-spacing:1px}.game-modes a[aria-current]{border-color:#88e4ca;color:#b6ffdf;background:#163f3d}
+.campaign-hero{position:relative;overflow:hidden;border-radius:18px;background:#0d1c2c;border:1px solid #365064;margin:24px 0}.hero-copy{padding:32px;max-width:650px;position:relative;z-index:1}.eyebrow{font-size:10px;letter-spacing:2px;color:#a3f5df}.hero-copy h1{font-size:clamp(30px,5vw,52px);line-height:1.08;letter-spacing:-1.7px;margin:14px 0}.hero-copy>p:not(.eyebrow){color:#b5c8d1;max-width:560px;font-size:14px}.hero-link{display:inline-block;color:#c7ffdf;font-size:12px;font-weight:800;padding:10px 0}.campaign-hero canvas{display:block;width:100%;height:auto;margin-top:-30px;background:#102239}
+#echoCampaignHub .campaign-missions{grid-template-columns:repeat(3,minmax(0,1fr))}
+#echoCampaignHub .campaign-missions a{min-height:160px;position:relative;overflow:hidden;border-top:3px solid var(--biome-color);background:linear-gradient(150deg,var(--biome-bg),#091725)}
+#echoCampaignHub .campaign-missions b{font-size:14px}#echoCampaignHub .campaign-missions em{font-size:11px;font-style:normal;color:#c1d1d7;line-height:1.7;margin-top:12px}
+#echoCampaignHub .biome-1{--biome-color:#8be8ff;--biome-bg:#1d3855}#echoCampaignHub .biome-2{--biome-color:#ffc078;--biome-bg:#512b24}#echoCampaignHub .biome-3{--biome-color:#a4ef9d;--biome-bg:#1c4535}#echoCampaignHub .biome-4{--biome-color:#dcb0ff;--biome-bg:#3b2558}#echoCampaignHub .biome-5{--biome-color:#ffcb79;--biome-bg:#2d345b}#echoCampaignHub .biome-6{--biome-color:#6fffd9;--biome-bg:#15464d}
+.home-footer{text-align:center;font-size:11px;letter-spacing:1px;padding:24px 0 36px;color:#90afb8}.home-footer strong{color:#b7eadb}.home-footer p{letter-spacing:0}
+.campaign-home a:focus-visible,.campaign-home summary:focus-visible{outline:3px solid #ffe39c;outline-offset:3px}
+@media(max-width:700px){.campaign-shell{padding:0 14px}.home-header{padding:18px 0;flex-wrap:wrap}.game-modes{gap:8px}.game-modes a{font-size:12px;padding:12px}.hero-copy{padding:24px}#echoCampaignHub .campaign-missions{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:440px){#echoCampaignHub .campaign-missions{grid-template-columns:1fr}.campaign-hero canvas{margin-top:0}.game-modes small{font-size:9px}}
