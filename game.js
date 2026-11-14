@@ -207,6 +207,34 @@
   let threatInvulnerability = 0;
   let shiftUsed = false;
   let relayAwarded = false;
+  // Operator abilities: deterministic, short-lived, and reset per attempt.
+  let abilityUntil = 0;
+  let abilityCooldownUntil = 0;
+  let overchargePlate = -1;
+  let overchargeUntil = 0;
+  function currentOperator() {
+    let id = "";
+    try { id = String(localStorage.getItem("echo404_operator") || "").toLowerCase(); } catch (_) {}
+    return id.includes("nyra") ? "nyra" : id.includes("kai") ? "kai7" : "axiom";
+  }
+  function activateAbility() {
+    if (!running || worldTime < abilityCooldownUntil) return false;
+    const id = currentOperator();
+    if (id === "kai7") {
+      overchargePlate = (level.plates || []).findIndex(p => distance(player,p) < PLATE_RADIUS);
+      if (overchargePlate < 0) { setStatus("KAI-7: APROXIMA-TE DE UMA PLACA."); return false; }
+      overchargeUntil = worldTime + 3;
+      setStatus("OVERCHARGE: PLACA ENERGIZADA POR 3s");
+    } else {
+      abilityUntil = worldTime + (id === "nyra" ? 0.9 : 2.5);
+      setStatus(id === "nyra" ? "NYRA: DASH ATIVO!" : "AXIOM: PHASE WALK ATIVO!");
+    }
+    abilityCooldownUntil = worldTime + 9;
+    emitEvent("ability",{operator:id,cycle});
+    playSound("shift");
+    return true;
+  }
+
 
   let portalCooldown = 0;
   let lastFrame = 0;
@@ -579,6 +607,8 @@
     threatInvulnerability = 0;
     shiftUsed = false;
     relayAwarded = false;
+    abilityUntil = 0; abilityCooldownUntil = 0;
+    overchargePlate = -1; overchargeUntil = 0;
 
     portalCooldown = 0;
     lastFrame = 0;
@@ -835,7 +865,7 @@
       (player && distance(player, plate) < PLATE_RADIUS) ||
       ghosts.some(
         ghost => distance(ghost, plate) < PLATE_RADIUS
-      )
+      ) || (overchargePlate === (level.plates || []).indexOf(plate) && worldTime < overchargeUntil)
     );
   }
 
@@ -952,6 +982,7 @@
 
     for (const wall of level.phaseWalls || []) {
       if (
+        !(currentOperator() === "axiom" && worldTime < abilityUntil) &&
         isPhaseWallActive(wall) &&
         intersects(rect, wall)
       ) {
@@ -987,8 +1018,9 @@
       });
     }
 
-    const distanceX = dx * player.speed * dt;
-    const distanceY = dy * player.speed * dt;
+    const boost = currentOperator() === "nyra" && worldTime < abilityUntil ? 2.2 : 1;
+    const distanceX = dx * player.speed * boost * dt;
+    const distanceY = dy * player.speed * boost * dt;
 
     // Move in small steps to prevent tunnelling
     // through narrow walls during frame drops.
@@ -1400,6 +1432,8 @@
     // One Paradox Shift per cycle.
     shiftUsed = false;
     relayAwarded = false;
+    abilityUntil = 0; abilityCooldownUntil = 0;
+    overchargePlate = -1; overchargeUntil = 0;
 
     player.x = arena().start.x;
     player.y = arena().start.y;
@@ -2461,6 +2495,9 @@
       getState() {
         return {
           relayAwarded,
+          abilityCooldown: Math.max(0,abilityCooldownUntil-worldTime),
+          abilityActive: worldTime < abilityUntil || worldTime < overchargeUntil,
+          operator: currentOperator(),
           player: player ? { ...player } : null,
           running,
           finished,
@@ -2503,6 +2540,8 @@
       restart: startGame,
 
       shift: paradoxShift,
+
+      ability: activateAbility,
 
       redraw: draw,
 
