@@ -9,7 +9,7 @@
   <meta name="color-scheme" content="dark">
   <meta name="author" content="MANUEL SAMPAIO01">
   <meta name="description" content="ECHO//404 — PARADOX EVOLUTION. Jogo de puzzles temporais, ecos e paradoxos.">
-  <title>ECHO//404 — PARADOX EVOLUTION v4.2</title>
+  <title>ECHO//404 — THE LIVING PARADOX | ORIGIN</title>
   <link rel="stylesheet" href="style.css?v=421">
 
   <style>
@@ -1184,6 +1184,30 @@ body.echo-immersive #echoSurvivorActions #echoSelectOperator{flex:1 1 100%;min-h
  body.echo-immersive #echoMorePanel{flex:0 0 auto!important}
  body.echo-immersive #echoMobileQuickActions #echoMoreBtn{min-height:32px!important}
 }
+</style><style id="echo-v82-collapse-cinematic">
+/* A standalone cinematic presentation that does not affect the game HUD. */
+#awakeningIntro{position:fixed!important;inset:0!important;z-index:30000!important;overflow-y:auto!important;overscroll-behavior:contain!important;background:radial-gradient(circle at 50% 30%,#143b55 0%,#061323 52%,#02070e 100%)!important;padding:calc(env(safe-area-inset-top,0px) + 18px) 12px calc(env(safe-area-inset-bottom,0px) + 18px)!important}
+#awakeningIntro.hidden{display:none!important}
+#awakeningIntro.visible{display:flex!important;align-items:center!important;justify-content:center!important}
+#awakeningIntro .awakening-intro-backdrop{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0px,transparent 5px,rgba(79,235,255,.025) 6px);animation:echoStoryScan 10s linear infinite}
+#awakeningIntro .awakening-intro-content{position:relative!important;z-index:1!important;width:min(100%,570px)!important;max-height:none!important;overflow:visible!important;padding:clamp(18px,5vw,34px)!important;border:1px solid #398da6!important;border-radius:18px!important;background:linear-gradient(160deg,rgba(10,31,50,.96),rgba(5,12,28,.98))!important;box-shadow:0 0 70px #00d5ff16,0 25px 70px #0009!important}
+#awakeningIntro .awakening-system-label{letter-spacing:.15em;color:#8ad7ed;font-size:11px}
+#awakeningIntro .awakening-symbol{font-size:clamp(38px,11vw,72px);line-height:1.1;color:#57f1ff;text-shadow:0 0 22px #37e5ff8a;animation:echoStoryPulse 3s ease-in-out infinite}
+#awakeningIntro #awakeningTitle{font-size:clamp(23px,6vw,38px)!important;line-height:1.13!important;letter-spacing:.02em!important;margin:10px 0!important}
+#awakeningIntro #awakeningText{font-size:clamp(15px,3.7vw,18px)!important;line-height:1.65!important;min-height:7.5em!important;max-width:45ch;margin:12px auto 18px!important;color:#e5f6ff!important}
+#awakeningIntro #awakeningCounter{font-size:12px!important;color:#76d6e7!important}
+#awakeningIntro #awakeningGlitch{position:relative!important;display:block!important;min-height:18px!important;opacity:1!important;color:#7de7ef!important;font:700 10px system-ui!important;letter-spacing:.12em!important;text-align:center!important;pointer-events:none!important}
+#awakeningIntro .awakening-intro-actions{display:flex!important;gap:8px!important;justify-content:center!important}
+#awakeningIntro .awakening-intro-actions button{min-height:46px!important;flex:1!important;max-width:230px!important}
+#awakeningIntro .awakening-signature{font-size:10px!important;margin-top:16px!important;opacity:.65!important}
+body[data-echo-intro-tone="danger"] #awakeningIntro .awakening-intro-content{border-color:#f45b76!important;box-shadow:0 0 65px #ff33502e!important}
+body[data-echo-intro-tone="danger"] #awakeningIntro .awakening-symbol{color:#ff6e85!important;text-shadow:0 0 25px #ff315b!important}
+body[data-echo-intro-tone="hope"] #awakeningIntro .awakening-symbol{color:#80ffd1!important}
+#echoReplayStory{grid-column:1/-1!important}
+@keyframes echoStoryPulse{50%{opacity:.55;transform:scale(1.08)}}
+@keyframes echoStoryScan{to{background-position:0 70px}}
+@media(prefers-reduced-motion:reduce){#awakeningIntro .awakening-symbol,#awakeningIntro .awakening-intro-backdrop{animation:none!important}}
+@media(max-width:768px){#awakeningIntro .awakening-intro-content{margin:auto!important}#awakeningIntro #awakeningText{min-height:9em!important}#awakeningIntro .awakening-intro-actions button{font-size:12px!important}}
 </style></head>
 
 <body class="echo404-app">
@@ -1624,7 +1648,7 @@ body.echo-immersive #echoSurvivorActions #echoSelectOperator{flex:1 1 100%;min-h
   <script src="dynamic-threats.js?v=540"></script>
   <script src="system-war.js?v=600"></script>
   <script src="game.js?v=810"></script>
-  <script src="awakening.js?v=810"></script>
+  <script src="awakening.js?v=820"></script>
   <script src="visual-v1.js?v=811"></script>
   <script src="world-renderer.js?v=530"></script>
   <script src="visual-effects.js?v=410"></script>
@@ -2285,6 +2309,20 @@ window.addEventListener("resize",()=>{if(window.innerWidth>768&&!modal.hidden)cl
  document.addEventListener("keydown",e=>{
   if(e.key==="Escape"&&!panel.hidden){panel.hidden=true;more.setAttribute("aria-expanded","false");}
  });
+})();
+</script><script id="echo-v82-story-replay">
+(()=>{
+ const panel=document.getElementById("echoMorePanel");
+ if(!panel)return;
+ const button=document.createElement("button");
+ button.type="button";button.id="echoReplayStory";
+ button.textContent="◈ REVER HISTÓRIA";
+ button.addEventListener("click",()=>{
+  panel.hidden=true;
+  document.getElementById("echoMoreBtn")?.setAttribute("aria-expanded","false");
+  if(window.EchoAwakening?.openIntro)window.EchoAwakening.openIntro(true);
+ });
+ panel.appendChild(button);
 })();
 </script></body>
 </html>

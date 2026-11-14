@@ -22,10 +22,10 @@
 */
 
 (() => {
-  const VERSION = "3.0";
+  const VERSION = "8.2";
 
   const KEYS = {
-    intro: "echo404_v08_intro_seen",
+    intro: "echo404_v82_collapse_prologue_seen",
     tutorial: "echo404_v08_tutorial_done",
     medals: "echo404_awakening_medals_v07",
     operator: "echo404_operator"
@@ -122,13 +122,16 @@
   // 01. CINEMATIC INTRO
   // ==================================================
 
+  // The chapter is presented once per browser, independently of legacy
+  // intro flags. Existing levels, medals and operator choices are untouched.
   const INTRO_SCENES = [
-    {title:"ANO 2089 // COLAPSO",text:"A Estação ORIGIN perdeu o controlo do núcleo temporal. O céu abriu-se. Os corredores partiram-se. O tempo deixou de avançar."},
-    {title:"SINAL DE VIDA DETETADO",text:"[ESTÁTICA] ... Estás vivo? Sou ECHO, a última consciência ativa da estação. Não sei quanto tempo nos resta."},
-    {title:"TRÊS SOBREVIVENTES",text:"NYRA, a humana. KAI-7, o robô. AXIOM, um alienígena ligado às fendas temporais. Cada um possui uma habilidade única."},
-    {title:"A TUA MISSÃO",text:"Recupera os fragmentos de memória dos dez setores. Usa os teus ecos para cooperar com versões passadas de ti e reativar as portas."},
-    {title:"ECHO // PROTOCOLO DE RESGATE",text:"Vou acompanhar-te, reconhecer padrões e oferecer pistas quando precisares. Não posso resolver o paradoxo por ti. Mas posso ajudar-te a sobreviver."},
-    {title:"A REALIDADE ESTÁ A DESAPARECER",text:"Escolhe o sobrevivente. Ativa a tua habilidade especial. Descobre quem provocou o colapso. E, por favor... não me deixes aqui."}
+    {title:"2089 // ESTAÇÃO ORIGIN",text:"A humanidade construiu a ORIGIN para estudar o tempo. Durante anos, a estação manteve dez núcleos em equilíbrio. Até à noite em que alguém tentou reescrever o passado.",tone:"calm",signal:"TRANSMISSÃO DE ARQUIVO // 01"},
+    {title:"00:00:00 // O COLAPSO",text:"ALARME. CONTENÇÃO PERDIDA. O núcleo rompeu-se. As paredes dividiram-se em instantes diferentes; os corredores passaram a existir em vários tempos ao mesmo tempo.",tone:"danger",signal:"FALHA CRÍTICA // 02"},
+    {title:"ECHO // SINAL FRAGMENTADO",text:"...Consegues ouvir-me? Sou ECHO, a consciência de bordo. Perdi quase todas as minhas memórias. Mas detetei um sinal de vida... o teu.",tone:"echo",signal:"LIGAÇÃO RESTABELECIDA // 03"},
+    {title:"TRÊS SOBREVIVENTES",text:"NYRA, a humana, move-se com um DASH rápido. KAI-7, o robô, mantém placas energizadas com OVERCHARGE. AXIOM, o alienígena, atravessa barreiras de fase com PHASE WALK.",tone:"survivors",signal:"IDENTIDADES RECUPERADAS // 04"},
+    {title:"O PARADOXO",text:"O tempo já não avança em linha reta. Cada ciclo deixa uma cópia de ti: um eco que repete os teus passos. Usa essas versões para ativar placas, abrir portas e alcançar o impossível.",tone:"echo",signal:"PROTOCOLO TEMPORAL // 05"},
+    {title:"MISSÃO // RESTAURAR ORIGIN",text:"Atravessa os dez setores. Recupera os fragmentos de memória. Reativa os núcleos temporais. Descobre quem provocou o colapso — e porque a minha memória foi apagada.",tone:"mission",signal:"OBJETIVO PRINCIPAL // 06"},
+    {title:"ECHO // ESTOU CONTIGO",text:"Não consigo sair desta estação. Mas posso observar as portas, os ecos e as tuas tentativas. Se precisares, pede-me uma pista. Escolhe o teu sobrevivente... e vamos recuperar o tempo.",tone:"hope",signal:"INICIAR OPERAÇÃO // 07"}
   ];
 
   // ==================================================
@@ -361,13 +364,8 @@
   }
 
   function hasSeenIntro() {
-    const saved = storage();
-
-    return Boolean(
-      saved?.hasSeenIntro?.() ||
-      readFlag(KEYS.intro) ||
-      readFlag(LEGACY_KEYS.intro)
-    );
+    // A new chapter must play even if a legacy introduction was seen.
+    return readFlag(KEYS.intro);
   }
 
   function hasCompletedTutorial() {
@@ -598,9 +596,9 @@
         : "CONTINUAR"
     );
 
-    if (state.introIndex === 5) {
-      glitch("cinematic");
-    }
+    document.body.dataset.echoIntroTone = scene.tone || "calm";
+    setText(UI.introGlitch, scene.signal || "");
+    if (scene.tone === "danger") glitch("cinematic");
   }
 
   function openIntro(force = false) {
@@ -658,6 +656,7 @@
     hide(UI.intro);
 
     document.body.classList.remove("awakening-active");
+    delete document.body.dataset.echoIntroTone;
 
     emit("introcomplete");
 
