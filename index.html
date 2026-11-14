@@ -1013,7 +1013,19 @@
 #echoMobileLevelPanel .echo-menu-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#ddfaff;font:700 16px system-ui}
 #echoMobileLevelPanel .echo-menu-close{border:1px solid #36d9ec;border-radius:9px;background:#102b40;color:white;padding:9px 13px;min-height:42px}
 #echoMobileLevelPanel #levelGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
-}</style></head>
+}</style><style id="echo-v71-mobile-controls">
+@media(max-width:768px){
+ #mobileControls .mobile-control-options{display:block!important;visibility:visible!important;position:relative!important;margin:7px 0 0!important;z-index:20!important}
+ #controlModeBtn{display:block!important;width:100%!important;min-height:38px!important;padding:7px 10px!important;font:700 12px system-ui!important;letter-spacing:.02em!important;border:1px solid #34ddeb!important;border-radius:9px!important;background:#0a2b41!important;color:#d7faff!important;touch-action:manipulation!important}
+ #mobileControls #virtualJoystick:not(.hidden){display:flex!important;align-items:center!important;justify-content:center!important;min-width:0!important;min-height:115px!important}
+ #mobileControls #joystickBase{width:110px!important;height:110px!important;min-width:110px!important;min-height:110px!important;border-radius:50%!important;touch-action:none!important}
+ #mobileControls #joystickStick{pointer-events:none!important}
+ #mobileControls #mobileDpad.hidden,#mobileControls #virtualJoystick.hidden{display:none!important}
+ #mobileControls .mobile-control-layout{min-height:110px!important}
+ #arenaShell,#gameCanvas{touch-action:pan-y!important}
+ #arenaShell.echo-drag-enabled,#arenaShell.echo-drag-enabled #gameCanvas{touch-action:none!important}
+}
+</style></head>
 
 <body class="echo404-app">
 
@@ -1827,11 +1839,12 @@
       mode = ["dpad","joystick","drag"].includes(next) ? next : "dpad";
       dpad.classList.toggle("hidden", mode !== "dpad");
       joystick.classList.toggle("hidden", mode !== "joystick");
+      $("arenaShell")?.classList.toggle("echo-drag-enabled",mode === "drag");
       if (canvas) canvas.style.setProperty("touch-action", mode === "drag" ? "none" : "pan-y", "important");
       $("arenaShell")?.style.setProperty("touch-action", mode === "drag" ? "none" : "pan-y", "important");
-      toggle.textContent = mode === "dpad" ? "CONTROLO: D-PAD → JOYSTICK"
-        : mode === "joystick" ? "CONTROLO: JOYSTICK → ARRASTAR"
-        : "CONTROLO: ARRASTAR → D-PAD";
+      toggle.textContent = mode === "dpad" ? "🎮 D-PAD  ·  MUDAR PARA JOYSTICK"
+        : mode === "joystick" ? "🕹 JOYSTICK  ·  MUDAR PARA ARRASTAR"
+        : "☝ ARRASTAR  ·  MUDAR PARA D-PAD";
       toggle.setAttribute("aria-label", "Alterar modo de controlo: " + mode);
       toggle.setAttribute("aria-pressed", String(mode !== "dpad"));
       try { localStorage.setItem(storageKey, mode); } catch (_) {}
