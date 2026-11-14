@@ -1,0 +1,2460 @@
+
+<!DOCTYPE html>
+<html lang="pt-AO">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050b17">
+  <meta name="color-scheme" content="dark">
+  <meta name="author" content="MANUEL SAMPAIO01">
+  <meta name="description" content="ECHO//404 — PARADOX EVOLUTION. Jogo de puzzles temporais, ecos e paradoxos.">
+  <title>ECHO//404 — Modo clássico</title>
+  <link rel="stylesheet" href="style.css?v=421">
+  <style>.mode-return{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;padding:18px;border:1px solid #4c8d99;border-radius:12px;background:#102331}.mode-return a{color:#a2ffdf;min-height:44px;padding:10px}.mode-return strong{align-self:center}</style>
+
+  <style>
+    /* ECHO//404 — MOBILE INTERFACE FIX v4.2.1
+       CREATED & DEVELOPED BY MANUEL SAMPAIO01 */
+
+    :root {
+      color-scheme: dark;
+      --vr-bg: #050b17;
+      --vr-panel: #0b1a2d;
+      --vr-border: #31516e;
+      --vr-cyan: #48f6ff;
+      --vr-purple: #c88cff;
+      --vr-muted: #9bb6cf;
+      --vr-white: #eef9ff;
+      --operator-color: #48f6ff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { background: var(--vr-bg); scroll-behavior: smooth; }
+    body.echo404-app {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--vr-white);
+      font-family: system-ui, Arial, sans-serif;
+      background: radial-gradient(ellipse at 50% 0%, #153550, transparent 55%), var(--vr-bg);
+    }
+    .hidden, [hidden] { display: none !important; }
+    button { font: inherit; cursor: pointer; }
+    button:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--vr-cyan);
+      outline-offset: 3px;
+    }
+
+    #app.app-container {
+      position: relative;
+      z-index: 1;
+      width: min(calc(100% - 24px), 1050px);
+      margin: auto;
+      padding: 14px 0 40px;
+    }
+
+    .game-header, .header-brand, .header-actions,
+    .panel-heading, .level-information-top,
+    .echo-ai-header, .echo-ai-identity,
+    .echo-ai-footer, .arena-status-bar,
+    .mobile-controls-heading, .mobile-control-layout,
+    .game-actions, .overlay-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .game-header, .level-information-top,
+    .echo-ai-header, .echo-ai-footer,
+    .arena-status-bar, .mobile-controls-heading {
+      justify-content: space-between;
+    }
+
+    .game-header {
+      padding: 12px 0 18px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #48f6ff22;
+    }
+    .game-logo {
+      margin: 0;
+      font-size: clamp(23px, 5vw, 32px);
+      letter-spacing: 2px;
+    }
+    .game-logo span, .brand-mark, .panel-overline {
+      color: var(--vr-cyan);
+    }
+    .brand-mark { font-size: 27px; }
+    .brand-overline, .game-subtitle,
+    .system-status, .hud-label, .panel-overline {
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+    .brand-overline, .game-subtitle,
+    .hud-label, .level-hint { color: var(--vr-muted); }
+    .system-status { color: #7dffce; }
+    .system-status-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      margin-right: 5px;
+      border-radius: 50%;
+      background: #7dffce;
+      box-shadow: 0 0 10px #7dffce;
+    }
+
+    .system-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      border: 1px solid #48f6ff33;
+      border-radius: 10px;
+      background: #08192c;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+    .system-banner-left { display: flex; gap: 10px; align-items: center; }
+    .system-tag { color: var(--vr-cyan); font-weight: 800; }
+    .system-banner-right { color: #ff9b9b; }
+
+    .game-layout, .game-main, .gameplay-zone {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      min-width: 0;
+    }
+    .game-sidebar { display: grid; gap: 12px; width: 100%; }
+
+    .panel, .hud-card, .mobile-controls, .vr-details {
+      border: 1px solid var(--vr-border);
+      border-radius: 15px;
+      background: linear-gradient(145deg, #10263e, #081525);
+      box-shadow: 0 8px 28px #0003;
+    }
+    .panel { padding: 15px; }
+    .level-information h2 { margin: 5px 0; }
+    .level-hint { margin-top: 6px; font-size: 12px; line-height: 1.5; }
+
+    .game-hud {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 7px;
+    }
+    .hud-card {
+      min-width: 0;
+      padding: 11px 5px;
+      text-align: center;
+      border-radius: 11px;
+    }
+    .hud-label { display: block; margin-bottom: 5px; }
+    .hud-value {
+      display: block;
+      font-size: clamp(12px, 3vw, 20px);
+      font-variant-numeric: tabular-nums;
+    }
+    .timer-progress-track {
+      height: 5px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #23324c;
+    }
+    .timer-progress-bar {
+      width: 100%;
+      height: 100%;
+      background: var(--vr-cyan);
+      transition: width .12s linear;
+    }
+    .timer-progress-bar.critical { background: #ff4c69; }
+
+    .arena-section, .arena-shell { width: 100%; min-width: 0; }
+    #arenaShell {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      aspect-ratio: 8 / 5;
+      border: 1px solid #48f6ff77;
+      border-radius: 13px;
+      background: #06101e;
+      box-shadow: 0 0 25px #48f6ff18;
+    }
+    #echoWorldRenderer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    #echoWorldRenderer canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    #gameCanvas {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: transparent !important;
+    }
+    #vr-overlay, #echo404CharacterOverlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    #vr-overlay { z-index: 2; }
+    #echo404CharacterOverlay { z-index: 3; }
+    #criticalWarning {
+      position: absolute;
+      z-index: 4;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 7px 12px;
+      border-radius: 6px;
+      background: #531b2bdc;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+    .game-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      background: #050b19df;
+      text-align: center;
+      backdrop-filter: blur(5px);
+    }
+    .overlay-content {
+      width: min(100%, 420px);
+      max-height: 100%;
+      overflow-y: auto;
+    }
+    .overlay-actions { flex-wrap: wrap; justify-content: center; }
+    .overlay-score { margin: 14px 0; }
+    .overlay-score span, .overlay-score strong { display: block; }
+    .overlay-score strong {
+      margin-top: 5px;
+      font-size: 25px;
+      color: var(--vr-cyan);
+    }
+
+    .btn {
+      padding: 10px 13px;
+      border: 1px solid #385572;
+      border-radius: 10px;
+      background: #192c46;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .btn:hover { filter: brightness(1.14); }
+    .btn-primary {
+      border-color: var(--vr-cyan);
+      background: linear-gradient(120deg, #48f6ff, #26cde7);
+      color: #04131d;
+    }
+    .btn-shift {
+      border-color: #ba7cff;
+      background: linear-gradient(120deg, #432465, #6b3b9e);
+    }
+    .game-actions { flex-wrap: wrap; }
+    .game-actions .btn { flex: 1; min-width: 110px; }
+
+    .mobile-controls { width: 100%; padding: 12px; }
+    .mobile-dpad {
+      display: grid;
+      grid-template-columns: repeat(3, 50px);
+      grid-template-rows: repeat(3, 48px);
+      gap: 3px;
+    }
+    .dpad-btn {
+      border: 1px solid #427b99;
+      border-radius: 10px;
+      background: #17334c;
+      color: var(--vr-cyan);
+      font-size: 20px;
+      touch-action: none;
+      user-select: none;
+    }
+    .dpad-btn:active { background: #2b6585; }
+    .dpad-up { grid-area: 1 / 2; }
+    .dpad-left { grid-area: 2 / 1; }
+    .dpad-right { grid-area: 2 / 3; }
+    .dpad-down { grid-area: 3 / 2; }
+    .dpad-center {
+      grid-area: 2 / 2;
+      display: grid;
+      place-items: center;
+    }
+    .mobile-action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .mobile-action-btn {
+      min-width: 96px;
+      min-height: 60px;
+      border: 1px solid #865bcb;
+      border-radius: 13px;
+      background: #35204e;
+      color: white;
+      touch-action: manipulation;
+    }
+    .mobile-action-btn span, .mobile-action-btn small { display: block; }
+    .virtual-joystick {
+      width: 150px;
+      height: 150px;
+      touch-action: none;
+    }
+    .joystick-base {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      margin: auto;
+      border: 2px solid #457e9c;
+      border-radius: 50%;
+      background: #102b42;
+    }
+    .joystick-stick {
+      position: absolute;
+      top: calc(50% - 27.5px);
+      left: calc(50% - 27.5px);
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: #48f6ff99;
+    }
+    .mobile-control-options { margin-top: 12px; text-align: center; }
+
+    .vr-details { overflow: hidden; }
+    .vr-details > summary {
+      padding: 15px;
+      color: var(--vr-cyan);
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .vr-details-body { padding: 0 12px 12px; }
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+      margin: 12px 0;
+    }
+    .level-grid button {
+      min-height: 43px;
+      border: 1px solid #42617d;
+      border-radius: 9px;
+      background: #142a44;
+      color: white;
+    }
+    .level-grid button.selected { border-color: var(--vr-cyan); }
+    .level-grid button.completed { background: #174d45; }
+    .level-grid button.locked { opacity: .4; }
+
+    .echo-ai-panel { border-color: #a67aff66; }
+    .echo-ai-identity { justify-content: flex-start; }
+    .echo-ai-avatar { color: var(--vr-purple); font-size: 23px; }
+    .echo-message {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 9px 0;
+    }
+    .echo-message-content { flex: 1; min-width: 0; }
+    .echo-message-content p { margin: 3px 0; line-height: 1.5; }
+    .echo-message-close {
+      border: 0;
+      background: transparent;
+      color: white;
+      font-size: 20px;
+    }
+    #obstaclePanel { display: none !important; }
+    .game-footer {
+      margin-top: 28px;
+      padding: 18px 0;
+      border-top: 1px solid #48f6ff33;
+      color: var(--vr-muted);
+      text-align: center;
+      font-size: 11px;
+    }
+    .footer-divider {
+      height: 1px;
+      margin: 12px 0;
+      background: var(--vr-border);
+    }
+    .awakening-intro, .awakening-tutorial { z-index: 9000; }
+
+    /* NEW: MOBILE MENU AT TOP */
+    #echoMobileMenu {
+      display: none;
+    }
+
+    /* NEW: QUICK PLAY ACTIONS */
+    #echoMobileQuickActions {
+      display: none;
+    }
+
+    /* Prevent overlapping notifications */
+    #vr-toast {
+      max-width: calc(100vw - 24px);
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 768px) {
+      #app.app-container {
+        width: calc(100% - 14px);
+        padding-bottom: 110px;
+      }
+
+      .system-status,
+      .brand-overline,
+      .game-subtitle {
+        display: none;
+      }
+
+      .game-logo { font-size: 23px; }
+      .game-header { gap: 8px; }
+      .header-brand { min-width: 0; }
+      .header-actions { flex-shrink: 0; }
+
+      .level-information {
+        overflow: hidden;
+      }
+      #levelName {
+        overflow-wrap: anywhere;
+      }
+
+      .mobile-dpad {
+        grid-template-columns: repeat(3, 44px);
+        grid-template-rows: repeat(3, 43px);
+      }
+      .mobile-action-btn { min-width: 84px; }
+
+      /* Menu stays visible near top */
+      #echoMobileMenu {
+        position: fixed !important;
+        top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
+        right: 10px !important;
+        bottom: auto !important;
+        left: auto !important;
+        z-index: 8500 !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        min-width: 74px;
+        min-height: 40px;
+        padding: 8px 12px;
+        border: 1px solid #48f6ff99;
+        border-radius: 12px;
+        background: #071c30f2;
+        color: #c7faff;
+        font-size: 12px;
+        font-weight: 800;
+        box-shadow: 0 6px 24px #0008;
+        backdrop-filter: blur(12px);
+      }
+
+      /* Old floating launch must not overlap AI */
+      #vr-launch {
+        position: fixed !important;
+        top: calc(env(safe-area-inset-top, 0px) + 58px) !important;
+        right: 10px !important;
+        bottom: auto !important;
+        left: auto !important;
+        z-index: 8400 !important;
+      }
+
+      /* Quick actions always reachable */
+      #echoMobileQuickActions {
+        position: fixed !important;
+        left: 50% !important;
+        right: auto !important;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 12px) !important;
+        transform: translateX(-50%) !important;
+        z-index: 8500 !important;
+        display: flex !important;
+        gap: 8px;
+        width: min(96vw, 400px);
+        padding: 8px;
+        border: 1px solid #31516e;
+        border-radius: 16px;
+        background: #071322f2;
+        box-shadow: 0 10px 35px #000a;
+        backdrop-filter: blur(14px);
+      }
+
+      #echoMobileQuickActions button {
+        flex: 1;
+        min-width: 0;
+        min-height: 46px;
+        padding: 9px 6px;
+        border-radius: 10px;
+        border: 1px solid #48f6ff88;
+        background: #103049;
+        color: #dcfbff;
+        font-size: 11px;
+        font-weight: 800;
+        touch-action: manipulation;
+      }
+
+      #echoMobileQuickActions button:first-child {
+        background: #48f6ff;
+        color: #051521;
+      }
+
+      #echoMobileQuickActions button:last-child {
+        border-color: #a979f7;
+        background: #30204b;
+        color: white;
+      }
+
+      /* Make original buttons visible too */
+      .game-actions {
+        display: flex !important;
+        width: 100%;
+        gap: 8px;
+      }
+      .game-actions .btn {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        min-width: 0;
+        min-height: 44px;
+        padding: 10px 6px;
+        font-size: 11px;
+      }
+
+      /* Move toast above quick actions */
+      #vr-toast {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 86px) !important;
+      }
+
+      .echo-ai-panel {
+        margin-bottom: 10px;
+      }
+
+      .game-overlay .overlay-actions .btn {
+        display: inline-flex !important;
+        min-height: 40px;
+      }
+
+      .game-overlay .overlay-content {
+        padding: 8px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      #echoMobileQuickActions button { font-size: 10px; }
+      .game-logo { font-size: 20px; }
+    }
+
+    @media (min-width: 769px) {
+      #echoMobileMenu,
+      #echoMobileQuickActions {
+        display: none !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+  <style>
+/* ECHO//404 — MOBILE CLEANUP v4.2.2 */
+
+@media (max-width: 768px) {
+
+  /* Esconder menu antigo, manter o novo */
+  #vr-launch {
+    display: none !important;
+  }
+
+  /* Esconder controlos antigos duplicados */
+  .game-actions {
+    display: none !important;
+  }
+
+  /* Manter os novos botões rápidos */
+  #echoMobileQuickActions {
+    display: flex !important;
+  }
+
+  /* Manter apenas o novo menu superior */
+  #echoMobileMenu {
+    display: flex !important;
+  }
+
+  /* Corrigir título cortado */
+  .level-information,
+  .level-information-top {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  #levelName {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    font-size: 17px;
+    line-height: 1.4;
+  }
+
+  /* Espaço para os botões inferiores */
+  #app.app-container {
+    padding-bottom: 110px;
+  }
+}
+</style>
+
+  <style id="echo-mobile-menu-fix-v423">
+    /* Accessible fixed mobile menu; original desktop sidebar remains intact. */
+    @media (max-width: 768px) {
+      #vrLevelDetails[open] {
+        position: fixed !important;
+        top: calc(env(safe-area-inset-top, 0px) + 58px) !important;
+        left: 10px !important;
+        right: 10px !important;
+        bottom: auto !important;
+        width: auto !important;
+        max-height: min(70dvh, 550px) !important;
+        overflow-y: auto !important;
+        z-index: 8490 !important;
+        box-shadow: 0 16px 50px rgba(0,0,0,.9) !important;
+        background: #081b30 !important;
+      }
+      #echoMobileMenu { z-index: 8500 !important; }
+      #echoMobileQuickActions { z-index: 8500 !important; }
+      #echoMobileQuickActions button { touch-action: manipulation; }
+      #overlay:not(.hidden) .overlay-content {
+        max-height: 100%;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  </style>
+
+  <style id="echo-mobile-input-v43">
+    /* Disable long-press selection/copy only inside the interactive game.
+       Keep normal text selection available in the rest of the page. */
+    #arenaShell, #gameCanvas, #mobileControls, #mobileControls *,
+    #echoMobileQuickActions, #echoMobileQuickActions *,
+    #echoMobileMenu, #virtualJoystick, #virtualJoystick * {
+      -webkit-user-select: none !important;
+      user-select: none !important;
+      -webkit-touch-callout: none !important;
+      touch-action: none;
+    }
+    #echoMobileQuickActions button, #echoMobileMenu { touch-action: manipulation !important; }
+    #gameCanvas { -webkit-tap-highlight-color: transparent; }
+    #controlModeBtn { min-height: 44px; }
+    #virtualJoystick:not(.hidden) { display: flex; align-items: center; justify-content: center; }
+    @media (max-width: 768px) {
+      #mobileControls { position: relative; }
+      #virtualJoystick { min-width: 155px; }
+      #joystickBase { touch-action: none; }
+      #controlModeBtn { width: 100%; }
+    }
+  </style>
+
+  <style id="rebirth-phase1-style">
+    .rebirth-guide {
+      position: relative; z-index: 5; display: grid; gap: 6px;
+      margin: 0 0 12px; padding: 12px 15px;
+      background: linear-gradient(110deg, rgba(7,30,48,.96),rgba(18,15,47,.95));
+      border: 1px solid rgba(72,246,255,.42); border-radius: 12px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.2); color: #e8faff;
+      font: 500 13px/1.4 system-ui, sans-serif;
+    }
+    .rebirth-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    #rebirthTag { font-size: 10px; letter-spacing: .12em; color: #69f5ff; }
+    .rebirth-guide strong { font-size: 17px; letter-spacing: .03em; }
+    .rebirth-guide p { margin: 0; color: #c5d9eb; }
+    .rebirth-progress { color: #69f5ff; font-size: 12px; letter-spacing: 3px; }
+    #rebirthToggle, #rebirthSkip {
+      cursor: pointer; color: #baf9ff; border: 1px solid rgba(72,246,255,.35);
+      border-radius: 7px; background: rgba(72,246,255,.09); padding: 7px 10px;
+      touch-action: manipulation;
+    }
+    #rebirthToggle:disabled { opacity: .55; cursor: default; }
+    #rebirthSkip { justify-self: start; font-size: 11px; }
+    #rebirthSkip[hidden] { display: none; }
+    @media (max-width: 768px) {
+      .rebirth-guide { padding: 10px 12px; gap: 4px; margin-bottom: 8px; }
+      .rebirth-guide strong { font-size: 15px; }
+      .rebirth-guide p { font-size: 12px; }
+      #mobileControls { scroll-margin-top: 12px; }
+      #echoMobileQuickActions button { min-height: 44px; }
+      #controlModeBtn { min-height: 44px; }
+    }
+  </style>
+<style id="rebirth-mobile-v52">
+  /* Small-screen play-first layout: avoid burying the arena below menus. */
+  @media (max-width: 768px) {
+    #rebirthGuide { padding: 7px 10px !important; margin: 4px 0 6px !important; gap: 3px !important; }
+    #rebirthGuide .rebirth-top { min-height: 22px; }
+    #rebirthGuide strong { font-size: 13px !important; }
+    #rebirthGuide p { font-size: 11px !important; line-height: 1.3 !important; }
+    #rebirthSkip { padding: 3px 8px !important; }
+    #rebirthToggle { padding: 4px 8px !important; font-size: 10px !important; }
+    #mobileControls { padding: 8px !important; }
+    #mobileControls .mobile-controls-heading { display: none !important; }
+    #mobileControls .mobile-control-layout { gap: 8px !important; }
+    #mobileControls .mobile-control-options { margin-top: 4px !important; }
+    #gameCanvas, #echoWorldRenderer { max-width: 100%; }
+  }
+</style>
+<style id="echo-mobile-v55">
+@media (max-width: 768px) {
+  body { overflow-x: hidden; }
+  #arenaShell { width:100% !important; max-width:100% !important; margin:0 auto !important; }
+  #gameCanvas { width:100% !important; height:auto !important; display:block; touch-action:none; }
+  #mobileControls { position:relative; z-index:10; width:100%; box-sizing:border-box; }
+  .mobile-control-layout { display:flex; align-items:center; justify-content:space-around; gap:12px; flex-wrap:wrap; }
+  #mobileDpad, #virtualJoystick { flex-shrink:0; touch-action:none; }
+  #mobileControls button { touch-action:none; -webkit-tap-highlight-color:transparent; }
+  #mobileShiftBtn, #mobileRestartBtn { min-width:64px; min-height:64px; }
+  #controlModeBtn { min-height:46px; }
+  #echoMobileQuickActions { position:relative !important; z-index:12; }
+  #rebirthGuide { max-width:100%; box-sizing:border-box; }
+}
+@media (max-width: 390px) {
+  #mobileControls { padding:6px !important; }
+  .mobile-control-layout { gap:5px !important; }
+  #mobileShiftBtn, #mobileRestartBtn { min-width:55px; min-height:55px; }
+}
+</style>
+<style id="echo-mobile-layout-hotfix-v601">
+/* v6.0.1: restore floating quick actions; remove mobile dead space. */
+@media (max-width:768px) {
+  #echoMobileQuickActions {
+    position:fixed !important;
+    left:50% !important;
+    right:auto !important;
+    bottom:calc(env(safe-area-inset-bottom, 0px) + 10px) !important;
+    top:auto !important;
+    transform:translateX(-50%) !important;
+    z-index:8500 !important;
+    display:flex !important;
+    width:min(95vw,440px) !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+    padding:7px !important;
+    gap:7px !important;
+    border-radius:15px !important;
+    background:rgba(5,17,32,.95) !important;
+    backdrop-filter:blur(12px);
+  }
+  #echoMobileQuickActions button { min-height:48px !important; font-size:12px !important; }
+  #app.app-container { padding-bottom:calc(env(safe-area-inset-bottom, 0px) + 92px) !important; }
+  #rebirthGuide { padding:8px 10px !important; margin:3px 0 7px !important; }
+  #rebirthGuide p { font-size:12px !important; }
+  #echoMobileMenu { top:calc(env(safe-area-inset-top, 0px) + 7px) !important; min-height:40px !important; }
+  #arenaShell { aspect-ratio:8/5 !important; }
+  #gameCanvas { height:100% !important; }
+  #mobileControls { margin-top:6px !important; }
+  #mobileControls .mobile-control-layout { justify-content:space-between !important; }
+  .game-actions { display:none !important; }
+}
+@media (max-width:420px) {
+  #echoMobileQuickActions button { padding:8px 4px !important; font-size:11px !important; }
+  #rebirthGuide strong { font-size:13px !important; }
+  #rebirthGuide p { font-size:11px !important; }
+}
+</style>
+<style id="echo-mobile-controls-fix-v602">
+@media (max-width:768px) {
+  /* Controls must never be hidden behind action buttons. */
+  #echoMobileQuickActions {
+    position:static !important;
+    inset:auto !important;
+    left:auto !important;
+    right:auto !important;
+    top:auto !important;
+    bottom:auto !important;
+    transform:none !important;
+    width:100% !important;
+    max-width:none !important;
+    display:flex !important;
+    box-sizing:border-box !important;
+    margin:10px 0 0 !important;
+    padding:7px !important;
+    z-index:auto !important;
+    gap:7px !important;
+    box-shadow:none !important;
+  }
+  #echoMobileQuickActions button { flex:1 1 0 !important; min-width:0 !important; min-height:48px !important; }
+  #mobileControls { position:relative !important; z-index:1 !important; padding:10px !important; }
+  #mobileControls .mobile-control-layout { min-height:160px; align-items:center !important; }
+  #mobileDpad, #virtualJoystick, .mobile-action-buttons { position:relative; z-index:2; }
+  #app.app-container { padding-bottom:24px !important; }
+  #echoMobileMenu { z-index:8500 !important; }
+}
+</style>
+<style id="echo-mobile-first-v610">
+/* v6.1: One authoritative mobile layout, no floating game actions. */
+@media (max-width:768px) {
+  html { scroll-padding-top:8px; }
+  body { overflow-x:hidden; }
+  #app.app-container { width:calc(100% - 16px) !important; padding:8px 0 calc(env(safe-area-inset-bottom,0px) + 18px) !important; }
+  .game-layout,.game-main,.gameplay-zone { gap:7px !important; }
+  .game-header { display:flex !important; align-items:center !important; justify-content:space-between !important; gap:6px !important; margin:0 0 7px !important; min-height:42px !important; }
+  .header-brand { flex:1 1 auto !important; min-width:0 !important; }
+  .game-logo { font-size:clamp(19px,5.5vw,26px) !important; white-space:nowrap; }
+  .header-actions { display:flex !important; gap:5px !important; align-items:center !important; flex:0 0 auto !important; }
+  .header-actions .btn-icon { min-width:36px !important; min-height:38px !important; padding:6px !important; }
+  #echoMobileMenu {
+    display:inline-flex !important; position:static !important;
+    inset:auto !important; transform:none !important; flex:0 0 auto !important;
+    z-index:auto !important; min-width:66px !important; min-height:40px !important;
+    padding:6px 8px !important; margin:0 !important; font-size:11px !important;
+    box-shadow:none !important;
+  }
+  .system-banner { display:none !important; }
+  .level-information { padding:7px 10px !important; margin:0 !important; }
+  .level-information-top { display:flex !important; align-items:center !important; gap:5px !important; }
+  .level-information .panel-overline, #difficultyBadge, #levelHint { display:none !important; }
+  #levelName { font-size:13px !important; line-height:1.25 !important; margin:0 !important; font-weight:750; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .game-hud { grid-template-columns:repeat(4,minmax(0,1fr)) !important; gap:4px !important; }
+  .game-hud .hud-card { padding:5px 2px !important; border-radius:9px !important; }
+  .game-hud .hud-card:last-child { display:none !important; }
+  .hud-label { font-size:9px !important; letter-spacing:.08em !important; margin-bottom:2px !important; }
+  .hud-value { font-size:17px !important; }
+  .timer-progress-track { height:4px !important; margin:0 !important; }
+  #rebirthGuide {
+    display:grid !important; gap:2px !important; padding:7px 10px !important;
+    margin:0 0 4px !important; border-radius:10px !important;
+  }
+  #rebirthGuide .rebirth-top { min-height:18px !important; }
+  #rebirthTag { font-size:9px !important; }
+  #rebirthGuide strong { font-size:13px !important; line-height:1.2 !important; }
+  #rebirthGuide p { font-size:11px !important; line-height:1.25 !important; }
+  #rebirthProgress { font-size:10px !important; line-height:1 !important; }
+  #rebirthSkip { font-size:10px !important; padding:4px 7px !important; }
+  #rebirthToggle { font-size:10px !important; padding:4px 7px !important; }
+  #arenaShell { aspect-ratio:8/5 !important; }
+  .arena-status-bar { font-size:10px !important; min-height:18px !important; }
+  #arenaThreatStatus { display:none !important; }
+  #mobileControls {
+    margin:3px 0 0 !important; padding:8px !important;
+    border-radius:12px !important; min-height:0 !important; height:auto !important;
+  }
+  #mobileControls .mobile-controls-heading { display:none !important; }
+  #mobileControls .mobile-control-layout {
+    min-height:0 !important; height:auto !important; gap:6px !important;
+    display:flex !important; justify-content:space-between !important;
+    align-items:center !important; flex-wrap:nowrap !important;
+  }
+  #mobileDpad { grid-template-columns:repeat(3,clamp(38px,12vw,50px)) !important; grid-template-rows:repeat(3,clamp(38px,12vw,50px)) !important; gap:2px !important; }
+  .dpad-btn { min-width:0 !important; min-height:0 !important; width:100% !important; height:100% !important; padding:0 !important; touch-action:none !important; }
+  .mobile-action-buttons { display:flex !important; gap:7px !important; flex-wrap:nowrap !important; }
+  #mobileShiftBtn { width:clamp(66px,19vw,84px) !important; height:clamp(66px,19vw,84px) !important; min-width:0 !important; min-height:0 !important; padding:6px !important; }
+  #mobileRestartBtn { width:clamp(50px,14vw,62px) !important; height:clamp(50px,14vw,62px) !important; min-width:0 !important; min-height:0 !important; padding:4px !important; }
+  .mobile-action-btn small { font-size:9px !important; }
+  .mobile-control-options { margin:4px 0 0 !important; }
+  #controlModeBtn { min-height:30px !important; padding:4px 10px !important; font-size:10px !important; }
+  #echoMobileQuickActions {
+    display:flex !important; position:static !important; inset:auto !important;
+    transform:none !important; width:100% !important; max-width:none !important;
+    margin:5px 0 0 !important; padding:5px !important; gap:5px !important;
+    box-shadow:none !important; z-index:auto !important; border-radius:12px !important;
+  }
+  #echoMobileQuickActions button { min-height:42px !important; padding:5px 2px !important; font-size:11px !important; }
+  .game-actions { display:none !important; }
+  #vr-toast { bottom:calc(env(safe-area-inset-bottom,0px) + 8px) !important; max-width:90vw !important; }
+  .echo-message { max-width:95vw !important; }
+}
+@media (max-width:360px) {
+  .header-actions #fullscreenBtn { display:none !important; }
+  .mobile-action-buttons { gap:4px !important; }
+  #mobileRestartBtn { width:46px !important; height:46px !important; }
+  #mobileShiftBtn { width:60px !important; height:60px !important; }
+}
+</style>
+<style id="echo-mobile-viewport-v620">
+/* iPhone portrait: fit the entire play interface in one viewport. */
+@media (max-width:768px) and (orientation:portrait) {
+  body { overflow-x:hidden !important; }
+  #app.app-container { padding:4px 0 calc(env(safe-area-inset-bottom,0px) + 4px) !important; }
+  .game-header { min-height:34px !important; margin-bottom:3px !important; }
+  .game-logo { font-size:19px !important; }
+  .header-actions .btn-icon { min-width:30px !important; min-height:32px !important; }
+  #echoMobileMenu { min-height:32px !important; min-width:56px !important; font-size:10px !important; padding:4px !important; }
+  .game-layout,.game-main,.gameplay-zone { gap:3px !important; }
+  .level-information { padding:4px 8px !important; }
+  #levelName { font-size:11px !important; -webkit-line-clamp:1 !important; }
+  .game-hud { gap:3px !important; }
+  .game-hud .hud-card { padding:3px 2px !important; }
+  .hud-label { font-size:8px !important; margin:0 !important; }
+  .hud-value { font-size:14px !important; }
+  .timer-progress-track { height:3px !important; }
+  #rebirthGuide { display:flex !important; flex-wrap:wrap !important; align-items:center !important; padding:4px 7px !important; gap:3px 8px !important; margin:0 0 3px !important; }
+  #rebirthGuide .rebirth-top { flex:0 0 auto !important; min-height:0 !important; }
+  #rebirthTag { font-size:9px !important; }
+  #rebirthGuide strong { font-size:11px !important; }
+  #rebirthGuide p { flex:1 1 100% !important; font-size:10px !important; margin:0 !important; }
+  #rebirthProgress { display:none !important; }
+  #rebirthSkip { padding:2px 6px !important; font-size:9px !important; }
+  #rebirthToggle { padding:2px 6px !important; font-size:9px !important; }
+  #arenaShell { aspect-ratio:8/5 !important; }
+  .arena-status-bar { min-height:14px !important; font-size:9px !important; }
+  #mobileControls { padding:5px 7px !important; margin:0 !important; }
+  #mobileControls .mobile-control-layout { gap:4px !important; }
+  #mobileDpad { grid-template-columns:repeat(3,clamp(29px,9.5vw,38px)) !important; grid-template-rows:repeat(3,clamp(29px,9.5vw,38px)) !important; gap:2px !important; }
+  .dpad-btn { border-radius:7px !important; font-size:16px !important; }
+  #mobileShiftBtn { width:clamp(54px,15vw,64px) !important; height:clamp(54px,15vw,64px) !important; }
+  #mobileRestartBtn { width:clamp(40px,11vw,48px) !important; height:clamp(40px,11vw,48px) !important; }
+  .mobile-action-btn small { font-size:8px !important; }
+  .mobile-control-options { margin:2px 0 0 !important; }
+  #controlModeBtn { min-height:25px !important; font-size:9px !important; padding:2px 7px !important; }
+  #echoMobileQuickActions { margin:3px 0 0 !important; padding:3px !important; }
+  #echoMobileQuickActions button { min-height:35px !important; font-size:10px !important; padding:4px 1px !important; }
+  .arena-section { min-width:0; }
+}
+@media (max-width:768px) and (orientation:portrait) and (max-height:760px) {
+  #rebirthGuide p { display:none !important; }
+  #rebirthGuide { padding:3px 6px !important; }
+  .game-header { min-height:30px !important; }
+  .game-hud .hud-card { padding:2px !important; }
+  #mobileDpad { grid-template-columns:repeat(3,30px) !important; grid-template-rows:repeat(3,30px) !important; }
+  #mobileShiftBtn { width:50px !important; height:50px !important; }
+  #mobileRestartBtn { width:40px !important; height:40px !important; }
+}
+</style>
+<style id="echo-scroll-fix-v621">
+/* Allow native vertical page scrolling over the non-interactive arena. */
+@media (pointer:coarse) {
+  #arenaShell, #gameCanvas, #echoWorldRenderer, #echoWorldRenderer canvas {
+    touch-action:pan-y !important;
+    -webkit-overflow-scrolling:touch;
+  }
+  #mobileControls .dpad-btn,
+  #mobileControls #joystickBase,
+  #mobileControls #mobileShiftBtn,
+  #mobileControls #mobileRestartBtn { touch-action:none !important; }
+  #echoMobileQuickActions, #echoMobileQuickActions button,
+  #echoMobileMenu { touch-action:manipulation !important; }
+}
+</style>
+<style id="echo-mobile-selection-and-modes-v622">
+/* Block accidental text copying while preserving ordinary page scrolling. */
+@media (pointer:coarse) {
+  #app, #app * { -webkit-user-select:none !important; user-select:none !important; -webkit-touch-callout:none !important; }
+  #arenaShell, #gameCanvas { touch-action:pan-y !important; }
+  #mobileControls, #mobileControls button, #mobileControls #joystickBase,
+  #mobileControls #virtualJoystick, #mobileControls #mobileDpad {
+    touch-action:none !important;
+    -webkit-tap-highlight-color:transparent !important;
+  }
+  #controlModeBtn, #echoMobileQuickActions button, #echoMobileMenu { touch-action:manipulation !important; }
+}
+</style>
+<style id="echo-v7-immersive">
+/* Immersive gameplay is opt-in. The original page remains scrollable. */
+#echoImmersiveClose { display:none; }
+@media (max-width:768px) {
+  #echoImmersiveClose {
+    position:absolute; right:calc(env(safe-area-inset-right,0px) + 8px);
+    top:calc(env(safe-area-inset-top,0px) + 6px);
+    z-index:100; border:1px solid #37dff1; border-radius:10px;
+    background:#061827; color:#d9ffff; font:700 12px system-ui;
+    padding:8px 12px; min-height:38px; touch-action:manipulation;
+  }
+  body.echo-immersive { overflow:hidden !important; overscroll-behavior:none; }
+  body.echo-immersive .gameplay-zone {
+    position:fixed !important; inset:0 !important; z-index:9000 !important;
+    width:100vw !important; height:100dvh !important; max-height:100dvh !important;
+    box-sizing:border-box !important; overflow:hidden !important;
+    display:flex !important; flex-direction:column !important;
+    justify-content:center !important; gap:5px !important;
+    padding:calc(env(safe-area-inset-top,0px) + 46px) 8px
+      calc(env(safe-area-inset-bottom,0px) + 8px) !important;
+    background:#030e1b !important;
+  }
+  body.echo-immersive #echoImmersiveClose { display:block; }
+  body.echo-immersive .arena-section { width:100% !important; flex:0 1 auto !important; min-height:0 !important; }
+  body.echo-immersive #arenaShell {
+    width:100% !important; height:auto !important; aspect-ratio:8/5 !important;
+    max-height:min(59dvh,calc(100dvh - 225px)) !important; margin:auto !important;
+  }
+  body.echo-immersive #gameCanvas { width:100% !important; height:100% !important; }
+  body.echo-immersive #mobileControls {
+    width:100% !important; flex:0 0 auto !important; min-height:0 !important;
+    padding:5px !important; margin:0 !important;
+  }
+  body.echo-immersive #echoMobileQuickActions { flex:0 0 auto !important; margin:0 !important; }
+  body.echo-immersive .arena-status-bar { font-size:10px !important; }
+}
+@media (max-width:768px) and (max-height:650px) {
+  body.echo-immersive #arenaShell { max-height:48dvh !important; }
+  body.echo-immersive #mobileDpad { grid-template-columns:repeat(3,30px) !important; grid-template-rows:repeat(3,30px) !important; }
+}
+</style>
+<style id="echo-mobile-menu-v701">@media(max-width:768px){
+#levelName{font-size:12px!important;line-height:1.2!important;display:-webkit-box!important;-webkit-line-clamp:1!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+.level-information{padding:5px 8px!important}
+.game-logo{font-size:clamp(17px,5vw,23px)!important}
+#fullscreenBtn{display:inline-flex!important}
+#echoMobileLevelPanel[hidden]{display:none!important}
+#echoMobileLevelPanel{position:fixed!important;z-index:12000!important;inset:0!important;display:flex!important;align-items:flex-start!important;justify-content:center!important;background:rgba(0,4,12,.9)!important;padding:calc(env(safe-area-inset-top,0px) + 12px) 10px calc(env(safe-area-inset-bottom,0px) + 12px)!important;box-sizing:border-box!important;overflow:auto!important}
+#echoMobileLevelPanel .echo-menu-inner{width:100%;max-width:520px;max-height:calc(100dvh - 35px);overflow-y:auto;background:#091c30;border:1px solid #36d9ec;border-radius:16px;padding:14px;box-sizing:border-box}
+#echoMobileLevelPanel .echo-menu-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#ddfaff;font:700 16px system-ui}
+#echoMobileLevelPanel .echo-menu-close{border:1px solid #36d9ec;border-radius:9px;background:#102b40;color:white;padding:9px 13px;min-height:42px}
+#echoMobileLevelPanel #levelGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+}</style><style id="echo-v71-mobile-controls">
+@media(max-width:768px){
+ #mobileControls .mobile-control-options{display:block!important;visibility:visible!important;position:relative!important;margin:7px 0 0!important;z-index:20!important}
+ #controlModeBtn{display:block!important;width:100%!important;min-height:38px!important;padding:7px 10px!important;font:700 12px system-ui!important;letter-spacing:.02em!important;border:1px solid #34ddeb!important;border-radius:9px!important;background:#0a2b41!important;color:#d7faff!important;touch-action:manipulation!important}
+ #mobileControls #virtualJoystick:not(.hidden){display:flex!important;align-items:center!important;justify-content:center!important;min-width:0!important;min-height:115px!important}
+ #mobileControls #joystickBase{width:110px!important;height:110px!important;min-width:110px!important;min-height:110px!important;border-radius:50%!important;touch-action:none!important}
+ #mobileControls #joystickStick{pointer-events:none!important}
+ #mobileControls #mobileDpad.hidden,#mobileControls #virtualJoystick.hidden{display:none!important}
+ #mobileControls .mobile-control-layout{min-height:110px!important}
+ #arenaShell,#gameCanvas{touch-action:pan-y!important}
+ #arenaShell.echo-drag-enabled,#arenaShell.echo-drag-enabled #gameCanvas{touch-action:none!important}
+}
+</style><style id="echo-v80-mobile-immersive">
+@media(max-width:768px){
+ body.echo-immersive .gameplay-zone{
+  justify-content:space-between!important;
+  padding:calc(env(safe-area-inset-top,0px) + 44px) 6px calc(env(safe-area-inset-bottom,0px) + 6px)!important;
+  gap:4px!important;
+ }
+ body.echo-immersive #arenaShell{
+  max-height:min(56dvh,calc(100dvh - 280px))!important;
+  aspect-ratio:8/5!important;
+ }
+ body.echo-immersive #mobileControls .mobile-control-layout{
+  min-height:0!important;
+ }
+ body.echo-immersive #mobileControls .mobile-control-options{
+  margin-top:2px!important;
+ }
+ body.echo-immersive #controlModeBtn{min-height:30px!important;padding:3px 8px!important}
+ body.echo-immersive #mobileDpad{grid-template-columns:repeat(3,clamp(30px,10vw,44px))!important;grid-template-rows:repeat(3,clamp(30px,10vw,44px))!important}
+ body.echo-immersive #joystickBase{width:clamp(86px,25vw,110px)!important;height:clamp(86px,25vw,110px)!important;min-width:0!important;min-height:0!important}
+ body.echo-immersive #echoImmersiveClose{z-index:150!important;min-height:34px!important}
+ body.echo-immersive #echoV80Hud{
+  display:flex!important;gap:6px;justify-content:flex-start;align-items:center;
+  color:#c9fbff;font:700 11px system-ui;min-height:25px;flex:0 0 auto;
+  padding:2px 8px;background:#0b2539;border:1px solid #22768b;border-radius:8px;
+ }
+ #echoV80Hud{display:none}
+}
+</style><style id="echo-v80-survivors">
+#echoAbilityBtn,#echoHintBtn{border:1px solid #35d9e8;border-radius:10px;background:#0b2b40;color:#e2fdff;font:700 12px system-ui;min-height:42px;padding:7px 10px;touch-action:manipulation;user-select:none}
+#echoAbilityBtn[disabled]{opacity:.55}
+#echoSurvivorActions{display:flex;gap:7px;align-items:stretch;justify-content:space-between;margin:5px 0}
+#echoAbilityBtn{flex:1}
+#echoHintBtn{flex:0 0 auto}
+#echoAiPanel{position:relative}
+#echoAiAvatar{animation:echoPulse80 3s ease-in-out infinite}
+@keyframes echoPulse80{50%{filter:drop-shadow(0 0 10px #8b8aff);transform:scale(1.06)}}
+body.echo-immersive #echoSurvivorActions{margin:0!important;flex:0 0 auto}
+body.echo-immersive #echoSurvivorActions button{min-height:32px!important;padding:3px 8px!important}
+</style><style id="echo-v811-operator-access">
+#echoSelectOperator{border:1px solid #36d8eb;border-radius:10px;background:#15334c;color:#e5faff;font:800 12px system-ui;min-height:42px;padding:7px 10px;touch-action:manipulation;user-select:none}
+#echoSelectOperator:focus-visible{outline:3px solid #76f4ff;outline-offset:2px}
+#echoSurvivorActions{flex-wrap:wrap}
+#echoSurvivorActions #echoSelectOperator{flex:1 1 100%}
+body.echo-immersive #echoSurvivorActions #echoSelectOperator{flex:1 1 100%;min-height:32px!important}
+</style><style id="echo-v812-mobile-layout">
+/* Mobile layout pass: compact control dock, accessible buttons, no dead space. */
+@media(max-width:768px){
+ #app.app-container{padding-bottom:18px!important}
+ .gameplay-zone{display:flex!important;flex-direction:column!important;gap:5px!important;min-width:0!important}
+ .arena-section{margin:0!important;min-width:0!important}
+ #arenaShell{margin:0 auto!important}
+ #mobileControls{margin:0!important;padding:8px 10px 6px!important;min-height:0!important;border-radius:14px!important}
+ #mobileControls .mobile-controls-heading{display:none!important}
+ #mobileControls .mobile-control-layout{
+  display:flex!important;flex-wrap:nowrap!important;align-items:center!important;
+  justify-content:space-between!important;gap:8px!important;
+  min-height:0!important;height:clamp(108px,31vw,145px)!important;
+  padding:0!important;margin:0!important;
+ }
+ #mobileDpad:not(.hidden){
+  display:grid!important;grid-template-columns:repeat(3,clamp(33px,10vw,43px))!important;
+  grid-template-rows:repeat(3,clamp(33px,10vw,43px))!important;
+  flex:0 0 auto!important;margin:0!important
+ }
+ #mobileControls #virtualJoystick:not(.hidden){
+  flex:0 0 auto!important;min-height:0!important;
+  height:clamp(100px,28vw,125px)!important;width:clamp(100px,28vw,125px)!important;
+ }
+ #mobileControls #joystickBase{width:clamp(96px,27vw,120px)!important;height:clamp(96px,27vw,120px)!important;min-width:0!important;min-height:0!important}
+ #mobileControls .mobile-action-buttons{
+  display:flex!important;flex:0 0 auto!important;gap:8px!important;
+  align-items:center!important;justify-content:flex-end!important;margin-left:auto!important;
+ }
+ #mobileShiftBtn{min-width:0!important;min-height:0!important;width:clamp(60px,17vw,78px)!important;height:clamp(60px,17vw,78px)!important}
+ #mobileRestartBtn{min-width:0!important;min-height:0!important;width:clamp(48px,13vw,60px)!important;height:clamp(48px,13vw,60px)!important}
+ #mobileControls .mobile-control-options{display:block!important;margin:5px 0 0!important}
+ #controlModeBtn{min-height:35px!important;padding:5px 8px!important;font-size:11px!important}
+ #echoSurvivorActions{
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;
+  gap:5px!important;margin:2px 0!important;align-items:stretch!important;
+ }
+ #echoAbilityBtn{min-width:0!important;min-height:39px!important;font-size:11px!important;padding:6px 5px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+ #echoHintBtn{min-height:39px!important;font-size:11px!important;padding:6px 9px!important}
+ #echoSurvivorActions #echoSelectOperator{
+  grid-column:1/-1!important;min-height:37px!important;
+  padding:6px!important;font-size:11px!important
+ }
+ #echoMobileQuickActions{
+  position:static!important;inset:auto!important;transform:none!important;
+  width:100%!important;margin:3px 0 0!important;padding:5px!important;
+  gap:5px!important;border-radius:12px!important;
+ }
+ #echoMobileQuickActions button{min-height:42px!important;padding:6px 3px!important;font-size:11px!important}
+ .arena-status-bar{margin:2px 0!important}
+ #vr-launch{display:none!important}
+ .game-actions{display:none!important}
+}
+@media(max-width:380px){
+ #mobileControls{padding:5px!important}
+ #mobileControls .mobile-control-layout{gap:4px!important}
+ #mobileControls .mobile-action-buttons{gap:4px!important}
+ #mobileShiftBtn{width:54px!important;height:54px!important}
+ #mobileRestartBtn{width:44px!important;height:44px!important}
+ #echoHintBtn{font-size:10px!important}
+}
+@media(max-width:768px){
+ body.echo-immersive .gameplay-zone{justify-content:flex-start!important;gap:3px!important}
+ body.echo-immersive #mobileControls .mobile-control-layout{height:clamp(96px,23dvh,130px)!important}
+ body.echo-immersive #echoSurvivorActions #echoSelectOperator{min-height:29px!important}
+ body.echo-immersive #echoMobileQuickActions button{min-height:34px!important}
+}
+</style><style id="echo-v813-focus-mobile">
+@media(max-width:768px){
+ /* Gameplay first: one primary action, secondary actions in a small drawer. */
+ #app.app-container{padding-bottom:12px!important}
+ .gameplay-zone{gap:4px!important}
+ #mobileControls{padding:5px 8px!important;margin:0!important}
+ #mobileControls .mobile-control-layout{height:clamp(102px,27vw,122px)!important;min-height:0!important;gap:4px!important}
+ #mobileDpad:not(.hidden){grid-template-columns:repeat(3,clamp(30px,9vw,38px))!important;grid-template-rows:repeat(3,clamp(30px,9vw,38px))!important}
+ #mobileControls #virtualJoystick:not(.hidden){width:clamp(90px,25vw,112px)!important;height:clamp(90px,25vw,112px)!important}
+ #mobileControls #joystickBase{width:clamp(90px,25vw,112px)!important;height:clamp(90px,25vw,112px)!important}
+ #mobileShiftBtn{width:clamp(52px,14vw,66px)!important;height:clamp(52px,14vw,66px)!important}
+ #mobileRestartBtn{display:none!important}
+ #mobileControls .mobile-control-options{margin:3px 0 0!important}
+ #controlModeBtn{min-height:30px!important;font-size:10px!important;padding:3px 6px!important}
+ #echoSurvivorActions{display:flex!important;gap:5px!important;margin:1px 0!important}
+ #echoAbilityBtn{flex:1 1 auto!important;min-height:36px!important;font-size:11px!important}
+ #echoHintBtn,#echoSelectOperator{display:none!important}
+ #echoMobileQuickActions{
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  margin:2px 0 0!important;padding:4px!important;gap:5px!important;
+ }
+ #echoMobileQuickActions #echoQuickPlay{min-height:42px!important;font-size:13px!important}
+ #echoMobileQuickActions #echoQuickRestart,
+ #echoMobileQuickActions #echoQuickLevels{display:none!important}
+ #echoMobileQuickActions #echoMoreBtn{display:block!important;min-height:42px!important;background:#18364b!important;color:#e0f9ff!important;border:1px solid #377d91!important;font-size:12px!important}
+ #echoMorePanel[hidden]{display:none!important}
+ #echoMorePanel{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:6px!important;padding:7px!important;margin:2px 0 0!important;
+  background:#0a2032!important;border:1px solid #276078!important;border-radius:12px!important;
+ }
+ #echoMorePanel button{display:block!important;min-height:40px!important;min-width:0!important;font:700 11px system-ui!important;padding:5px!important;border:1px solid #38778d!important;border-radius:9px!important;background:#17374e!important;color:#e1faff!important;touch-action:manipulation!important}
+ #echoMorePanel #echoSelectOperator{grid-column:1/-1!important}
+ #echoMobileQuickActions + #echoMorePanel #echoQuickRestart,
+ #echoMobileQuickActions + #echoMorePanel #echoQuickLevels,
+ #echoMobileQuickActions + #echoMorePanel #echoHintBtn,
+ #echoMobileQuickActions + #echoMorePanel #echoSelectOperator{display:block!important}
+
+ .arena-status-bar{font-size:10px!important}
+ #rebirthGuide{padding:4px 7px!important;margin:2px 0!important}
+ #rebirthGuide p{display:none!important}
+ .level-information{padding:3px 7px!important}
+ #levelName{font-size:11px!important}
+ .game-hud .hud-card{padding:4px 2px!important}
+ body.echo-immersive #echoMorePanel{flex:0 0 auto!important}
+ body.echo-immersive #echoMobileQuickActions #echoMoreBtn{min-height:32px!important}
+}
+</style><style id="echo-v82-collapse-cinematic">
+/* A standalone cinematic presentation that does not affect the game HUD. */
+#awakeningIntro{position:fixed!important;inset:0!important;z-index:30000!important;overflow-y:auto!important;overscroll-behavior:contain!important;background:radial-gradient(circle at 50% 30%,#143b55 0%,#061323 52%,#02070e 100%)!important;padding:calc(env(safe-area-inset-top,0px) + 18px) 12px calc(env(safe-area-inset-bottom,0px) + 18px)!important}
+#awakeningIntro.hidden{display:none!important}
+#awakeningIntro.visible{display:flex!important;align-items:center!important;justify-content:center!important}
+#awakeningIntro .awakening-intro-backdrop{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0px,transparent 5px,rgba(79,235,255,.025) 6px);animation:echoStoryScan 10s linear infinite}
+#awakeningIntro .awakening-intro-content{position:relative!important;z-index:1!important;width:min(100%,570px)!important;max-height:none!important;overflow:visible!important;padding:clamp(18px,5vw,34px)!important;border:1px solid #398da6!important;border-radius:18px!important;background:linear-gradient(160deg,rgba(10,31,50,.96),rgba(5,12,28,.98))!important;box-shadow:0 0 70px #00d5ff16,0 25px 70px #0009!important}
+#awakeningIntro .awakening-system-label{letter-spacing:.15em;color:#8ad7ed;font-size:11px}
+#awakeningIntro .awakening-symbol{font-size:clamp(38px,11vw,72px);line-height:1.1;color:#57f1ff;text-shadow:0 0 22px #37e5ff8a;animation:echoStoryPulse 3s ease-in-out infinite}
+#awakeningIntro #awakeningTitle{font-size:clamp(23px,6vw,38px)!important;line-height:1.13!important;letter-spacing:.02em!important;margin:10px 0!important}
+#awakeningIntro #awakeningText{font-size:clamp(15px,3.7vw,18px)!important;line-height:1.65!important;min-height:7.5em!important;max-width:45ch;margin:12px auto 18px!important;color:#e5f6ff!important}
+#awakeningIntro #awakeningCounter{font-size:12px!important;color:#76d6e7!important}
+#awakeningIntro #awakeningGlitch{position:relative!important;display:block!important;min-height:18px!important;opacity:1!important;color:#7de7ef!important;font:700 10px system-ui!important;letter-spacing:.12em!important;text-align:center!important;pointer-events:none!important}
+#awakeningIntro .awakening-intro-actions{display:flex!important;gap:8px!important;justify-content:center!important}
+#awakeningIntro .awakening-intro-actions button{min-height:46px!important;flex:1!important;max-width:230px!important}
+#awakeningIntro .awakening-signature{font-size:10px!important;margin-top:16px!important;opacity:.65!important}
+body[data-echo-intro-tone="danger"] #awakeningIntro .awakening-intro-content{border-color:#f45b76!important;box-shadow:0 0 65px #ff33502e!important}
+body[data-echo-intro-tone="danger"] #awakeningIntro .awakening-symbol{color:#ff6e85!important;text-shadow:0 0 25px #ff315b!important}
+body[data-echo-intro-tone="hope"] #awakeningIntro .awakening-symbol{color:#80ffd1!important}
+#echoReplayStory{grid-column:1/-1!important}
+@keyframes echoStoryPulse{50%{opacity:.55;transform:scale(1.08)}}
+@keyframes echoStoryScan{to{background-position:0 70px}}
+@media(prefers-reduced-motion:reduce){#awakeningIntro .awakening-symbol,#awakeningIntro .awakening-intro-backdrop{animation:none!important}}
+@media(max-width:768px){#awakeningIntro .awakening-intro-content{margin:auto!important}#awakeningIntro #awakeningText{min-height:9em!important}#awakeningIntro .awakening-intro-actions button{font-size:12px!important}}
+</style><style id="echo-v83-origin-scene">
+/* The story now happens in a visual scene, not a text-only slide. */
+#awakeningIntro .awakening-intro-content{width:min(100%,680px)!important;padding:clamp(12px,3vw,22px)!important}
+#awakeningIntro .awakening-symbol{display:none!important}
+#awakeningIntro #awakeningTitle{font-size:clamp(20px,5vw,29px)!important;margin:7px 0!important}
+#awakeningIntro #awakeningText{min-height:5.6em!important;max-width:55ch!important;margin:7px auto 12px!important;font-size:clamp(13px,3.5vw,16px)!important;line-height:1.5!important}
+#echoOriginStage{position:relative;width:100%;aspect-ratio:640/290;max-height:38dvh;margin:10px auto 8px;overflow:hidden;border:1px solid #28758d;border-radius:12px;background:#05111e;box-shadow:inset 0 0 40px #0009,0 0 24px #00dfff15}
+#echoOriginStage svg{display:block;width:100%;height:100%}
+#echoOriginStage #originCore{transform-origin:320px 143px;animation:originCoreSpin 12s linear infinite,originCorePulse 3s ease-in-out infinite}
+#echoOriginStage #originEcho{opacity:0;animation:originEchoAppear 2.5s ease-in-out infinite alternate}
+#echoOriginStage #originSparks{opacity:.12;animation:originFlicker .25s steps(2,end) infinite}
+#echoOriginStage #originWarning{opacity:0}
+#echoOriginStage .origin-stage-caption{position:absolute;top:7px;right:8px;display:flex;align-items:center;gap:6px;max-width:75%;padding:4px 7px;border:1px solid #3c9bb0;background:#031521cb;color:#aaf7ff;font:700 9px system-ui;letter-spacing:.07em;border-radius:5px}
+#echoOriginStage .origin-live-dot{width:6px;height:6px;border-radius:50%;background:#70f9df;box-shadow:0 0 8px #70f9df;flex:none}
+body[data-echo-intro-tone="danger"] #echoOriginStage{border-color:#fa6479;box-shadow:0 0 28px #fa35542c;animation:originShake .35s linear infinite}
+body[data-echo-intro-tone="danger"] #originWarning{opacity:1}
+body[data-echo-intro-tone="danger"] #originCore{animation:originCorePulse .45s ease-in-out infinite}
+body[data-echo-intro-tone="danger"] #originSparks{opacity:1}
+body[data-echo-intro-tone="echo"] #originEcho,body[data-echo-intro-tone="hope"] #originEcho,body[data-echo-intro-tone="mission"] #originEcho{opacity:1}
+body[data-echo-intro-tone="echo"] #originCore,body[data-echo-intro-tone="hope"] #originCore{opacity:.35}
+body[data-echo-intro-tone="survivors"] #originEcho{opacity:.7}
+body[data-echo-intro-tone="hope"] #echoOriginStage{border-color:#76ffd6}
+@keyframes originCoreSpin{to{transform:rotate(360deg)}}
+@keyframes originCorePulse{50%{opacity:.6;filter:brightness(1.5)}}
+@keyframes originEchoAppear{0%{filter:opacity(.55) drop-shadow(0 0 2px #45edff);transform:translate(320px,149px)}100%{filter:opacity(1) drop-shadow(0 0 10px #45edff);transform:translate(320px,141px)}}
+@keyframes originFlicker{50%{opacity:.15}}
+@keyframes originShake{25%{transform:translateX(2px)}75%{transform:translateX(-2px)}}
+@media(max-width:768px){
+ #awakeningIntro{padding:calc(env(safe-area-inset-top,0px) + 6px) 8px calc(env(safe-area-inset-bottom,0px) + 6px)!important}
+ #awakeningIntro .awakening-intro-content{padding:12px!important}
+ #awakeningIntro .awakening-system-label{font-size:9px!important}
+ #awakeningIntro #awakeningText{min-height:7em!important}
+ #awakeningIntro .awakening-intro-actions button{min-height:41px!important}
+ #awakeningIntro .awakening-signature{font-size:8px!important;margin-top:7px!important}
+ #echoOriginStage{max-height:34dvh}
+}
+@media(prefers-reduced-motion:reduce){#echoOriginStage,#echoOriginStage *{animation:none!important}body[data-echo-intro-tone="echo"] #originEcho,body[data-echo-intro-tone="hope"] #originEcho{opacity:1}}
+</style><style id="echo-v83-operator-mobile">
+/* Mobile character selector: one-screen overview, details remain scrollable. */
+@media(max-width:650px){
+ #vr-menu{overscroll-behavior:contain!important}
+ #vr-menu .vr-shell{width:calc(100% - 18px)!important;max-width:520px!important;padding:calc(env(safe-area-inset-top,0px) + 8px) 0 calc(env(safe-area-inset-bottom,0px) + 16px)!important}
+ #vr-menu .vr-topbar{margin-bottom:4px!important}
+ #vr-menu .vr-topbar .vr-button{min-height:34px!important;padding:5px 10px!important;font-size:11px!important}
+ #vr-menu .vr-heading{margin-bottom:10px!important}
+ #vr-menu .vr-kicker{font-size:9px!important;letter-spacing:2px!important}
+ #vr-menu .vr-logo{font-size:clamp(27px,8vw,39px)!important;line-height:1.05!important;margin:3px 0!important}
+ #vr-menu .vr-version{font-size:9px!important;letter-spacing:2px!important}
+ #vr-menu .vr-title{font-size:clamp(17px,5vw,23px)!important;margin:9px 0 3px!important}
+ #vr-menu .vr-subtitle{font-size:11px!important;margin:0!important}
+ #vr-menu .vr-characters{gap:6px!important}
+ #vr-menu .vr-character{padding:3px!important;border-radius:11px!important}
+ #vr-menu .vr-character.active{padding:2px!important}
+ #vr-menu .vr-portrait{height:clamp(100px,29vw,148px)!important;border-radius:7px!important}
+ #vr-menu .vr-character-name{font-size:clamp(14px,4vw,18px)!important;padding:5px 1px 1px!important}
+ #vr-menu .vr-character-role{font-size:9px!important;line-height:1.2!important;min-height:25px!important;padding:0 2px 3px!important}
+ #vr-menu .vr-selected-mark{font-size:8px!important;padding:4px!important;top:5px!important;right:5px!important}
+ #vr-menu .vr-info{display:block!important;margin-top:8px!important;padding:9px 11px!important}
+ #vr-menu .vr-info h3{font-size:19px!important;margin:0!important}
+ #vr-menu .vr-info p{font-size:11px!important;margin:3px 0!important;line-height:1.3!important}
+ #vr-menu .vr-abilities{display:flex!important;flex-wrap:wrap!important;gap:4px 10px!important;padding:5px 0 0!important;margin:4px 0 0!important;border:0!important}
+ #vr-menu .vr-ability{font-size:10px!important;line-height:1.25!important}
+ #vr-menu .vr-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;margin:9px 0!important}
+ #vr-menu #vr-play{grid-column:1/-1!important;grid-row:1!important;min-height:44px!important;font-size:14px!important}
+ #vr-menu #vr-levels,#vr-menu #vr-close{min-height:34px!important;font-size:11px!important}
+ #vr-menu #vr-levels{grid-column:1/3!important}
+ #vr-menu #vr-close{grid-column:3/4!important}
+ #vr-menu .vr-settings{font-size:11px!important;gap:10px!important;margin-top:6px!important}
+ #vr-menu .vr-footer{font-size:9px!important;margin-top:10px!important}
+}
+@media(max-width:380px){
+ #vr-menu .vr-portrait{height:96px!important}
+ #vr-menu .vr-abilities{display:none!important}
+}
+</style><style id="echo-v831-story-visibility">
+/* Make the cinematic dominant and the operator screen genuinely compact. */
+#awakeningIntro.visible{z-index:50000!important}
+@media(max-width:650px){
+ #vr-menu .vr-shell{padding-top:8px!important}
+ #vr-menu .vr-portrait{height:clamp(92px,25vw,126px)!important}
+ #vr-menu .vr-heading{margin-bottom:7px!important}
+ #vr-menu .vr-info p:nth-of-type(3){display:none!important}
+ #vr-menu .vr-abilities{gap:3px!important}
+ #vr-menu #vr-replay-story{min-height:36px!important;font-size:11px!important}
+}
+</style><style id="echo-v90-temporal-mode">
+#echoV90Mode,#echoV90Record{border:1px solid #3c9fb3;border-radius:9px;background:#123449;color:#e7fbff;font:700 11px system-ui;min-height:39px;padding:7px 10px;touch-action:manipulation}
+#echoV90Mode{grid-column:1/-1}
+#echoV90Record{display:none}
+body.echo-v90-free #echoV90Record{display:block}
+body.echo-v90-free #echoMobileQuickActions #echoQuickPlay{background:#104c45!important}
+body.echo-v90-free #mobileShiftBtn{opacity:.75}
+body.echo-v90-free #timerBar{background:#65e3ca!important}
+@media(max-width:768px){#echoV90Record{width:100%;margin:3px 0}#echoV90Mode{width:100%}}
+</style></head>
+
+<body class="echo404-app">
+
+  <!-- BACKGROUND EFFECTS -->
+  <div class="background-grid" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow-one" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow-two" aria-hidden="true"></div>
+  <div class="screen-noise" aria-hidden="true"></div>
+  <div class="screen-scanlines" aria-hidden="true"></div>
+  <div id="globalGlitch" class="global-glitch" aria-hidden="true"></div>
+
+  <!-- CINEMATIC INTRO -->
+  <section id="awakeningIntro" class="awakening-intro hidden"
+           role="dialog" aria-modal="true"
+           aria-labelledby="awakeningTitle">
+    <div class="awakening-intro-backdrop"></div>
+    <div class="awakening-intro-content">
+      <div class="awakening-system-label">
+        ECHO SYSTEM // INITIALIZING
+      </div>
+      <div class="awakening-symbol">◈</div>
+      <div id="awakeningCounter" class="awakening-counter">
+        PROTOCOL 01 / 04
+      </div>
+      <h1 id="awakeningTitle" class="awakening-title">
+        THE AWAKENING
+      </h1>
+      <p id="awakeningText" class="awakening-text">
+        O tempo está a fragmentar-se.
+      </p>
+      <div id="awakeningGlitch" class="awakening-glitch"></div>
+      <div class="awakening-intro-actions">
+        <button id="awakeningSkip" class="btn btn-secondary" type="button">
+          SALTAR
+        </button>
+        <button id="awakeningNext" class="btn btn-primary" type="button">
+          CONTINUAR
+        </button>
+      </div>
+      <div class="awakening-signature">
+        CREATED &amp; DEVELOPED BY MANUEL SAMPAIO01
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN APPLICATION -->
+  <div id="app" class="app-container">
+
+    <header class="game-header">
+      <div class="header-brand">
+        <div class="brand-mark">◈</div>
+        <div class="brand-information">
+          <div class="brand-overline">PARADOX EVOLUTION</div>
+          <h1 class="game-logo">ECHO<span>//</span>404</h1>
+          <div class="game-subtitle">TEMPORAL ENGINE v7.0</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="echoMobileMenu" type="button" aria-label="Abrir menu de níveis e progresso" aria-controls="vrLevelDetails" aria-expanded="false">☰ MENU</button>
+        <span id="systemStatus" class="system-status">
+          <span class="system-status-dot"></span>
+          <span class="operator-status-label">SYSTEM ONLINE</span>
+        </span>
+        <button id="soundBtn" class="btn btn-icon" type="button"
+                aria-label="Som">🔊</button>
+        <button id="fullscreenBtn" class="btn btn-icon" type="button"
+                aria-label="Ecrã completo">⛶</button>
+      </div>
+    </header>
+
+    <section class="system-banner">
+      <div class="system-banner-left">
+        <span class="system-tag">v4.2</span>
+        <span class="system-banner-text">PARADOX EVOLUTION</span>
+      </div>
+      <div class="system-banner-right">
+        <span id="threatLevel">THREAT LEVEL: LOW</span>
+      </div>
+    </section>
+
+    <nav class="mode-return" aria-label="Modos de jogo"><a href="./index.html">← CAMPANHA · MODO PRINCIPAL</a><strong>CLÁSSICO · PUZZLES TEMPORAIS</strong></nav>
+
+    <main class="game-layout">
+      <section class="game-main">
+
+        <!-- LEVEL INFORMATION -->
+        <section class="panel level-information">
+          <div class="level-information-top">
+            <div>
+              <span class="panel-overline">CURRENT SIMULATION</span>
+              <h2 id="levelName">O Primeiro Eco</h2>
+            </div>
+            <span id="difficultyBadge" class="difficulty-badge">
+              INICIANTE
+            </span>
+          </div>
+          <div id="levelHint" class="level-hint">
+            Utiliza os ecos temporais para abrir a porta.
+          </div>
+        </section>
+
+        <!-- HUD -->
+        <section class="game-hud" aria-label="Indicadores do jogo">
+          <div class="hud-card">
+            <span class="hud-label">CICLO</span>
+            <strong id="cycle" class="hud-value">1 / 6</strong>
+          </div>
+          <div id="timerCard" class="hud-card timer-card">
+            <span class="hud-label">TEMPO</span>
+            <strong id="timer" class="hud-value">10.0</strong>
+          </div>
+          <div class="hud-card">
+            <span class="hud-label">ECOS</span>
+            <strong id="ghosts" class="hud-value">0</strong>
+          </div>
+          <div class="hud-card">
+            <span class="hud-label">PONTOS</span>
+            <strong id="score" class="hud-value">0</strong>
+          </div>
+          <div class="hud-card">
+            <span class="hud-label">RECORDE</span>
+            <strong id="best" class="hud-value">0</strong>
+          </div>
+        </section>
+
+        <div class="timer-progress-track">
+          <div id="timerBar" class="timer-progress-bar"></div>
+        </div>
+
+        <!-- GAME ARENA -->
+        <div class="gameplay-zone">
+          <section class="arena-section">
+            <div id="arenaShell" class="arena-shell">
+
+              <div class="arena-corner arena-corner-tl"></div>
+              <div class="arena-corner arena-corner-tr"></div>
+              <div class="arena-corner arena-corner-bl"></div>
+              <div class="arena-corner arena-corner-br"></div>
+
+              <canvas id="gameCanvas" width="800" height="500"
+                      aria-label="Arena temporal ECHO//404"></canvas>
+
+              <div id="criticalWarning"
+                   class="critical-warning hidden" role="alert">
+                ⚠ TEMPORAL COLLAPSE IMMINENT
+              </div>
+
+              <div id="arenaGlitch" class="arena-glitch"
+                   aria-hidden="true"></div>
+
+              <!-- GAME RESULT OVERLAY -->
+              <div id="overlay" class="game-overlay">
+                <div class="overlay-content">
+                  <span class="overlay-overline">TEMPORAL PROTOCOL</span>
+                  <h2 id="overlayTitle">ECHO//404</h2>
+                  <p id="overlayMessage">
+                    Escolhe um operador e inicia a simulação.
+                  </p>
+                  <div id="awakeningMedalResult"
+                       class="medal-result"></div>
+                  <div class="overlay-score">
+                    <span>FINAL SCORE</span>
+                    <strong id="finalScore">0</strong>
+                  </div>
+                  <div class="overlay-actions">
+                    <button id="playAgainBtn" class="btn btn-primary"
+                            type="button">JOGAR NOVAMENTE</button>
+                    <button id="nextBtn" class="btn btn-secondary"
+                            type="button">PRÓXIMO NÍVEL</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="arena-status-bar">
+              <div class="arena-status-left">
+                <span class="status-indicator"></span>
+                <span id="status">SYSTEM READY</span>
+              </div>
+              <span id="arenaThreatStatus" class="arena-threat-status">
+                NO ANOMALIES DETECTED
+              </span>
+            </div>
+          </section>
+
+          <!-- MOBILE CONTROLS -->
+          <section id="mobileControls"
+                   class="mobile-controls mobile-gamepad"
+                   aria-label="Controlos móveis">
+            <div class="mobile-controls-heading">
+              <span>CONTROLOS</span>
+              <span>MOBILE READY</span>
+            </div>
+
+            <div class="mobile-control-layout">
+              <div id="mobileDpad" class="mobile-dpad">
+                <button id="moveUp" class="dpad-btn dpad-up"
+                        data-direction="up" type="button"
+                        aria-label="Mover para cima">▲</button>
+                <button id="moveLeft" class="dpad-btn dpad-left"
+                        data-direction="left" type="button"
+                        aria-label="Mover para a esquerda">◀</button>
+                <button id="moveRight" class="dpad-btn dpad-right"
+                        data-direction="right" type="button"
+                        aria-label="Mover para a direita">▶</button>
+                <button id="moveDown" class="dpad-btn dpad-down"
+                        data-direction="down" type="button"
+                        aria-label="Mover para baixo">▼</button>
+                <div class="dpad-center" aria-hidden="true">◈</div>
+              </div>
+
+              <div id="virtualJoystick"
+                   class="virtual-joystick hidden">
+                <div id="joystickBase" class="joystick-base">
+                  <div id="joystickStick"
+                       class="joystick-stick"></div>
+                </div>
+              </div>
+
+              <div class="mobile-action-buttons">
+                <button id="mobileShiftBtn"
+                        class="mobile-action-btn mobile-shift"
+                        type="button">
+                  <span>◈</span>
+                  <small>SHIFT</small>
+                </button>
+                <button id="mobileRestartBtn"
+                        class="mobile-action-btn mobile-restart"
+                        type="button">
+                  <span>↻</span>
+                  <small>REINICIAR</small>
+                </button>
+              </div>
+            </div>
+
+            <div class="mobile-control-options">
+              <button id="controlModeBtn" class="btn btn-secondary"
+                      type="button">
+                CONTROL MODE: D-PAD
+              </button>
+            </div>
+          </section>
+  <!-- NEW MOBILE QUICK ACTIONS -->
+  <nav id="echoMobileQuickActions"
+       aria-label="Ações rápidas do jogo">
+    <button id="echoQuickPlay" type="button">
+      ▶ JOGAR
+    </button>
+    <button id="echoQuickRestart" type="button">
+      ↻ REINICIAR
+    </button>
+    <button id="echoQuickLevels" type="button" aria-controls="vrLevelDetails" aria-expanded="false">
+      ☰ NÍVEIS
+    </button>
+  </nav>
+
+        </div>
+
+        <!-- ORIGINAL GAME ACTIONS -->
+        <section class="game-actions">
+          <button id="startBtn" class="btn btn-primary"
+                  type="button">▶ INICIAR</button>
+          <button id="restartBtn" class="btn btn-secondary"
+                  type="button">↻ REINICIAR</button>
+          <button id="shiftBtn" class="btn btn-shift"
+                  type="button">◈ PARADOX SHIFT</button>
+        </section>
+
+        <!-- ECHO AI -->
+        <section id="echoAiPanel"
+                 class="panel echo-ai-panel echo-ai-compact">
+          <div class="echo-ai-header">
+            <div class="echo-ai-identity">
+              <div id="echoAiAvatar" class="echo-ai-avatar">◈</div>
+              <div>
+                <span class="panel-overline">AI COMPANION</span>
+                <h2>ECHO // SISTEMA CONSCIENTE</h2>
+              </div>
+            </div>
+            <span id="echoAiState" class="echo-ai-state">
+              OBSERVING
+            </span>
+          </div>
+
+          <div id="echoMessage" class="echo-message"
+               role="status" aria-live="polite">
+            <div class="echo-message-content">
+              <span id="echoMessageLabel"
+                    class="echo-message-label">ECHO:</span>
+              <p id="echoMessageText">
+                Estou pronta para te acompanhar.
+              </p>
+            </div>
+            <button id="echoMessageClose"
+                    class="echo-message-close" type="button"
+                    aria-label="Fechar mensagem">×</button>
+          </div>
+
+          <div class="echo-ai-footer">
+            <span id="echoAiMood">MOOD: NEUTRAL</span>
+            <span id="echoAiAnalysis">
+              PLAYER ANALYSIS ACTIVE
+            </span>
+          </div>
+        </section>
+
+        <!-- ENGINE STATUS -->
+        <section id="obstaclePanel" class="panel obstacle-panel"
+                 hidden aria-hidden="true">
+          <span id="obstacleCount"></span>
+          <span id="movingLaserStatus"></span>
+          <span id="phaseWallStatus"></span>
+          <span id="platformStatus"></span>
+          <span id="echoTrapStatus"></span>
+        </section>
+      </section>
+
+      <!-- SIDEBAR -->
+      <aside class="game-sidebar">
+        <details class="vr-details" id="vrLevelDetails">
+          <summary>◈ NÍVEIS E PROGRESSO</summary>
+          <div class="vr-details-body">
+            <section class="panel levels-panel">
+              <div class="panel-heading">
+                <h2>SELECCIONAR NÍVEL</h2>
+              </div>
+              <div id="progress" class="level-progress">
+                0 / 10 COMPLETED
+              </div>
+              <div id="levelGrid" class="level-grid"></div>
+              <div class="level-legend">
+                <span>Disponível · </span>
+                <span>Concluído · </span>
+                <span>Bloqueado</span>
+              </div>
+            </section>
+          </div>
+        </details>
+
+        <details class="vr-details">
+          <summary>★ MEDALHAS E CONTROLOS</summary>
+          <div class="vr-details-body">
+            <section class="panel medals-panel">
+              <h2>MEDALHAS</h2>
+              <div id="awakeningMedalSummary" class="medal-summary">
+                🥇 0 · 🥈 0 · 🥉 0
+              </div>
+            </section>
+
+            <section class="panel controls-panel">
+              <h2>CONTROLOS</h2>
+              <div class="controls-guide">
+                <div class="control-guide-row">
+                  <span>Mover</span>
+                  <span>
+                    <kbd>W</kbd><kbd>A</kbd>
+                    <kbd>S</kbd><kbd>D</kbd>
+                  </span>
+                </div>
+                <div class="control-guide-row">
+                  <span>SHIFT</span><kbd>E</kbd>
+                </div>
+                <div class="control-guide-row">
+                  <span>Reiniciar</span><kbd>R</kbd>
+                </div>
+              </div>
+            </section>
+          </div>
+        </details>
+      </aside>
+    </main>
+
+    <!-- TUTORIAL -->
+    <section id="awakeningTutorial"
+             class="awakening-tutorial hidden"
+             role="dialog" aria-modal="false"
+             aria-labelledby="tutorialTitle">
+      <div class="tutorial-content">
+        <div class="tutorial-heading">
+          <span class="tutorial-overline">OPERATOR TRAINING</span>
+          <h2 id="tutorialTitle">TEMPORAL TRAINING</h2>
+        </div>
+        <div id="tutorialCounter" class="tutorial-counter">
+          STEP 01 / 05
+        </div>
+        <p id="tutorialText" class="tutorial-text">
+          Aprende a controlar os teus ecos.
+        </p>
+        <div class="tutorial-actions">
+          <button id="tutorialSkip" class="btn btn-secondary"
+                  type="button">SALTAR</button>
+          <button id="tutorialNext" class="btn btn-primary"
+                  type="button">SEGUINTE</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREDITS -->
+    <footer class="game-footer">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <strong>ECHO//404</strong>
+          <span> — PARADOX EVOLUTION</span>
+        </div>
+        <div class="footer-version">
+          TEMPORAL ENGINE // v6.0
+        </div>
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-creator">
+        <span class="footer-creator-label">
+          CREATED &amp; DEVELOPED BY
+        </span>
+        <strong class="footer-creator-name">
+          MANUEL SAMPAIO01
+        </strong>
+      </div>
+
+      <p class="footer-copyright">
+        © 2026 MANUEL SAMPAIO01. ALL RIGHTS RESERVED.
+      </p>
+    </footer>
+  </div>
+
+  <!-- EXTERNAL LIBRARIES -->
+  <script src="https://cdn.jsdelivr.net/npm/pixi.js@8.16.0/dist/pixi.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pixi-filters@6.1.5/dist/pixi-filters.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+  <!-- GAME MODULES -->
+  <script src="levels.js?v=430"></script>
+  <script src="world-layouts.js?v=800"></script>
+  <script src="storage.js?v=420"></script>
+  <script src="audio.js?v=310"></script>
+  <script src="dynamic-threats.js?v=540"></script>
+  <script src="system-war.js?v=600"></script>
+  <script src="game.js?v=900"></script>
+  <script src="awakening.js?v=831"></script>
+  <script src="visual-v1.js?v=831"></script>
+  <script src="world-renderer.js?v=530"></script>
+  <script src="visual-effects.js?v=410"></script>
+
+  <!-- INTERFACE INTEGRATION -->
+  <script>
+    "use strict";
+
+    (() => {
+      const $ = id => document.getElementById(id);
+
+      const OPERATORS = Object.freeze({
+        AXIOM: {
+          name: "AXIOM",
+          color: "#48f6ff",
+          role: "TACTICAL OPERATOR"
+        },
+        NYRA: {
+          name: "NYRA",
+          color: "#c88cff",
+          role: "TEMPORAL SPECIALIST"
+        },
+        "KAI-7": {
+          name: "KAI-7",
+          color: "#ffad57",
+          role: "ANDROID UNIT"
+        }
+      });
+
+      // FULLSCREEN
+      const fullscreenButton = $("fullscreenBtn");
+
+      fullscreenButton?.addEventListener("click", async () => {
+        try {
+          if (document.fullscreenElement) {
+            await document.exitFullscreen();
+          } else if (document.documentElement.requestFullscreen) {
+            await document.documentElement.requestFullscreen();
+          }
+        } catch (error) {
+          console.warn("[ECHO//404] Fullscreen indisponível:", error);
+        }
+      });
+
+      document.addEventListener("fullscreenchange", () => {
+        if (fullscreenButton) {
+          const active = Boolean(document.fullscreenElement);
+          fullscreenButton.textContent = active ? "⤢" : "⛶";
+          fullscreenButton.setAttribute(
+            "aria-label",
+            active ? "Sair do ecrã completo" : "Ecrã completo"
+          );
+        }
+        window.EchoWorldRenderer?.resize?.();
+      });
+
+      // LEVEL MENU
+      const levelDetails = $("vrLevelDetails");
+
+      function openLevels() {
+        if (!levelDetails) return;
+        const mobile = window.matchMedia("(max-width: 768px)").matches;
+        if (mobile) {
+          levelDetails.open = !levelDetails.open;
+          $("echoMobileMenu")?.setAttribute("aria-expanded", String(levelDetails.open));
+          $("echoQuickLevels")?.setAttribute("aria-expanded", String(levelDetails.open));
+          return;
+        }
+        levelDetails.open = true;
+        levelDetails.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && levelDetails?.open &&
+            window.matchMedia("(max-width: 768px)").matches) {
+          levelDetails.open = false;
+          $("echoMobileMenu")?.setAttribute("aria-expanded", "false");
+          $("echoQuickLevels")?.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("click", event => {
+        if (event.target?.closest?.("#vr-levels")) {
+          openLevels();
+        }
+      });
+
+      // NEW MOBILE MENU
+      $("echoMobileMenu")?.addEventListener("click", openLevels);
+      $("echoQuickLevels")?.addEventListener("click", openLevels);
+
+      // MOBILE QUICK ACTIONS
+      // Reuse original game buttons to avoid conflicting handlers.
+      function triggerOriginalButton(id) {
+        const button = $(id);
+
+        if (!button || button.disabled) {
+          console.warn("[ECHO//404] Botão indisponível:", id);
+          return false;
+        }
+
+        button.click();
+        return true;
+      }
+
+      $("echoQuickPlay")?.addEventListener("click", () => {
+        const overlay = $("overlay");
+        const playAgain = $("playAgainBtn");
+
+        // When the result overlay is open, use the
+        // existing replay action if it is available.
+        if (
+          window.EchoGame?.getState?.()?.finished === true &&
+          overlay &&
+          !overlay.classList.contains("hidden") &&
+          playAgain &&
+          !playAgain.disabled
+        ) {
+          triggerOriginalButton("playAgainBtn");
+        } else {
+          triggerOriginalButton("startBtn");
+        }
+      });
+
+      $("echoQuickRestart")?.addEventListener("click", () => {
+        triggerOriginalButton("restartBtn");
+      });
+
+      // Update quick button label according to overlay.
+      function updateQuickPlayLabel() {
+        const overlay = $("overlay");
+        const button = $("echoQuickPlay");
+
+        if (!button || !overlay) return;
+
+        const overlayVisible =
+          !overlay.classList.contains("hidden") &&
+          getComputedStyle(overlay).display !== "none";
+
+        const title = ($("overlayTitle")?.textContent || "")
+          .toLowerCase();
+
+        const finished = window.EchoGame?.getState?.()?.finished === true;
+
+        button.textContent =
+          overlayVisible && finished
+            ? "▶ JOGAR NOVAMENTE"
+            : "▶ JOGAR";
+      }
+
+      if ($("overlay")) {
+        const observer = new MutationObserver(updateQuickPlayLabel);
+        observer.observe($("overlay"), {
+          attributes: true,
+          attributeFilter: ["class", "style"]
+        });
+      }
+
+      // OPERATOR INTEGRATION
+      function normalizeOperator(detail = {}) {
+        const raw =
+          detail.operator ??
+          detail.character ??
+          detail.id ??
+          detail.name ??
+          "";
+
+        const value =
+          typeof raw === "object" && raw !== null
+            ? raw.id ?? raw.name ?? ""
+            : raw;
+
+        let name = String(value)
+          .trim()
+          .toUpperCase()
+          .replace(/_/g, "-")
+          .replace(/\s+/g, "-");
+
+        if (name === "KAI7") name = "KAI-7";
+
+        return name;
+      }
+
+      function updateOperatorUI(name) {
+        const operator = OPERATORS[name];
+        if (!operator) return;
+
+        const key = name.toLowerCase();
+
+        document.body.dataset.operator = key;
+        document.documentElement.style.setProperty(
+          "--operator-color",
+          operator.color
+        );
+
+        const status = $("systemStatus");
+
+        if (status) {
+          status.dataset.operator = key;
+          status.title =
+            `Operador activo: ${operator.name} — ${operator.role}`;
+
+          let dot = status.querySelector(".system-status-dot");
+          if (!dot) {
+            dot = document.createElement("span");
+            dot.className = "system-status-dot";
+            status.prepend(dot);
+          }
+
+          let label = status.querySelector(".operator-status-label");
+          if (!label) {
+            label = document.createElement("span");
+            label.className = "operator-status-label";
+            status.appendChild(label);
+          }
+
+          label.textContent = `${operator.name} // ONLINE`;
+          dot.style.background = operator.color;
+          dot.style.boxShadow = `0 0 12px ${operator.color}`;
+        }
+
+        const arena = $("arenaShell");
+        if (arena) {
+          arena.dataset.operator = key;
+          arena.style.setProperty(
+            "--operator-color",
+            operator.color
+          );
+        }
+
+        const app = $("app");
+        if (app) app.dataset.activeOperator = key;
+
+        window.dispatchEvent(
+          new CustomEvent("echo404:operatoruiupdated", {
+            detail: {
+              operator: operator.name,
+              role: operator.role,
+              color: operator.color
+            }
+          })
+        );
+      }
+
+      window.addEventListener("echo404:operatorselected", event => {
+        const name = normalizeOperator(event.detail || {});
+        updateOperatorUI(name);
+      });
+
+      // RESTORE OPERATOR UI
+      try {
+        const savedOperator = window.GameStorage?.getOperator?.();
+        if (savedOperator) {
+          updateOperatorUI(normalizeOperator({
+            operator: savedOperator
+          }));
+        }
+      } catch (error) {
+        console.warn("[ECHO//404] Operador:", error);
+      }
+
+      // ECHO AI MESSAGE
+      $("echoMessageClose")?.addEventListener("click", () => {
+        $("echoMessage")?.classList.add("hidden");
+      });
+
+      // MODULE DIAGNOSTICS
+      function checkModules() {
+        const modules = {
+          pixi: Boolean(window.PIXI),
+          levels: Boolean(
+            window.EchoLevelsV42 ||
+            window.GAME_LEVELS ||
+            typeof GAME_LEVELS !== "undefined"
+          ),
+          storage: Boolean(window.GameStorage),
+          audio: Boolean(window.GameAudio),
+          game: Boolean(window.EchoGame),
+          awakening: Boolean(window.EchoAwakening),
+          operators: Boolean(
+            window.EchoVisualRebirthV30 ||
+            window.EchoVisualRebirthV21 ||
+            window.EchoVisual
+          ),
+          worldRenderer: Boolean(window.EchoWorldRenderer),
+          visualEffects: Boolean(window.EchoVisualEffects)
+        };
+
+        const missing = Object.entries(modules)
+          .filter(([, loaded]) => !loaded)
+          .map(([name]) => name);
+
+        if (missing.length) {
+          console.warn(
+            "[ECHO//404] Módulos não detectados:",
+            missing.join(", ")
+          );
+        } else {
+          console.info("[ECHO//404] Todos os módulos detectados.");
+        }
+
+        const worldState =
+          window.EchoWorldRenderer?.getState?.();
+
+        if (worldState?.initialized) {
+          console.info(
+            "[ECHO//404] WORLD RENDERER ONLINE",
+            worldState
+          );
+        }
+
+        try {
+          window.EchoLevelsV42?.validate?.();
+        } catch (error) {
+          console.warn("[ECHO//404] Validação:", error);
+        }
+
+        updateQuickPlayLabel();
+
+        console.info(
+          "ECHO//404 — PARADOX EVOLUTION\n" +
+          "MOBILE INTERFACE FIX v4.2.1\n" +
+          "CREATED & DEVELOPED BY MANUEL SAMPAIO01\n" +
+          "© 2026 MANUEL SAMPAIO01"
+        );
+      }
+
+      if (document.readyState === "complete") {
+        checkModules();
+      } else {
+        window.addEventListener("load", checkModules, {
+          once: true
+        });
+      }
+
+    })();
+  </script>
+
+  <script id="echo-mobile-joystick-v43">
+  (() => {
+    "use strict";
+    const $ = id => document.getElementById(id);
+    const joystick = $("virtualJoystick");
+    const base = $("joystickBase");
+    const stick = $("joystickStick");
+    const dpad = $("mobileDpad");
+    const toggle = $("controlModeBtn");
+    if (!joystick || !base || !stick || !dpad || !toggle) return;
+
+    const storageKey = "echo404_control_mode";
+    const directionKeys = {up:"ArrowUp",down:"ArrowDown",left:"ArrowLeft",right:"ArrowRight"};
+    const active = new Set();
+    let pointerId = null;
+    let mode = "dpad";
+    let dragPointer = null;
+    let dragOrigin = null;
+    const canvas = $("gameCanvas");
+
+    function releaseKeys() {
+      for (const key of active) {
+        window.dispatchEvent(new KeyboardEvent("keyup",{key,bubbles:true}));
+      }
+      active.clear();
+      stick.style.transform = "translate(0px, 0px)";
+    }
+    function setMode(next) {
+      releaseKeys();
+      pointerId = null;
+      dragPointer = null;
+      dragOrigin = null;
+      mode = ["dpad","joystick","drag"].includes(next) ? next : "dpad";
+      dpad.classList.toggle("hidden", mode !== "dpad");
+      joystick.classList.toggle("hidden", mode !== "joystick");
+      $("arenaShell")?.classList.toggle("echo-drag-enabled",mode === "drag");
+      if (canvas) canvas.style.setProperty("touch-action", mode === "drag" ? "none" : "pan-y", "important");
+      $("arenaShell")?.style.setProperty("touch-action", mode === "drag" ? "none" : "pan-y", "important");
+      toggle.textContent = mode === "dpad" ? "🎮 D-PAD  ·  MUDAR PARA JOYSTICK"
+        : mode === "joystick" ? "🕹 JOYSTICK  ·  MUDAR PARA ARRASTAR"
+        : "☝ ARRASTAR  ·  MUDAR PARA D-PAD";
+      toggle.setAttribute("aria-label", "Alterar modo de controlo: " + mode);
+      toggle.setAttribute("aria-pressed", String(mode !== "dpad"));
+      try { localStorage.setItem(storageKey, mode); } catch (_) {}
+    }
+    function movePointer(event) {
+      if (event.pointerId !== pointerId) return;
+      event.preventDefault();
+      const rect = base.getBoundingClientRect();
+      const dx = event.clientX - (rect.left + rect.width/2);
+      const dy = event.clientY - (rect.top + rect.height/2);
+      const radius = Math.min(rect.width,rect.height)*0.30;
+      const length = Math.hypot(dx,dy) || 1;
+      const factor = Math.min(1,radius/length);
+      stick.style.transform = `translate(${dx*factor}px,${dy*factor}px)`;
+      const wanted = new Set();
+      const threshold = 16;
+      if (dx < -threshold) wanted.add("ArrowLeft");
+      if (dx > threshold) wanted.add("ArrowRight");
+      if (dy < -threshold) wanted.add("ArrowUp");
+      if (dy > threshold) wanted.add("ArrowDown");
+      for (const key of active) {
+        if (!wanted.has(key)) {
+          window.dispatchEvent(new KeyboardEvent("keyup",{key,bubbles:true}));
+          active.delete(key);
+        }
+      }
+      for (const key of wanted) {
+        if (!active.has(key)) {
+          window.dispatchEvent(new KeyboardEvent("keydown",{key,bubbles:true}));
+          active.add(key);
+        }
+      }
+    }
+    base.addEventListener("pointerdown", event => {
+      if (pointerId !== null) return;
+      pointerId = event.pointerId;
+      try { base.setPointerCapture(pointerId); } catch (_) {}
+      movePointer(event);
+    });
+    base.addEventListener("pointermove", movePointer);
+    for (const name of ["pointerup","pointercancel","lostpointercapture"]) {
+      base.addEventListener(name, event => {
+        if (event.pointerId !== pointerId) return;
+        pointerId = null;
+        releaseKeys();
+      });
+    }
+    toggle.addEventListener("click", () => setMode(mode === "dpad" ? "joystick" : mode === "joystick" ? "drag" : "dpad"));
+    function updateDrag(event) {
+      if (mode !== "drag" || dragPointer !== event.pointerId || !dragOrigin) return;
+      event.preventDefault();
+      const dx = event.clientX - dragOrigin.x;
+      const dy = event.clientY - dragOrigin.y;
+      const wanted = new Set();
+      if (dx < -15) wanted.add(directionKeys.left);
+      if (dx > 15) wanted.add(directionKeys.right);
+      if (dy < -15) wanted.add(directionKeys.up);
+      if (dy > 15) wanted.add(directionKeys.down);
+      for (const key of [...active]) if (!wanted.has(key)) {
+        window.dispatchEvent(new KeyboardEvent("keyup",{key,bubbles:true})); active.delete(key);
+      }
+      for (const key of wanted) if (!active.has(key)) {
+        window.dispatchEvent(new KeyboardEvent("keydown",{key,bubbles:true})); active.add(key);
+      }
+    }
+    canvas?.addEventListener("pointerdown", event => {
+      if (mode !== "drag" || event.pointerType === "mouse" || dragPointer !== null) return;
+      if (!window.EchoGame?.getState?.()?.running) return;
+      dragPointer = event.pointerId;
+      dragOrigin = {x:event.clientX,y:event.clientY};
+      try {canvas.setPointerCapture(event.pointerId);} catch (_) {}
+      event.preventDefault();
+    }, {passive:false});
+    canvas?.addEventListener("pointermove", updateDrag, {passive:false});
+    for (const name of ["pointerup","pointercancel","lostpointercapture"]) {
+      canvas?.addEventListener(name, event => {
+        if (event.pointerId !== dragPointer) return;
+        dragPointer = null; dragOrigin = null; releaseKeys();
+      });
+    }
+    window.addEventListener("blur", releaseKeys);
+    document.addEventListener("visibilitychange", () => { if(document.hidden) releaseKeys(); });
+    for (const el of [$("arenaShell"),canvas,$("mobileControls"),dpad,joystick]) {
+      el?.addEventListener("contextmenu", event => event.preventDefault());
+      el?.addEventListener("selectstart", event => event.preventDefault());
+    }
+    let saved = "dpad";
+    try { saved = localStorage.getItem(storageKey) || "dpad"; } catch (_) {}
+    setMode(saved);
+  })();
+  </script>
+  <script src="rebirth-guide.js?v=530"></script>
+
+<script id="echo-v7-immersive-controller">
+(() => {
+  "use strict";
+  const zone=document.querySelector(".gameplay-zone");
+  const button=document.getElementById("fullscreenBtn");
+  if(!zone||!button)return;
+  const close=document.createElement("button");
+  close.id="echoImmersiveClose";close.type="button";
+  close.textContent="✕ SAIR";close.setAttribute("aria-label","Sair do modo de jogo imersivo");
+  zone.appendChild(close);
+  let previousScroll=0;
+  function setImmersive(on){
+    if(on)previousScroll=window.scrollY;
+    document.body.classList.toggle("echo-immersive",on);
+    button.setAttribute("aria-pressed",String(on));
+    button.setAttribute("aria-label",on?"Sair do modo de jogo":"Modo de jogo em ecrã completo");
+    close.hidden=!on;
+    if(!on)window.scrollTo(0,previousScroll);
+    window.EchoWorldRenderer?.resize?.();
+  }
+  close.addEventListener("click",()=>setImmersive(false));
+  button.addEventListener("click",event=>{
+    if(!matchMedia("(max-width:768px)").matches)return;
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    setImmersive(!document.body.classList.contains("echo-immersive"));
+  },true);
+  window.addEventListener("keydown",event=>{
+    if(event.key==="Escape"&&document.body.classList.contains("echo-immersive"))setImmersive(false);
+  });
+  window.addEventListener("resize",()=>{
+    if(window.innerWidth>768&&document.body.classList.contains("echo-immersive"))setImmersive(false);
+  });
+})();
+</script>
+<script id="echo-mobile-menu-controller-v701">
+(()=>{
+const menu=document.getElementById("echoMobileMenu"),grid=document.getElementById("levelGrid");
+if(!menu||!grid)return;
+const modal=document.createElement("section");modal.id="echoMobileLevelPanel";modal.hidden=true;
+modal.setAttribute("role","dialog");modal.setAttribute("aria-modal","true");modal.setAttribute("aria-label","Selecionar nível");
+modal.innerHTML='<div class="echo-menu-inner"><div class="echo-menu-head"><span>◈ NÍVEIS E PROGRESSO</span><button class="echo-menu-close" type="button">✕ FECHAR</button></div><div id="echoMenuProgress"></div><div id="echoMenuLevels"></div><p style="color:#a5c6d8;font:12px system-ui">Escolhe um nível desbloqueado para jogar.</p></div>';
+document.body.appendChild(modal);
+const holder=modal.querySelector("#echoMenuLevels"),progress=modal.querySelector("#echoMenuProgress");
+const originalGridParent=grid.parentNode, originalGridNext=grid.nextSibling;
+const close=()=>{modal.hidden=true;menu.setAttribute("aria-expanded","false");document.body.style.removeProperty("overflow");if(originalGridNext&&originalGridNext.parentNode===originalGridParent)originalGridParent.insertBefore(grid,originalGridNext);else originalGridParent.appendChild(grid);};
+function open(){if(window.innerWidth>768)return;holder.appendChild(grid);const p=document.getElementById("progress");if(p)progress.textContent=p.textContent;modal.hidden=false;document.body.style.overflow="hidden";menu.setAttribute("aria-expanded","true");modal.querySelector(".echo-menu-close").focus();}
+menu.addEventListener("click",event=>{if(window.innerWidth>768)return;event.preventDefault();event.stopImmediatePropagation();modal.hidden?open():close();},true);
+modal.querySelector(".echo-menu-close").addEventListener("click",close);
+modal.addEventListener("click",event=>{if(event.target===modal)close();});
+grid.addEventListener("click",event=>{if(event.target.closest("button"))close();});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!modal.hidden)close();});
+window.addEventListener("resize",()=>{if(window.innerWidth>768&&!modal.hidden)close();});
+})();
+</script><script id="echo-v80-mobile-hud">
+(()=>{
+ const zone=document.querySelector(".gameplay-zone");
+ if(!zone)return;
+ const hud=document.createElement("div");hud.id="echoV80Hud";
+ hud.setAttribute("aria-label","Estado da partida");
+ zone.prepend(hud);
+ let previous="";
+ function update(){
+  if(document.body.classList.contains("echo-immersive")){
+   const s=window.EchoGame?.getState?.();
+   if(s){
+    const label="NÍVEL "+s.levelNumber+" · CICLO "+s.cycle+"/"+s.maxCycles+
+      " · "+Math.max(0,s.cycleDuration-s.elapsed).toFixed(1)+"s · ECOS "+s.recordingsCount+
+      (s.relayAwarded?" · SINCRONIA ✓":"");
+    if(label!==previous){hud.textContent=label;previous=label;}
+   }
+  }
+  requestAnimationFrame(update);
+ }
+ requestAnimationFrame(update);
+})();
+</script><script id="echo-v80-survivor-ai">
+(()=>{
+ "use strict";
+ const zone=document.querySelector(".gameplay-zone");
+ if(!zone)return;
+ const actions=document.createElement("div");actions.id="echoSurvivorActions";
+ const ability=document.createElement("button");ability.id="echoAbilityBtn";ability.type="button";
+ const hint=document.createElement("button");hint.id="echoHintBtn";hint.type="button";hint.textContent="◈ PEDIR PISTA";
+ actions.append(ability,hint);
+ const controls=document.getElementById("mobileControls");
+ if(controls)controls.insertAdjacentElement("afterend",actions);
+ else zone.appendChild(actions);
+ let lastMessage="",lastHint=0;
+ const names={axiom:"AXIOM · PHASE WALK",nyra:"NYRA · DASH",kai7:"KAI-7 · OVERCHARGE"};
+ function speak(message){
+  if(!message||message===lastMessage)return;
+  lastMessage=message;
+  const panel=document.getElementById("echoAiAnalysis");
+  if(panel)panel.textContent="ECHO // "+message;
+  const text=document.getElementById("echoMessageText");
+  if(text)text.textContent=message;
+ }
+ function advise(s,requested){
+  if(!s?.level)return "Estou a recuperar o sinal. Inicia uma simulação.";
+  const plates=s.level.plates||[];
+  const active=plates.map(p=>Math.hypot(s.player.x-p.x,s.player.y-p.y)<27 || (s.ghosts||[]).some(g=>Math.hypot(g.x-p.x,g.y-p.y)<27));
+  const closed=(s.doorStates||[]).findIndex(open=>!open);
+  if(s.finished)return "A missão continua no próximo setor. Bom trabalho.";
+  if(!s.running)return "Escolhe o sobrevivente e inicia a missão. Estou contigo.";
+  if(!s.recordingsCount)return "Primeiro, pisa uma placa. O teu percurso ficará gravado como um eco no ciclo seguinte.";
+  if(closed>=0){
+   const p=plates[closed]||plates.find((_,i)=>!active[i]);
+   return p?"A porta "+(closed+1)+" está fechada. Leva um eco até à placa "+(closed+1)+" e atravessa enquanto ele a ativa.":"Observa as placas e sincroniza o teu percurso com o eco.";
+  }
+  if(requested)return "As portas estão abertas! Avança até à saída verde antes do fim do ciclo.";
+  return "Sincronização conseguida. Agora corre para a saída verde!";
+ }
+ ability.addEventListener("click",()=>window.EchoGame?.ability?.());
+ hint.addEventListener("click",()=>{
+  const s=window.EchoGame?.getState?.();
+  lastMessage="";speak(advise(s,true));lastHint=performance.now();
+ });
+ let lastLabel="",lastAuto=0;
+ function tick(now){
+  const s=window.EchoGame?.getState?.();
+  if(s){
+   const name=names[s.operator]||names.axiom;
+   const cooldown=s.abilityCooldown||0;
+   const label="✦ "+name+(cooldown>0?" · "+Math.ceil(cooldown)+"s":" · PRONTO");
+   if(label!==lastLabel){ability.textContent=label;lastLabel=label;}
+   ability.disabled=!s.running||cooldown>0;
+   if(s.running&&now-lastAuto>12000&&now-lastHint>8000){
+    lastAuto=now;
+    if(s.elapsed>3&&s.recordingsCount>0)speak(advise(s,false));
+   }
+  }
+  requestAnimationFrame(tick);
+ }
+ requestAnimationFrame(tick);
+})();
+</script><script id="echo-v811-operator-access">
+(()=>{
+ const actions=document.getElementById("echoSurvivorActions");
+ const quick=document.getElementById("echoMobileQuickActions");
+ if(!actions&&!quick)return;
+ const button=document.createElement("button");
+ button.id="echoSelectOperator";button.type="button";
+ button.textContent="👤 PERSONAGENS · TROCAR OPERADOR";
+ button.setAttribute("aria-label","Escolher entre AXIOM alienígena, NYRA humana e KAI-7 robô");
+ button.addEventListener("click",()=>{
+  if(window.EchoVisual?.openMenu){window.EchoVisual.openMenu();return;}
+  const menu=document.getElementById("vr-menu");
+  if(menu){menu.classList.add("open");return;}
+  alert("O seletor ainda está a carregar. Atualiza a página e tenta novamente.");
+ });
+ if(actions)actions.appendChild(button);
+ else quick.appendChild(button);
+})();
+</script><script id="echo-v813-focus-controller">
+(()=>{
+ const nav=document.getElementById("echoMobileQuickActions");
+ const zone=document.querySelector(".gameplay-zone");
+ if(!nav||!zone)return;
+ const more=document.createElement("button");
+ more.type="button";more.id="echoMoreBtn";more.textContent="☰ OPÇÕES";
+ more.setAttribute("aria-expanded","false");more.setAttribute("aria-controls","echoMorePanel");
+ nav.appendChild(more);
+ const panel=document.createElement("div");panel.id="echoMorePanel";panel.hidden=true;
+ panel.setAttribute("aria-label","Opções de jogo");
+ nav.insertAdjacentElement("afterend",panel);
+ const items=[
+  ["echoSelectOperator","👤 PERSONAGENS"],
+  ["echoQuickLevels","▦ NÍVEIS"],
+  ["echoQuickRestart","↻ REINICIAR"],
+  ["echoHintBtn","◈ PEDIR PISTA"]
+ ];
+ items.forEach(([id,label])=>{
+  const b=document.getElementById(id);
+  if(!b)return;
+  panel.appendChild(b);
+  b.textContent=label;
+  b.addEventListener("click",()=>{
+   panel.hidden=true;more.setAttribute("aria-expanded","false");
+  });
+ });
+ more.addEventListener("click",()=>{
+  panel.hidden=!panel.hidden;
+  more.setAttribute("aria-expanded",String(!panel.hidden));
+ });
+ document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&!panel.hidden){panel.hidden=true;more.setAttribute("aria-expanded","false");}
+ });
+})();
+</script><script id="echo-v82-story-replay">
+(()=>{
+ const panel=document.getElementById("echoMorePanel");
+ if(!panel)return;
+ const button=document.createElement("button");
+ button.type="button";button.id="echoReplayStory";
+ button.textContent="◈ REVER HISTÓRIA";
+ button.addEventListener("click",()=>{
+  panel.hidden=true;
+  document.getElementById("echoMoreBtn")?.setAttribute("aria-expanded","false");
+  if(window.EchoAwakening?.openIntro)window.EchoAwakening.openIntro(true);
+ });
+ panel.appendChild(button);
+})();
+</script><script id="echo-v90-temporal-controls">
+(()=>{
+ const options=document.getElementById("echoMorePanel");
+ const zone=document.querySelector(".gameplay-zone");
+ if(!options||!zone)return;
+ const mode=document.createElement("button");mode.id="echoV90Mode";mode.type="button";
+ mode.textContent="◈ TESTAR EXPLORAÇÃO LIVRE v9";
+ options.appendChild(mode);
+ const record=document.createElement("button");record.id="echoV90Record";record.type="button";
+ record.textContent="● GRAVAR ECO (8s)";
+ const actions=document.getElementById("echoSurvivorActions");
+ if(actions)actions.insertAdjacentElement("afterend",record);else zone.appendChild(record);
+ mode.addEventListener("click",()=>{
+  const free=window.EchoGame?.toggleFreeExplore?.();
+  document.body.classList.toggle("echo-v90-free",Boolean(free));
+  options.hidden=true;
+  document.getElementById("echoMoreBtn")?.setAttribute("aria-expanded","false");
+ });
+ record.addEventListener("click",()=>window.EchoGame?.toggleCapture?.());
+ let last="";
+ function update(){
+  const s=window.EchoGame?.getState?.();
+  if(s){
+   const label=s.captureActive?"■ TERMINAR GRAVAÇÃO · "+s.captureRemaining.toFixed(1)+"s":"● GRAVAR ECO · "+s.freeEchoCount+"/2";
+   if(label!==last){record.textContent=label;last=label;}
+   record.disabled=!s.running;
+   mode.textContent=s.freeExplore?"↩ VOLTAR AOS CICLOS CLÁSSICOS":"◈ TESTAR EXPLORAÇÃO LIVRE v9";
+   document.body.classList.toggle("echo-v90-free",Boolean(s.freeExplore));
+  }
+  requestAnimationFrame(update);
+ }
+ requestAnimationFrame(update);
+})();
+</script>
+
+</body>
+</html>
