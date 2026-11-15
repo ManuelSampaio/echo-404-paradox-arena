@@ -19,5 +19,5 @@ saved.set('echo404_v93_origin_result','broken json');assert.equal(pilot.save(sto
 for(const name of ['origin-pilot.js','origin-pilot-data.js'])new vm.Script(read(name));
 for(const match of read('origin-reborn.html').matchAll(/(?:src|href)="([^"#]+)"/g)){const value=match[1].split('?')[0].replace(/^\.\//,'');assert.ok(fs.existsSync(path.join(root,value)),value+' exists');}
 assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'vendor/phaser-3.90.0.min.js'))).digest('hex'),'e92ddef111ba42e92d316979c732311757093688ea1810591cb7aa2858eba7a7');
-for(const html of ['origin-v97.html','origin-v98.html','origin-v99.html','origin-v100.html','origin-v101.html','origin-v102.html'])assert.match(read(html),/class="result-story"/);
+for(const html of ['origin-v97.html','origin-v98.html','origin-v99.html','origin-v100.html','origin-v101.html','origin-v102.html'])assert.match(read(html),/origin-reborn\.html#nivel=/);
 console.log('PASS: authored vertical map, echo replay/hold, input ownership, medal/time preservation, blocked/corrupt saves, local assets and verified Phaser distribution');

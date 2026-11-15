@@ -17,3 +17,5 @@ button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;color:inher
 
 /* Prevent iOS text handles and long-press callouts across the entire game. */
 html,body,body *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{overscroll-behavior:none}img,a{-webkit-user-drag:none}
+
+#missionList{display:grid;gap:7px;margin:10px 0}#missionList a{display:block;min-height:44px;padding:12px;background:#183247;border:1px solid #79b5d24d;border-radius:8px;text-decoration:none;font-size:12px}#missionList a[aria-current=page]{border-color:#77f5df}#practicePilot{font-size:10px;min-height:36px}.pilot-header .chapter{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media(max-width:480px){.pilot-header .chapter{max-width:100px;font-size:8px}.pilot-header>div{gap:4px}.pilot-header button{padding:5px 6px}}

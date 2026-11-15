@@ -1,1 +1,27 @@
-{"id":"./paradox.html","name":"ECHO//404","short_name":"ECHO//404","description":"O teu passado joga contigo. 25 arenas futuristas de puzzles temporais.","start_url":"./paradox.html","scope":"./","display":"standalone","orientation":"any","background_color":"#0c2029","theme_color":"#102d35","lang":"pt","icons":[{"src":"assets/paradox/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"assets/paradox/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
+{
+  "id": "./paradox.html",
+  "name": "ECHO//404",
+  "short_name": "ECHO//404",
+  "description": "O teu passado joga contigo. 25 arenas futuristas de puzzles temporais.",
+  "start_url": "./origin-reborn.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0c2029",
+  "theme_color": "#102d35",
+  "lang": "pt",
+  "icons": [
+    {
+      "src": "assets/paradox/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/paradox/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

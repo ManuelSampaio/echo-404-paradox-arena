@@ -1,9 +1,9 @@
 /* ECHO//404 v14 offline cache. Only explicit game resources are intercepted. */
-const CACHE='echo404-v14-3';
-const CORE=['./','./index.html','./paradox.html','./paradox.css?v=1403','./paradox-data.js?v=1403','./paradox-core.js?v=1403','./paradox-game.js?v=1403','./paradox-home.js?v=1403','./paradox-register.js?v=1403','./paradox.webmanifest','./vendor/phaser-3.90.0.min.js','./assets/origin/explorer.png','./assets/origin/patrols.png','./assets/paradox/icon-192.png','./assets/paradox/icon-512.png','./assets/paradox/preview.png','./assets/operators/horizon.png'];
-const ARENAS=['origin','drift','resonance','mirage','window','junction','interference','trace','reflection','escape','current','frequency','between','phasebridge','fracture','blind','order','presents','silence','overload','signatures','maze','lastwindow','paradox','archive'];
-CORE.push('./origin-reborn.html','./origin-pilot.css?v=1403','./origin-pilot-data.js?v=1403','./origin-pilot.js?v=1403',...['axiom','nyra','kai7','axiom-portrait','nyra-portrait','kai7-portrait','platform'].map(id=>'./assets/operators/'+id+'.png'));
-const FILES=CORE.concat(ARENAS.map(id=>'./assets/paradox/'+id+'.png'));
+const CACHE='echo404-v14-4';
+const CORE=['./','./index.html','./paradox.html','./paradox.css?v=1410','./paradox-data.js?v=1410','./paradox-core.js?v=1410','./paradox-game.js?v=1410','./paradox-home.js?v=1410','./paradox-register.js?v=1410','./paradox.webmanifest','./vendor/phaser-3.90.0.min.js','./assets/origin/explorer.png','./assets/origin/patrols.png','./assets/paradox/icon-192.png','./assets/paradox/icon-512.png','./assets/paradox/preview.png','./assets/operators/horizon.png'];
+CORE.push('./origin-home.js?v=1410','./origin-reborn.html','./origin-pilot.css?v=1410','./origin-pilot-data.js?v=1410','./origin-pilot.js?v=1410',...['axiom','nyra','kai7','axiom-portrait','nyra-portrait','kai7-portrait','platform'].map(id=>'./assets/operators/'+id+'.png'));
+CORE.push('./origin-v91.html','./origin-v961.html','./campaign-v12.html',...Array.from({length:6},(_,i)=>'./origin-v'+(97+i)+'.html'));
+const FILES=CORE.filter(path=>!path.includes('paradox-core')&&!path.includes('paradox-data')&&!path.includes('paradox-game')&&!path.includes('paradox-home')&&!path.includes('assets/origin/explorer')&&!path.includes('assets/paradox/preview'));
 const ALLOWED=new Set(FILES.map(path=>new URL(path,self.location.href).pathname));
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES.map(path=>new Request(new URL(path,self.location.href),{cache:'reload'})))).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('echo404-v14-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));

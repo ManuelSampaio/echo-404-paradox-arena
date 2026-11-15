@@ -68,7 +68,7 @@ for(let id=2;id<=6;id++) {
 console.log('PASS: detection/chase/search/patrol, telegraphed ranged attacks, melee, cover, timed hazard warnings and vertical avoidance');
 // Both entry modes resolve to their own game; classic still loads the original engine.
 const home=read('index.html'),classic=read('classic.html');
-assert.ok(home.includes('href="./classic.html"'));assert.ok(!home.includes('src="game.js'));
+assert.ok(!home.includes('href="./classic.html"'));assert.ok(home.includes('./origin-reborn.html#nivel=1'));assert.ok(!home.includes('src="game.js'));
 for(const script of ['game.js','storage.js','levels.js','awakening.js'])assert.ok(classic.includes('src="'+script));
 assert.ok(classic.includes('href="./index.html"'));
 for(const file of ['origin-v91.html','origin-v961.html'])assert.ok(fs.existsSync(path.join(root,file)));
