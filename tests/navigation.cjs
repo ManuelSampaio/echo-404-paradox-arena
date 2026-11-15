@@ -56,7 +56,7 @@ vm.runInContext(read('storage.js'),classic.context);
 vm.runInContext('GameStorage.win(0,1234);GameStorage.saveMedal(0,"gold");',classic.context);
 const snapshot=new Map(saved);
 const progress=vm.runInContext('JSON.stringify(GameStorage.getProgress())',classic.context);
-const indexHtml=read('index.html');
+const indexHtml=read('campaign-v12.html');
 const index=environment(indexHtml);
 vm.runInContext(read('campaign-hub.js'),index.context);
 assert.equal(index.element('echoV91Launch').href,'./origin-reborn.html');
