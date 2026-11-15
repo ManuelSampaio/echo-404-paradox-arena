@@ -4,7 +4,8 @@ const {JSDOM}=require('jsdom');const native=require('@napi-rs/canvas'),fs=requir
 const assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 (async()=>{
- const images={};for(const name of ['explorer','patrols','platform','horizon'])images[name]=await native.loadImage(root+'/assets/origin/'+name+'.png');
+ const images={};for(const name of ['patrols'])images[name]=await native.loadImage(root+'/assets/origin/'+name+'.png');
+ for(const name of ['axiom','nyra','kai7','platform','horizon'])images[name]=await native.loadImage(root+'/assets/operators/'+name+'.png');
  const dom=new JSDOM(fs.readFileSync(root+'/origin-reborn.html','utf8').replace(/<script[\s\S]*?<\/script>/g,''),{url:'http://localhost/origin-reborn.html',pretendToBeVisual:true,runScripts:'outside-only'});
  const w=dom.window;global.window=w;global.document=w.document;Object.defineProperty(global,'navigator',{value:w.navigator,configurable:true});for(const key of ['Element','HTMLElement','HTMLCanvasElement','HTMLVideoElement','HTMLImageElement','XMLHttpRequest','screen'])global[key]=w[key];global.ImageData=native.ImageData;global.self=w;global.requestAnimationFrame=w.requestAnimationFrame.bind(w);global.cancelAnimationFrame=w.cancelAnimationFrame.bind(w);
  w.HTMLCanvasElement.prototype.getContext=function(type){if(type!=='2d')return null;if(!this._canvas)this._canvas=native.createCanvas(this.width||1,this.height||1);if(this._canvas.width!==this.width)this._canvas.width=this.width||1;if(this._canvas.height!==this.height)this._canvas.height=this.height||1;const ctx=this._canvas.getContext('2d');if(!ctx._patched){for(const method of ['drawImage','createPattern']){const fn=ctx[method].bind(ctx);ctx[method]=(img,...args)=>fn(img?._canvas||img,...args);}ctx._patched=true;}return ctx;};
@@ -12,25 +13,41 @@ const root=path.resolve(__dirname,'..');
  global.Image=w.Image=native.Image;w.CanvasRenderingContext2D=native.createCanvas(1,1).getContext('2d').constructor;w.focus=()=>{};w.ORIGIN_PILOT_NO_BOOT=true;
  const Phaser=require(root+'/vendor/phaser-3.90.0.min.js');global.Phaser=w.Phaser=Phaser;console.log('loaded',Phaser.VERSION);w.eval(fs.readFileSync(root+'/origin-pilot-data.js','utf8'));w.eval(fs.readFileSync(root+'/origin-pilot.js','utf8'));
  let ready;const created=new Promise(r=>ready=r);
- class TestScene extends w.OriginPilotScene{preload(){this.textures.addSpriteSheet('explorer',images.explorer,{frameWidth:72,frameHeight:88});this.textures.addSpriteSheet('patrols',images.patrols,{frameWidth:64,frameHeight:80});for(const name of ['platform','horizon'])this.textures.addImage(name,images[name]);}create(){super.create();ready(this);}}
+ class TestScene extends w.OriginPilotScene{preload(){for(const id of ['axiom','nyra','kai7'])this.textures.addSpriteSheet('operator-'+id,images[id],{frameWidth:72,frameHeight:88});this.textures.addSpriteSheet('patrols',images.patrols,{frameWidth:64,frameHeight:80});for(const name of ['platform','horizon'])this.textures.addImage(name,images[name]);}create(){super.create();ready(this);}}
  const game=new Phaser.Game({type:process.env.RENDER?Phaser.CANVAS:Phaser.HEADLESS,width:960,height:540,banner:false,audio:{noAudio:true},physics:{default:'arcade',arcade:{gravity:{y:1700},fixedStep:true,fps:60}},scene:[TestScene]});
  const scene=await Promise.race([created,new Promise((_,j)=>setTimeout(()=>j(Error('boot timeout')),3000))]);
 
- game.loop.stop();scene.begin();let clock=0;
+ game.loop.stop();let clock=0;
  const tick=(n=1)=>{for(let i=0;i<n;i++)game.headlessStep(clock+=1000/60,1000/60);};
  const place=(x,y)=>{scene.player.body.reset(x,y);scene.player.setVelocity(0,0);scene.control.clear();scene.invincible=100000;scene.dashTime=0;scene.dashCooldown=0;scene.jumpBuffer=0;scene.coyote=0;scene.player.body.setAllowGravity(true);};
+ // The public start action always opens the playable, harmless simulator.
+ w.localStorage.setItem('echo404_operator','classic unchanged');
+ for(const id of ['axiom','nyra','kai7']){w.document.querySelector('[data-operator="'+id+'"]').click();assert.equal(scene.operator,id);assert.equal(scene.player.texture.key,'operator-'+id);assert.equal(scene.player.body.width,26);}
+ assert.equal(w.localStorage.getItem('echo404_origin_operator'),'kai7');assert.equal(w.localStorage.getItem('echo404_operator'),'classic unchanged');
+ w.document.getElementById('beginPilot').click();assert.equal(scene.training,true);assert.equal(scene.trainingStep,0);tick(3);
+ scene.control.hold('move','right',true);tick(30);scene.control.hold('move','right',false);scene.control.hold('move','left',true);tick(60);scene.control.clear();assert.equal(scene.trainingStep,1);
+ w.document.getElementById('shortJump').click();tick(65);assert.equal(scene.trainingStep,2);
+ w.document.getElementById('highJump').click();tick(70);assert.equal(scene.trainingStep,3);
+ w.document.querySelector('[data-action="dash"]').click();tick(15);assert.equal(scene.trainingStep,4);
+ w.document.getElementById('echoAction').click();tick(45);w.document.getElementById('echoAction').click();tick(2);assert.equal(scene.trainingStep,5);assert.ok(scene.echo);assert.equal(scene.echoSprite.texture.key,'operator-kai7');
+ assert.equal(scene.elapsed,0);assert.equal(scene.deaths,0);assert.equal(scene.recovered.size,0);assert.equal(w.localStorage.getItem('echo404_v91_origin_mission_complete'),null);
+ w.document.getElementById('trainingMission').click();assert.equal(scene.training,false);assert.equal(scene.trainingCompleted,true);assert.equal(scene.echo,null);assert.equal(scene.echoUsed,false);assert.equal(scene.player.x,160);assert.equal(scene.health,3);assert.equal(scene.running,true);
+ console.log('PASS: three operators, isolated choice save, five playable tutorial steps, matching echo and clean mission start');
  tick(3);assert.equal(scene.player.body.blocked.down,true);assert.equal(scene.player.y,1320);
  tick(1);assert.equal(scene.lift.body.width,180);assert.equal(scene.lift.body.height,24);
  const input=scene.control;
  w.document.getElementById('echoAction').click();assert.equal(input.take('echo'),true,'assistive click triggers echo');
- w.document.querySelector('[data-hold="jump"]').click();assert.equal(input.take('jump'),true,'assistive click triggers jump');
+ w.document.getElementById('highJump').click();assert.equal(input.take('fullJump'),true,'accessible high jump');w.document.getElementById('shortJump').click();assert.equal(input.take('shortJump'),true,'accessible short jump');
 
  input.hold('touch-a','left',true);input.hold('touch-b','jump',true);input.hold('touch-b','jump',false);assert.equal(input.down('left'),true);input.clear();
  place(200,1320);tick(2);input.hold('test','right',true);tick(5);assert.ok(scene.player.body.velocity.x>0&&scene.player.body.velocity.x<310);tick(25);assert.equal(scene.player.body.velocity.x,310);input.clear();tick(15);assert.equal(scene.player.body.velocity.x,0);
  const jumpHeight=short=>{place(200,1320);tick(2);input.hold('jump','jump',true);tick(short?3:1);if(short)input.hold('jump','jump',false);let lowest=scene.player.y;for(let i=0;i<60;i++){tick();lowest=Math.min(lowest,scene.player.y);}input.clear();return 1320-lowest;};
- const full=jumpHeight(false),short=jumpHeight(true);assert.ok(full>125&&full<155);assert.ok(short<full-35);
+ const full=jumpHeight(false),short=jumpHeight(true);assert.ok(full>125&&full<155);assert.ok(short<full-35);const touchHeight=action=>{place(200,1320);tick(2);input.press(action);let peak=1320;for(let i=0;i<65;i++){tick();peak=Math.min(peak,scene.player.y);}return 1320-peak;};const shortTouch=touchHeight('shortJump'),highTouch=touchHeight('fullJump');assert.ok(shortTouch>55&&shortTouch<80);assert.ok(highTouch>125&&highTouch>shortTouch+50);
  place(200,1320);tick(2);input.press('dash');tick(8);assert.ok(scene.player.x>260);assert.ok(scene.dashCooldown>0);const cooldown=scene.dashCooldown;input.press('dash');tick();assert.ok(scene.dashCooldown<cooldown,'dash cooldown cannot be bypassed');
  place(200,1280);scene.player.setVelocityY(300);input.hold('buffer','jump',true);tick(12);assert.ok(scene.player.body.velocity.y<0,'jump buffered shortly before landing');
+ const pointer=(button,type,id)=>{const e=new w.Event(type,{bubbles:true,cancelable:true});e.pointerId=id;button.dispatchEvent(e);};
+ const leftButton=w.document.querySelector('[data-hold="left"]'),highButton=w.document.getElementById('highJump');input.clear();pointer(leftButton,'pointerdown',71);pointer(highButton,'pointerdown',72);assert.equal(input.down('left'),true);assert.equal(input.take('fullJump'),true);pointer(highButton,'pointerup',72);assert.equal(input.down('left'),true);pointer(leftButton,'pointercancel',71);assert.equal(input.down('left'),false);assert.equal(leftButton.classList.contains('pressed'),false);input.clear();
+ console.log('PASS: independent touch movement/jump and cancellation without stuck controls');
  console.log('PASS: actual Phaser ground collision, acceleration/braking, short/full jump, buffered jump, dash and multi-pointer ownership');
  // Every authored jump on the main route is executed by the real Arcade solver.
  const jumpTo=(source,target)=>{
