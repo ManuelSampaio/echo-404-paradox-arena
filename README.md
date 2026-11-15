@@ -1,12 +1,18 @@
-# ECHO//404 — v14.1.1
+# ECHO//404 — v14.2.0
 
 Created & developed by **MANUEL SAMPAIO01**.
 
 One campaign, 25 vertical platform missions. All levels use the same Phaser engine, animated AXIOM/NYRA/KAI-7 operators, short/high jump buttons, dash and recorded echo. The main menu, level selector and completion flow never switch into the retired top-down game.
 
+## Phase 2 operator abilities
+
+Each operator has a dedicated touch ability button and HUD cooldown; Q activates it on keyboard. AXIOM blocks incoming damage for 1.5 seconds with an 8-second cooldown (falls still recover at a checkpoint). NYRA gets one midair second jump with a 4-second cooldown. KAI-7 can start another recording while retaining the first echo, with a 12-second cooldown; ECO fixes the second trace, and the oldest extra echo is retired when a new pair is created. Both echoes replay independently and can sustain the lift anchor. At most two echoes coexist.
+
+Durations, cooldowns, icons and jump strength live in `origin-feel-config.js`; state rules live in `origin-abilities.js`. Timers freeze in pause. The six-step safe simulator teaches the selected ability and resets practice effects before the mission. Existing trained players keep direct entry and may repeat practice to learn the new ability. No phase 3 world/puzzle/star systems are included.
+
 ## Phase 1 game feel
 
-`origin-feel-config.js` exposes coyote (110ms), jump buffering (120ms), acceleration/braking and jump/dash tuning. CURTO and ALTO now vary with touch duration within separate height ranges. Larger 60×82 direction and 60×56 action targets, pressed feedback and safe-area padding improve phone controls. See `docs/PHASES.md` for the agreed validation gate; no phase 2 systems are included in this release.
+`origin-feel-config.js` exposes coyote (110ms), jump buffering (120ms), acceleration/braking and jump/dash tuning. CURTO and ALTO now vary with touch duration within separate height ranges. Larger 60×82 direction and 60×56 action targets, pressed feedback and safe-area padding improve phone controls. See `docs/PHASES.md` for the agreed validation gate; phase 2 is complete and awaits owner play validation before phase 3.
 
 ## Playing
 
@@ -14,7 +20,7 @@ Open `index.html` to continue or choose any mission. Direct mission links are `o
 
 Directions are on the left; short jump, high jump, dash and echo are on the right. Keyboard: A/D or arrows, hold/release Space for variable jump height, Shift dash, E echo. Thin ledges can be jumped through from below and support the player when landing. The moving echo-powered lift remains physical.
 
-A safe five-step simulator is mandatory before the first run. Completing it unlocks direct mission entry; its instructions and a repeat-practice button remain available before every mission. Practice never advances mission time or medals. Intro/result cards, text-selection prevention, differentiated sounds and touch audio unlocking remain shared across all missions.
+A safe six-step simulator is mandatory before the first run. Completing it unlocks direct mission entry; its instructions and a repeat-practice button remain available before every mission. Practice never advances mission time or medals. Intro/result cards, text-selection prevention, differentiated sounds and touch audio unlocking remain shared across all missions.
 
 ## Progress and old links
 
