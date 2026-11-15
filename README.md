@@ -1,10 +1,46 @@
-# ECHO//404 — ORIGIN REBORN v12.0
+# ECHO//404 v14
+
+Created & developed by **MANUEL SAMPAIO01**.
+
+The main entry now opens a futuristic temporal puzzle game: record your path, rewind and cooperate with up to three past versions of yourself. There are 25 authored arenas with different walls, routes, sensors, gates and backgrounds. The first five teach the echo mechanic; robots, drones and sentinels progressively introduce detection, pursuit, aimed shots and echo decoys. Later puzzles add portals, timed gates and ordered signals.
+
+Controls: WASD/arrows to move, E/Shift to record and rewind, Backspace to undo the latest echo, Space for a short protective phase, Escape to pause. Touch uses a directional pad and actions on opposite sides. Portrait view transposes the board and movement axes while keeping characters upright. Completion and help use compact cards.
+
+## Modes and saves
+
+- `index.html` / `paradox.html`: v14, 25 arenas, separate `echo404_v14` medals and records, daily shareable challenge, optional offline installation.
+- `classic.html`: original classic game, unchanged.
+- `campaign-v12.html`: previous campaign hub, including ORIGIN REBORN and missions 02–06. Older versions remain accessible through its archive.
+
+No save migration or clearing is performed. Existing classic and campaign keys are neither written nor removed by v14. Saves remain local to this browser/device. Challenges share a seed/link, not a global leaderboard. Only v14 resources are handled by its service worker; older games retain their own loading behavior.
+
+## Implementation
+
+`paradox-data.js` contains authored layouts and difficulty. `paradox-core.js` is the deterministic collision, replay, puzzle, security and save model. `paradox-game.js` presents it using the locally vendored Phaser 3.90.0 (MIT); it does not use Arcade physics. The human and patrol sprite sheets are original repository assets. `scripts/create-paradox-art.cjs` regenerates the 25 backgrounds and icons. Arena textures load on demand; offline installation caches all arenas. No API key, external runtime CDN or build step is required.
+
+## Run and verify
+
+```sh
+python -m http.server 8000
+# Open http://localhost:8000/
+npm ci
+npm test
+npm run test:phaser
+# Optional screenshots from the real Phaser Canvas renderer:
+RENDER_DIR=/tmp/echo-v14 node tests/paradox-phaser.cjs
+```
+
+The temporal suite solves all 25 authored puzzles through actual collision, replay, portals, timed gates and ordered signals with patrols/hazards disabled to isolate puzzle feasibility. Security tests separately check all patrol configurations, robot/drone/sentinel detection, pursuit, telegraphed shots, cover, decoys and recovery. The Phaser suite boots the real engine, renders all arenas, and checks controls, pause, menu, completion/next and portrait projection. Web tests check navigation, home progress, cache scope and offline fallback. These checks do not constitute a full combat playthrough of all 25 arenas or a physical iPhone test.
+
+---
+
+# Previous release: ORIGIN REBORN v12.0
 
 Created & developed by **MANUEL SAMPAIO01**.
 
 A browser game with two connected modes:
 
-- **Campaign** (`index.html`): the primary entry, six lateral missions, temporal echoes, patrols and story progression.
+- **Campaign archive** (`campaign-v12.html`): the primary entry, six lateral missions, temporal echoes, patrols and story progression.
 - **Classic** (`classic.html`): the original temporal puzzle arena, operators, levels, medals and controls.
 
 ## Campaign worlds

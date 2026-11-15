@@ -1,11 +1,12 @@
 {
   "name": "echo-404-paradox-arena",
-  "version": "12.0.0",
+  "version": "14.0.0",
   "private": true,
   "scripts": {
-    "test": "node tests/navigation.cjs && node tests/worlds.cjs && node tests/pilot.cjs",
-    "test:phaser": "node tests/pilot-phaser.cjs",
-    "art:origin": "node scripts/create-origin-art.cjs"
+    "test": "node tests/navigation.cjs && node tests/worlds.cjs && node tests/pilot.cjs && node tests/paradox.cjs && node tests/paradox-security.cjs && node tests/paradox-web.cjs",
+    "test:phaser": "node tests/pilot-phaser.cjs && node tests/paradox-phaser.cjs",
+    "art:origin": "node scripts/create-origin-art.cjs",
+    "art:paradox": "node scripts/create-paradox-art.cjs"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100",
