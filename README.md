@@ -1,14 +1,18 @@
-# ECHO//404 — v14.1
+# ECHO//404 — v14.1.1
 
 Created & developed by **MANUEL SAMPAIO01**.
 
 One campaign, 25 vertical platform missions. All levels use the same Phaser engine, animated AXIOM/NYRA/KAI-7 operators, short/high jump buttons, dash and recorded echo. The main menu, level selector and completion flow never switch into the retired top-down game.
 
+## Phase 1 game feel
+
+`origin-feel-config.js` exposes coyote (110ms), jump buffering (120ms), acceleration/braking and jump/dash tuning. CURTO and ALTO now vary with touch duration within separate height ranges. Larger 60×82 direction and 60×56 action targets, pressed feedback and safe-area padding improve phone controls. See `docs/PHASES.md` for the agreed validation gate; no phase 2 systems are included in this release.
+
 ## Playing
 
 Open `index.html` to continue or choose any mission. Direct mission links are `origin-reborn.html#nivel=1` through `#nivel=25`. The first mission retains its original dock/silo/crane/roof route. Later missions use authored ascent profiles in narrow futuristic towers, with different platform positions, ledge widths, lift sides, background structures, patrol placements and hazards. Difficulty increases through height, ledge precision, threat count and firing cadence.
 
-Directions are on the left; one-tap short jump, high jump, dash and echo are on the right. Keyboard: A/D or arrows, hold/release Space for variable jump height, Shift dash, E echo. Thin ledges can be jumped through from below and support the player when landing. The moving echo-powered lift remains physical.
+Directions are on the left; short jump, high jump, dash and echo are on the right. Keyboard: A/D or arrows, hold/release Space for variable jump height, Shift dash, E echo. Thin ledges can be jumped through from below and support the player when landing. The moving echo-powered lift remains physical.
 
 A safe five-step simulator is mandatory before the first run. Completing it unlocks direct mission entry; its instructions and a repeat-practice button remain available before every mission. Practice never advances mission time or medals. Intro/result cards, text-selection prevention, differentiated sounds and touch audio unlocking remain shared across all missions.
 
