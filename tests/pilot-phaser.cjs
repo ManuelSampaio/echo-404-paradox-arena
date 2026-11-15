@@ -36,13 +36,16 @@ const root=path.resolve(__dirname,'..');
  tick(3);assert.equal(scene.player.body.blocked.down,true);assert.equal(scene.player.y,1320);
  tick(1);assert.equal(scene.lift.body.width,180);assert.equal(scene.lift.body.height,24);
  const input=scene.control;
+ for(const type of ['contextmenu','selectstart','dragstart']){const event=new w.Event(type,{bubbles:true,cancelable:true});w.document.querySelector('footer b').dispatchEvent(event);assert.equal(event.defaultPrevented,true,type+' blocked on credit text');}
+ const range=w.document.createRange();range.selectNodeContents(w.document.querySelector('footer b'));w.getSelection().addRange(range);w.document.dispatchEvent(new w.Event('pointerdown'));assert.equal(w.getSelection().rangeCount,0,'old iOS selection cleared');
+ const soundEvents=[],playSound=scene.soundBus.play.bind(scene.soundBus);scene.soundBus.play=type=>{soundEvents.push(type);playSound(type);};
  w.document.getElementById('echoAction').click();assert.equal(input.take('echo'),true,'assistive click triggers echo');
  w.document.getElementById('highJump').click();assert.equal(input.take('fullJump'),true,'accessible high jump');w.document.getElementById('shortJump').click();assert.equal(input.take('shortJump'),true,'accessible short jump');
 
  input.hold('touch-a','left',true);input.hold('touch-b','jump',true);input.hold('touch-b','jump',false);assert.equal(input.down('left'),true);input.clear();
  place(200,1320);tick(2);input.hold('test','right',true);tick(5);assert.ok(scene.player.body.velocity.x>0&&scene.player.body.velocity.x<310);tick(25);assert.equal(scene.player.body.velocity.x,310);input.clear();tick(15);assert.equal(scene.player.body.velocity.x,0);
  const jumpHeight=short=>{place(200,1320);tick(2);input.hold('jump','jump',true);tick(short?3:1);if(short)input.hold('jump','jump',false);let lowest=scene.player.y;for(let i=0;i<60;i++){tick();lowest=Math.min(lowest,scene.player.y);}input.clear();return 1320-lowest;};
- const full=jumpHeight(false),short=jumpHeight(true);assert.ok(full>125&&full<155);assert.ok(short<full-35);const touchHeight=action=>{place(200,1320);tick(2);input.press(action);let peak=1320;for(let i=0;i<65;i++){tick();peak=Math.min(peak,scene.player.y);}return 1320-peak;};const shortTouch=touchHeight('shortJump'),highTouch=touchHeight('fullJump');assert.ok(shortTouch>55&&shortTouch<80);assert.ok(highTouch>125&&highTouch>shortTouch+50);
+ const full=jumpHeight(false),short=jumpHeight(true);assert.ok(full>125&&full<155);assert.ok(short<full-35);const touchHeight=action=>{place(200,1320);tick(2);input.press(action);let peak=1320;for(let i=0;i<65;i++){tick();peak=Math.min(peak,scene.player.y);}return 1320-peak;};const shortTouch=touchHeight('shortJump'),highTouch=touchHeight('fullJump');assert.ok(shortTouch>55&&shortTouch<80);assert.ok(highTouch>125&&highTouch>shortTouch+50);assert.ok(soundEvents.includes('jump-short'));assert.ok(soundEvents.includes('jump-high'));
  place(200,1320);tick(2);input.press('dash');tick(8);assert.ok(scene.player.x>260);assert.ok(scene.dashCooldown>0);const cooldown=scene.dashCooldown;input.press('dash');tick();assert.ok(scene.dashCooldown<cooldown,'dash cooldown cannot be bypassed');
  place(200,1280);scene.player.setVelocityY(300);input.hold('buffer','jump',true);tick(12);assert.ok(scene.player.body.velocity.y<0,'jump buffered shortly before landing');
  const pointer=(button,type,id)=>{const e=new w.Event(type,{bubbles:true,cancelable:true});e.pointerId=id;button.dispatchEvent(e);};
@@ -63,7 +66,7 @@ const root=path.resolve(__dirname,'..');
  const route=['dock','broken-stair','signal-ledge','arrival','silo-a','silo-b','silo-c','anchor'];
  for(let i=1;i<route.length;i++)jumpTo(byId(route[i-1]),byId(route[i]));
  // Record a stationary echo at the pad, then ride the physical moving platform.
- place(map.anchor.x,map.anchor.y);tick(2);scene.toggleEcho();tick(45);scene.toggleEcho();assert.ok(scene.echo&&scene.echo.frames.length>=5);
+ place(map.anchor.x,map.anchor.y);tick(2);scene.toggleEcho();tick(45);scene.toggleEcho();assert.ok(scene.echo&&scene.echo.frames.length>=5);assert.ok(soundEvents.includes('echo-start'));assert.ok(soundEvents.includes('echo-fix'));
  const oldLiftY=scene.lift.y;place(map.lift.x,scene.lift.body.top-2);tick(360);
  assert.ok(scene.padPowered,'recorded echo sustains the crane');assert.ok(scene.lift.y<oldLiftY-250,'crane rises');
  assert.ok(Math.abs(scene.player.y-map.lift.top)<10,'Arcade platform carries the player to the upper dock');

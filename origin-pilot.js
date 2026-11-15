@@ -1,4 +1,4 @@
-/* ECHO//404 — ORIGIN REBORN v14.0.2. Phaser 3.90 / Arcade Physics. */
+/* ECHO//404 — ORIGIN REBORN v14.0.3. Phaser 3.90 / Arcade Physics. */
 (() => {
  'use strict';
  if(!window.Phaser){document.getElementById('startCard').hidden=true;document.getElementById('loadError').hidden=false;return;}
@@ -16,7 +16,7 @@
   constructor(){this.enabled=true;try{this.enabled=localStorage.getItem('echo404_origin_sound')!=='false';}catch(_){}this.context=null;}
   unlock(){try{this.context ||= new (window.AudioContext||window.webkitAudioContext)();this.context.resume().catch(()=>{});}catch(_){} }
   note(freq,duration=.12,volume=.035,type='sine',delay=0){if(!this.enabled||!this.context)return;const c=this.context,t=c.currentTime+delay,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(volume,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+duration+.02);}
-  play(type){if(type==='fragment'){[440,660,880].forEach((f,i)=>this.note(f,.2,.03,'sine',i*.08));}else if(type==='checkpoint'){this.note(330,.25,.025);this.note(495,.3,.025,'sine',.12);}else if(type==='jump')this.note(220,.08,.015,'triangle');else if(type==='dash')this.note(120,.12,.03,'triangle');else if(type==='hurt')this.note(75,.2,.04,'triangle');else if(type==='echo'){this.note(370,.3,.02);this.note(554,.3,.02,'sine',.1);}}
+  play(type){if(type==='fragment'){[440,660,880].forEach((f,i)=>this.note(f,.2,.03,'sine',i*.08));}else if(type==='checkpoint'){this.note(330,.25,.025);this.note(495,.3,.025,'sine',.12);}else if(type==='jump-short'){this.note(380,.075,.04,'triangle');this.note(520,.06,.022,'sine',.03);}else if(type==='jump-high'){this.note(240,.12,.04,'triangle');this.note(580,.16,.028,'sine',.045);}else if(type==='dash')this.note(120,.12,.03,'triangle');else if(type==='hurt')this.note(75,.2,.04,'triangle');else if(type==='echo-start'){this.note(250,.1,.035);this.note(370,.12,.025,'sine',.06);}else if(type==='echo-fix'){this.note(370,.24,.035);this.note(554,.3,.025,'sine',.08);this.note(740,.22,.02,'sine',.14);}}
  }
  class OriginScene extends Phaser.Scene {
   constructor(){super('OriginPilot');}
@@ -81,6 +81,8 @@
   resize(){if(!this.player)return;const cam=this.cameras.main;cam.setZoom(Math.max(.55,Math.min(1,this.scale.width/960,this.scale.height/540)));this.background.setPosition(this.scale.width/2,this.scale.height/2).setDisplaySize(this.scale.width/cam.zoom,this.scale.height/cam.zoom);}
   bindUI(){
    this.domHandlers=[];const on=(target,event,fn)=>{target.addEventListener(event,fn);this.domHandlers.push(()=>target.removeEventListener(event,fn));};
+   for(const event of ['contextmenu','selectstart','dragstart'])on(document,event,e=>e.preventDefault());
+   const clearSelection=()=>{const selected=window.getSelection?.();if(selected?.rangeCount)selected.removeAllRanges();};clearSelection();on(document,'pointerdown',clearSelection);
    on($('beginPilot'),'click',()=>this.startTraining());on($('trainingMission'),'click',()=>this.finishTraining());for(const button of document.querySelectorAll('[data-operator]'))on(button,'click',()=>{if(!this.running)this.selectOperator(button.dataset.operator);});on($('pauseToggle'),'click',()=>this.setPaused(!this.pausedByUser));on($('resumePilot'),'click',()=>this.setPaused(false));
    on($('checkpointPilot'),'click',()=>{this.respawn(false);this.setPaused(false);});on($('retryPilot'),'click',()=>this.scene.restart());
    on($('soundToggle'),'click',()=>{this.soundBus.unlock();this.soundBus.enabled=!this.soundBus.enabled;try{localStorage.setItem('echo404_origin_sound',String(this.soundBus.enabled));}catch(_){}this.soundButton();});this.soundButton();
@@ -89,13 +91,13 @@
    on(window,'keyup',e=>{if(keyMap[e.key]){e.preventDefault();this.control.hold('key:'+e.code,keyMap[e.key],false);}});
    for(const b of document.querySelectorAll('[data-hold],[data-action]')){
     let pointerActivation=false;
-    on(b,'pointerdown',e=>{pointerActivation=true;e.preventDefault();try{b.setPointerCapture(e.pointerId);}catch(_){}if(b.dataset.hold)this.control.hold('pointer:'+e.pointerId,b.dataset.hold,true);else this.control.press(b.dataset.action);b.classList.add('pressed');});
+    on(b,'pointerdown',e=>{pointerActivation=true;e.preventDefault();this.soundBus.unlock();try{b.setPointerCapture(e.pointerId);}catch(_){}if(b.dataset.hold)this.control.hold('pointer:'+e.pointerId,b.dataset.hold,true);else this.control.press(b.dataset.action);b.classList.add('pressed');});
     const release=e=>{this.control.hold('pointer:'+e.pointerId,b.dataset.hold,false);b.classList.remove('pressed');};
     on(b,'pointerup',release);on(b,'pointercancel',e=>{release(e);pointerActivation=false;});on(b,'lostpointercapture',release);
     // Assistive technology and keyboard activation can emit only a click.
     // Consume the synthetic click after a real pointer press to avoid duplicates.
     on(b,'click',()=>{if(pointerActivation){pointerActivation=false;return;}
-     if(b.dataset.action)this.control.press(b.dataset.action);
+     this.soundBus.unlock();if(b.dataset.action)this.control.press(b.dataset.action);
      else if(b.dataset.hold==='jump')this.control.press('jump');
      else{const token='click:'+b.dataset.hold;this.control.hold(token,b.dataset.hold,true);this.time.delayedCall(180,()=>this.control.hold(token,b.dataset.hold,false));}
     });
@@ -154,14 +156,14 @@
    if(this.capture){
     if(this.captureTime<.5||this.capture.length<15){this.toast('ECHO','Grava pelo menos meio segundo antes de fixar o eco.');return;}
     if(this.echoSprite)this.echoSprite.destroy();this.echo={frames:this.capture,time:0};this.echoUsed=true;this.echoSprite=this.add.sprite(this.capture[0].x,this.capture[0].y,'operator-'+this.operator,0).setOrigin(.5,1).setTint(0x92e8e4).setAlpha(.5).setDepth(13);
-    this.capture=null;$('echoMeter').hidden=true;this.soundBus.play('echo');this.toast('ECHO','Eco fixado. Ele repete o percurso e mantém a posição final.');
-   }else{this.capture=[];this.captureTime=0;this.captureAccumulator=0;$('echoMeter').hidden=false;this.toast('ECHO','A gravar. Toca em ECO outra vez para fixar a tua posição.');}
+    this.capture=null;$('echoMeter').hidden=true;this.soundBus.play('echo-fix');this.toast('ECHO','Eco fixado. Ele repete o percurso e mantém a posição final.');
+   }else{this.soundBus.play('echo-start');this.capture=[];this.captureTime=0;this.captureAccumulator=0;$('echoMeter').hidden=false;this.toast('ECHO','A gravar. Toca em ECO outra vez para fixar a tua posição.');}
   }
   move(dt){
    const p=this.player,b=p.body,grounded=b.blocked.down||b.touching.down;
    this.coyote=grounded ? .11 :Math.max(0,this.coyote-dt);this.jumpBuffer=Math.max(0,this.jumpBuffer-dt);
    if(this.control.take('jump')){this.jumpBuffer=.13;this.jumpStyle='variable';}if(this.control.take('shortJump')){this.jumpBuffer=.16;this.jumpStyle='short';}if(this.control.take('fullJump')){this.jumpBuffer=.16;this.jumpStyle='full';}
-   if(this.jumpBuffer>0&&this.coyote>0&&this.dashTime<=0){p.setVelocityY(this.jumpStyle==='short'?-480:-700);this.lastJumpStyle=this.jumpStyle;this.jumpBuffer=0;this.coyote=0;this.soundBus.play('jump');this.spark(p.x,p.y,0xb3cbb8,4);}
+   if(this.jumpBuffer>0&&this.coyote>0&&this.dashTime<=0){p.setVelocityY(this.jumpStyle==='short'?-480:-700);this.lastJumpStyle=this.jumpStyle;this.jumpBuffer=0;this.coyote=0;this.soundBus.play(this.jumpStyle==='short'?'jump-short':'jump-high');this.spark(p.x,p.y,0xb3cbb8,4);}
    if(this.control.releasedJump){if(this.jumpStyle==='variable'&&b.velocity.y<-260)p.setVelocityY(b.velocity.y*.5);this.control.releasedJump=false;}
    this.dashCooldown=Math.max(0,this.dashCooldown-dt);
    if(this.control.take('dash')&&this.dashCooldown<=0){this.dashTime=.14;this.dashCooldown=1.05;this.soundBus.play('dash');this.spark(p.x,p.y-35,0xa6e4d6);}
@@ -237,7 +239,7 @@
   }
   cleanup(){this.control.clear();for(const off of this.domHandlers||[])off();this.scale.off('resize',this.resize,this);if(this.soundBus.context)this.soundBus.context.close().catch(()=>{});}
  }
- window.OriginPilotInput=PilotInput;window.OriginPilotScene=OriginScene;
+ window.OriginPilotSound=PilotSound;window.OriginPilotInput=PilotInput;window.OriginPilotScene=OriginScene;
  if(window.ORIGIN_PILOT_NO_BOOT)return;
  window.addEventListener('error',()=>{if($('beginPilot').disabled){$('startCard').hidden=true;$('loadError').hidden=false;}},{once:true});
  try{window.originPilotGame=new Phaser.Game({type:Phaser.AUTO,parent:'gameMount',width:960,height:540,backgroundColor:'#193547',antialias:true,roundPixels:false,banner:false,physics:{default:'arcade',arcade:{gravity:{y:1700},fixedStep:true,fps:60}},scale:{mode:Phaser.Scale.RESIZE,autoCenter:Phaser.Scale.CENTER_BOTH},scene:[OriginScene],audio:{noAudio:true},render:{powerPreference:'low-power'}});}catch(error){$('startCard').hidden=true;$('loadError').hidden=false;console.error(error);}
