@@ -1,6 +1,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path'),crypto=require('node:crypto');
 const root=path.resolve(__dirname,'..'),read=name=>fs.readFileSync(path.join(root,name),'utf8');
 const context=vm.createContext({Phaser:{Scene:class{}},ORIGIN_PILOT_NO_BOOT:true});context.window=context;
+vm.runInContext(read('origin-feel-config.js'),context);
 vm.runInContext(read('origin-pilot-data.js'),context);vm.runInContext(read('origin-pilot.js'),context);
 const pilot=context.OriginPilot;
 assert.equal(pilot.data.fragments.length,3);assert.equal(pilot.data.secrets.length,3);assert.ok(new Set(pilot.data.platforms.map(p=>p.y)).size>=9,'real vertical architecture');
