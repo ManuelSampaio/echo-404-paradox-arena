@@ -75,7 +75,7 @@
    g.lineStyle(5,0x274655,.8);for(const p of data.platforms.filter(p=>p.id.includes('silo')))g.lineBetween(p.x+p.w/2,p.y+20,p.x+p.w/2,p.y+115);
    g.fillStyle(0x123242,.7);g.fillTriangle(100,1320,330,950,470,1320);g.fillTriangle(430,1320,650,1040,740,1320);
    for(const [x,y,label] of [[120,1180,'01 / CAIS EM RUÍNAS'],[1560,510,'02 / SILO DE MEMÓRIA'],[2450,180,'03 / AS COBERTURAS']])this.add.text(x,y,label,{fontFamily:'monospace',fontSize:'16px',color:'#d9e1bf'}).setAlpha(.55).setDepth(-5);
-   this.add.text(410,1275,'↑ ALTO · ↥ CURTO · TOCA PARA SALTAR',{fontFamily:'monospace',fontSize:'12px',color:'#b7d2c6'}).setDepth(1);
+   this.add.text(410,1275,'↑ ALTO · ↑ CURTO · TOCA PARA SALTAR',{fontFamily:'monospace',fontSize:'12px',color:'#b7d2c6'}).setDepth(1);
    this.add.text(1780,730,'E / GRAVA · E / FIXA O TEU ECO',{fontFamily:'monospace',fontSize:'12px',color:'#d8dfa9'}).setDepth(1);
   }
   resize(){if(!this.player)return;const cam=this.cameras.main;cam.setZoom(Math.max(.55,Math.min(1,this.scale.width/960,this.scale.height/540)));this.background.setPosition(this.scale.width/2,this.scale.height/2).setDisplaySize(this.scale.width/cam.zoom,this.scale.height/cam.zoom);}
