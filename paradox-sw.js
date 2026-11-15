@@ -1,7 +1,7 @@
 /* ECHO//404 v14 offline cache. Only explicit game resources are intercepted. */
-const CACHE='echo404-v14-5';
-const CORE=['./','./index.html','./paradox.html','./paradox.css?v=1411','./paradox-data.js?v=1411','./paradox-core.js?v=1411','./paradox-game.js?v=1411','./paradox-home.js?v=1411','./paradox-register.js?v=1411','./paradox.webmanifest','./vendor/phaser-3.90.0.min.js','./assets/origin/explorer.png','./assets/origin/patrols.png','./assets/paradox/icon-192.png','./assets/paradox/icon-512.png','./assets/paradox/preview.png','./assets/operators/horizon.png'];
-CORE.push('./origin-feel-config.js?v=1411','./origin-home.js?v=1411','./origin-reborn.html','./origin-pilot.css?v=1411','./origin-pilot-data.js?v=1411','./origin-pilot.js?v=1411',...['axiom','nyra','kai7','axiom-portrait','nyra-portrait','kai7-portrait','platform'].map(id=>'./assets/operators/'+id+'.png'));
+const CACHE='echo404-v14-6';
+const CORE=['./','./index.html','./paradox.html','./paradox.css?v=1420','./paradox-data.js?v=1420','./paradox-core.js?v=1420','./paradox-game.js?v=1420','./paradox-home.js?v=1420','./paradox-register.js?v=1420','./paradox.webmanifest','./vendor/phaser-3.90.0.min.js','./assets/origin/explorer.png','./assets/origin/patrols.png','./assets/paradox/icon-192.png','./assets/paradox/icon-512.png','./assets/paradox/preview.png','./assets/operators/horizon.png'];
+CORE.push('./origin-abilities.js?v=1420','./origin-feel-config.js?v=1420','./origin-home.js?v=1420','./origin-reborn.html','./origin-pilot.css?v=1420','./origin-pilot-data.js?v=1420','./origin-pilot.js?v=1420',...['axiom','nyra','kai7','axiom-portrait','nyra-portrait','kai7-portrait','platform'].map(id=>'./assets/operators/'+id+'.png'));
 CORE.push('./origin-v91.html','./origin-v961.html','./campaign-v12.html',...Array.from({length:6},(_,i)=>'./origin-v'+(97+i)+'.html'));
 const FILES=CORE.filter(path=>!path.includes('paradox-core')&&!path.includes('paradox-data')&&!path.includes('paradox-game')&&!path.includes('paradox-home')&&!path.includes('assets/origin/explorer')&&!path.includes('assets/paradox/preview'));
 const ALLOWED=new Set(FILES.map(path=>new URL(path,self.location.href).pathname));
