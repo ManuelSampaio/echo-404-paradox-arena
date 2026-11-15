@@ -1,4 +1,4 @@
-# ECHO//404 v14.0.2
+# ECHO//404 v14.0.3
 
 Created & developed by **MANUEL SAMPAIO01**.
 
@@ -7,6 +7,10 @@ The main entry highlights ORIGIN, the vertical platform mission, with three sele
 The alternate mode is a futuristic temporal puzzle game: record your path, rewind and cooperate with up to three past versions of yourself. There are 25 authored arenas with different walls, routes, sensors, gates and backgrounds. The first five teach the echo mechanic; robots, drones and sentinels progressively introduce detection, pursuit, aimed shots and echo decoys. Later puzzles add portals, timed gates and ordered signals.
 
 Controls: WASD/arrows to move, E/Shift to record and rewind, Backspace to undo the latest echo, Space for a short protective phase, Escape to pause. Touch uses a directional pad and actions on opposite sides. Portrait view transposes the board and movement axes while keeping characters upright. Completion and help use compact cards.
+
+## v14.0.3 touch, audio and updates
+
+The game disables text selection and iOS long-press callouts across controls, notices and credits. Short/high jumps have distinct sounds; recording and fixing an echo have separate cues. Audio unlocks on touch and respects mute. With internet, refreshing fetches current game HTML, scripts and styles with HTTP revalidation. The service worker checks updates without its HTTP cache and removes only outdated ECHO v14 caches after the new cache installs successfully; it never clears saved progress. ORIGIN now participates in the same offline/update lifecycle. Running sessions are not forcibly reloaded.
 
 ## v14.0.2 controls and playability validation
 
