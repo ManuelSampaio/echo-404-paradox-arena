@@ -5,7 +5,7 @@
  const progress=C.load(storage),saved=level=>progress.levels[level.id];
  const next=D.levels.findIndex(l=>!saved(l)),target=next<0?0:next;
  $('continue14').href='./paradox.html#nivel='+D.levels[target].id;
- $('continue14').textContent=next<0?'REPETIR A VIAGEM →':Object.keys(progress.levels).length?'CONTINUAR · ARENA '+String(target+1).padStart(2,'0')+' →':'ENTRAR NO PRIMEIRO CICLO →';
+ $('continue14').textContent=next<0?'REPETIR A VIAGEM →':Object.keys(progress.levels).length?'CONTINUAR · ARENA '+String(target+1).padStart(2,'0')+' →':'JOGAR 25 ARENAS →';
  $('progress14').textContent=D.levels.filter(l=>saved(l)).length+' / 25 sinais restaurados · recordes neste dispositivo';
  const daily=C.daily();$('daily14').href='./paradox.html#desafio='+daily.code;$('dailyInfo14').textContent='Desafio do dia · '+D.levels[daily.index].place+' · '+daily.day;
  const grid=$('arenaGrid');D.levels.forEach((level,index)=>{

@@ -51,7 +51,7 @@
   s.events=[];if(!s.active||s.done)return s;const dt=clamp(delta,0,.05);s.total+=dt;s.t+=dt;s.phase=Math.max(0,s.phase-dt);s.phaseCooldown=Math.max(0,s.phaseCooldown-dt);s.portalCooldown=Math.max(0,s.portalCooldown-dt);s.grace=Math.max(0,s.grace-dt);
   if(input.undo){undo(s);return s;}
   if(input.rewind){rewind(s,true);return s;}
-  if(input.phase&&s.phaseCooldown<=0){s.phase=.22;s.phaseCooldown=2.2;s.events.push({type:'phase'});}
+  if(input.phase&&s.phaseCooldown<=0){s.phase=.4;s.phaseCooldown=1.8;s.events.push({type:'phase'});}
   refresh(s);
   let dx=clamp(Number(input.x)||0,-1,1),dy=clamp(Number(input.y)||0,-1,1),length=Math.hypot(dx,dy);if(length>1){dx/=length;dy/=length;}if(length>.05){s.player.dx=dx;s.player.dy=dy;}
   const previousX=s.player.x,previousY=s.player.y;
