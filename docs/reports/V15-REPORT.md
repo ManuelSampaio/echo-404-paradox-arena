@@ -27,7 +27,7 @@ Data: 16-11-2026. Branch: feat/v15-final-playtest. PR de salvaguarda #41; PR de 
 
 ## Confirmado por teste
 
-npm test; npm run test:phaser; npm run test:v15; npm run test:bot; npm run build. Inclui física Arcade real, treino/habilidades, novo ciclo de morte/pausa, atualização de worker v14→v15, chaves antigas inalteradas, geometria Tiled, AND de dois sensores, isolamento de resultados e margem segura do ícone.
+npm test; npm run test:phaser; npm run test:v15; npm run test:bot; npm run build. Inclui física Arcade real, treino/habilidades, novo ciclo de morte/pausa, atualização de worker v14→v15, chaves antigas e preferências de operador/som/treino inalteradas, geometria Tiled, AND de dois sensores, isolamento de resultados e margem segura do ícone.
 
 A suite de saltos isolados usa posicionamento/imunidade para validar geometria; a suite contínua abaixo não usa esses atalhos. Passar com mortes não prova obtenção da estrela sem morrer.
 
