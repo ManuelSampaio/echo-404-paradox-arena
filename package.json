@@ -17,7 +17,8 @@
     "test:v15": "node tests/v15.cjs && node tests/cache-upgrade.cjs && node tests/maskable.cjs",
     "cap:sync": "npm run build && cap sync",
     "cap:android": "cap add android",
-    "cap:ios": "cap add ios"
+    "cap:ios": "cap add ios",
+    "test:build": "node tests/build.cjs"
   },
   "devDependencies": {
     "@capacitor/cli": "8.6.2",
