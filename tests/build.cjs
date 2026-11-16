@@ -1,4 +1,5 @@
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),vm=require('vm'),{JSDOM}=require('jsdom');
+assert.match(fs.readFileSync('dist/paradox-sw.js','utf8'),/const CACHE='echo404-v15-[a-f0-9]{12}';/,'release cache derives from built content, including image bytes');
 const events={},self={location:{href:'https://example.com/echo/paradox-sw.js'},addEventListener:(k,v)=>events[k]=v};let paths;
 vm.runInNewContext(fs.readFileSync('dist/paradox-sw.js','utf8')+';paths=[...ALLOWED];',{self,URL,set paths(p){paths=p;}});
 for(const file of ['index.html','origin-reborn.html']){const w=new JSDOM(fs.readFileSync('dist/'+file,'utf8')).window;for(const el of w.document.querySelectorAll('script[src],link[href],img[src]')){const ref=el.getAttribute('src')||el.getAttribute('href');if(ref.startsWith('http'))continue;const p=ref.split('?')[0].replace(/^\.\//,'');assert.ok(fs.existsSync('dist/'+p),file+' -> '+p);assert.ok(paths.includes('/echo/'+p),'offline precache includes '+p);}assert.equal(w.document.querySelector('link[rel=manifest]').getAttribute('href'),'./paradox.webmanifest','manifest URLs must stay at app root');w.close();}
