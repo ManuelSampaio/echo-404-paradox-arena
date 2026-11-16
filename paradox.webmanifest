@@ -1,12 +1,12 @@
 {
-  "id": "./paradox.html",
+  "id": "./origin-reborn.html",
   "name": "ECHO//404",
   "short_name": "ECHO//404",
   "description": "O teu passado joga contigo. 25 arenas futuristas de puzzles temporais.",
   "start_url": "./origin-reborn.html",
   "scope": "./",
   "display": "standalone",
-  "orientation": "any",
+  "orientation": "portrait",
   "background_color": "#0c2029",
   "theme_color": "#102d35",
   "lang": "pt",
@@ -21,7 +21,13 @@
       "src": "assets/paradox/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "assets/paradox/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

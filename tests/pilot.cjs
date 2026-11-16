@@ -2,7 +2,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 const root=path.resolve(__dirname,'..'),read=name=>fs.readFileSync(path.join(root,name),'utf8');
 const context=vm.createContext({Phaser:{Scene:class{}},ORIGIN_PILOT_NO_BOOT:true});context.window=context;
 vm.runInContext(read('origin-feel-config.js'),context);
-vm.runInContext(read('origin-pilot-data.js'),context);vm.runInContext(read('origin-abilities.js'),context);vm.runInContext(read('origin-pilot.js'),context);
+vm.runInContext(read('origin-pilot-data.js'),context);vm.runInContext(read('origin-abilities.js'),context);for(const f of ['origin-geometry.js','origin-modules/movement.js','origin-modules/echoes.js','origin-modules/devices.js','origin-modules/enemies.js','origin-modules/hud.js','origin-modules/training.js','origin-modules/abilities.js','origin-pilot.js'])vm.runInContext(read(f),context);
 const pilot=context.OriginPilot;
 assert.equal(pilot.data.fragments.length,3);assert.equal(pilot.data.secrets.length,3);assert.ok(new Set(pilot.data.platforms.map(p=>p.y)).size>=9,'real vertical architecture');
 assert.ok(pilot.data.spawn.y-pilot.data.exit.y>800,'ending is above the dock');
@@ -13,8 +13,9 @@ const input=new context.OriginPilotInput();input.hold(1,'left',true);input.hold(
 assert.equal(pilot.rank({deaths:0,secrets:2}),'OURO');assert.equal(pilot.rank({deaths:2,secrets:0}),'PRATA');assert.equal(pilot.rank({deaths:5,secrets:3}),'BRONZE');
 const saved=new Map([['echo404_paradox_v06','old classic'],['echo404_awakening_medals_v07','old medals'],['echo404_v93_origin_result',JSON.stringify({time:90,medal:'OURO'})]]);
 const storage={getItem:k=>saved.get(k)||null,setItem:(k,v)=>saved.set(k,v)};
-assert.equal(pilot.save(storage,{time:120,medal:'BRONZE'}),true);let result=JSON.parse(saved.get('echo404_v93_origin_result'));assert.equal(result.medal,'OURO');assert.equal(result.bestTime,90);assert.equal(saved.get('echo404_paradox_v06'),'old classic');assert.equal(saved.get('echo404_awakening_medals_v07'),'old medals');
-pilot.save(storage,{time:60,medal:'PRATA'});result=JSON.parse(saved.get('echo404_v93_origin_result'));assert.equal(result.bestTime,60);assert.equal(result.medal,'OURO');
+const legacyBefore=saved.get('echo404_v93_origin_result');
+assert.equal(pilot.save(storage,{time:120,medal:'BRONZE'}),true);let result=pilot.load(storage).levels.origin;assert.equal(result.legacyMedal,'OURO');assert.equal(saved.get('echo404_v93_origin_result'),legacyBefore);assert.equal(saved.get('echo404_paradox_v06'),'old classic');assert.equal(saved.get('echo404_awakening_medals_v07'),'old medals');
+pilot.save(storage,{time:60,medal:'PRATA'});result=pilot.load(storage).levels.origin;assert.equal(result.bestTime,60);assert.equal(result.legacyBestTime,90);assert.equal(saved.get('echo404_v93_origin_result'),legacyBefore);
 assert.equal(pilot.save({getItem(){throw Error('blocked');},setItem(){throw Error('blocked');}},{time:120,medal:'BRONZE'}),false);
 saved.set('echo404_v93_origin_result','broken json');assert.equal(pilot.save(storage,{time:80,medal:'PRATA'}),true);
 for(const name of ['origin-pilot.js','origin-pilot-data.js'])new vm.Script(read(name));
