@@ -1,0 +1,43 @@
+// Real Phaser Arcade simulation with DOM/image adapters; no mocked physics.
+process.on('uncaughtException',e=>{console.error(e.stack);process.exit(1)});
+const {JSDOM}=require('jsdom');const native=require('@napi-rs/canvas'),fs=require('fs'),path=require('path');
+const assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..');
+(async()=>{
+ const images={};for(const name of ['patrols'])images[name]=await native.loadImage(root+'/assets/origin/'+name+'.png');
+ for(const name of ['axiom','nyra','kai7','platform','horizon'])images[name]=await native.loadImage(root+'/assets/operators/'+name+'.png');
+ const dom=new JSDOM(fs.readFileSync(root+'/origin-reborn.html','utf8').replace(/<script[\s\S]*?<\/script>/g,''),{url:'http://localhost/origin-reborn.html',pretendToBeVisual:true,runScripts:'outside-only'});
+ const w=dom.window;global.window=w;global.document=w.document;Object.defineProperty(global,'navigator',{value:w.navigator,configurable:true});for(const key of ['Element','HTMLElement','HTMLCanvasElement','HTMLVideoElement','HTMLImageElement','XMLHttpRequest','screen'])global[key]=w[key];global.ImageData=native.ImageData;global.self=w;global.requestAnimationFrame=w.requestAnimationFrame.bind(w);global.cancelAnimationFrame=w.cancelAnimationFrame.bind(w);
+ w.HTMLCanvasElement.prototype.getContext=function(type){if(type!=='2d')return null;if(!this._canvas)this._canvas=native.createCanvas(this.width||1,this.height||1);if(this._canvas.width!==this.width)this._canvas.width=this.width||1;if(this._canvas.height!==this.height)this._canvas.height=this.height||1;const ctx=this._canvas.getContext('2d');if(!ctx._patched){for(const method of ['drawImage','createPattern']){const fn=ctx[method].bind(ctx);ctx[method]=(img,...args)=>fn(img?._canvas||img,...args);}ctx._patched=true;}return ctx;};
+ w.HTMLCanvasElement.prototype.toDataURL=function(){return this._canvas?.toDataURL()||'';};
+ global.Image=w.Image=native.Image;w.CanvasRenderingContext2D=native.createCanvas(1,1).getContext('2d').constructor;w.focus=()=>{};w.ORIGIN_PILOT_NO_BOOT=true;
+ const Phaser=require(root+'/vendor/phaser-3.90.0.min.js');global.Phaser=w.Phaser=Phaser;console.log('loaded',Phaser.VERSION);w.eval(fs.readFileSync(root+'/origin-feel-config.js','utf8'));w.eval(fs.readFileSync(root+'/origin-pilot-data.js','utf8'));w.eval(fs.readFileSync(root+'/origin-abilities.js','utf8'));for(const f of ['origin-tiled.js','origin-maps.js','origin-devices.js','origin-modules/mechanisms.js','origin-session.js','origin-geometry.js','origin-modules/movement.js','origin-modules/echoes.js','origin-modules/devices.js','origin-modules/enemies.js','origin-modules/hud.js','origin-modules/training.js','origin-modules/abilities.js','origin-pilot.js'])w.eval(fs.readFileSync(root+'/'+f,'utf8'));
+ let ready;const created=new Promise(r=>ready=r);
+ class TestScene extends w.OriginPilotScene{preload(){for(const id of ['axiom','nyra','kai7'])if(!this.textures.exists('operator-'+id))this.textures.addSpriteSheet('operator-'+id,images[id],{frameWidth:72,frameHeight:88});if(!this.textures.exists('patrols'))this.textures.addSpriteSheet('patrols',images.patrols,{frameWidth:64,frameHeight:80});for(const name of ['platform','horizon'])if(!this.textures.exists(name))this.textures.addImage(name,images[name]);}create(){super.create();ready(this);}}
+ const game=new Phaser.Game({type:process.env.RENDER||process.env.RENDER_DIR?Phaser.CANVAS:Phaser.HEADLESS,width:960,height:540,banner:false,audio:{noAudio:true},physics:{default:'arcade',arcade:{gravity:{y:1700},fixedStep:true,fps:60}},scene:[TestScene]});
+ if(process.env.RENDER_DIR)fs.mkdirSync(process.env.RENDER_DIR,{recursive:true});
+ const scene=await Promise.race([created,new Promise((_,j)=>setTimeout(()=>j(Error('boot timeout')),3000))]);
+
+ game.loop.stop();let clock=0;
+ const tick=(n=1)=>{for(let i=0;i<n;i++)game.headlessStep(clock+=1000/60,1000/60);};
+
+ const rows=[];const operators=['axiom','nyra','kai7'];const indices=process.env.BOT_LEVELS?process.env.BOT_LEVELS.split(',').map(n=>Number(n)-1):Array.from({length:25},(_,i)=>i);
+ function hold(direction,jump=false){scene.control.hold('bot-left','left',direction<0);scene.control.hold('bot-right','right',direction>0);scene.control.hold('bot-jump','jump',jump);}
+ function steer(x,jump=false){const dx=x-scene.player.x,v=scene.player.body.velocity.x,desired=Math.max(-310,Math.min(310,dx*6));hold(v<desired-25?1:v>desired+25?-1:0,jump);}
+ function walk(x,limit=200){for(let i=0;i<limit;i++){steer(x);tick();if(scene.finished)return true;if(Math.abs(scene.player.x-x)<9&&Math.abs(scene.player.body.velocity.x)<45){hold(0);return true;}}hold(0);return false;}
+ function jump(source,target){const p=scene.player;const left=Math.max(source.x,target.x),right=Math.min(source.x+source.w,target.x+target.w);const overlap=right-left>60;const tx=target.x+target.w/2;const launch=overlap?(left+right)/2:tx>source.x+source.w/2?source.x+source.w-25:source.x+25;
+  if(!walk(launch,250))throw Error('approach '+source.id+' x='+Math.round(p.x));
+  let airborne=false;const before=scene.deaths;
+  for(let f=0;f<130;f++){steer(overlap?launch:tx,true);tick();if(scene.finished){hold(0);return;}airborne ||= !p.body.blocked.down;if(airborne&&p.body.blocked.down&&Math.abs(p.y-target.y)<5){hold(0);return;}if(scene.deaths>before)throw Error('death jumping '+source.id+' -> '+target.id);}
+  hold(0);throw Error('landing '+source.id+' -> '+target.id+' at '+Math.round(p.x)+','+Math.round(p.y));
+ }
+ function record(){scene.control.press('echo');tick(40);scene.control.press('echo');tick(2);}
+ for(const index of indices)for(const operator of operators){w.history.replaceState({},'', '/origin-reborn.html#nivel='+(index+1));scene.scene.restart();tick(3);scene.selectOperator(operator,false);scene.begin();tick(3);const map=scene.data;let cause=null;try{const by=id=>map.platforms.find(p=>p.id===id);let source=by(map.route[0]);
+   for(const id of map.route.slice(1)){
+    if(id==='lift'){if(!walk(map.anchor.x))throw Error('anchor approach');record();const lift={id:'lift',x:map.lift.x-map.lift.w/2,w:map.lift.w,get y(){return scene.lift.body.top;}};jump(source,lift);hold(0);let reached=false;for(let f=0;f<500;f++){steer(map.lift.x);tick();if(Math.abs(scene.player.y-map.lift.top)<6){reached=true;break;}}if(!reached)throw Error('lift ride');source={id:'lift',x:map.lift.x-map.lift.w/2,w:map.lift.w,y:map.lift.top};
+    }else{const target=by(id);jump(source,target);source=target;for(const sensor of map.sensors||[])if(Math.abs(sensor.y-source.y)<3){if(!walk(sensor.x))throw Error('sensor approach');if(map.world===5&&sensor.id==='pressure-b'){scene.control.press('node');tick(2);if(!scene.capture)throw Error('local echo node');tick(40);scene.control.press('echo');tick(2);}else{record();if(process.env.BOT_TRACE)console.log('PLATE',sensor,scene.echoPoint,scene.mechanisms.state);}}}
+   }
+   if(!walk(map.exit.x))throw Error('exit approach');tick(4);if(!scene.finished)throw Error('exit locked/fragments '+scene.recovered.size+'/3');
+  }catch(e){cause=e.message;}hold(0);const row={level:index+1,id:map.id,operator,pass:scene.finished&&!cause,time:Math.round(scene.elapsed*10)/10,deaths:scene.deaths,fragments:scene.recovered.size,abilityUses:scene.ability.uses,cause};rows.push(row);console.log(JSON.stringify(row));}
+ fs.mkdirSync(root+'/docs/reports',{recursive:true});fs.writeFileSync(root+'/docs/reports/bot-results.json',JSON.stringify({version:'15.0.0',method:'Real Phaser; normal input only after spawn; damage enabled; no ability; no teleports or immunity',rows},null,2));game.destroy(true);w.close();process.exitCode=rows.some(r=>!r.pass)?1:0;
+})().catch(e=>{console.error(e.stack);process.exit(1);});

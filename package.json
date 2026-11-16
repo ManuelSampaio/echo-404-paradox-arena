@@ -8,10 +8,26 @@
     "art:origin": "node scripts/create-origin-art.cjs",
     "art:paradox": "node scripts/create-paradox-art.cjs",
     "art:operators": "node scripts/create-operator-art.cjs",
-    "test:archive": "node tests/worlds.cjs && node tests/paradox.cjs && node tests/paradox-security.cjs && node tests/paradox-combat.cjs"
+    "test:archive": "node tests/worlds.cjs && node tests/paradox.cjs && node tests/paradox-security.cjs && node tests/paradox-combat.cjs",
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "maps:export": "node scripts/export-tiled.cjs",
+    "test:bot": "node tests/continuous-bot.cjs",
+    "test:v15": "node tests/v15.cjs",
+    "cap:sync": "npm run build && cap sync",
+    "cap:android": "cap add android",
+    "cap:ios": "cap add ios"
   },
   "devDependencies": {
+    "@capacitor/cli": "^7.4.3",
     "@napi-rs/canvas": "0.1.100",
-    "jsdom": "26.1.0"
+    "jsdom": "26.1.0",
+    "vite": "^6.4.1"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3",
+    "@capacitor/ios": "^7.4.3"
   }
 }

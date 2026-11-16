@@ -1,0 +1,6 @@
+/* Tiled object-layer adapter. Unknown/missing structures fail closed before gameplay. */
+(()=>{'use strict';
+ const properties=p=>Object.fromEntries((p||[]).map(p=>[p.name,p.type==='string'&&p.name.startsWith('json:')?JSON.parse(p.value):p.value]));
+ function validate(map){if(map.type!=='map'||map.orientation!=='orthogonal')throw Error('Unsupported Tiled map');const props=properties(map.properties);if(!props['json:level']?.id)throw Error('Missing level ID');const layers=new Map(map.layers.map(l=>[l.name,l]));for(const name of ['platforms','spawn','anchor','lift','fragments','exit'])if(!layers.get(name)?.objects.length)throw Error('Missing layer '+name);const ids=map.layers.flatMap(l=>l.objects||[]).map(o=>o.id);if(new Set(ids).size!==ids.length)throw Error('Duplicate object IDs');if(layers.get('fragments').objects.length!==3)throw Error('Exactly three fragments required');return true;}
+ function adapt(map){validate(map);const l={...properties(map.properties)['json:level']};for(const layer of map.layers){l[layer.name]=layer.objects.map(o=>properties(o.properties)['json:value']);if(['spawn','anchor','lift','exit','vent','echoNode'].includes(layer.name))l[layer.name]=l[layer.name][0];}return l;}
+ window.OriginTiled={validate,adapt};})();

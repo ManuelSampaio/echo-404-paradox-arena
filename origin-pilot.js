@@ -31,7 +31,7 @@
    if(this.assetFailed){$('startCard').hidden=true;$('loadError').hidden=false;return;}
    this.elapsed=0;this.deaths=0;this.health=3;this.invincible=0;this.running=false;this.finished=false;this.pausedByUser=false;
    this.recovered=new Set();this.secrets=new Set();this.visited=new Set();this.checkpointIndex=0;
-   this.extraEcho=null;this.maxEchoes=0;this.capture=null;this.echo=null;this.echoSprite=null;this.captureAccumulator=0;this.echoUsed=false;this.padPowered=false;
+   this.extraEcho=null;this.maxEchoes=0;this.echoPoint=null;this.session=null;this.ghostSprite=null;this.nearEchoNode=false;this.capture=null;this.echo=null;this.echoSprite=null;this.captureAccumulator=0;this.echoUsed=false;this.padPowered=false;
    this.jumpBuffer=0;this.coyote=0;this.jumpAge=0;this.touchJumpReleased=false;this.dashTime=0;this.dashCooldown=0;this.facing=1;this.wasGrounded=false;this.noticeUntil=0;this.uiTick=0;
    this.operator='axiom';try{const saved=localStorage.getItem('echo404_origin_operator')||localStorage.getItem('echo404_operator');if(['axiom','nyra','kai7'].includes(String(saved).toLowerCase().replace('-','')))this.operator=String(saved).toLowerCase().replace('-','');}catch(_){}this.training=false;this.trainingCompleted=false;this.jumpStyle='variable';this.control=new PilotInput();this.soundBus=new PilotSound();
    this.ability=new OriginAbilities.Ability(this.operator);
@@ -165,7 +165,7 @@
    visit('dash',this.levelIndex===0&&this.player.x>1000&&this.player.y>1000,'IMPULSO atravessa intervalos maiores. Shift ou o botão »; volta a carregar em um segundo.');
    visit('anchor',this.levelIndex===0&&this.player.x>1740&&this.player.y<750&&this.player.y>550,'Grava-te parado sobre a âncora iluminada. Fixa o eco e salta para a grua.');
    visit('sky',this.levelIndex===0&&this.player.x>2380&&this.player.y<550,'Conseguiste subir. A cobertura mais alta esconde uma memória opcional.');
-   if(Math.abs(this.player.x-data.exit.x)<55&&Math.abs(this.player.y-data.exit.y)<40){if(this.recovered.size===3)this.complete();else visit('missing',true,'Ainda faltam '+(3-this.recovered.size)+' fragmentos. Procura os sinais de luz no percurso.');}
+   if(Math.abs(this.player.x-data.exit.x)<55&&Math.abs(this.player.y-data.exit.y)<40){if(this.recovered.size===3&&(!this.mechanisms?.devices.some(d=>d.type==='door')||this.mechanisms.state['exit-door']))this.complete();else visit('missing',true,'Ainda faltam '+(3-this.recovered.size)+' fragmentos. Procura os sinais de luz no percurso.');}
    this.uiTick+=dt;if(this.uiTick>.1){this.uiTick=0;this.updateHUD();}
   }
   cleanup(){this.session?.flush(this.elapsed);this.clearInput();for(const off of this.domHandlers||[])off();this.scale.off('resize',this.resize,this);if(this.soundBus.context)this.soundBus.context.close().catch(()=>{});}
