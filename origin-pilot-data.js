@@ -1,4 +1,4 @@
-/* ECHO//404 v14.1: a unified 25-mission vertical platform campaign. */
+/* ECHO//404 v15.0: a unified 25-mission vertical platform campaign. */
 (() => {
  'use strict';
  const platforms=[
