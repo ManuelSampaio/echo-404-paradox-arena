@@ -1,10 +1,10 @@
 # ECHO//404 v15 — relatório da atualização final
 
-Data: 16-11-2026. Branch: feat/v15-final-playtest. PR de salvaguarda #41; PR de atualização #42.
+Data: 16-11-2026. Branch: feat/v15-final-playtest. PR de salvaguarda #41; PR de atualização #42; publicação corrigida na PR #43.
 
 ## Alterações por tarefa
 
-1. Salvaguarda: tag v14.2.0-stable no commit 6ffc120; /v14-stable/ publicado antes de mudar o jogo, com escritas isoladas. Correções: recuperação pelo menu conta como morte; gravação interrompida é cancelada e ecos fixados mantêm-se; dados novos em v15; manifest portrait, identidade e ícone maskable; eventos pagehide/pageshow/rotação; áudio suspenso/retomado através do contexto; linha de visão por segmento e hitboxes alinhadas; instruções de saída por posição; curva inicial de patrulhas; CSS sem declarações repetidas para o mesmo contexto/seletor; lista explícita de cache; LICENSES.md.
+1. Salvaguarda: tag v14.2.0-stable no commit 6ffc120; /v14-stable/ publicado antes de mudar o jogo, com escritas isoladas. Correções: recuperação pelo menu conta como morte; gravação interrompida é cancelada e ecos fixados mantêm-se; dados novos em v15; manifest portrait, identidade e ícone maskable; eventos pagehide/pageshow/rotação; áudio suspenso/retomado através do contexto; linha de visão por segmento e hitboxes alinhadas; instruções de saída por posição; curva inicial de patrulhas; CSS sem declarações repetidas para o mesmo contexto/seletor; lista explícita de cache e identificador calculado a partir dos ficheiros do build (incluindo imagens); LICENSES.md.
 2. Teste humano: 25 níveis sempre disponíveis, versão no rodapé, modo puro por defeito, reduzir efeitos e ?debug com relatório copiável. Registo local das últimas 300 sessões por nível/operador e causas.
 3. Bot: 75 conclusões com dano ativo, 3 fragmentos naturais, eco gravado, elevador físico e nós de segundo eco, sem habilidades. Mortes e recuperações não são omitidas. Resultados detalhados abaixo e em bot-results.json. Testes de migração usam resultados serializados pela implementação v14 congelada, não gravações privadas extraídas do iPhone do proprietário.
 4. Sistemas: módulos de movimento, treino, HUD, habilidades, ecos, elevador, inimigos e mecanismos; atualização do eco separada do elevador; sensores e dispositivos ligados por IDs com AND.
@@ -24,6 +24,9 @@ Data: 16-11-2026. Branch: feat/v15-final-playtest. PR de salvaguarda #41; PR de 
 - Bot: não reconhecia conclusão no ar e interpretava algumas conclusões como falhas de aterragem; condição corrigida.
 - Bot: não reconhecia touching.down em plataformas dinâmicas; corrigido. Recolha exige caminhada natural sobre os fragmentos. Recuperação usa apenas comandos e checkpoints reais.
 - Dependências: preparação Capacitor atualizada para 8.6.2; npm audit --omit=dev sem vulnerabilidades reportadas no momento da execução. Isto não é uma auditoria completa de segurança.
+
+- Publicação: o token recusou mudar a configuração administrativa do Pages (HTTP 403). Removida essa chamada; deploy normal do artefacto confirmado com sucesso. A origem também suporta imports JSON nativos durante a transição.
+- Navegação: trocar de nível durante o treino deixava painel/destaques antigos; estado visual reposto no início de cada cena. Regressar à missão 1 restaura o título original e escolher o nível atual reinicia-o.
 
 ## Confirmado por teste
 
