@@ -1,50 +1,51 @@
-# ECHO//404 — v14.2.0
+# ECHO//404 — v15.0.0
 
-Created & developed by **MANUEL SAMPAIO01**.
+Criado e desenvolvido por **MANUEL SAMPAIO01**. Campanha de 25 níveis de plataformas, pensada para telemóvel na vertical, com AXIOM, NYRA e KAI-7. Todos os níveis ficam desbloqueados.
 
-One campaign, 25 vertical platform missions. All levels use the same Phaser engine, animated AXIOM/NYRA/KAI-7 operators, short/high jump buttons, dash and recorded echo. The main menu, level selector and completion flow never switch into the retired top-down game.
+## Jogar e comparar
 
-## Phase 2 operator abilities
+- Campanha: `origin-reborn.html`; nível direto: `origin-reborn.html#nivel=25`.
+- Testar e copiar relatório: `origin-reborn.html?debug#nivel=1`.
+- Comparar: `v14-stable/`; a tag `v14.2.0-stable` preserva a fonte original.
+- A comparação lê resultados antigos e escreve apenas no prefixo `echo404_stable_compare:`.
 
-Each operator has a dedicated touch ability button and HUD cooldown; Q activates it on keyboard. AXIOM blocks incoming damage for 1.5 seconds with an 8-second cooldown (falls still recover at a checkpoint). NYRA gets one midair second jump with a 4-second cooldown. KAI-7 can start another recording while retaining the first echo, with a 12-second cooldown; ECO fixes the second trace, and the oldest extra echo is retired when a new pair is created. Both echoes replay independently and can sustain the lift anchor. At most two echoes coexist.
+O treino inicial de seis passos é obrigatório na primeira utilização e pode ser repetido. Direções à esquerda, CURTO/ALTO/IMPULSO/ECO e habilidade à direita. Teclado: A/D ou setas, Espaço, Shift, E, Q. No quinto mundo, o botão contextual NÓ fornece um segundo eco a qualquer operador, sem exigir habilidade.
 
-Durations, cooldowns, icons and jump strength live in `origin-feel-config.js`; state rules live in `origin-abilities.js`. Timers freeze in pause. The six-step safe simulator teaches the selected ability and resets practice effects before the mission. Existing trained players keep direct entry and may repeat practice to learn the new ability. No phase 3 world/puzzle/star systems are included.
+## Cinco mundos
 
-## Phase 1 game feel
+1. SINAL: âncora e elevador, patrulhas simples.
+2. CIRCUITO: botões e portas; dois primeiros exercícios com memória, depois ocupação contínua.
+3. REFRAÇÃO: lasers com aviso e desativação por eco.
+4. ÓRBITA: plataformas móveis, eco e janela periódica de sensor (8 de 12 segundos).
+5. CONVERGÊNCIA: dois sensores ligados por AND à porta, com segundo eco local.
 
-`origin-feel-config.js` exposes coyote (110ms), jump buffering (120ms), acceleration/braking and jump/dash tuning. CURTO and ALTO now vary with touch duration within separate height ranges. Larger 60×82 direction and 60×56 action targets, pressed feedback and safe-area padding improve phone controls. See `docs/PHASES.md` for the agreed validation gate; phase 2 is complete and awaits owner play validation before phase 3.
+Os mapas mudam entre ziguezagues, salas empilhadas, ilhas, plataformas orbitais e terraços largos. A geometria base e as ameaças são verificadas em Phaser real. Os elementos móveis acrescentam rotas/apoios; nem todos os saltos exigem usá-los.
 
-## Playing
+## Resultados e dados
 
-Open `index.html` to continue or choose any mission. Direct mission links are `origin-reborn.html#nivel=1` through `#nivel=25`. The first mission retains its original dock/silo/crane/roof route. Later missions use authored ascent profiles in narrow futuristic towers, with different platform positions, ledge widths, lift sides, background structures, patrol placements and hazards. Difficulty increases through height, ledge precision, threat count and firing cadence.
+Modo puro é o padrão: sem power-ups, upgrades ou ghost visível. Estrelas independentes: três fragmentos, tempo abaixo do alvo, zero mortes. Recuperar pelo menu conta como morte. Os resultados assistidos não substituem estrelas, medalhas ou recordes puros. Os valores-alvo ficam em `origin-balance.js`; são referências do bot, não tempos humanos já calibrados.
 
-Directions are on the left; short jump, high jump, dash and echo are on the right. Keyboard: A/D or arrows, hold/release Space for variable jump height, Shift dash, E echo. Thin ledges can be jumped through from below and support the player when landing. The moving echo-powered lift remains physical.
+Os dados v14, clássicos, medalhas, tempos e preferências antigos nunca são escritos pela nova campanha. Migração por leitura. Novos resultados: `echo404_origin_campaign_v15`; preferências: `echo404_origin_settings_v15`; relatórios: `echo404_origin_tests_v15` (últimas 300 sessões); economia: `echo404_origin_economy_v15`; ghosts: `echo404_origin_ghost_v15:{id}:{operador}`. Sem contas, analytics remoto ou sincronização entre dispositivos. Falhas de quota são tratadas sem apagar dados antigos.
 
-A safe six-step simulator is mandatory before the first run. Completing it unlocks direct mission entry; its instructions and a repeat-practice button remain available before every mission. Practice never advances mission time or medals. Intro/result cards, text-selection prevention, differentiated sounds and touch audio unlocking remain shared across all missions.
+Assistido: abrandamento de ameaças, íman e escudo extra; fragmentos por primeira conclusão nível/operador permitem reduzir recargas em passos de 2%, até 10%. Ghost do melhor tempo puro por operador. Sem pagamentos ou anúncios.
 
-## Progress and old links
+## Desenvolvimento
 
-The new platform campaign saves each mission's medal/best time in `echo404_origin_campaign_v14`. Mission 01 continues to read/write its established Origin result/completion keys and preserves the best existing medal/time. Character, sound and training preferences remain in separate keys. Other existing save keys are not removed or rewritten.
+`npm ci`, `npm run dev`. Usar Vite: os imports JSON de Tiled são processados pelo bundler. `npm run maps:export` valida os JSON e atualiza as entradas. `npm run build` gera `dist/`, com base relativa e as URLs antigas preservadas. GitHub Actions valida e publica o build em Pages.
 
-The former top-down entry and old Origin mission pages now redirect into the corresponding platform mission. Their old engines remain as source/history, with no links from the current game menu. Their medals are not incorrectly treated as completions of newly authored platform levels.
+- `npm test`: sintaxe, navegação, áudio, persistência e cache.
+- `npm run test:phaser`: física real, treino, habilidades, percursos isolados e lifecycle.
+- `npm run test:v15`: migração de gravações v14 produzidas pela implementação estável, estrelas, sensores, mapas e manifest.
+- `npm run test:bot`: 25 × 3 partidas contínuas, comandos normais, dano ativo, sem habilidades, teletransporte ou imunidade artificial; grava `docs/reports/bot-results.json`.
 
-## Updates and offline use
+Os testes isolados usam posicionamento/imunidade para verificar geometria. O bot contínuo não usa esses atalhos; pode morrer e continuar normalmente a partir de checkpoints. As conclusões não equivalem a 75 partidas sem morrer. Consultar os resultados por nível/operador.
 
-HTML, gameplay scripts and styles check the network first with HTTP revalidation and fall back to the installed release offline. Worker update checks bypass the worker's HTTP cache. After a new release installs, only outdated ECHO v14 caches are removed. Saves are localStorage, not this cache. Running sessions are not forcibly reloaded.
+## Arquitetura
 
-Phaser 3.90.0 is vendored locally under MIT (`vendor/PHASER-LICENSE.md`). Original art is generated by `scripts/create-operator-art.cjs`. No API key or runtime CDN is needed.
+`origin-pilot.js` coordena a cena. `origin-modules/` separa movimento, ecos, elevador, dispositivos, inimigos, HUD, treino e habilidades. Os módulos são registados na cena e importados por entradas ES modules em `src/`, preservando compatibilidade com o harness Node. `origin-tiled.js` adapta object layers dos 25 JSON em `maps/`. `origin-devices.js` contém a lógica independente dos sensores/links. `origin-session.js` gere dados novos e relatórios. Phaser 3.90.0 é local, MIT. Web Audio mantém os sons sintetizados; não foi necessário introduzir Howler.
 
-## Development and validation
+## Limites de validação
 
-```sh
-python -m http.server 8000
-npm ci
-npm test
-npm run test:phaser
-# Export frames of the later missions from the real Phaser Canvas renderer:
-RENDER_DIR=/tmp/echo-vertical node tests/pilot-phaser.cjs
-```
+Não confirmado: iPhone real, FPS/GPU/memória em gama baixa, recuperação de áudio em chamadas, Lighthouse, APK/AAB/iOS e duração humana de primeira conclusão de 2–4 minutos. A opção de reduzir efeitos desliga partículas/shake/scanlines; o backdrop blur foi removido preventivamente, sem alegar uma medição GPU real.
 
-The unit/navigation suites check 25 distinct maps, progression, all deep links and old-entry redirects, local files, per-mission saves, legacy medal/time preservation, audio, cache replacement and offline fallback. The Phaser suite uses the real Arcade solver to complete the simulator, verify both explicit jump heights and independent touch/cancellation, execute every mandatory jump and ride each physical echo-powered lift in all 25 maps. It checks completion, saving and next links through mission 25. These route checks isolate traversal with damage immunity and position the player on each source ledge; they are not a continuous combat playthrough or a physical iPhone test.
-
-`tests/mobile-preview.html` embeds the real game at a phone viewport for browser layout/control review. Retired engine checks remain available via `npm run test:archive`.
+Ver `docs/TILED.md`, `docs/LICENSES.md`, `docs/MOBILE-PUBLISHING.md` e `docs/reports/`.

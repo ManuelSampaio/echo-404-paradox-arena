@@ -10,7 +10,7 @@ O build em dist usa URLs relativas para GitHub Pages e para a WebView. O service
 
 ## Android
 
-Instalar Android Studio e SDK/JDK compatíveis com Capacitor 7. `npm run cap:android` (uma vez), `npm run cap:sync`, `npx cap open android`. No Android Studio, executar num dispositivo real, configurar orientação portrait na Activity e testar safe areas, botão voltar, suspensão e áudio. Para APK debug: Gradle assembleDebug. Para AAB de distribuição: gerar keystore de assinatura privada e usar bundleRelease; nunca guardar keystore/senhas no repositório. Nenhum keystore foi criado por esta atualização.
+Instalar Android Studio e SDK/JDK compatíveis com Capacitor 8 (Node.js 22+). `npm run cap:android` (uma vez), `npm run cap:sync`, `npx cap open android`. No Android Studio, executar num dispositivo real, configurar orientação portrait na Activity e testar safe areas, botão voltar, suspensão e áudio. Para APK debug: Gradle assembleDebug. Para AAB de distribuição: gerar keystore de assinatura privada e usar bundleRelease; nunca guardar keystore/senhas no repositório. Nenhum keystore foi criado por esta atualização.
 
 ## iOS
 
