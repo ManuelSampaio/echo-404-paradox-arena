@@ -234,46 +234,10 @@
         },
         {
           "id": 11,
-          "name": "step-4",
-          "type": "platforms",
-          "x": 102,
-          "y": 2513,
-          "width": 196,
-          "height": 24,
-          "rotation": 0,
-          "visible": true,
-          "properties": [
-            {
-              "name": "json:value",
-              "type": "string",
-              "value": "{\"id\":\"step-4\",\"x\":102,\"y\":2513,\"w\":196,\"h\":24}"
-            }
-          ]
-        },
-        {
-          "id": 12,
-          "name": "step-5",
-          "type": "platforms",
-          "x": 342,
-          "y": 2413,
-          "width": 196,
-          "height": 24,
-          "rotation": 0,
-          "visible": true,
-          "properties": [
-            {
-              "name": "json:value",
-              "type": "string",
-              "value": "{\"id\":\"step-5\",\"x\":342,\"y\":2413,\"w\":196,\"h\":24}"
-            }
-          ]
-        },
-        {
-          "id": 13,
           "name": "anchor",
           "type": "platforms",
-          "x": 570,
-          "y": 2313,
+          "x": 560,
+          "y": 2513,
           "width": 260,
           "height": 24,
           "rotation": 0,
@@ -282,7 +246,43 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"id\":\"anchor\",\"x\":570,\"y\":2313,\"w\":260,\"h\":24}"
+              "value": "{\"id\":\"anchor\",\"x\":560,\"y\":2513,\"w\":260,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "step-5",
+          "type": "platforms",
+          "x": 580,
+          "y": 2183,
+          "width": 250,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-5\",\"x\":580,\"y\":2183,\"w\":250,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "step-6",
+          "type": "platforms",
+          "x": 570,
+          "y": 2083,
+          "width": 260,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-6\",\"x\":570,\"y\":2083,\"w\":260,\"h\":24}"
             }
           ]
         },
@@ -510,8 +510,8 @@
           "id": 25,
           "name": "anchor",
           "type": "anchor",
-          "x": 700,
-          "y": 2313,
+          "x": 690,
+          "y": 2513,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -520,7 +520,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":700,\"y\":2313,\"radius\":55}"
+              "value": "{\"x\":690,\"y\":2513,\"radius\":55}"
             }
           ]
         }
@@ -539,8 +539,8 @@
           "id": 26,
           "name": "lift",
           "type": "lift",
-          "x": 920,
-          "y": 2453,
+          "x": 910,
+          "y": 2653,
           "width": 180,
           "height": 24,
           "rotation": 0,
@@ -549,7 +549,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":920,\"y\":2453,\"top\":2108,\"bottom\":2453,\"w\":180,\"h\":24}"
+              "value": "{\"x\":910,\"y\":2653,\"top\":2308,\"bottom\":2653,\"w\":180,\"h\":24}"
             }
           ]
         }
@@ -586,8 +586,8 @@
           "id": 28,
           "name": "fragments",
           "type": "fragments",
-          "x": 745,
-          "y": 2271,
+          "x": 735,
+          "y": 2471,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -596,7 +596,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":745,\"y\":2271}"
+              "value": "{\"x\":735,\"y\":2471}"
             }
           ]
         },
@@ -651,7 +651,7 @@
           "id": 31,
           "name": "secrets",
           "type": "secrets",
-          "x": 145,
+          "x": 650,
           "y": 2471,
           "width": 0,
           "height": 0,
@@ -661,7 +661,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":145,\"y\":2471}"
+              "value": "{\"x\":650,\"y\":2471}"
             }
           ]
         },
@@ -734,8 +734,8 @@
           "id": 35,
           "name": "checkpoints",
           "type": "checkpoints",
-          "x": 665,
-          "y": 2311,
+          "x": 655,
+          "y": 2511,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -744,7 +744,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":665,\"y\":2311}"
+              "value": "{\"x\":655,\"y\":2511}"
             }
           ]
         },
@@ -752,8 +752,8 @@
           "id": 36,
           "name": "checkpoints",
           "type": "checkpoints",
-          "x": 715,
-          "y": 1975,
+          "x": 705,
+          "y": 2181,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -762,7 +762,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":715,\"y\":1975}"
+              "value": "{\"x\":705,\"y\":2181}"
             }
           ]
         },
@@ -799,7 +799,7 @@
           "id": 38,
           "name": "scout",
           "type": "enemies",
-          "x": 498,
+          "x": 382,
           "y": 2619,
           "width": 0,
           "height": 0,
@@ -809,7 +809,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"scout\",\"x\":498,\"y\":2619,\"min\":473,\"max\":518}"
+              "value": "{\"type\":\"scout\",\"x\":382,\"y\":2619,\"min\":362,\"max\":407}"
             }
           ]
         },
@@ -817,8 +817,8 @@
           "id": 39,
           "name": "sentry",
           "type": "enemies",
-          "x": 382,
-          "y": 2413,
+          "x": 620,
+          "y": 2183,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -827,7 +827,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"sentry\",\"x\":382,\"y\":2413,\"min\":362,\"max\":407}"
+              "value": "{\"type\":\"sentry\",\"x\":620,\"y\":2183,\"min\":600,\"max\":645}"
             }
           ]
         },
@@ -940,8 +940,8 @@
           "id": 44,
           "name": "vents",
           "type": "vents",
-          "x": 122,
-          "y": 2513,
+          "x": 200,
+          "y": 1777,
           "width": 53,
           "height": 0,
           "rotation": 0,
@@ -950,7 +950,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":122,\"y\":2513,\"w\":53,\"period\":5.545,\"offset\":0}"
+              "value": "{\"x\":200,\"y\":1777,\"w\":53,\"period\":5.545,\"offset\":0}"
             }
           ]
         },
@@ -958,7 +958,7 @@
           "id": 45,
           "name": "vents",
           "type": "vents",
-          "x": 642,
+          "x": 360,
           "y": 1265,
           "width": 53,
           "height": 0,
@@ -968,7 +968,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":642,\"y\":1265,\"w\":53,\"period\":5.545,\"offset\":2}"
+              "value": "{\"x\":360,\"y\":1265,\"w\":53,\"period\":5.545,\"offset\":2}"
             }
           ]
         }
@@ -979,7 +979,7 @@
     {
       "name": "json:level",
       "type": "string",
-      "value": "{\"id\":\"phasebridge\",\"name\":\"PONTE DE FASE\",\"index\":13,\"difficulty\":14,\"kind\":\"foundry\",\"color\":\"#a5c9ff\",\"width\":1100,\"height\":3265,\"route\":[\"floor\",\"step-0\",\"step-1\",\"step-2\",\"step-3\",\"step-4\",\"step-5\",\"anchor\",\"lift\",\"step-7\",\"step-8\",\"step-9\",\"step-10\",\"step-11\",\"step-12\",\"step-13\",\"step-14\",\"step-15\",\"step-16\"],\"briefing\":\"O eco no botão desliga os lasers. Observa o aviso antes de atravessar. Recupera os três fragmentos e procura a saída no topo do percurso.\",\"world\":3,\"worldName\":\"REFRAÇÃO\",\"stage\":4,\"targetTime\":206,\"version\":15,\"links\":[{\"sensor\":\"pressure-a\",\"device\":\"exit-door\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-0\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-1\"}]}"
+      "value": "{\"id\":\"phasebridge\",\"name\":\"PONTE DE FASE\",\"index\":13,\"difficulty\":14,\"kind\":\"foundry\",\"color\":\"#a5c9ff\",\"width\":1100,\"height\":3265,\"route\":[\"floor\",\"step-0\",\"step-1\",\"step-2\",\"step-3\",\"anchor\",\"lift\",\"step-5\",\"step-6\",\"step-7\",\"step-8\",\"step-9\",\"step-10\",\"step-11\",\"step-12\",\"step-13\",\"step-14\",\"step-15\",\"step-16\"],\"briefing\":\"O eco no botão desliga os lasers. Observa o aviso antes de atravessar. Recupera os três fragmentos e procura a saída no topo do percurso.\",\"world\":3,\"worldName\":\"REFRAÇÃO\",\"stage\":4,\"targetTime\":206,\"version\":15,\"links\":[{\"sensor\":\"pressure-a\",\"device\":\"exit-door\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-0\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-1\"}]}"
     }
   ],
   "tilesets": [],

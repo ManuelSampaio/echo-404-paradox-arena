@@ -597,7 +597,7 @@
           "id": 28,
           "name": "secrets",
           "type": "secrets",
-          "x": 725,
+          "x": 740,
           "y": 2362,
           "width": 0,
           "height": 0,
@@ -607,7 +607,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":725,\"y\":2362}"
+              "value": "{\"x\":740,\"y\":2362}"
             }
           ]
         },
@@ -868,8 +868,8 @@
           "id": 40,
           "name": "vents",
           "type": "vents",
-          "x": 698,
-          "y": 2404,
+          "x": 390,
+          "y": 1672,
           "width": 48,
           "height": 0,
           "rotation": 0,
@@ -878,7 +878,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":698,\"y\":2404,\"w\":48,\"period\":5.72,\"offset\":0}"
+              "value": "{\"x\":390,\"y\":1672,\"w\":48,\"period\":5.72,\"offset\":0}"
             }
           ]
         }

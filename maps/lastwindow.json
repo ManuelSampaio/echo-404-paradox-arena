@@ -752,7 +752,7 @@
           "id": 36,
           "name": "secrets",
           "type": "secrets",
-          "x": 735,
+          "x": 750,
           "y": 2671,
           "width": 0,
           "height": 0,
@@ -762,7 +762,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":735,\"y\":2671}"
+              "value": "{\"x\":750,\"y\":2671}"
             }
           ]
         },
@@ -936,7 +936,7 @@
           "id": 45,
           "name": "hound",
           "type": "enemies",
-          "x": 300,
+          "x": 470,
           "y": 2162,
           "width": 0,
           "height": 0,
@@ -946,7 +946,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"hound\",\"x\":300,\"y\":2162,\"min\":280,\"max\":325}"
+              "value": "{\"type\":\"hound\",\"x\":470,\"y\":2162,\"min\":445,\"max\":490}"
             }
           ]
         },
@@ -1077,8 +1077,8 @@
           "id": 51,
           "name": "vents",
           "type": "vents",
-          "x": 720,
-          "y": 2713,
+          "x": 190,
+          "y": 1952,
           "width": 62,
           "height": 0,
           "rotation": 0,
@@ -1087,7 +1087,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":720,\"y\":2713,\"w\":62,\"period\":5.23,\"offset\":0}"
+              "value": "{\"x\":190,\"y\":1952,\"w\":62,\"period\":5.23,\"offset\":0}"
             }
           ]
         },
@@ -1095,7 +1095,7 @@
           "id": 52,
           "name": "vents",
           "type": "vents",
-          "x": 240,
+          "x": 440,
           "y": 1199,
           "width": 62,
           "height": 0,
@@ -1105,7 +1105,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":240,\"y\":1199,\"w\":62,\"period\":5.23,\"offset\":2}"
+              "value": "{\"x\":440,\"y\":1199,\"w\":62,\"period\":5.23,\"offset\":2}"
             }
           ]
         }

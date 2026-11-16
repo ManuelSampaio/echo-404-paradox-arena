@@ -317,28 +317,10 @@
         },
         {
           "id": 15,
-          "name": "step-5",
-          "type": "platforms",
-          "x": 434,
-          "y": 2652,
-          "width": 172,
-          "height": 24,
-          "rotation": 0,
-          "visible": true,
-          "properties": [
-            {
-              "name": "json:value",
-              "type": "string",
-              "value": "{\"id\":\"step-5\",\"x\":434,\"y\":2652,\"w\":172,\"h\":24}"
-            }
-          ]
-        },
-        {
-          "id": 16,
           "name": "anchor",
           "type": "platforms",
-          "x": 270,
-          "y": 2540,
+          "x": 380,
+          "y": 2652,
           "width": 260,
           "height": 24,
           "rotation": 0,
@@ -347,7 +329,25 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"id\":\"anchor\",\"x\":270,\"y\":2540,\"w\":260,\"h\":24}"
+              "value": "{\"id\":\"anchor\",\"x\":380,\"y\":2652,\"w\":260,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "name": "step-6",
+          "type": "platforms",
+          "x": 370,
+          "y": 2310,
+          "width": 250,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-6\",\"x\":370,\"y\":2310,\"w\":250,\"h\":24}"
             }
           ]
         },
@@ -611,8 +611,8 @@
           "id": 30,
           "name": "anchor",
           "type": "anchor",
-          "x": 400,
-          "y": 2540,
+          "x": 510,
+          "y": 2652,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -621,7 +621,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":400,\"y\":2540,\"radius\":55}"
+              "value": "{\"x\":510,\"y\":2652,\"radius\":55}"
             }
           ]
         }
@@ -640,8 +640,8 @@
           "id": 31,
           "name": "lift",
           "type": "lift",
-          "x": 180,
-          "y": 2680,
+          "x": 290,
+          "y": 2792,
           "width": 180,
           "height": 24,
           "rotation": 0,
@@ -650,7 +650,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":180,\"y\":2680,\"top\":2335,\"bottom\":2680,\"w\":180,\"h\":24}"
+              "value": "{\"x\":290,\"y\":2792,\"top\":2447,\"bottom\":2792,\"w\":180,\"h\":24}"
             }
           ]
         }
@@ -687,8 +687,8 @@
           "id": 33,
           "name": "fragments",
           "type": "fragments",
-          "x": 445,
-          "y": 2498,
+          "x": 555,
+          "y": 2610,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -697,7 +697,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":445,\"y\":2498}"
+              "value": "{\"x\":555,\"y\":2610}"
             }
           ]
         },
@@ -752,7 +752,7 @@
           "id": 36,
           "name": "secrets",
           "type": "secrets",
-          "x": 705,
+          "x": 720,
           "y": 2716,
           "width": 0,
           "height": 0,
@@ -762,7 +762,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":705,\"y\":2716}"
+              "value": "{\"x\":720,\"y\":2716}"
             }
           ]
         },
@@ -835,8 +835,8 @@
           "id": 40,
           "name": "checkpoints",
           "type": "checkpoints",
-          "x": 365,
-          "y": 2538,
+          "x": 475,
+          "y": 2650,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -845,7 +845,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":365,\"y\":2538}"
+              "value": "{\"x\":475,\"y\":2650}"
             }
           ]
         },
@@ -853,8 +853,8 @@
           "id": 41,
           "name": "checkpoints",
           "type": "checkpoints",
-          "x": 385,
-          "y": 2202,
+          "x": 495,
+          "y": 2308,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -863,7 +863,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":385,\"y\":2202}"
+              "value": "{\"x\":495,\"y\":2308}"
             }
           ]
         },
@@ -918,7 +918,7 @@
           "id": 44,
           "name": "sentry",
           "type": "enemies",
-          "x": 566,
+          "x": 600,
           "y": 2652,
           "width": 0,
           "height": 0,
@@ -928,7 +928,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"sentry\",\"x\":566,\"y\":2652,\"min\":541,\"max\":586}"
+              "value": "{\"type\":\"sentry\",\"x\":600,\"y\":2652,\"min\":575,\"max\":620}"
             }
           ]
         },
@@ -1077,8 +1077,8 @@
           "id": 51,
           "name": "vents",
           "type": "vents",
-          "x": 694,
-          "y": 2758,
+          "x": 190,
+          "y": 1986,
           "width": 64,
           "height": 0,
           "rotation": 0,
@@ -1087,7 +1087,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":694,\"y\":2758,\"w\":64,\"period\":5.16,\"offset\":0}"
+              "value": "{\"x\":190,\"y\":1986,\"w\":64,\"period\":5.16,\"offset\":0}"
             }
           ]
         },
@@ -1095,7 +1095,7 @@
           "id": 52,
           "name": "vents",
           "type": "vents",
-          "x": 664,
+          "x": 440,
           "y": 1232,
           "width": 64,
           "height": 0,
@@ -1105,7 +1105,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":664,\"y\":1232,\"w\":64,\"period\":5.16,\"offset\":2}"
+              "value": "{\"x\":440,\"y\":1232,\"w\":64,\"period\":5.16,\"offset\":2}"
             }
           ]
         }
@@ -1116,7 +1116,7 @@
     {
       "name": "json:level",
       "type": "string",
-      "value": "{\"id\":\"archive\",\"name\":\"ARQUIVO ZERO\",\"index\":24,\"difficulty\":25,\"kind\":\"orbital\",\"color\":\"#77f5df\",\"width\":1100,\"height\":3540,\"route\":[\"floor\",\"step-0\",\"step-1\",\"step-2\",\"step-3\",\"step-4\",\"step-5\",\"anchor\",\"lift\",\"step-7\",\"step-8\",\"step-9\",\"step-10\",\"step-11\",\"step-12\",\"step-13\",\"step-14\",\"step-15\",\"step-16\",\"step-17\",\"step-18\"],\"briefing\":\"Mantém os dois botões ocupados por ecos. O nó local permite gravar o segundo. Recupera os três fragmentos e procura a saída à esquerda.\",\"world\":5,\"worldName\":\"CONVERGÊNCIA\",\"stage\":5,\"targetTime\":228,\"version\":15,\"links\":[{\"sensor\":\"pressure-a\",\"device\":\"exit-door\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-0\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-1\"},{\"sensor\":\"pressure-a\",\"device\":\"shuttle\"},{\"sensor\":\"pressure-b\",\"device\":\"exit-door\"}]}"
+      "value": "{\"id\":\"archive\",\"name\":\"ARQUIVO ZERO\",\"index\":24,\"difficulty\":25,\"kind\":\"orbital\",\"color\":\"#77f5df\",\"width\":1100,\"height\":3540,\"route\":[\"floor\",\"step-0\",\"step-1\",\"step-2\",\"step-3\",\"step-4\",\"anchor\",\"lift\",\"step-6\",\"step-7\",\"step-8\",\"step-9\",\"step-10\",\"step-11\",\"step-12\",\"step-13\",\"step-14\",\"step-15\",\"step-16\",\"step-17\",\"step-18\"],\"briefing\":\"Mantém os dois botões ocupados por ecos. O nó local permite gravar o segundo. Recupera os três fragmentos e procura a saída à esquerda.\",\"world\":5,\"worldName\":\"CONVERGÊNCIA\",\"stage\":5,\"targetTime\":228,\"version\":15,\"links\":[{\"sensor\":\"pressure-a\",\"device\":\"exit-door\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-0\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-1\"},{\"sensor\":\"pressure-a\",\"device\":\"shuttle\"},{\"sensor\":\"pressure-b\",\"device\":\"exit-door\"}]}"
     }
   ],
   "tilesets": [],

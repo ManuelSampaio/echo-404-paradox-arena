@@ -1,7 +1,6 @@
 {
   "version": "15.0.0",
-  "date": "2026-11-16",
-  "method": "Real Phaser; continuous commands; natural fragment collection; damage enabled; checkpoints and normal respawn allowed; no ability, teleport or artificial immunity",
+  "method": "Real Phaser; normal input only after spawn; damage enabled; no ability; no teleports or immunity",
   "rows": [
     {
       "level": 1,
@@ -188,7 +187,7 @@
       "id": "junction",
       "operator": "axiom",
       "pass": true,
-      "time": 30.2,
+      "time": 28.8,
       "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
@@ -200,7 +199,7 @@
       "id": "junction",
       "operator": "nyra",
       "pass": true,
-      "time": 30.2,
+      "time": 28.8,
       "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
@@ -212,7 +211,7 @@
       "id": "junction",
       "operator": "kai7",
       "pass": true,
-      "time": 30.2,
+      "time": 28.8,
       "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
@@ -224,7 +223,7 @@
       "id": "interference",
       "operator": "axiom",
       "pass": true,
-      "time": 29.1,
+      "time": 29,
       "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
@@ -236,7 +235,7 @@
       "id": "interference",
       "operator": "nyra",
       "pass": true,
-      "time": 29.1,
+      "time": 29,
       "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
@@ -248,7 +247,7 @@
       "id": "interference",
       "operator": "kai7",
       "pass": true,
-      "time": 29.1,
+      "time": 29,
       "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
@@ -260,7 +259,7 @@
       "id": "trace",
       "operator": "axiom",
       "pass": true,
-      "time": 27.8,
+      "time": 26.7,
       "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
@@ -272,7 +271,7 @@
       "id": "trace",
       "operator": "nyra",
       "pass": true,
-      "time": 27.8,
+      "time": 26.7,
       "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
@@ -284,7 +283,7 @@
       "id": "trace",
       "operator": "kai7",
       "pass": true,
-      "time": 27.8,
+      "time": 26.7,
       "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
@@ -332,13 +331,11 @@
       "id": "escape",
       "operator": "axiom",
       "pass": true,
-      "time": 36.4,
-      "deaths": 1,
+      "time": 28.1,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -346,13 +343,11 @@
       "id": "escape",
       "operator": "nyra",
       "pass": true,
-      "time": 36.4,
-      "deaths": 1,
+      "time": 28.1,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -360,13 +355,11 @@
       "id": "escape",
       "operator": "kai7",
       "pass": true,
-      "time": 36.4,
-      "deaths": 1,
+      "time": 28.1,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -374,13 +367,11 @@
       "id": "current",
       "operator": "axiom",
       "pass": true,
-      "time": 32.8,
-      "deaths": 1,
+      "time": 23.7,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -388,13 +379,11 @@
       "id": "current",
       "operator": "nyra",
       "pass": true,
-      "time": 32.8,
-      "deaths": 1,
+      "time": 23.7,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -402,13 +391,11 @@
       "id": "current",
       "operator": "kai7",
       "pass": true,
-      "time": 32.8,
-      "deaths": 1,
+      "time": 23.7,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -416,13 +403,11 @@
       "id": "frequency",
       "operator": "axiom",
       "pass": true,
-      "time": 35.6,
-      "deaths": 1,
+      "time": 26.2,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -430,13 +415,11 @@
       "id": "frequency",
       "operator": "nyra",
       "pass": true,
-      "time": 35.6,
-      "deaths": 1,
+      "time": 26.2,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -444,13 +427,11 @@
       "id": "frequency",
       "operator": "kai7",
       "pass": true,
-      "time": 35.6,
-      "deaths": 1,
+      "time": 26.2,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -458,12 +439,12 @@
       "id": "between",
       "operator": "axiom",
       "pass": true,
-      "time": 34.5,
+      "time": 26.5,
       "deaths": 1,
       "fragments": 3,
       "abilityUses": 0,
       "recoveries": [
-        "death jumping lift -> step-7"
+        "death jumping step-7 -> step-8"
       ],
       "cause": null
     },
@@ -472,12 +453,12 @@
       "id": "between",
       "operator": "nyra",
       "pass": true,
-      "time": 34.5,
+      "time": 26.5,
       "deaths": 1,
       "fragments": 3,
       "abilityUses": 0,
       "recoveries": [
-        "death jumping lift -> step-7"
+        "death jumping step-7 -> step-8"
       ],
       "cause": null
     },
@@ -486,12 +467,12 @@
       "id": "between",
       "operator": "kai7",
       "pass": true,
-      "time": 34.5,
+      "time": 26.5,
       "deaths": 1,
       "fragments": 3,
       "abilityUses": 0,
       "recoveries": [
-        "death jumping lift -> step-7"
+        "death jumping step-7 -> step-8"
       ],
       "cause": null
     },
@@ -500,14 +481,11 @@
       "id": "phasebridge",
       "operator": "axiom",
       "pass": true,
-      "time": 44,
-      "deaths": 1,
+      "time": 25.4,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 718,2313"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -515,14 +493,11 @@
       "id": "phasebridge",
       "operator": "nyra",
       "pass": true,
-      "time": 44,
-      "deaths": 1,
+      "time": 25.4,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 718,2313"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -530,14 +505,11 @@
       "id": "phasebridge",
       "operator": "kai7",
       "pass": true,
-      "time": 44,
-      "deaths": 1,
+      "time": 25.4,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 718,2313"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -545,13 +517,11 @@
       "id": "fracture",
       "operator": "axiom",
       "pass": true,
-      "time": 34.3,
-      "deaths": 1,
+      "time": 25.5,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -559,13 +529,11 @@
       "id": "fracture",
       "operator": "nyra",
       "pass": true,
-      "time": 34.3,
-      "deaths": 1,
+      "time": 25.5,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -573,13 +541,11 @@
       "id": "fracture",
       "operator": "kai7",
       "pass": true,
-      "time": 34.3,
-      "deaths": 1,
+      "time": 25.5,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -587,12 +553,12 @@
       "id": "blind",
       "operator": "axiom",
       "pass": true,
-      "time": 37.5,
+      "time": 40.6,
       "deaths": 1,
       "fragments": 3,
       "abilityUses": 0,
       "recoveries": [
-        "death jumping lift -> step-7"
+        "death jumping step-13 -> step-14"
       ],
       "cause": null
     },
@@ -601,12 +567,12 @@
       "id": "blind",
       "operator": "nyra",
       "pass": true,
-      "time": 37.5,
+      "time": 40.6,
       "deaths": 1,
       "fragments": 3,
       "abilityUses": 0,
       "recoveries": [
-        "death jumping lift -> step-7"
+        "death jumping step-13 -> step-14"
       ],
       "cause": null
     },
@@ -615,12 +581,12 @@
       "id": "blind",
       "operator": "kai7",
       "pass": true,
-      "time": 37.5,
+      "time": 40.6,
       "deaths": 1,
       "fragments": 3,
       "abilityUses": 0,
       "recoveries": [
-        "death jumping lift -> step-7"
+        "death jumping step-13 -> step-14"
       ],
       "cause": null
     },
@@ -629,12 +595,12 @@
       "id": "order",
       "operator": "axiom",
       "pass": true,
-      "time": 32.9,
+      "time": 29.9,
       "deaths": 1,
       "fragments": 3,
       "abilityUses": 0,
       "recoveries": [
-        "death jumping step-8 -> step-9"
+        "death jumping step-6 -> step-7"
       ],
       "cause": null
     },
@@ -643,12 +609,12 @@
       "id": "order",
       "operator": "nyra",
       "pass": true,
-      "time": 32.9,
+      "time": 29.9,
       "deaths": 1,
       "fragments": 3,
       "abilityUses": 0,
       "recoveries": [
-        "death jumping step-8 -> step-9"
+        "death jumping step-6 -> step-7"
       ],
       "cause": null
     },
@@ -657,12 +623,12 @@
       "id": "order",
       "operator": "kai7",
       "pass": true,
-      "time": 32.9,
+      "time": 29.9,
       "deaths": 1,
       "fragments": 3,
       "abilityUses": 0,
       "recoveries": [
-        "death jumping step-8 -> step-9"
+        "death jumping step-6 -> step-7"
       ],
       "cause": null
     },
@@ -671,13 +637,11 @@
       "id": "presents",
       "operator": "axiom",
       "pass": true,
-      "time": 38.6,
-      "deaths": 1,
+      "time": 29,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -685,13 +649,11 @@
       "id": "presents",
       "operator": "nyra",
       "pass": true,
-      "time": 38.6,
-      "deaths": 1,
+      "time": 29,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -699,13 +661,11 @@
       "id": "presents",
       "operator": "kai7",
       "pass": true,
-      "time": 38.6,
-      "deaths": 1,
+      "time": 29,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -755,18 +715,11 @@
       "id": "overload",
       "operator": "axiom",
       "pass": true,
-      "time": 79.7,
-      "deaths": 3,
+      "time": 29,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 718,2442",
-        "landing lift -> step-7 at 718,2442",
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 718,2442",
-        "death jumping step-10 -> step-11"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -774,18 +727,11 @@
       "id": "overload",
       "operator": "nyra",
       "pass": true,
-      "time": 79.7,
-      "deaths": 3,
+      "time": 29,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 718,2442",
-        "landing lift -> step-7 at 718,2442",
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 718,2442",
-        "death jumping step-10 -> step-11"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -793,18 +739,11 @@
       "id": "overload",
       "operator": "kai7",
       "pass": true,
-      "time": 79.7,
-      "deaths": 3,
+      "time": 29,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 718,2442",
-        "landing lift -> step-7 at 718,2442",
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 718,2442",
-        "death jumping step-10 -> step-11"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -812,13 +751,11 @@
       "id": "signatures",
       "operator": "axiom",
       "pass": true,
-      "time": 39.5,
-      "deaths": 1,
+      "time": 31,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -826,13 +763,11 @@
       "id": "signatures",
       "operator": "nyra",
       "pass": true,
-      "time": 39.5,
-      "deaths": 1,
+      "time": 31,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -840,13 +775,11 @@
       "id": "signatures",
       "operator": "kai7",
       "pass": true,
-      "time": 39.5,
-      "deaths": 1,
+      "time": 31,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -854,14 +787,11 @@
       "id": "maze",
       "operator": "axiom",
       "pass": true,
-      "time": 50.8,
-      "deaths": 1,
+      "time": 32.1,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 717,2479"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -869,14 +799,11 @@
       "id": "maze",
       "operator": "nyra",
       "pass": true,
-      "time": 50.8,
-      "deaths": 1,
+      "time": 32.1,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 717,2479"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -884,14 +811,11 @@
       "id": "maze",
       "operator": "kai7",
       "pass": true,
-      "time": 50.8,
-      "deaths": 1,
+      "time": 32.1,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 717,2479"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -899,13 +823,11 @@
       "id": "lastwindow",
       "operator": "axiom",
       "pass": true,
-      "time": 40.8,
-      "deaths": 1,
+      "time": 32.3,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -913,13 +835,11 @@
       "id": "lastwindow",
       "operator": "nyra",
       "pass": true,
-      "time": 40.8,
-      "deaths": 1,
+      "time": 32.3,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -927,13 +847,11 @@
       "id": "lastwindow",
       "operator": "kai7",
       "pass": true,
-      "time": 40.8,
-      "deaths": 1,
+      "time": 32.3,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -941,14 +859,11 @@
       "id": "paradox",
       "operator": "axiom",
       "pass": true,
-      "time": 50.8,
-      "deaths": 1,
+      "time": 32.3,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 718,2528"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -956,14 +871,11 @@
       "id": "paradox",
       "operator": "nyra",
       "pass": true,
-      "time": 50.8,
-      "deaths": 1,
+      "time": 32.3,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 718,2528"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -971,14 +883,11 @@
       "id": "paradox",
       "operator": "kai7",
       "pass": true,
-      "time": 50.8,
-      "deaths": 1,
+      "time": 32.3,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 718,2528"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -986,14 +895,11 @@
       "id": "archive",
       "operator": "axiom",
       "pass": true,
-      "time": 49.5,
-      "deaths": 1,
+      "time": 31.9,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 381,2540"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -1001,14 +907,11 @@
       "id": "archive",
       "operator": "nyra",
       "pass": true,
-      "time": 49.5,
-      "deaths": 1,
+      "time": 31.9,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 381,2540"
-      ],
+      "recoveries": [],
       "cause": null
     },
     {
@@ -1016,14 +919,11 @@
       "id": "archive",
       "operator": "kai7",
       "pass": true,
-      "time": 49.5,
-      "deaths": 1,
+      "time": 31.9,
+      "deaths": 0,
       "fragments": 3,
       "abilityUses": 0,
-      "recoveries": [
-        "death jumping lift -> step-7",
-        "landing lift -> step-7 at 381,2540"
-      ],
+      "recoveries": [],
       "cause": null
     }
   ]

@@ -651,7 +651,7 @@
           "id": 31,
           "name": "secrets",
           "type": "secrets",
-          "x": 725,
+          "x": 740,
           "y": 2446,
           "width": 0,
           "height": 0,
@@ -661,7 +661,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":725,\"y\":2446}"
+              "value": "{\"x\":740,\"y\":2446}"
             }
           ]
         },
@@ -835,7 +835,7 @@
           "id": 40,
           "name": "hound",
           "type": "enemies",
-          "x": 300,
+          "x": 470,
           "y": 1952,
           "width": 0,
           "height": 0,
@@ -845,7 +845,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"hound\",\"x\":300,\"y\":1952,\"min\":280,\"max\":325}"
+              "value": "{\"type\":\"hound\",\"x\":470,\"y\":1952,\"min\":445,\"max\":490}"
             }
           ]
         },
@@ -940,8 +940,8 @@
           "id": 44,
           "name": "vents",
           "type": "vents",
-          "x": 702,
-          "y": 2488,
+          "x": 200,
+          "y": 1746,
           "width": 52,
           "height": 0,
           "rotation": 0,
@@ -950,7 +950,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":702,\"y\":2488,\"w\":52,\"period\":5.58,\"offset\":0}"
+              "value": "{\"x\":200,\"y\":1746,\"w\":52,\"period\":5.58,\"offset\":0}"
             }
           ]
         },
@@ -958,7 +958,7 @@
           "id": 45,
           "name": "vents",
           "type": "vents",
-          "x": 692,
+          "x": 360,
           "y": 1240,
           "width": 52,
           "height": 0,
@@ -968,7 +968,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":692,\"y\":1240,\"w\":52,\"period\":5.58,\"offset\":2}"
+              "value": "{\"x\":360,\"y\":1240,\"w\":52,\"period\":5.58,\"offset\":2}"
             }
           ]
         }

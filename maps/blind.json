@@ -216,64 +216,10 @@
         },
         {
           "id": 10,
-          "name": "step-3",
-          "type": "platforms",
-          "x": 392,
-          "y": 2659,
-          "width": 196,
-          "height": 24,
-          "rotation": 0,
-          "visible": true,
-          "properties": [
-            {
-              "name": "json:value",
-              "type": "string",
-              "value": "{\"id\":\"step-3\",\"x\":392,\"y\":2659,\"w\":196,\"h\":24}"
-            }
-          ]
-        },
-        {
-          "id": 11,
-          "name": "step-4",
-          "type": "platforms",
-          "x": 152,
-          "y": 2558,
-          "width": 196,
-          "height": 24,
-          "rotation": 0,
-          "visible": true,
-          "properties": [
-            {
-              "name": "json:value",
-              "type": "string",
-              "value": "{\"id\":\"step-4\",\"x\":152,\"y\":2558,\"w\":196,\"h\":24}"
-            }
-          ]
-        },
-        {
-          "id": 12,
-          "name": "step-5",
-          "type": "platforms",
-          "x": 392,
-          "y": 2457,
-          "width": 196,
-          "height": 24,
-          "rotation": 0,
-          "visible": true,
-          "properties": [
-            {
-              "name": "json:value",
-              "type": "string",
-              "value": "{\"id\":\"step-5\",\"x\":392,\"y\":2457,\"w\":196,\"h\":24}"
-            }
-          ]
-        },
-        {
-          "id": 13,
           "name": "anchor",
           "type": "platforms",
           "x": 570,
-          "y": 2350,
+          "y": 2659,
           "width": 260,
           "height": 24,
           "rotation": 0,
@@ -282,7 +228,61 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"id\":\"anchor\",\"x\":570,\"y\":2350,\"w\":260,\"h\":24}"
+              "value": "{\"id\":\"anchor\",\"x\":570,\"y\":2659,\"w\":260,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "step-4",
+          "type": "platforms",
+          "x": 590,
+          "y": 2328,
+          "width": 250,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-4\",\"x\":590,\"y\":2328,\"w\":250,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "step-5",
+          "type": "platforms",
+          "x": 392,
+          "y": 2227,
+          "width": 196,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-5\",\"x\":392,\"y\":2227,\"w\":196,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "step-6",
+          "type": "platforms",
+          "x": 570,
+          "y": 2120,
+          "width": 260,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-6\",\"x\":570,\"y\":2120,\"w\":260,\"h\":24}"
             }
           ]
         },
@@ -511,7 +511,7 @@
           "name": "anchor",
           "type": "anchor",
           "x": 700,
-          "y": 2350,
+          "y": 2659,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -520,7 +520,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":700,\"y\":2350,\"radius\":55}"
+              "value": "{\"x\":700,\"y\":2659,\"radius\":55}"
             }
           ]
         }
@@ -540,7 +540,7 @@
           "name": "lift",
           "type": "lift",
           "x": 920,
-          "y": 2490,
+          "y": 2799,
           "width": 180,
           "height": 24,
           "rotation": 0,
@@ -549,7 +549,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":920,\"y\":2490,\"top\":2145,\"bottom\":2490,\"w\":180,\"h\":24}"
+              "value": "{\"x\":920,\"y\":2799,\"top\":2454,\"bottom\":2799,\"w\":180,\"h\":24}"
             }
           ]
         }
@@ -587,7 +587,7 @@
           "name": "fragments",
           "type": "fragments",
           "x": 745,
-          "y": 2308,
+          "y": 2617,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -596,7 +596,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":745,\"y\":2308}"
+              "value": "{\"x\":745,\"y\":2617}"
             }
           ]
         },
@@ -651,8 +651,8 @@
           "id": 31,
           "name": "secrets",
           "type": "secrets",
-          "x": 195,
-          "y": 2516,
+          "x": 675,
+          "y": 2286,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -661,7 +661,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":195,\"y\":2516}"
+              "value": "{\"x\":675,\"y\":2286}"
             }
           ]
         },
@@ -716,7 +716,7 @@
           "id": 34,
           "name": "checkpoints",
           "type": "checkpoints",
-          "x": 490,
+          "x": 700,
           "y": 2657,
           "width": 0,
           "height": 0,
@@ -726,7 +726,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":490,\"y\":2657}"
+              "value": "{\"x\":700,\"y\":2657}"
             }
           ]
         },
@@ -735,7 +735,7 @@
           "name": "checkpoints",
           "type": "checkpoints",
           "x": 665,
-          "y": 2348,
+          "y": 2657,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -744,7 +744,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":665,\"y\":2348}"
+              "value": "{\"x\":665,\"y\":2657}"
             }
           ]
         },
@@ -753,7 +753,7 @@
           "name": "checkpoints",
           "type": "checkpoints",
           "x": 715,
-          "y": 2017,
+          "y": 2326,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -762,7 +762,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":715,\"y\":2017}"
+              "value": "{\"x\":715,\"y\":2326}"
             }
           ]
         },
@@ -799,7 +799,7 @@
           "id": 38,
           "name": "scout",
           "type": "enemies",
-          "x": 548,
+          "x": 610,
           "y": 2659,
           "width": 0,
           "height": 0,
@@ -809,7 +809,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"scout\",\"x\":548,\"y\":2659,\"min\":523,\"max\":568}"
+              "value": "{\"type\":\"scout\",\"x\":610,\"y\":2659,\"min\":590,\"max\":635}"
             }
           ]
         },
@@ -818,7 +818,7 @@
           "name": "sentry",
           "type": "enemies",
           "x": 432,
-          "y": 2457,
+          "y": 2227,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -827,7 +827,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"sentry\",\"x\":432,\"y\":2457,\"min\":412,\"max\":457}"
+              "value": "{\"type\":\"sentry\",\"x\":432,\"y\":2227,\"min\":412,\"max\":457}"
             }
           ]
         },
@@ -940,8 +940,8 @@
           "id": 44,
           "name": "vents",
           "type": "vents",
-          "x": 172,
-          "y": 2558,
+          "x": 400,
+          "y": 1811,
           "width": 55,
           "height": 0,
           "rotation": 0,
@@ -950,7 +950,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":172,\"y\":2558,\"w\":55,\"period\":5.475,\"offset\":0}"
+              "value": "{\"x\":400,\"y\":1811,\"w\":55,\"period\":5.475,\"offset\":0}"
             }
           ]
         },
@@ -958,7 +958,7 @@
           "id": 45,
           "name": "vents",
           "type": "vents",
-          "x": 692,
+          "x": 650,
           "y": 1300,
           "width": 55,
           "height": 0,
@@ -968,7 +968,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":692,\"y\":1300,\"w\":55,\"period\":5.475,\"offset\":2}"
+              "value": "{\"x\":650,\"y\":1300,\"w\":55,\"period\":5.475,\"offset\":2}"
             }
           ]
         }
@@ -979,7 +979,7 @@
     {
       "name": "json:level",
       "type": "string",
-      "value": "{\"id\":\"blind\",\"name\":\"PROTOCOLO CEGO\",\"index\":15,\"difficulty\":16,\"kind\":\"reactor\",\"color\":\"#ffc789\",\"width\":1100,\"height\":3315,\"route\":[\"floor\",\"step-0\",\"step-1\",\"step-2\",\"step-3\",\"step-4\",\"step-5\",\"anchor\",\"lift\",\"step-7\",\"step-8\",\"step-9\",\"step-10\",\"step-11\",\"step-12\",\"step-13\",\"step-14\",\"step-15\",\"step-16\"],\"briefing\":\"Coordena o eco, a plataforma móvel e a janela da porta. Recupera os três fragmentos e procura a saída no topo do percurso.\",\"world\":4,\"worldName\":\"ÓRBITA\",\"stage\":1,\"targetTime\":210,\"version\":15,\"links\":[{\"sensor\":\"pressure-a\",\"device\":\"exit-door\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-0\"},{\"sensor\":\"pressure-a\",\"device\":\"shuttle\"}]}"
+      "value": "{\"id\":\"blind\",\"name\":\"PROTOCOLO CEGO\",\"index\":15,\"difficulty\":16,\"kind\":\"reactor\",\"color\":\"#ffc789\",\"width\":1100,\"height\":3315,\"route\":[\"floor\",\"step-0\",\"step-1\",\"step-2\",\"anchor\",\"lift\",\"step-4\",\"step-5\",\"step-6\",\"step-7\",\"step-8\",\"step-9\",\"step-10\",\"step-11\",\"step-12\",\"step-13\",\"step-14\",\"step-15\",\"step-16\"],\"briefing\":\"Coordena o eco, a plataforma móvel e a janela da porta. Recupera os três fragmentos e procura a saída no topo do percurso.\",\"world\":4,\"worldName\":\"ÓRBITA\",\"stage\":1,\"targetTime\":210,\"version\":15,\"links\":[{\"sensor\":\"pressure-a\",\"device\":\"exit-door\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-0\"},{\"sensor\":\"pressure-a\",\"device\":\"shuttle\"}]}"
     }
   ],
   "tilesets": [],

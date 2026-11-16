@@ -281,64 +281,10 @@
         },
         {
           "id": 13,
-          "name": "step-3",
-          "type": "platforms",
-          "x": 380,
-          "y": 2849,
-          "width": 180,
-          "height": 24,
-          "rotation": 0,
-          "visible": true,
-          "properties": [
-            {
-              "name": "json:value",
-              "type": "string",
-              "value": "{\"id\":\"step-3\",\"x\":380,\"y\":2849,\"w\":180,\"h\":24}"
-            }
-          ]
-        },
-        {
-          "id": 14,
-          "name": "step-4",
-          "type": "platforms",
-          "x": 140,
-          "y": 2744,
-          "width": 180,
-          "height": 24,
-          "rotation": 0,
-          "visible": true,
-          "properties": [
-            {
-              "name": "json:value",
-              "type": "string",
-              "value": "{\"id\":\"step-4\",\"x\":140,\"y\":2744,\"w\":180,\"h\":24}"
-            }
-          ]
-        },
-        {
-          "id": 15,
-          "name": "step-5",
-          "type": "platforms",
-          "x": 380,
-          "y": 2633,
-          "width": 180,
-          "height": 24,
-          "rotation": 0,
-          "visible": true,
-          "properties": [
-            {
-              "name": "json:value",
-              "type": "string",
-              "value": "{\"id\":\"step-5\",\"x\":380,\"y\":2633,\"w\":180,\"h\":24}"
-            }
-          ]
-        },
-        {
-          "id": 16,
           "name": "anchor",
           "type": "platforms",
           "x": 570,
-          "y": 2528,
+          "y": 2849,
           "width": 260,
           "height": 24,
           "rotation": 0,
@@ -347,7 +293,61 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"id\":\"anchor\",\"x\":570,\"y\":2528,\"w\":260,\"h\":24}"
+              "value": "{\"id\":\"anchor\",\"x\":570,\"y\":2849,\"w\":260,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "name": "step-4",
+          "type": "platforms",
+          "x": 590,
+          "y": 2514,
+          "width": 250,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-4\",\"x\":590,\"y\":2514,\"w\":250,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "name": "step-5",
+          "type": "platforms",
+          "x": 380,
+          "y": 2403,
+          "width": 180,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-5\",\"x\":380,\"y\":2403,\"w\":180,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "name": "step-6",
+          "type": "platforms",
+          "x": 570,
+          "y": 2298,
+          "width": 260,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-6\",\"x\":570,\"y\":2298,\"w\":260,\"h\":24}"
             }
           ]
         },
@@ -612,7 +612,7 @@
           "name": "anchor",
           "type": "anchor",
           "x": 700,
-          "y": 2528,
+          "y": 2849,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -621,7 +621,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":700,\"y\":2528,\"radius\":55}"
+              "value": "{\"x\":700,\"y\":2849,\"radius\":55}"
             }
           ]
         }
@@ -641,7 +641,7 @@
           "name": "lift",
           "type": "lift",
           "x": 920,
-          "y": 2668,
+          "y": 2989,
           "width": 180,
           "height": 24,
           "rotation": 0,
@@ -650,7 +650,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":920,\"y\":2668,\"top\":2323,\"bottom\":2668,\"w\":180,\"h\":24}"
+              "value": "{\"x\":920,\"y\":2989,\"top\":2644,\"bottom\":2989,\"w\":180,\"h\":24}"
             }
           ]
         }
@@ -688,7 +688,7 @@
           "name": "fragments",
           "type": "fragments",
           "x": 745,
-          "y": 2486,
+          "y": 2807,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -697,7 +697,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":745,\"y\":2486}"
+              "value": "{\"x\":745,\"y\":2807}"
             }
           ]
         },
@@ -752,8 +752,8 @@
           "id": 36,
           "name": "secrets",
           "type": "secrets",
-          "x": 175,
-          "y": 2702,
+          "x": 675,
+          "y": 2472,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -762,7 +762,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":175,\"y\":2702}"
+              "value": "{\"x\":675,\"y\":2472}"
             }
           ]
         },
@@ -817,7 +817,7 @@
           "id": 39,
           "name": "checkpoints",
           "type": "checkpoints",
-          "x": 470,
+          "x": 700,
           "y": 2847,
           "width": 0,
           "height": 0,
@@ -827,7 +827,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":470,\"y\":2847}"
+              "value": "{\"x\":700,\"y\":2847}"
             }
           ]
         },
@@ -836,7 +836,7 @@
           "name": "checkpoints",
           "type": "checkpoints",
           "x": 665,
-          "y": 2526,
+          "y": 2847,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -845,7 +845,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":665,\"y\":2526}"
+              "value": "{\"x\":665,\"y\":2847}"
             }
           ]
         },
@@ -854,7 +854,7 @@
           "name": "checkpoints",
           "type": "checkpoints",
           "x": 715,
-          "y": 2191,
+          "y": 2512,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -863,7 +863,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":715,\"y\":2191}"
+              "value": "{\"x\":715,\"y\":2512}"
             }
           ]
         },
@@ -900,7 +900,7 @@
           "id": 43,
           "name": "scout",
           "type": "enemies",
-          "x": 520,
+          "x": 610,
           "y": 2849,
           "width": 0,
           "height": 0,
@@ -910,7 +910,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"scout\",\"x\":520,\"y\":2849,\"min\":495,\"max\":540}"
+              "value": "{\"type\":\"scout\",\"x\":610,\"y\":2849,\"min\":590,\"max\":635}"
             }
           ]
         },
@@ -919,7 +919,7 @@
           "name": "sentry",
           "type": "enemies",
           "x": 420,
-          "y": 2633,
+          "y": 2403,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -928,7 +928,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"sentry\",\"x\":420,\"y\":2633,\"min\":400,\"max\":445}"
+              "value": "{\"type\":\"sentry\",\"x\":420,\"y\":2403,\"min\":400,\"max\":445}"
             }
           ]
         },
@@ -1077,8 +1077,8 @@
           "id": 51,
           "name": "vents",
           "type": "vents",
-          "x": 160,
-          "y": 2744,
+          "x": 190,
+          "y": 1977,
           "width": 63,
           "height": 0,
           "rotation": 0,
@@ -1087,7 +1087,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":160,\"y\":2744,\"w\":63,\"period\":5.195,\"offset\":0}"
+              "value": "{\"x\":190,\"y\":1977,\"w\":63,\"period\":5.195,\"offset\":0}"
             }
           ]
         },
@@ -1095,7 +1095,7 @@
           "id": 52,
           "name": "vents",
           "type": "vents",
-          "x": 220,
+          "x": 440,
           "y": 1230,
           "width": 63,
           "height": 0,
@@ -1105,7 +1105,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":220,\"y\":1230,\"w\":63,\"period\":5.195,\"offset\":2}"
+              "value": "{\"x\":440,\"y\":1230,\"w\":63,\"period\":5.195,\"offset\":2}"
             }
           ]
         }
@@ -1116,7 +1116,7 @@
     {
       "name": "json:level",
       "type": "string",
-      "value": "{\"id\":\"paradox\",\"name\":\"PARADOXO\",\"index\":23,\"difficulty\":24,\"kind\":\"vault\",\"color\":\"#ffae96\",\"width\":1100,\"height\":3515,\"route\":[\"floor\",\"step-0\",\"step-1\",\"step-2\",\"step-3\",\"step-4\",\"step-5\",\"anchor\",\"lift\",\"step-7\",\"step-8\",\"step-9\",\"step-10\",\"step-11\",\"step-12\",\"step-13\",\"step-14\",\"step-15\",\"step-16\",\"step-17\",\"step-18\"],\"briefing\":\"Mantém os dois botões ocupados por ecos. O nó local permite gravar o segundo. Recupera os três fragmentos e procura a saída no topo do percurso.\",\"world\":5,\"worldName\":\"CONVERGÊNCIA\",\"stage\":4,\"targetTime\":226,\"version\":15,\"links\":[{\"sensor\":\"pressure-a\",\"device\":\"exit-door\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-0\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-1\"},{\"sensor\":\"pressure-a\",\"device\":\"shuttle\"},{\"sensor\":\"pressure-b\",\"device\":\"exit-door\"}]}"
+      "value": "{\"id\":\"paradox\",\"name\":\"PARADOXO\",\"index\":23,\"difficulty\":24,\"kind\":\"vault\",\"color\":\"#ffae96\",\"width\":1100,\"height\":3515,\"route\":[\"floor\",\"step-0\",\"step-1\",\"step-2\",\"anchor\",\"lift\",\"step-4\",\"step-5\",\"step-6\",\"step-7\",\"step-8\",\"step-9\",\"step-10\",\"step-11\",\"step-12\",\"step-13\",\"step-14\",\"step-15\",\"step-16\",\"step-17\",\"step-18\"],\"briefing\":\"Mantém os dois botões ocupados por ecos. O nó local permite gravar o segundo. Recupera os três fragmentos e procura a saída no topo do percurso.\",\"world\":5,\"worldName\":\"CONVERGÊNCIA\",\"stage\":4,\"targetTime\":226,\"version\":15,\"links\":[{\"sensor\":\"pressure-a\",\"device\":\"exit-door\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-0\"},{\"sensor\":\"pressure-a\",\"device\":\"laser-1\"},{\"sensor\":\"pressure-a\",\"device\":\"shuttle\"},{\"sensor\":\"pressure-b\",\"device\":\"exit-door\"}]}"
     }
   ],
   "tilesets": [],

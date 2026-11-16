@@ -9,16 +9,16 @@ Data: 16-11-2026. Branch: feat/v15-final-playtest. PR de salvaguarda #41; PR de 
 3. Bot: 75 conclusões com dano ativo, 3 fragmentos naturais, eco gravado, elevador físico e nós de segundo eco, sem habilidades. Mortes e recuperações não são omitidas. Resultados detalhados abaixo e em bot-results.json. Testes de migração usam resultados serializados pela implementação v14 congelada, não gravações privadas extraídas do iPhone do proprietário.
 4. Sistemas: módulos de movimento, treino, HUD, habilidades, ecos, elevador, inimigos e mecanismos; atualização do eco separada do elevador; sensores e dispositivos ligados por IDs com AND.
 5. Ferramentas: 25 mapas Tiled, validação/adaptação e comparação; Vite com base relativa; workflow GitHub Actions/Pages; Capacitor 8 configurado e documentado, sem geração ou publicação nativa.
-6. Conteúdo: cinco mundos; botões, portas, lasers com aviso, plataformas móveis, janela de sensor 8/12s e puzzle de dois ecos com nó local. Salas empilhadas, ilhas e terraços substituem parte dos ziguezagues. Nem todas as plataformas móveis são obrigatórias: também existem como apoios/rotas alternativas. Estrelas independentes e histórico v14 visível.
+6. Conteúdo: cinco mundos; botões, portas, lasers com aviso, plataformas móveis, janela de sensor 8/12s e puzzle de dois ecos com nó local. Salas empilhadas, ilhas e terraços substituem parte dos ziguezagues. As âncoras/elevadores mudam de posição na sequência das salas. Nem todas as plataformas móveis são obrigatórias: também existem como apoios/rotas alternativas. Estrelas independentes e histórico v14 visível.
 7. Assistido: abrandamento de ameaças, íman, escudo, moeda por primeira conclusão e upgrades de recarga de 2% até 10%; ghosts de melhores tempos puros por operador. Assistido não altera estrelas/medalhas/recordes puros. Sem pagamentos ou anúncios.
 8. Apresentação: partículas, rastos, scanlines e shake controlados; reduzir efeitos; Web Audio mantido. Removido backdrop blur preventivamente. Zoom mínimo 0,38. Custo GPU em aparelho real não medido.
-9. Equilíbrio: dash mantém duração 0,14s, mas imunidade só nos primeiros 0,06s. Recargas AXIOM/NYRA/KAI-7 mantidas em 8/4/12s porque o bot base não fornece evidência suficiente para mudar as habilidades. Alvos de estrelas em origin-balance.js, derivados do bot ×1,65 com mínimo 75s; exigem calibração humana.
+9. Equilíbrio: dash mantém duração 0,14s, mas imunidade só nos primeiros 0,06s. Recargas AXIOM/NYRA/KAI-7 mantidas em 8/4/12s porque o bot base não fornece evidência suficiente para mudar as habilidades. Alvos de estrelas em origin-balance.js, derivados do bot ×2,2 com mínimo 60s; exigem calibração humana.
 
 ## Falhas encontradas e correções
 
 - Jogo: echoPoint sobrevivia a um restart e podia acionar o elevador antes da chegada; estado limpo em create().
 - Mapas: entradas no elevador demasiado dependentes de timing; elevadores posteriores reposicionados, plataforma inferior mais baixa e chamada automática enquanto se espera junto à âncora.
-- Mapas: novas salas criavam intervalos largos; centros consecutivos limitados e travessias novamente verificadas.
+- Mapas: âncoras/elevadores passam a ocupar salas diferentes nos mundos 2–5; novas salas criavam intervalos largos; centros consecutivos limitados e travessias novamente verificadas.
 - Mapas: patrulhas deixavam de corresponder às plataformas editadas; reposicionadas na geometria final, fora da direção principal de saída.
 - Mapas: lasers podiam alcançar a aproximação ao botão de desativação; deslocados para depois desse exercício.
 - Bot: não reconhecia conclusão no ar e interpretava algumas conclusões como falhas de aterragem; condição corrigida.
@@ -42,26 +42,26 @@ Formato: conclusão · segundos de simulação / mortes. Tempos idênticos entre
 | 3 | resonance | PASSOU · 23.3s / 0 | PASSOU · 23.3s / 0 | PASSOU · 23.3s / 0 |
 | 4 | mirage | PASSOU · 23.6s / 0 | PASSOU · 23.6s / 0 | PASSOU · 23.6s / 0 |
 | 5 | window | PASSOU · 24.9s / 0 | PASSOU · 24.9s / 0 | PASSOU · 24.9s / 0 |
-| 6 | junction | PASSOU · 30.2s / 0 | PASSOU · 30.2s / 0 | PASSOU · 30.2s / 0 |
-| 7 | interference | PASSOU · 29.1s / 0 | PASSOU · 29.1s / 0 | PASSOU · 29.1s / 0 |
-| 8 | trace | PASSOU · 27.8s / 0 | PASSOU · 27.8s / 0 | PASSOU · 27.8s / 0 |
+| 6 | junction | PASSOU · 28.8s / 0 | PASSOU · 28.8s / 0 | PASSOU · 28.8s / 0 |
+| 7 | interference | PASSOU · 29s / 0 | PASSOU · 29s / 0 | PASSOU · 29s / 0 |
+| 8 | trace | PASSOU · 26.7s / 0 | PASSOU · 26.7s / 0 | PASSOU · 26.7s / 0 |
 | 9 | reflection | PASSOU · 27.3s / 0 | PASSOU · 27.3s / 0 | PASSOU · 27.3s / 0 |
-| 10 | escape | PASSOU · 36.4s / 1 | PASSOU · 36.4s / 1 | PASSOU · 36.4s / 1 |
-| 11 | current | PASSOU · 32.8s / 1 | PASSOU · 32.8s / 1 | PASSOU · 32.8s / 1 |
-| 12 | frequency | PASSOU · 35.6s / 1 | PASSOU · 35.6s / 1 | PASSOU · 35.6s / 1 |
-| 13 | between | PASSOU · 34.5s / 1 | PASSOU · 34.5s / 1 | PASSOU · 34.5s / 1 |
-| 14 | phasebridge | PASSOU · 44s / 1 | PASSOU · 44s / 1 | PASSOU · 44s / 1 |
-| 15 | fracture | PASSOU · 34.3s / 1 | PASSOU · 34.3s / 1 | PASSOU · 34.3s / 1 |
-| 16 | blind | PASSOU · 37.5s / 1 | PASSOU · 37.5s / 1 | PASSOU · 37.5s / 1 |
-| 17 | order | PASSOU · 32.9s / 1 | PASSOU · 32.9s / 1 | PASSOU · 32.9s / 1 |
-| 18 | presents | PASSOU · 38.6s / 1 | PASSOU · 38.6s / 1 | PASSOU · 38.6s / 1 |
+| 10 | escape | PASSOU · 28.1s / 0 | PASSOU · 28.1s / 0 | PASSOU · 28.1s / 0 |
+| 11 | current | PASSOU · 23.7s / 0 | PASSOU · 23.7s / 0 | PASSOU · 23.7s / 0 |
+| 12 | frequency | PASSOU · 26.2s / 0 | PASSOU · 26.2s / 0 | PASSOU · 26.2s / 0 |
+| 13 | between | PASSOU · 26.5s / 1 | PASSOU · 26.5s / 1 | PASSOU · 26.5s / 1 |
+| 14 | phasebridge | PASSOU · 25.4s / 0 | PASSOU · 25.4s / 0 | PASSOU · 25.4s / 0 |
+| 15 | fracture | PASSOU · 25.5s / 0 | PASSOU · 25.5s / 0 | PASSOU · 25.5s / 0 |
+| 16 | blind | PASSOU · 40.6s / 1 | PASSOU · 40.6s / 1 | PASSOU · 40.6s / 1 |
+| 17 | order | PASSOU · 29.9s / 1 | PASSOU · 29.9s / 1 | PASSOU · 29.9s / 1 |
+| 18 | presents | PASSOU · 29s / 0 | PASSOU · 29s / 0 | PASSOU · 29s / 0 |
 | 19 | silence | PASSOU · 34.6s / 1 | PASSOU · 34.6s / 1 | PASSOU · 34.6s / 1 |
-| 20 | overload | PASSOU · 79.7s / 3 | PASSOU · 79.7s / 3 | PASSOU · 79.7s / 3 |
-| 21 | signatures | PASSOU · 39.5s / 1 | PASSOU · 39.5s / 1 | PASSOU · 39.5s / 1 |
-| 22 | maze | PASSOU · 50.8s / 1 | PASSOU · 50.8s / 1 | PASSOU · 50.8s / 1 |
-| 23 | lastwindow | PASSOU · 40.8s / 1 | PASSOU · 40.8s / 1 | PASSOU · 40.8s / 1 |
-| 24 | paradox | PASSOU · 50.8s / 1 | PASSOU · 50.8s / 1 | PASSOU · 50.8s / 1 |
-| 25 | archive | PASSOU · 49.5s / 1 | PASSOU · 49.5s / 1 | PASSOU · 49.5s / 1 |
+| 20 | overload | PASSOU · 29s / 0 | PASSOU · 29s / 0 | PASSOU · 29s / 0 |
+| 21 | signatures | PASSOU · 31s / 0 | PASSOU · 31s / 0 | PASSOU · 31s / 0 |
+| 22 | maze | PASSOU · 32.1s / 0 | PASSOU · 32.1s / 0 | PASSOU · 32.1s / 0 |
+| 23 | lastwindow | PASSOU · 32.3s / 0 | PASSOU · 32.3s / 0 | PASSOU · 32.3s / 0 |
+| 24 | paradox | PASSOU · 32.3s / 0 | PASSOU · 32.3s / 0 | PASSOU · 32.3s / 0 |
+| 25 | archive | PASSOU · 31.9s / 0 | PASSOU · 31.9s / 0 | PASSOU · 31.9s / 0 |
 
 ## Não confirmado
 

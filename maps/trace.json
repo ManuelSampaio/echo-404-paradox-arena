@@ -198,46 +198,10 @@
         },
         {
           "id": 9,
-          "name": "step-4",
-          "type": "platforms",
-          "x": 84,
-          "y": 2378,
-          "width": 212,
-          "height": 24,
-          "rotation": 0,
-          "visible": true,
-          "properties": [
-            {
-              "name": "json:value",
-              "type": "string",
-              "value": "{\"id\":\"step-4\",\"x\":84,\"y\":2378,\"w\":212,\"h\":24}"
-            }
-          ]
-        },
-        {
-          "id": 10,
-          "name": "step-5",
-          "type": "platforms",
-          "x": 334,
-          "y": 2281,
-          "width": 212,
-          "height": 24,
-          "rotation": 0,
-          "visible": true,
-          "properties": [
-            {
-              "name": "json:value",
-              "type": "string",
-              "value": "{\"id\":\"step-5\",\"x\":334,\"y\":2281,\"w\":212,\"h\":24}"
-            }
-          ]
-        },
-        {
-          "id": 11,
           "name": "anchor",
           "type": "platforms",
-          "x": 570,
-          "y": 2184,
+          "x": 550,
+          "y": 2378,
           "width": 260,
           "height": 24,
           "rotation": 0,
@@ -246,7 +210,43 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"id\":\"anchor\",\"x\":570,\"y\":2184,\"w\":260,\"h\":24}"
+              "value": "{\"id\":\"anchor\",\"x\":550,\"y\":2378,\"w\":260,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "name": "step-5",
+          "type": "platforms",
+          "x": 570,
+          "y": 2051,
+          "width": 250,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-5\",\"x\":570,\"y\":2051,\"w\":250,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "step-6",
+          "type": "platforms",
+          "x": 570,
+          "y": 1954,
+          "width": 260,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-6\",\"x\":570,\"y\":1954,\"w\":260,\"h\":24}"
             }
           ]
         },
@@ -456,8 +456,8 @@
           "id": 22,
           "name": "anchor",
           "type": "anchor",
-          "x": 700,
-          "y": 2184,
+          "x": 680,
+          "y": 2378,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -466,7 +466,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":700,\"y\":2184,\"radius\":55}"
+              "value": "{\"x\":680,\"y\":2378,\"radius\":55}"
             }
           ]
         }
@@ -485,8 +485,8 @@
           "id": 23,
           "name": "lift",
           "type": "lift",
-          "x": 920,
-          "y": 2324,
+          "x": 900,
+          "y": 2518,
           "width": 180,
           "height": 24,
           "rotation": 0,
@@ -495,7 +495,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":920,\"y\":2324,\"top\":1979,\"bottom\":2324,\"w\":180,\"h\":24}"
+              "value": "{\"x\":900,\"y\":2518,\"top\":2173,\"bottom\":2518,\"w\":180,\"h\":24}"
             }
           ]
         }
@@ -532,8 +532,8 @@
           "id": 25,
           "name": "fragments",
           "type": "fragments",
-          "x": 745,
-          "y": 2142,
+          "x": 725,
+          "y": 2336,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -542,7 +542,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":745,\"y\":2142}"
+              "value": "{\"x\":725,\"y\":2336}"
             }
           ]
         },
@@ -597,7 +597,7 @@
           "id": 28,
           "name": "secrets",
           "type": "secrets",
-          "x": 135,
+          "x": 640,
           "y": 2336,
           "width": 0,
           "height": 0,
@@ -607,7 +607,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":135,\"y\":2336}"
+              "value": "{\"x\":640,\"y\":2336}"
             }
           ]
         },
@@ -680,8 +680,8 @@
           "id": 32,
           "name": "checkpoints",
           "type": "checkpoints",
-          "x": 665,
-          "y": 2182,
+          "x": 645,
+          "y": 2376,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -690,7 +690,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":665,\"y\":2182}"
+              "value": "{\"x\":645,\"y\":2376}"
             }
           ]
         },
@@ -698,8 +698,8 @@
           "id": 33,
           "name": "checkpoints",
           "type": "checkpoints",
-          "x": 715,
-          "y": 1849,
+          "x": 695,
+          "y": 2049,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -708,7 +708,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":715,\"y\":1849}"
+              "value": "{\"x\":695,\"y\":2049}"
             }
           ]
         },
@@ -745,7 +745,7 @@
           "id": 35,
           "name": "scout",
           "type": "enemies",
-          "x": 496,
+          "x": 364,
           "y": 2481,
           "width": 0,
           "height": 0,
@@ -755,7 +755,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"scout\",\"x\":496,\"y\":2481,\"min\":471,\"max\":516}"
+              "value": "{\"type\":\"scout\",\"x\":364,\"y\":2481,\"min\":344,\"max\":389}"
             }
           ]
         },
@@ -763,8 +763,8 @@
           "id": 36,
           "name": "sentry",
           "type": "enemies",
-          "x": 374,
-          "y": 2281,
+          "x": 610,
+          "y": 2051,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -773,7 +773,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"sentry\",\"x\":374,\"y\":2281,\"min\":354,\"max\":399}"
+              "value": "{\"type\":\"sentry\",\"x\":610,\"y\":2051,\"min\":590,\"max\":635}"
             }
           ]
         }
@@ -850,8 +850,8 @@
           "id": 39,
           "name": "vents",
           "type": "vents",
-          "x": 104,
-          "y": 2378,
+          "x": 555,
+          "y": 1657,
           "width": 47,
           "height": 0,
           "rotation": 0,
@@ -860,7 +860,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":104,\"y\":2378,\"w\":47,\"period\":5.755,\"offset\":0}"
+              "value": "{\"x\":555,\"y\":1657,\"w\":47,\"period\":5.755,\"offset\":0}"
             }
           ]
         }
@@ -871,7 +871,7 @@
     {
       "name": "json:level",
       "type": "string",
-      "value": "{\"id\":\"trace\",\"name\":\"RASTO\",\"index\":7,\"difficulty\":8,\"kind\":\"foundry\",\"color\":\"#a5c9ff\",\"width\":1100,\"height\":3115,\"route\":[\"floor\",\"step-0\",\"step-1\",\"step-2\",\"step-3\",\"step-4\",\"step-5\",\"anchor\",\"lift\",\"step-7\",\"step-8\",\"step-9\",\"step-10\",\"step-11\",\"step-12\",\"step-13\",\"step-14\",\"step-15\"],\"briefing\":\"Deixa um eco no botão para abrir a porta. Recupera os três fragmentos e procura a saída no topo do percurso.\",\"world\":2,\"worldName\":\"CIRCUITO\",\"stage\":3,\"targetTime\":194,\"version\":15,\"links\":[{\"sensor\":\"pressure-a\",\"device\":\"exit-door\"}]}"
+      "value": "{\"id\":\"trace\",\"name\":\"RASTO\",\"index\":7,\"difficulty\":8,\"kind\":\"foundry\",\"color\":\"#a5c9ff\",\"width\":1100,\"height\":3115,\"route\":[\"floor\",\"step-0\",\"step-1\",\"step-2\",\"step-3\",\"anchor\",\"lift\",\"step-5\",\"step-6\",\"step-7\",\"step-8\",\"step-9\",\"step-10\",\"step-11\",\"step-12\",\"step-13\",\"step-14\",\"step-15\"],\"briefing\":\"Deixa um eco no botão para abrir a porta. Recupera os três fragmentos e procura a saída no topo do percurso.\",\"world\":2,\"worldName\":\"CIRCUITO\",\"stage\":3,\"targetTime\":194,\"version\":15,\"links\":[{\"sensor\":\"pressure-a\",\"device\":\"exit-door\"}]}"
     }
   ],
   "tilesets": [],
