@@ -70,24 +70,6 @@
           "id": 3,
           "name": "laser-0",
           "type": "devices",
-          "x": 300,
-          "y": 1656,
-          "width": 8,
-          "height": 90,
-          "rotation": 0,
-          "visible": true,
-          "properties": [
-            {
-              "name": "json:value",
-              "type": "string",
-              "value": "{\"id\":\"laser-0\",\"type\":\"laser\",\"x\":300,\"y\":1656,\"w\":8,\"h\":90,\"period\":6,\"offset\":0}"
-            }
-          ]
-        },
-        {
-          "id": 4,
-          "name": "laser-1",
-          "type": "devices",
           "x": 550,
           "y": 1456,
           "width": 8,
@@ -98,7 +80,25 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"id\":\"laser-1\",\"type\":\"laser\",\"x\":550,\"y\":1456,\"w\":8,\"h\":90,\"period\":7,\"offset\":0}"
+              "value": "{\"id\":\"laser-0\",\"type\":\"laser\",\"x\":550,\"y\":1456,\"w\":8,\"h\":90,\"period\":6,\"offset\":0}"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "laser-1",
+          "type": "devices",
+          "x": 550,
+          "y": 1250,
+          "width": 8,
+          "height": 90,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"laser-1\",\"type\":\"laser\",\"x\":550,\"y\":1250,\"w\":8,\"h\":90,\"period\":7,\"offset\":0}"
             }
           ]
         }
@@ -540,7 +540,7 @@
           "name": "lift",
           "type": "lift",
           "x": 180,
-          "y": 2372,
+          "y": 2422,
           "width": 180,
           "height": 24,
           "rotation": 0,
@@ -549,7 +549,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":180,\"y\":2372,\"top\":2077,\"bottom\":2372,\"w\":180,\"h\":24}"
+              "value": "{\"x\":180,\"y\":2422,\"top\":2077,\"bottom\":2422,\"w\":180,\"h\":24}"
             }
           ]
         }
@@ -799,8 +799,8 @@
           "id": 38,
           "name": "scout",
           "type": "enemies",
-          "x": 359,
-          "y": 2694,
+          "x": 482,
+          "y": 2588,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -809,7 +809,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"scout\",\"x\":359,\"y\":2694,\"min\":232,\"max\":388}"
+              "value": "{\"type\":\"scout\",\"x\":482,\"y\":2588,\"min\":462,\"max\":507}"
             }
           ]
         },
@@ -817,8 +817,8 @@
           "id": 39,
           "name": "sentry",
           "type": "enemies",
-          "x": 829,
-          "y": 2488,
+          "x": 608,
+          "y": 2388,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -827,7 +827,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"sentry\",\"x\":829,\"y\":2488,\"min\":702,\"max\":858}"
+              "value": "{\"type\":\"sentry\",\"x\":608,\"y\":2388,\"min\":583,\"max\":628}"
             }
           ]
         },
@@ -835,8 +835,8 @@
           "id": 40,
           "name": "hound",
           "type": "enemies",
-          "x": 465,
-          "y": 2282,
+          "x": 300,
+          "y": 1952,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -845,7 +845,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"hound\",\"x\":465,\"y\":2282,\"min\":290,\"max\":510}"
+              "value": "{\"type\":\"hound\",\"x\":300,\"y\":1952,\"min\":280,\"max\":325}"
             }
           ]
         },
@@ -853,8 +853,8 @@
           "id": 41,
           "name": "drone",
           "type": "enemies",
-          "x": 655,
-          "y": 1782,
+          "x": 220,
+          "y": 1676,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -863,7 +863,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"drone\",\"x\":655,\"y\":1782,\"min\":360,\"max\":740}"
+              "value": "{\"type\":\"drone\",\"x\":220,\"y\":1676,\"min\":200,\"max\":245}"
             }
           ]
         }

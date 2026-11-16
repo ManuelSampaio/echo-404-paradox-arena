@@ -486,7 +486,7 @@
           "name": "lift",
           "type": "lift",
           "x": 180,
-          "y": 2292,
+          "y": 2342,
           "width": 180,
           "height": 24,
           "rotation": 0,
@@ -495,7 +495,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":180,\"y\":2292,\"top\":1997,\"bottom\":2292,\"w\":180,\"h\":24}"
+              "value": "{\"x\":180,\"y\":2342,\"top\":1997,\"bottom\":2342,\"w\":180,\"h\":24}"
             }
           ]
         }
@@ -745,8 +745,8 @@
           "id": 35,
           "name": "scout",
           "type": "enemies",
-          "x": 391,
-          "y": 2600,
+          "x": 488,
+          "y": 2502,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -755,7 +755,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"scout\",\"x\":391,\"y\":2600,\"min\":258,\"max\":422}"
+              "value": "{\"type\":\"scout\",\"x\":488,\"y\":2502,\"min\":468,\"max\":513}"
             }
           ]
         },
@@ -763,8 +763,8 @@
           "id": 36,
           "name": "sentry",
           "type": "enemies",
-          "x": 831,
-          "y": 2404,
+          "x": 622,
+          "y": 2300,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -773,7 +773,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"sentry\",\"x\":831,\"y\":2404,\"min\":698,\"max\":862}"
+              "value": "{\"type\":\"sentry\",\"x\":622,\"y\":2300,\"min\":597,\"max\":642}"
             }
           ]
         },
@@ -781,8 +781,8 @@
           "id": 37,
           "name": "hound",
           "type": "enemies",
-          "x": 465,
-          "y": 2202,
+          "x": 470,
+          "y": 1874,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -791,7 +791,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"hound\",\"x\":465,\"y\":2202,\"min\":290,\"max\":510}"
+              "value": "{\"type\":\"hound\",\"x\":470,\"y\":1874,\"min\":445,\"max\":490}"
             }
           ]
         }

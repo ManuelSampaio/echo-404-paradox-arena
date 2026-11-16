@@ -12,7 +12,8 @@
    if(this.capture){this.captureTime+=dt;this.captureAccumulator+=dt;if(this.captureAccumulator>=1/30){this.captureAccumulator=0;this.capture.push({t:this.captureTime,x:this.player.x,y:this.player.y,flip:this.player.flipX,frame:Number(this.player.frame.name)||0});}
     $('echoMeter').querySelector('span').style.transform='scaleX('+Math.min(1,this.captureTime/5)+')';if(this.captureTime>=5)this.toggleEcho();}
    if(this.echo){this.echo.time+=dt;const point=pose(this.echo.frames,this.echo.time);this.echoSprite.setPosition(point.x,point.y).setFlipX(point.flip).setFrame(point.frame);this.echoPoint=point;}
+   if(!this.reducedEffects){this.trailTick=(this.trailTick||0)+dt;if(this.trailTick>.12){this.trailTick=0;for(const p of [this.echoPoint,this.extraEcho?.point])if(p){const o=this.add.rectangle(p.x,p.y-30,4,12,0x77f5df).setDepth(12).setAlpha(.3);this.effects.push({o,vx:0,vy:0,life:.25});}}}
    if(this.extraEcho){this.extraEcho.time+=dt;const point=pose(this.extraEcho.frames,this.extraEcho.time);this.extraEcho.point=point;this.extraEcho.sprite.setPosition(point.x,point.y).setFlipX(point.flip).setFrame(point.frame);}
-   this.updateLift(dt);this.updateAbilityHUD();$('echoAction').innerHTML=this.capture?'◈<small>FIXAR</small>':this.echo?'◈<small>REGRAVAR</small>':'◈<small>ECO</small>';
+   this.updateAbilityHUD();$('echoAction').innerHTML=this.capture?'◈<small>FIXAR</small>':this.echo?'◈<small>REGRAVAR</small>':'◈<small>ECO</small>';
   }
 };})();

@@ -70,8 +70,8 @@
           "id": 3,
           "name": "laser-0",
           "type": "devices",
-          "x": 300,
-          "y": 1647,
+          "x": 550,
+          "y": 1443,
           "width": 8,
           "height": 90,
           "rotation": 0,
@@ -80,7 +80,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"id\":\"laser-0\",\"type\":\"laser\",\"x\":300,\"y\":1647,\"w\":8,\"h\":90,\"period\":6,\"offset\":2}"
+              "value": "{\"id\":\"laser-0\",\"type\":\"laser\",\"x\":550,\"y\":1443,\"w\":8,\"h\":90,\"period\":6,\"offset\":2}"
             }
           ]
         }
@@ -522,7 +522,7 @@
           "name": "lift",
           "type": "lift",
           "x": 920,
-          "y": 2360,
+          "y": 2410,
           "width": 180,
           "height": 24,
           "rotation": 0,
@@ -531,7 +531,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":920,\"y\":2360,\"top\":2065,\"bottom\":2360,\"w\":180,\"h\":24}"
+              "value": "{\"x\":920,\"y\":2410,\"top\":2065,\"bottom\":2410,\"w\":180,\"h\":24}"
             }
           ]
         }
@@ -781,8 +781,8 @@
           "id": 37,
           "name": "scout",
           "type": "enemies",
-          "x": 731,
-          "y": 2672,
+          "x": 522,
+          "y": 2573,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -791,7 +791,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"scout\",\"x\":731,\"y\":2672,\"min\":598,\"max\":762}"
+              "value": "{\"type\":\"scout\",\"x\":522,\"y\":2573,\"min\":497,\"max\":542}"
             }
           ]
         },
@@ -799,8 +799,8 @@
           "id": 38,
           "name": "sentry",
           "type": "enemies",
-          "x": 271,
-          "y": 2474,
+          "x": 388,
+          "y": 2369,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -809,7 +809,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"sentry\",\"x\":271,\"y\":2474,\"min\":138,\"max\":302}"
+              "value": "{\"type\":\"sentry\",\"x\":388,\"y\":2369,\"min\":368,\"max\":413}"
             }
           ]
         },
@@ -817,8 +817,8 @@
           "id": 39,
           "name": "drone",
           "type": "enemies",
-          "x": 765,
-          "y": 2200,
+          "x": 800,
+          "y": 1871,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -827,7 +827,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"drone\",\"x\":765,\"y\":2200,\"min\":590,\"max\":810}"
+              "value": "{\"type\":\"drone\",\"x\":800,\"y\":1871,\"min\":775,\"max\":820}"
             }
           ]
         }

@@ -88,8 +88,8 @@
           "id": 4,
           "name": "laser-0",
           "type": "devices",
-          "x": 320,
-          "y": 1822,
+          "x": 520,
+          "y": 1608,
           "width": 8,
           "height": 90,
           "rotation": 0,
@@ -98,7 +98,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"id\":\"laser-0\",\"type\":\"laser\",\"x\":320,\"y\":1822,\"w\":8,\"h\":90,\"period\":6,\"offset\":2}"
+              "value": "{\"id\":\"laser-0\",\"type\":\"laser\",\"x\":520,\"y\":1608,\"w\":8,\"h\":90,\"period\":6,\"offset\":2}"
             }
           ]
         },
@@ -107,7 +107,7 @@
           "name": "shuttle",
           "type": "devices",
           "x": 570,
-          "y": 1800,
+          "y": 1808,
           "width": 100,
           "height": 16,
           "rotation": 0,
@@ -116,7 +116,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"id\":\"shuttle\",\"type\":\"moving\",\"x\":570,\"y\":1800,\"w\":100,\"h\":16,\"travel\":80,\"period\":5}"
+              "value": "{\"id\":\"shuttle\",\"type\":\"moving\",\"x\":570,\"y\":1808,\"w\":100,\"h\":16,\"travel\":80,\"period\":5}"
             }
           ]
         }
@@ -605,7 +605,7 @@
           "name": "lift",
           "type": "lift",
           "x": 180,
-          "y": 2550,
+          "y": 2600,
           "width": 180,
           "height": 24,
           "rotation": 0,
@@ -614,7 +614,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":180,\"y\":2550,\"top\":2255,\"bottom\":2550,\"w\":180,\"h\":24}"
+              "value": "{\"x\":180,\"y\":2600,\"top\":2255,\"bottom\":2600,\"w\":180,\"h\":24}"
             }
           ]
         }
@@ -864,8 +864,8 @@
           "id": 41,
           "name": "scout",
           "type": "enemies",
-          "x": 345,
-          "y": 2882,
+          "x": 480,
+          "y": 2778,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -874,7 +874,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"scout\",\"x\":345,\"y\":2882,\"min\":230,\"max\":370}"
+              "value": "{\"type\":\"scout\",\"x\":480,\"y\":2778,\"min\":460,\"max\":505}"
             }
           ]
         },
@@ -882,8 +882,8 @@
           "id": 42,
           "name": "sentry",
           "type": "enemies",
-          "x": 815,
-          "y": 2674,
+          "x": 580,
+          "y": 2564,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -892,7 +892,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"sentry\",\"x\":815,\"y\":2674,\"min\":700,\"max\":840}"
+              "value": "{\"type\":\"sentry\",\"x\":580,\"y\":2564,\"min\":555,\"max\":600}"
             }
           ]
         },
@@ -900,8 +900,8 @@
           "id": 43,
           "name": "hound",
           "type": "enemies",
-          "x": 465,
-          "y": 2460,
+          "x": 300,
+          "y": 2126,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -910,7 +910,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"hound\",\"x\":465,\"y\":2460,\"min\":290,\"max\":510}"
+              "value": "{\"type\":\"hound\",\"x\":300,\"y\":2126,\"min\":280,\"max\":325}"
             }
           ]
         },
@@ -918,8 +918,8 @@
           "id": 44,
           "name": "scout",
           "type": "enemies",
-          "x": 695,
-          "y": 2016,
+          "x": 210,
+          "y": 1912,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -928,7 +928,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"scout\",\"x\":695,\"y\":2016,\"min\":190,\"max\":850}"
+              "value": "{\"type\":\"scout\",\"x\":210,\"y\":1912,\"min\":190,\"max\":235}"
             }
           ]
         },
@@ -936,8 +936,8 @@
           "id": 45,
           "name": "sentry",
           "type": "enemies",
-          "x": 645,
-          "y": 1808,
+          "x": 830,
+          "y": 1698,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -946,7 +946,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"sentry\",\"x\":645,\"y\":1808,\"min\":440,\"max\":700}"
+              "value": "{\"type\":\"sentry\",\"x\":830,\"y\":1698,\"min\":805,\"max\":850}"
             }
           ]
         },
@@ -954,8 +954,8 @@
           "id": 46,
           "name": "drone",
           "type": "enemies",
-          "x": 395,
-          "y": 1524,
+          "x": 680,
+          "y": 1420,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -964,7 +964,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"drone\",\"x\":395,\"y\":1524,\"min\":190,\"max\":450}"
+              "value": "{\"type\":\"drone\",\"x\":680,\"y\":1420,\"min\":655,\"max\":700}"
             }
           ]
         }

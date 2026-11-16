@@ -17,7 +17,7 @@
   },
   trainingAdvance(){const data=this.data,feel=OriginFeel,{clamp,pose,groundedAt,rank,save}=OriginPilot,$=id=>document.getElementById(id);this.trainingStep++;this.clearInput();this.lastJumpStyle=null;this.trainingPeak=1320;this.trainingPrompt();},
   trainingUpdate(dt){const data=this.data,feel=OriginFeel,{clamp,pose,groundedAt,rank,save}=OriginPilot,$=id=>document.getElementById(id);
-   const oldX=this.trainingLastX??this.player.x;this.move(dt);this.updateEcho(dt);const dx=this.player.x-oldX;this.trainingLastX=this.player.x;$('notice').hidden=true;
+   const oldX=this.trainingLastX??this.player.x;this.move(dt);this.updateEcho(dt);this.updateLift(dt);const dx=this.player.x-oldX;this.trainingLastX=this.player.x;$('notice').hidden=true;
    if(this.trainingStep===0){if(this.control.down('left'))this.trainingDistance.left+=Math.max(0,-dx);if(this.control.down('right'))this.trainingDistance.right+=Math.max(0,dx);if(this.trainingDistance.left>35&&this.trainingDistance.right>35)this.trainingAdvance();}
    else if(this.trainingStep===1||this.trainingStep===2){this.trainingPeak=Math.min(this.trainingPeak,this.player.y);const expected=this.trainingStep===1?'short':'full';if(this.lastJumpStyle===expected&&1320-this.trainingPeak>(expected==='short'?30:95)&&this.player.body.blocked.down)this.trainingAdvance();}
    else if(this.trainingStep===3&&this.dashTime>0)this.trainingAdvance();

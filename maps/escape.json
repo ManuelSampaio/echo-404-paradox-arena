@@ -486,7 +486,7 @@
           "name": "lift",
           "type": "lift",
           "x": 920,
-          "y": 2311,
+          "y": 2361,
           "width": 180,
           "height": 24,
           "rotation": 0,
@@ -495,7 +495,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":920,\"y\":2311,\"top\":2016,\"bottom\":2311,\"w\":180,\"h\":24}"
+              "value": "{\"x\":920,\"y\":2361,\"top\":2016,\"bottom\":2361,\"w\":180,\"h\":24}"
             }
           ]
         }
@@ -745,8 +745,8 @@
           "id": 35,
           "name": "scout",
           "type": "enemies",
-          "x": 751,
-          "y": 2625,
+          "x": 542,
+          "y": 2521,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -755,7 +755,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"scout\",\"x\":751,\"y\":2625,\"min\":618,\"max\":782}"
+              "value": "{\"type\":\"scout\",\"x\":542,\"y\":2521,\"min\":517,\"max\":562}"
             }
           ]
         },
@@ -763,8 +763,8 @@
           "id": 36,
           "name": "sentry",
           "type": "enemies",
-          "x": 301,
-          "y": 2423,
+          "x": 428,
+          "y": 2325,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -773,7 +773,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"sentry\",\"x\":301,\"y\":2423,\"min\":168,\"max\":332}"
+              "value": "{\"type\":\"sentry\",\"x\":428,\"y\":2325,\"min\":408,\"max\":453}"
             }
           ]
         },
@@ -781,8 +781,8 @@
           "id": 37,
           "name": "drone",
           "type": "enemies",
-          "x": 765,
-          "y": 2151,
+          "x": 800,
+          "y": 1823,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -791,7 +791,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"drone\",\"x\":765,\"y\":2151,\"min\":590,\"max\":810}"
+              "value": "{\"type\":\"drone\",\"x\":800,\"y\":1823,\"min\":775,\"max\":820}"
             }
           ]
         }

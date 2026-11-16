@@ -11,7 +11,7 @@
    this.updateAbilityHUD();return true;
   },
   updateAbilityHUD(){const data=this.data,feel=OriginFeel,{clamp,pose,groundedAt,rank,save}=OriginPilot,$=id=>document.getElementById(id);
-   if(!this.ability||!this.player)return;const a=this.ability,c=a.config,context=this.abilityContext(),ready=a.ready(context),button=$('operatorAbility');
+   if(!this.ability||!this.player)return;const a=this.ability,c=a.config,context=this.abilityContext(),ready=a.ready(context),button=$('operatorAbility');const stamp=[this.operator,Math.ceil(a.cooldown*10),Math.ceil(a.active*10),this.running,this.pausedByUser,this.finished,this.training,this.trainingStep,context.grounded,context.hasEcho,context.recording,a.airUsed].join('|');if(stamp===this.abilityHUDStamp)return;this.abilityHUDStamp=stamp;
    button.disabled=!this.running||this.pausedByUser||this.finished||this.training&&this.trainingStep!==5||!ready;
    button.querySelector('span').textContent=c.icon;button.querySelector('small').textContent=a.cooldown>0?(Math.ceil(a.cooldown*10)/10).toFixed(1)+'s':!this.running?c.name:this.operator==='nyra'&&context.grounded?'NO AR':this.operator==='nyra'&&a.airUsed?'ATERRA':this.operator==='kai7'&&context.recording?'FIXA ECO':this.operator==='kai7'&&!context.hasEcho?'1.º ECO':c.name;
    button.classList.toggle('ability-active',a.active>0);button.title=this.abilityHelp();

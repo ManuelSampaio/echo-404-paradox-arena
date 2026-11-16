@@ -393,7 +393,7 @@
           "name": "lift",
           "type": "lift",
           "x": 920,
-          "y": 2145,
+          "y": 2195,
           "width": 180,
           "height": 24,
           "rotation": 0,
@@ -402,7 +402,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"x\":920,\"y\":2145,\"top\":1850,\"bottom\":2145,\"w\":180,\"h\":24}"
+              "value": "{\"x\":920,\"y\":2195,\"top\":1850,\"bottom\":2195,\"w\":180,\"h\":24}"
             }
           ]
         }
@@ -652,8 +652,8 @@
           "id": 30,
           "name": "scout",
           "type": "enemies",
-          "x": 775,
-          "y": 2437,
+          "x": 500,
+          "y": 2343,
           "width": 0,
           "height": 0,
           "rotation": 0,
@@ -662,7 +662,7 @@
             {
               "name": "json:value",
               "type": "string",
-              "value": "{\"type\":\"scout\",\"x\":775,\"y\":2437,\"min\":630,\"max\":810}"
+              "value": "{\"type\":\"scout\",\"x\":500,\"y\":2343,\"min\":420,\"max\":580}"
             }
           ]
         }
