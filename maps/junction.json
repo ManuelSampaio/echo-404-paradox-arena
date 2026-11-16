@@ -1,0 +1,862 @@
+{
+  "type": "map",
+  "version": "1.10",
+  "tiledversion": "1.11.2",
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "width": 35,
+  "height": 96,
+  "tilewidth": 32,
+  "tileheight": 32,
+  "infinite": false,
+  "layers": [
+    {
+      "id": 1,
+      "name": "sensors",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 1,
+          "name": "pressure-a",
+          "type": "sensors",
+          "x": 330,
+          "y": 1713,
+          "width": 70,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"pressure-a\",\"type\":\"pressure\",\"x\":330,\"y\":1713,\"w\":70,\"latch\":true}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "devices",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 2,
+          "name": "exit-door",
+          "type": "devices",
+          "x": 877,
+          "y": 1017,
+          "width": 22,
+          "height": 108,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"exit-door\",\"type\":\"door\",\"x\":877,\"y\":1017,\"w\":22,\"h\":108,\"hold\":0}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "powerups",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 3,
+          "name": "pickup-5",
+          "type": "powerups",
+          "x": 730,
+          "y": 2491,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"pickup-5\",\"type\":\"shield\",\"x\":730,\"y\":2491}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "platforms",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 4,
+          "name": "floor",
+          "type": "platforms",
+          "x": 0,
+          "y": 2825,
+          "width": 1100,
+          "height": 160,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"floor\",\"x\":0,\"y\":2825,\"w\":1100,\"h\":160}"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "name": "step-0",
+          "type": "platforms",
+          "x": 124,
+          "y": 2729,
+          "width": 212,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-0\",\"x\":124,\"y\":2729,\"w\":212,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "name": "step-1",
+          "type": "platforms",
+          "x": 374,
+          "y": 2633,
+          "width": 212,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-1\",\"x\":374,\"y\":2633,\"w\":212,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "name": "step-2",
+          "type": "platforms",
+          "x": 624,
+          "y": 2531,
+          "width": 212,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-2\",\"x\":624,\"y\":2531,\"w\":212,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "name": "step-3",
+          "type": "platforms",
+          "x": 404,
+          "y": 2435,
+          "width": 212,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-3\",\"x\":404,\"y\":2435,\"w\":212,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "name": "anchor",
+          "type": "platforms",
+          "x": 570,
+          "y": 2339,
+          "width": 260,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"anchor\",\"x\":570,\"y\":2339,\"w\":260,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "name": "step-5",
+          "type": "platforms",
+          "x": 590,
+          "y": 2007,
+          "width": 250,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-5\",\"x\":590,\"y\":2007,\"w\":250,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "step-6",
+          "type": "platforms",
+          "x": 570,
+          "y": 1911,
+          "width": 260,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-6\",\"x\":570,\"y\":1911,\"w\":260,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "step-7",
+          "type": "platforms",
+          "x": 590,
+          "y": 1815,
+          "width": 250,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-7\",\"x\":590,\"y\":1815,\"w\":250,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "step-8",
+          "type": "platforms",
+          "x": 285,
+          "y": 1713,
+          "width": 360,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-8\",\"x\":285,\"y\":1713,\"w\":360,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "name": "step-9",
+          "type": "platforms",
+          "x": 535,
+          "y": 1617,
+          "width": 360,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-9\",\"x\":535,\"y\":1617,\"w\":360,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "name": "step-10",
+          "type": "platforms",
+          "x": 600,
+          "y": 1521,
+          "width": 360,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-10\",\"x\":600,\"y\":1521,\"w\":360,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "name": "step-11",
+          "type": "platforms",
+          "x": 350,
+          "y": 1419,
+          "width": 360,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-11\",\"x\":350,\"y\":1419,\"w\":360,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "name": "step-12",
+          "type": "platforms",
+          "x": 120,
+          "y": 1323,
+          "width": 360,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-12\",\"x\":120,\"y\":1323,\"w\":360,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "name": "step-13",
+          "type": "platforms",
+          "x": 370,
+          "y": 1227,
+          "width": 360,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-13\",\"x\":370,\"y\":1227,\"w\":360,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 19,
+          "name": "step-14",
+          "type": "platforms",
+          "x": 600,
+          "y": 1125,
+          "width": 360,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"step-14\",\"x\":600,\"y\":1125,\"w\":360,\"h\":24}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "spawn",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 20,
+          "name": "spawn",
+          "type": "spawn",
+          "x": 160,
+          "y": 2823,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":160,\"y\":2823}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "anchor",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 21,
+          "name": "anchor",
+          "type": "anchor",
+          "x": 700,
+          "y": 2339,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":700,\"y\":2339,\"radius\":55}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "lift",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 22,
+          "name": "lift",
+          "type": "lift",
+          "x": 920,
+          "y": 2479,
+          "width": 180,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":920,\"y\":2479,\"top\":2134,\"bottom\":2479,\"w\":180,\"h\":24}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "fragments",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 23,
+          "name": "fragments",
+          "type": "fragments",
+          "x": 730,
+          "y": 2489,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":730,\"y\":2489}"
+            }
+          ]
+        },
+        {
+          "id": 24,
+          "name": "fragments",
+          "type": "fragments",
+          "x": 745,
+          "y": 2297,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":745,\"y\":2297}"
+            }
+          ]
+        },
+        {
+          "id": 25,
+          "name": "fragments",
+          "type": "fragments",
+          "x": 300,
+          "y": 1281,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":300,\"y\":1281}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "secrets",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 26,
+          "name": "secrets",
+          "type": "secrets",
+          "x": 900,
+          "y": 2785,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":900,\"y\":2785}"
+            }
+          ]
+        },
+        {
+          "id": 27,
+          "name": "secrets",
+          "type": "secrets",
+          "x": 660,
+          "y": 2297,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":660,\"y\":2297}"
+            }
+          ]
+        },
+        {
+          "id": 28,
+          "name": "secrets",
+          "type": "secrets",
+          "x": 550,
+          "y": 1185,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":550,\"y\":1185}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "checkpoints",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 29,
+          "name": "checkpoints",
+          "type": "checkpoints",
+          "x": 160,
+          "y": 2823,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":160,\"y\":2823}"
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "name": "checkpoints",
+          "type": "checkpoints",
+          "x": 510,
+          "y": 2433,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":510,\"y\":2433}"
+            }
+          ]
+        },
+        {
+          "id": 31,
+          "name": "checkpoints",
+          "type": "checkpoints",
+          "x": 665,
+          "y": 2337,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":665,\"y\":2337}"
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "name": "checkpoints",
+          "type": "checkpoints",
+          "x": 715,
+          "y": 2005,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":715,\"y\":2005}"
+            }
+          ]
+        },
+        {
+          "id": 33,
+          "name": "checkpoints",
+          "type": "checkpoints",
+          "x": 300,
+          "y": 1321,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":300,\"y\":1321}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "enemies",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 34,
+          "name": "scout",
+          "type": "enemies",
+          "x": 444,
+          "y": 2435,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"type\":\"scout\",\"x\":444,\"y\":2435,\"min\":424,\"max\":469}"
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "name": "sentry",
+          "type": "enemies",
+          "x": 630,
+          "y": 2007,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"type\":\"sentry\",\"x\":630,\"y\":2007,\"min\":610,\"max\":655}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "exit",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 36,
+          "name": "exit",
+          "type": "exit",
+          "x": 915,
+          "y": 1125,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":915,\"y\":1125}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "vent",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 37,
+          "name": "vent",
+          "type": "vent",
+          "x": -1000,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":-1000,\"y\":0,\"w\":0,\"period\":6}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "vents",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 38,
+          "name": "vents",
+          "type": "vents",
+          "x": 555,
+          "y": 1617,
+          "width": 45,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":555,\"y\":1617,\"w\":45,\"period\":5.825,\"offset\":0}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "json:level",
+      "type": "string",
+      "value": "{\"id\":\"junction\",\"name\":\"LINHAS CRUZADAS\",\"index\":5,\"difficulty\":6,\"kind\":\"vault\",\"color\":\"#ffae96\",\"width\":1100,\"height\":3065,\"route\":[\"floor\",\"step-0\",\"step-1\",\"step-2\",\"step-3\",\"anchor\",\"lift\",\"step-5\",\"step-6\",\"step-7\",\"step-8\",\"step-9\",\"step-10\",\"step-11\",\"step-12\",\"step-13\",\"step-14\"],\"briefing\":\"Deixa um eco no botão para abrir a porta. Recupera os três fragmentos e procura a saída no topo do percurso.\",\"world\":2,\"worldName\":\"CIRCUITO\",\"stage\":1,\"targetTime\":190,\"version\":15,\"links\":[{\"sensor\":\"pressure-a\",\"device\":\"exit-door\"}]}"
+    }
+  ],
+  "tilesets": [],
+  "nextobjectid": 39,
+  "nextlayerid": 15
+}

@@ -1,6 +1,6 @@
 {
   "name": "echo-404-paradox-arena",
-  "version": "14.2.0",
+  "version": "15.0.0",
   "private": true,
   "scripts": {
     "test": "node tests/navigation.cjs && node tests/pilot.cjs && node tests/pilot-sound.cjs && node tests/operator-abilities.cjs && node tests/vertical-campaign.cjs && node tests/paradox-web.cjs",
@@ -8,10 +8,27 @@
     "art:origin": "node scripts/create-origin-art.cjs",
     "art:paradox": "node scripts/create-paradox-art.cjs",
     "art:operators": "node scripts/create-operator-art.cjs",
-    "test:archive": "node tests/worlds.cjs && node tests/paradox.cjs && node tests/paradox-security.cjs && node tests/paradox-combat.cjs"
+    "test:archive": "node tests/worlds.cjs && node tests/paradox.cjs && node tests/paradox-security.cjs && node tests/paradox-combat.cjs",
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "maps:export": "node scripts/export-tiled.cjs",
+    "test:bot": "node tests/continuous-bot.cjs",
+    "test:v15": "node tests/v15.cjs && node tests/cache-upgrade.cjs && node tests/maskable.cjs",
+    "cap:sync": "npm run build && cap sync",
+    "cap:android": "cap add android",
+    "cap:ios": "cap add ios",
+    "test:build": "node tests/build.cjs"
   },
   "devDependencies": {
+    "@capacitor/cli": "8.6.2",
     "@napi-rs/canvas": "0.1.100",
-    "jsdom": "26.1.0"
+    "jsdom": "26.1.0",
+    "vite": "6.4.1"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.6.2",
+    "@capacitor/core": "8.6.2",
+    "@capacitor/ios": "8.6.2"
   }
 }

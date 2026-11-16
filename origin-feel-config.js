@@ -5,7 +5,7 @@
   coyote:.11,jumpBuffer:.12,
   horizontal:{maxSpeed:310,groundAcceleration:1900,airAcceleration:1400,groundBrake:2400,airBrake:650},
   jumps:{shortSpeed:480,highSpeed:700,keyboardReleaseFactor:.5,shortMinHold:.09,highMinHold:.18,touchReleaseFactor:.55},
-  dash:{speed:620,duration:.14,cooldown:1.05},
+  dash:{speed:620,duration:.14,cooldown:1.05,immunity:.06},
   abilities:{
    axiom:{name:'FASE',icon:'◇',duration:1.5,cooldown:8,color:'#77f5df',label:'Escudo de fase',description:'Bloqueia danos enquanto o escudo está ativo. Não evita quedas.'},
    nyra:{name:'DUPLO',icon:'↑↑',jumpSpeed:560,cooldown:4,color:'#dca0ff',label:'Duplo salto',description:'No ar, toca na habilidade para um segundo salto. Uma vez por voo.'},
