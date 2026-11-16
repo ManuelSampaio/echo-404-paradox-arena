@@ -1,6 +1,6 @@
 # ECHO//404 v15 — relatório da atualização final
 
-Data: 16-11-2026. Branch: feat/v15-final-playtest. PR de salvaguarda #41; PR de atualização #42.
+Data: 16-11-2026. Branch: feat/v15-final-playtest. PR de salvaguarda #41; PR de atualização #42; publicação corrigida na PR #43.
 
 ## Alterações por tarefa
 
@@ -24,6 +24,9 @@ Data: 16-11-2026. Branch: feat/v15-final-playtest. PR de salvaguarda #41; PR de 
 - Bot: não reconhecia conclusão no ar e interpretava algumas conclusões como falhas de aterragem; condição corrigida.
 - Bot: não reconhecia touching.down em plataformas dinâmicas; corrigido. Recolha exige caminhada natural sobre os fragmentos. Recuperação usa apenas comandos e checkpoints reais.
 - Dependências: preparação Capacitor atualizada para 8.6.2; npm audit --omit=dev sem vulnerabilidades reportadas no momento da execução. Isto não é uma auditoria completa de segurança.
+
+- Publicação: o token recusou mudar a configuração administrativa do Pages (HTTP 403). Removida essa chamada; deploy normal do artefacto confirmado com sucesso. A origem também suporta imports JSON nativos durante a transição.
+- Navegação: trocar de nível durante o treino deixava painel/destaques antigos; estado visual reposto no início de cada cena. Regressar à missão 1 restaura o título original e escolher o nível atual reinicia-o.
 
 ## Confirmado por teste
 
