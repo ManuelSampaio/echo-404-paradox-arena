@@ -1,0 +1,10 @@
+const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');const c={};c.window=c;for(const f of ['origin-pilot-data.js','origin-tiled.js'])vm.runInNewContext(fs.readFileSync(f,'utf8'),c);
+const maps=c.OriginPilot.levels.map(l=>JSON.parse(fs.readFileSync('maps/'+l.id+'.json'))),levels=maps.map(c.OriginTiled.adapt);assert.equal(levels.length,25);assert.equal(new Set(levels.map(l=>l.id)).size,25);assert.equal(new Set(levels.map(l=>JSON.stringify(l.platforms))).size,25);assert.equal(new Set(levels.map(l=>l.operation.type)).size,6);assert.equal(new Set(levels.map(l=>l.operation.title)).size,25);
+for(const [i,l]of levels.entries()){assert.equal(l.id,c.OriginPilot.levels[i].id);assert.equal(l.world,Math.floor(i/5)+1);assert.equal(l.fragments.length,3);assert.ok(l.route.includes('lift'));for(const r of l.relays)assert.ok(l.platforms.some(p=>Math.abs(p.y-r.y)<1&&r.x>=p.x&&r.x<=p.x+p.w));if(i){assert.ok(l.width>l.height,'horizontal action routes supplement ascent');assert.ok(l.platforms.some((p,k)=>k&&p.y>=l.platforms[k-1].y),'route includes gallery or descent');}if(l.operation.type==='assault')assert.ok(l.enemies.length>=l.operation.required);if(l.world===5)assert.ok(l.echoNode);}
+const invalid=mutate=>{const m=JSON.parse(JSON.stringify(maps[24]));mutate(m);assert.throws(()=>c.OriginTiled.validate(m));};
+invalid(m=>m.layers.find(l=>l.name==='devices').objects[0].width=-1);
+invalid(m=>m.layers.find(l=>l.name==='sensors').objects[1].name=m.layers.find(l=>l.name==='sensors').objects[0].name);
+invalid(m=>{const p=m.properties[0];const v=JSON.parse(p.value);v.links[0].sensor='missing';p.value=JSON.stringify(v)});
+invalid(m=>m.layers.find(l=>l.name==='spawn').objects.push({...m.layers.find(l=>l.name==='spawn').objects[0],id:999}));
+invalid(m=>{const p=m.properties[0],v=JSON.parse(p.value);v.route.push('missing');p.value=JSON.stringify(v)});
+console.log('PASS: 25 distinct action rooms/IDs, six objective types, horizontal/descending routes, echo nodes and negative Tiled graph fixtures');
