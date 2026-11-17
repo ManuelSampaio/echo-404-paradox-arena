@@ -30,6 +30,12 @@ jobs:
       - run: npm run test:bot
       - run: npm run build
       - run: npm run test:build
+      - run: npm run test:v17
+      - run: npm run test:bot:v17
+      - run: npm run build:v17
+      - run: node v17/tests/build.cjs
+      - run: npm run package:pages
+      - run: npm run test:pages
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
