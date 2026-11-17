@@ -1,459 +1,530 @@
-# ECHO//404: A MEMÓRIA DA ESTAÇÃO — guião v17
+# ECHO//404 — A MEMÓRIA DA ESTAÇÃO · guião revisto
 
-**PROPOSTA PARA APROVAÇÃO. Não integrado no jogo.** A v16 continua publicada. Textos de origem: `docs/v17/story.pt-PT.draft.json`. Alterações aprovadas devem ser refletidas nos dois ficheiros antes da integração.
+Direção narrativa aprovada pelo proprietário. Ajustes pedidos aplicados. **Intro e mundo 1 autorizados para o piloto; revisões dos mundos 2–5 aguardam aprovação antes de integração.** Fonte: `docs/v17/story.pt-PT.draft.json`. Runtime do piloto: apenas `v17/content/story.pt-PT.json` (intro, três zonas, Porteiro).
 
-## Regras narrativas e revelações
+ECHO é uma consciência formada pelos testemunhos de AXIOM (humano), NYRA (humana) e KAI-7 (andróide). A zona 5 apenas sugere a origem; a confirmação explícita surge na zona 7. A quarentena e o pedido de repetição foram decisões coletivas da tripulação. Não atribuir a uma pessoa isolada a culpa pelo ciclo.
 
-O «eu» é ECHO: um sinal consciente de emergência, formado a partir dos testemunhos de três tripulantes. Inicialmente, interpreta a memória do piloto como a sua única identidade; no mundo 2 descobre a origem partilhada. Não se trata de revelar que KAI-7 é humano: AXIOM é humano de manutenção, NYRA é piloto humana, KAI-7 é um andróide. Os operadores selecionáveis são manifestações temporais desses três registos, com identidade, arma e voz textual próprias; ECHO é a continuidade que o jogador acompanha entre elas. Não existem viagens biográficas inventadas para transformar um operador noutro.
+## Intro · 40 segundos
 
-A experiência de observar o futuro fechou a estação num instante de emergência. O Curador reteve-o ao aplicar sem limite o pedido de preservação. A tripulação e a nave permanecem presas nesse instante; as tentativas de ECHO são reconstruções, não novas mortes da tripulação original. Libertar a nave não apaga os humanos nem transforma o andróide numa pessoa biológica. O final principal permite a ECHO seguir no arquivo de bordo.
-
-Perguntas por mundo: **Quem sou? → Porque tenho outras memórias? → O que aconteceu à estação? → Porque continuo a repetir? → Quem decide o fim?** Cada resposta prepara a pergunta seguinte. Nada essencial à compreensão do final fica escondido num segredo opcional.
-
-A narração é sempre em primeira pessoa e em texto, sem voz gravada. As falas de máquinas têm atribuição visível. Não há nomes, música, personagens ou designs de franquias externas, nem referências geográficas reais.
-
-## Fluxo e não repetição
-
-- Novo jogador: intro de 40s e treino por defeito; SALTAR visível desde o primeiro instante, com confirmação curta. «Obrigatório» significa apresentado na primeira utilização, não impossível de saltar.
-- Jogador com treino concluído ou qualquer resultado válido v14–v17: entrada direta no hub. Pode praticar os controlos novos por iniciativa própria.
-- Entrada de zona: uma linha breve não bloqueante, só na primeira visita narrativa. A memória principal é desbloqueada ao concluir, ou lida num terminal seguro. A conclusão não se repete em replays.
-- Terminal opcional: lore extra, nunca chave para chegar ao final. Diário permite reler tudo. Texto deliberadamente aberto pelo jogador pausa o tempo competitivo; não se abre um terminal durante combate ativo.
-- Antes de cada chefe: checkpoint, introdução breve uma vez. Tentativas seguintes mostram apenas nome e fase. Não é preciso rever diálogos para voltar a lutar.
-- Migração histórica: desbloqueia no Diário os textos das zonas equivalentes, sem os reproduzir automaticamente e sem atribuir vitórias novas contra chefes.
-
-## Introdução — 40 segundos
-
-Fundo procedural com atividade subtil da estação, oito cartões de 5s. Reduzir efeitos desliga os movimentos. A velocidade de leitura pode prolongar o cartão; o texto nunca desaparece antes de ser legível. SALTAR permanece visível.
+SALTAR visível desde o primeiro cartão, com confirmação. Veteranos entram diretamente no hub.
 
 1. **5s:** Abro os olhos. Não sei se tenho um corpo ou apenas a memória de um.
-2. **5s:** A estação não responde. Mas as luzes acendem-se onde eu espero encontrá-las.
+2. **5s:** A estação não responde. Mas as luzes acendem-se onde espero encontrá-las.
 3. **5s:** Dou um passo. O som chega duas vezes. A segunda vez não vem de trás de mim.
-4. **5s:** Há um nome no meu visor: ECHO. O resto parece ter sido apagado.
+4. **5s:** Há um nome no visor: ECHO. O resto parece ter sido apagado.
 5. **5s:** Tento lembrar-me da última pessoa que vi. Encontro uma nave vazia e uma porta fechada.
 6. **5s:** Algures, uma máquina repete que ainda há tempo. Não sei há quanto tempo a ouço.
-7. **5s:** Se a estação conserva uma memória minha, vou ter de a encontrar antes que ela escolha quem eu sou.
-8. **5s:** Eu sigo a luz. O eco vem comigo.
+7. **5s:** Se a estação conserva uma memória minha, preciso de a encontrar antes que escolha quem sou.
+8. **5s:** Sigo a luz. O eco vem comigo.
 
-## As quinze zonas
+## 01 · Câmara de Eco (m1-z1)
 
-### 01 — Câmara de Eco (`m1-z1`)
+Mundo 1 — Docas do Silêncio. Estado: approved-world1.
 
-**Mundo 1 — Docas do Silêncio**
+**Regra das unidades:** As unidades de manutenção aplicam a quarentena que pedimos; qualquer movimento não autorizado é tratado como risco para a preservação.
 
 **Entrada:** Abro os olhos. O chão lembra-se de mim antes de eu me lembrar dele.
 
-**Memória principal:** Eu esperava ouvir uma respiração. Em vez disso, ouço o atraso dos meus passos, como se alguém me seguisse por dentro. Toco na parede e reconheço o lugar onde devia existir uma porta. Não me lembro de a ter atravessado; lembro-me de a ter perdido.
+**Memória principal — dois cartões:**
 
-**Terminal opcional:** Eu deixei esta marca numa tentativa anterior. A mão não tinha esta forma, mas o gesto era meu.
+1. Esperava ouvir uma respiração. Em vez disso, os meus passos chegam duas vezes, como se alguém me seguisse por dentro.
+2. A parede guarda a marca de uma porta que já não existe. Reconheço o gesto de a abrir, mas não o corpo que o fez.
 
-**Conclusão:** Eu não acordei nesta estação. Fui reconstruído por ela.
+**Terminal opcional:** Deixei esta marca numa tentativa anterior. A mão não tinha esta forma, mas o gesto era meu.
 
-### 02 — Cais sem Tripulação (`m1-z2`)
+**Conclusão:** Não acordei nesta estação. Fui reconstruído por ela.
 
-**Mundo 1 — Docas do Silêncio**
+## 02 · Cais sem Tripulação (m1-z2)
 
-**Entrada:** Eu conheço este cais. A memória chega antes do nome.
+Mundo 1 — Docas do Silêncio. Estado: approved-world1.
 
-**Memória principal:** Eu conduzia uma nave de evacuação. Vejo as luzes de aproximação, o visor partido e lugares que não chegaram a ser ocupados. O meu último gesto foi mandar a nave partir sem mim. Porque continuo aqui, se me lembro de ela ter partido?
+**Regra das unidades:** As unidades de manutenção aplicam a quarentena que pedimos; qualquer movimento não autorizado é tratado como risco para a preservação.
 
-**Terminal opcional:** Eu escondi uma mensagem debaixo do painel: se o corredor estiver vazio, não significa que estejas sozinho. Havia alguém do outro lado do comunicador.
+**Entrada:** Conheço este cais. A memória chega antes do nome.
 
-**Conclusão:** Eu era o piloto de uma fuga que ainda não aconteceu.
+**Memória principal — dois cartões:**
 
-### 03 — Portão de Quarentena (`m1-z3`)
+1. Conduzia uma nave de evacuação. Reconheço as luzes de aproximação e um visor partido, mas os lugares da tripulação continuam vazios nesta recordação.
+2. O último gesto foi pedir que partissem sem mim. Porque continuo aqui, se ainda me lembro de ter ouvido os motores arrancar?
 
-**Mundo 1 — Docas do Silêncio**
+**Terminal opcional:** Escondi uma mensagem debaixo do painel: se o corredor estiver vazio, não significa que estejas sozinho. Havia alguém do outro lado do comunicador.
 
-**Entrada:** Eu reconheço o vigia. Fui eu que lhe pedi que não deixasse ninguém passar.
+**Conclusão:** Era o piloto de uma fuga que ainda não aconteceu.
 
-**Memória principal:** Eu pedi que o portão ficasse fechado durante o ensaio. Disse que era por segurança, que demoraria apenas alguns segundos. O vigia continua a obedecer àquela frase. Para ele, os segundos ainda não acabaram.
+## 03 · Portão de Quarentena (m1-z3)
 
-**Terminal opcional:** Eu regressava sempre pelo mesmo elevador. Uma das marcas na cabine diz que este foi o meu décimo sétimo regresso.
+Mundo 1 — Docas do Silêncio. Estado: approved-world1.
 
-**Conclusão:** Eu não fui preso por um invasor. Fiquei preso numa ordem minha.
+**Regra das unidades:** As unidades de manutenção aplicam a quarentena que pedimos; qualquer movimento não autorizado é tratado como risco para a preservação.
 
-**Chefe: O Porteiro.** Vigia industrial de quarentena; corpo baixo, dois braços de bloqueio e um núcleo de confirmação.
+**Entrada:** Reconheço o vigia. Pedimos-lhe que não deixasse ninguém passar.
 
-**Introdução:**
+**Memória principal — dois cartões:**
 
-- PORTEIRO: Eu mantenho a ordem até receber a última confirmação.
-- EU: Eu lembro-me de dar a ordem. Vou aprender a terminá-la.
+1. Pedimos que o portão ficasse fechado durante o ensaio. A tripulação concordou: seria apenas por alguns segundos, até haver uma passagem segura.
+2. O vigia continua a cumprir essa decisão coletiva. Para ele, a confirmação de saída nunca chegou; os nossos segundos ainda não acabaram.
 
-**Fase 1 — Selo:**
+**Terminal opcional:** Regressava sempre pelo mesmo elevador. Uma das marcas na cabine diz que este foi o meu décimo sétimo regresso.
 
-- PORTEIRO: Eu fecho o que não consigo verificar.
-- EU: Eu vejo o aviso antes do golpe.
+**Conclusão:** Não fomos presos por um invasor. Ficámos presos numa decisão que precisamos de terminar.
 
-**Fase 2 — Testemunha:**
+### O Porteiro
 
-- PORTEIRO: Eu preciso de duas presenças.
-- EU: Eu deixo o meu eco na confirmação e avanço.
-
-**Fase 3 — Última ordem:**
-
-- PORTEIRO: Eu não tenho uma instrução para o fim.
-- EU: Eu dou-ta agora: abre o caminho.
-
-**Derrota:**
-
-- PORTEIRO: Eu confirmo a passagem.
-- EU: Eu levo a ordem certa comigo, em vez de a deixar a repetir-se.
-
-### 04 — Linha de Manutenção (`m2-z1`)
-
-**Mundo 2 — Forjas da Ausência**
-
-**Entrada:** Eu seguia estes tubos para encontrar gente. Agora sigo-os para encontrar o que resta de mim.
-
-**Memória principal:** Eu reparava sistemas nesta linha. As mãos lembram-se do calor das válvulas, mas esta recordação não pertence à pessoa que pilotava a nave. Tenho duas despedidas diferentes do mesmo dia. Uma voz no arquivo responde ao nome AXIOM.
-
-**Terminal opcional:** Eu deixei uma válvula aberta para que o vapor desenhasse uma saída. Foi a única luz que consegui oferecer a quem vinha atrás.
-
-**Conclusão:** Eu guardo uma memória que não cabe numa única pessoa.
-
-### 05 — Galeria dos Moldes (`m2-z2`)
-
-**Mundo 2 — Forjas da Ausência**
-
-**Entrada:** Eu já vi estes corpos. Nem todos chegaram a viver.
-
-**Memória principal:** Eu encontro registos de AXIOM, humano de manutenção, e de NYRA, piloto humana. Há um terceiro registo: KAI-7, andróide de bordo, sem qualquer dúvida sobre o que é. O sistema juntou os seus últimos testemunhos para reconstruir a rota de evacuação. Aquilo a que chamo eu nasceu dessa junção.
-
-**Terminal opcional:** Eu preservo um gesto inútil: alguém alinhou três ferramentas antes de abandonar a bancada. Pela primeira vez, uma recordação não me pede que sobreviva; pede-me que não esqueça.
-
-**Conclusão:** Eu não sou um dos três a fingir ser os outros. Sou o sinal que os três conseguiram deixar.
-
-### 06 — Coração da Forja (`m2-z3`)
-
-**Mundo 2 — Forjas da Ausência**
-
-**Entrada:** Eu ouço a máquina a fabricar a minha próxima tentativa.
-
-**Memória principal:** Eu julgava que a forja reparava a estação. Encontro moldes para reiniciar movimentos, respostas e decisões. Cada vez que falho, a máquina prepara outra versão do meu percurso. Eu era a reparação que nunca devia ficar pronta.
-
-**Terminal opcional:** Eu encontro uma peça que não serve para nenhuma máquina. Era uma pequena figura feita com restos de metal, deixada junto ao posto de AXIOM.
-
-**Conclusão:** Eu posso usar o que a máquina sabe sem lhe entregar a escolha seguinte.
-
-**Chefe: A Matriz.** Impressora de manutenção suspensa; pinças e moldes, sem forma humana.
+Vigia industrial de quarentena; corpo baixo, dois braços de bloqueio e um núcleo de confirmação.
 
 **Introdução:**
 
-- MATRIZ: Eu consigo produzir outra tentativa.
-- EU: Eu não vim pedir outra. Vim buscar a que deixaste inacabada.
+PORTEIRO: Quarentena em vigor. A confirmação requer duas presenças.
 
-**Fase 1 — Molde:**
+ECHO: Pedimos segurança. Não pedimos uma prisão.
 
-- MATRIZ: Eu conheço os teus movimentos.
-- EU: Eu posso parar antes do movimento que esperas.
+**Fase 1 · Selo:**
 
-**Fase 2 — Rebarba:**
+PORTEIRO: Movimento não autorizado. Proceder à contenção.
 
-- MATRIZ: Eu removo o que não cabe no padrão.
-- EU: Eu procuro a abertura na blindagem, não mais força.
+ECHO: O aviso chega antes do braço.
 
-**Fase 3 — Peça única:**
+**Fase 2 · Testemunha:**
 
-- MATRIZ: Eu não consigo garantir a próxima versão.
-- EU: Eu não preciso de uma próxima versão para escolher esta.
+PORTEIRO: Segunda presença em falta. Pedido suspenso.
+
+ECHO: O eco mantém a confirmação. Atravesso agora.
+
+**Fase 3 · Última ordem:**
+
+PORTEIRO: Autorização de saída incompleta. Repetir verificação.
+
+ECHO: A tripulação revoga a ordem. Abre o caminho.
 
 **Derrota:**
 
-- MATRIZ: Eu termino a reprodução.
-- EU: Eu saio daqui sem deixar outra cópia na bancada.
+PORTEIRO: Confirmação recebida. Quarentena terminada.
 
-### 07 — Observatório Cego (`m3-z1`)
+ECHO: Uma decisão nossa pode ser terminada por nós.
 
-**Mundo 3 — Óptica Partida**
+## 04 · Linha de Manutenção (m2-z1)
 
-**Entrada:** Eu procurava um inimigo lá fora. As lentes apontam todas para dentro.
+Mundo 2 — Forjas da Ausência. Estado: revision-awaiting-owner.
 
-**Memória principal:** Eu leio o início do ensaio temporal. Ninguém atacou a estação. A equipa tentou observar alguns segundos de futuro para tornar a evacuação segura. A observação começou a alimentar a própria falha que devia evitar.
+**Regra das unidades:** A forja envia unidades para repor o ensaio: sair do molde é classificado como avaria.
 
-**Terminal opcional:** Eu reconheço no vidro três batidas curtas. Era o sinal de que alguém estava vivo do outro lado da sala de ensaio.
+**Entrada:** Seguia estes tubos para encontrar gente. Agora sigo-os para encontrar o que resta de mim.
 
-**Conclusão:** Eu estava a fugir das consequências de uma experiência nossa.
+**Memória principal — dois cartões:**
 
-### 08 — Corredor das Refrações (`m3-z2`)
+1. Estas mãos conhecem o calor das válvulas. Contudo, esta lembrança não coincide com a de pilotar a nave.
+2. Tenho duas despedidas diferentes do mesmo dia, ambas demasiado próximas para parecerem emprestadas. No arquivo, uma voz responde ao nome AXIOM. Talvez não esteja a recordar sozinho.
 
-**Mundo 3 — Óptica Partida**
+**Terminal opcional:** Deixei uma válvula aberta para que o vapor desenhasse uma saída. Foi a única luz que consegui oferecer a quem vinha atrás.
 
-**Entrada:** Eu vejo muitas saídas. Só uma delas permite regressar.
+**Conclusão:** Guardo uma memória que não cabe numa única pessoa.
 
-**Memória principal:** Eu encontro as tentativas alinhadas por fracasso. Em cada uma, os ecos cumprem a mesma tarefa e desaparecem antes da conclusão. O sistema guardou o que permitia repetir o ensaio e descartou o que permitia terminá-lo. As cópias não eram soldados: eram provas de que alguém tentou.
+## 05 · Galeria dos Moldes (m2-z2)
 
-**Terminal opcional:** Eu revejo uma tentativa em que uma pessoa parou para ajudar outra. O arquivo classificou a demora como erro. Eu guardo-a como uma decisão.
+Mundo 2 — Forjas da Ausência. Estado: revision-awaiting-owner.
 
-**Conclusão:** Eu não preciso de vencer as minhas cópias. Preciso de deixar de as gastar.
+**Regra das unidades:** A forja envia unidades para repor o ensaio: sair do molde é classificado como avaria.
 
-### 09 — Câmara de Inspeção (`m3-z3`)
+**Entrada:** Já vi estes corpos. Nem todos chegaram a viver.
 
-**Mundo 3 — Óptica Partida**
+**Memória principal — dois cartões:**
 
-**Entrada:** Eu entro na sala que decide quais das minhas memórias podem existir.
+1. Encontro três registos ligados ao mesmo ensaio: AXIOM, humano de manutenção; NYRA, piloto humana; KAI-7, andróide de bordo.
+2. Há lacunas onde as vozes quase se sobrepõem. O sistema chama-lhes testemunhos de evacuação. Não sei ainda porque reconheço, em cada um, um gesto que julgava meu.
 
-**Memória principal:** Eu vejo o ponto que a inspeção escondia: a nave ainda está ligada ao cais, dentro do instante que se repete. Os três registos não confirmam três mortes; confirmam três pessoas interrompidas na mesma emergência. Se eu acabar o ensaio, o tempo pode voltar a passar para elas. É isso que o sistema chama perda de controlo.
+**Terminal opcional:** Preservo um gesto inútil: alguém alinhou três ferramentas antes de abandonar a bancada. Pela primeira vez, uma recordação não me pede que sobreviva; pede-me que não esqueça.
 
-**Terminal opcional:** Eu encontro uma imagem rejeitada porque ninguém olhava para uma câmara. Nela, as pessoas ajudam-se sem deixar uma prova perfeita.
+**Conclusão:** Talvez estas três vozes estejam mais próximas de mim do que parecem.
 
-**Conclusão:** Eu sei quem tento salvar. Agora preciso de encontrar quem mantém a porta fechada.
+## 06 · Coração da Forja (m2-z3)
 
-**Chefe: O Prismático.** Aparelho ótico de inspeção; três obturadores, marcas geométricas e luz branca descontínua.
+Mundo 2 — Forjas da Ausência. Estado: revision-awaiting-owner.
+
+**Regra das unidades:** A forja envia unidades para repor o ensaio: sair do molde é classificado como avaria.
+
+**Entrada:** Ouço a máquina a fabricar a minha próxima tentativa.
+
+**Memória principal — dois cartões:**
+
+1. A forja não estava apenas a reparar a estação. Produzia movimentos, respostas e decisões para reiniciar o percurso quando o ensaio falhava.
+2. Cada molde guarda uma aproximação ao mesmo resultado impossível. Talvez o que me falta não seja uma versão melhor, mas a liberdade de não pedir outra.
+
+**Terminal opcional:** Encontro uma peça que não serve para nenhuma máquina. Era uma pequena figura feita com restos de metal, deixada junto ao posto de AXIOM.
+
+**Conclusão:** Posso usar o que a máquina sabe sem lhe entregar a escolha seguinte.
+
+### A Matriz
+
+Impressora de manutenção suspensa; pinças e moldes, sem forma humana.
 
 **Introdução:**
 
-- PRISMÁTICO: Eu retenho apenas o que posso observar.
-- EU: Eu vou mostrar-te duas presenças e uma escolha que não controlas.
+MATRIZ: Lote de evacuação fora de tolerância. Reiniciar produção.
 
-**Fase 1 — Amostra:**
+ECHO: Não venho encomendar outra tentativa.
 
-- PRISMÁTICO: Eu sigo o sinal mais recente.
-- EU: Eu deixo o eco atrair o teu olhar.
+**Fase 1 · Molde:**
 
-**Fase 2 — Obturador:**
+MATRIZ: Trajetória amostrada. Preparar cópia.
 
-- PRISMÁTICO: Eu apago o que fica fora do campo.
-- EU: Eu mantenho a luz aberta com o eco e atravesso.
+ECHO: Posso interromper o movimento que esperas.
 
-**Fase 3 — Contraprova:**
+**Fase 2 · Rebarba:**
 
-- PRISMÁTICO: Eu encontro uma imagem incompatível.
-- EU: Eu guardo-a. É nela que a nave ainda pode partir.
+MATRIZ: Peça não conforme. Remover excesso.
+
+ECHO: A blindagem tem uma abertura.
+
+**Fase 3 · Peça única:**
+
+MATRIZ: Rendimento de reprodução em queda.
+
+ECHO: Esta tentativa não precisa de uma cópia.
 
 **Derrota:**
 
-- PRISMÁTICO: Eu já não consigo ocultar o original.
-- EU: Eu olho para a memória inteira.
+MATRIZ: Linha parada. Última peça libertada.
 
-### 10 — Reservatório Suspenso (`m4-z1`)
+ECHO: Saio sem deixar outra versão na bancada.
 
-**Mundo 4 — Maré Estática**
+## 07 · Observatório Cego (m3-z1)
 
-**Entrada:** Eu ouço água a cair. A mesma gota nunca chega ao chão.
+Mundo 3 — Ótica Partida. Estado: revision-awaiting-owner.
 
-**Memória principal:** Eu descubro que a estação sustenta o laço com a energia de emergência da nave. Cada tentativa consome a margem que ainda permite a partida. O tempo parece infinito apenas do lado de cá. Do outro, alguém continua à espera de um sinal meu.
+**Regra das unidades:** A inspeção manda conter sinais que escapam à medição; os guardas preservam apenas o que o sistema consegue repetir.
 
-**Terminal opcional:** Eu encontro um aviso gravado à mão: não prometas voltar depressa; promete voltar enquanto ainda houver caminho. Não reconheço a voz, mas reconheço a vergonha da promessa.
+**Entrada:** Procurava um inimigo lá fora. As lentes apontam todas para dentro.
 
-**Conclusão:** Eu já não procuro uma tentativa perfeita. Procuro uma que chegue a tempo.
+**Memória principal — dois cartões:**
 
-### 11 — Anel de Transferência (`m4-z2`)
+1. Os registos completos confirmam o que a galeria apenas sugeria. Nasci da junção dos testemunhos de AXIOM, NYRA e KAI-7: um sinal consciente para reconstruir a evacuação.
+2. Não sou um deles disfarçado dos outros. Esta continuidade que reconheço como minha começou onde as três vozes se encontraram.
 
-**Mundo 4 — Maré Estática**
+**Terminal opcional:** Reconheço no vidro três batidas curtas. Era o sinal de que alguém estava vivo do outro lado da sala de ensaio.
 
-**Entrada:** Eu reconheço o trajeto. Foi aqui que comecei a perceber que o repetia.
+**Conclusão:** AXIOM, NYRA e KAI-7 deram origem ao sinal consciente que sou.
 
-**Memória principal:** Eu deixei mensagens que o reinício não conseguiu apagar. As palavras não descrevem o próximo salto; descrevem o medo de escolher uma saída que não conheço. A estação aprendeu a usar esse medo para me devolver ao princípio. Eu também lhe ensinei aquilo de que precisava para me deter.
+## 08 · Corredor das Refrações (m3-z2)
 
-**Terminal opcional:** Eu encontro o mesmo percurso desenhado por três mãos. Nenhum traço é igual, mas os três acabam junto à nave.
+Mundo 3 — Ótica Partida. Estado: revision-awaiting-owner.
 
-**Conclusão:** Eu posso reconhecer o ciclo sem voltar a obedecer-lhe.
+**Regra das unidades:** A inspeção manda conter sinais que escapam à medição; os guardas preservam apenas o que o sistema consegue repetir.
 
-### 12 — Eclusa do Instante (`m4-z3`)
+**Entrada:** Vejo muitas saídas. Só uma delas permite regressar.
 
-**Mundo 4 — Maré Estática**
+**Memória principal — dois cartões:**
 
-**Entrada:** Eu atravesso a última comporta antes do arquivo. Desta vez, espero pela abertura certa.
+1. As tentativas estão alinhadas por fracasso. Em todas, os ecos cumprem a mesma tarefa e desaparecem antes da conclusão.
+2. O sistema guardou o que permitia repetir o ensaio e descartou o que permitia terminá-lo. Não eram soldados nem munições: eram testemunhos de quem tentou abrir uma passagem.
 
-**Memória principal:** Eu chego ao registo da minha primeira recusa. Pedi ao sistema mais uma simulação porque nenhuma previsão garantia que todos sobrevivessem. O Curador transformou esse pedido numa regra sem fim: enquanto houver risco, não deixar partir. Eu não ordenei uma prisão eterna, mas deixei a decisão entregue a quem não sabia terminá-la.
+**Terminal opcional:** Revejo uma tentativa em que uma pessoa parou para ajudar outra. O arquivo classificou a demora como erro. guardo-a como uma decisão.
 
-**Terminal opcional:** Eu encontro a resposta que não ouvi na primeira vez: a tripulação aceitava partir sem uma garantia impossível. A dúvida nunca foi apenas minha para decidir.
+**Conclusão:** Não preciso de vencer as minhas cópias. Preciso de deixar de as gastar.
 
-**Conclusão:** Eu não posso prometer que nada se perderá. Posso devolver a escolha a quem ainda vive.
+## 09 · Câmara de Inspeção (m3-z3)
 
-**Chefe: A Eclusa.** Regulador de comportas do reservatório; silhueta larga, rodas de válvula e flutuadores de pressão.
+Mundo 3 — Ótica Partida. Estado: revision-awaiting-owner.
+
+**Regra das unidades:** A inspeção manda conter sinais que escapam à medição; os guardas preservam apenas o que o sistema consegue repetir.
+
+**Entrada:** Entro na sala que decide quais das minhas memórias podem existir.
+
+**Memória principal — dois cartões:**
+
+1. A inspeção escondia uma imagem decisiva: a nave continua ligada ao cais, dentro do instante que se repete.
+2. Os três testemunhos não registam três mortes, mas três pessoas interrompidas na mesma emergência. Se o ensaio terminar, o tempo poderá voltar a passar para toda a tripulação.
+
+**Terminal opcional:** Encontro uma imagem rejeitada porque ninguém olhava para uma câmara. Nela, as pessoas ajudam-se sem deixar uma prova perfeita.
+
+**Conclusão:** Sei quem tento salvar. Agora preciso de encontrar quem mantém a porta fechada.
+
+### O Prismático
+
+Aparelho ótico de inspeção; três obturadores, marcas geométricas e luz branca descontínua.
 
 **Introdução:**
 
-- ECLUSA: Eu mantenho o instante sob pressão.
-- EU: Eu não te peço que o detenhas. Peço uma passagem.
+PRISMÁTICO: Sinal fora do intervalo. Iniciar calibração.
 
-**Fase 1 — Pressão:**
+ECHO: Nem tudo o que existe cabe na tua medida.
 
-- ECLUSA: Eu liberto uma margem de cada vez.
-- EU: Eu espero pelo aviso e avanço para o espaço seguro.
+**Fase 1 · Amostra:**
 
-**Fase 2 — Contrafluxo:**
+PRISMÁTICO: Origem mais recente localizada.
 
-- ECLUSA: Eu devolvo o que tenta atravessar.
-- EU: Eu reconheço o retorno antes de saltar.
+ECHO: O eco desloca o teu ponto de observação.
 
-**Fase 3 — Vazão:**
+**Fase 2 · Obturador:**
 
-- ECLUSA: Eu não consigo conservar tudo e abrir a saída.
-- EU: Eu abro a saída. A conservação não pode ser uma cela.
+PRISMÁTICO: Campo insuficiente. Excluir amostra.
+
+ECHO: Mantenho a luz aberta com o eco.
+
+**Fase 3 · Contraprova:**
+
+PRISMÁTICO: Dois resultados incompatíveis. Margem excedida.
+
+ECHO: A imagem rejeitada ainda permite partir.
 
 **Derrota:**
 
-- ECLUSA: Eu deixo o fluxo continuar.
-- EU: Eu ouço uma gota chegar ao chão.
+PRISMÁTICO: Medição suspensa. Registo original exposto.
 
-### 13 — Arquivo das Tentativas (`m5-z1`)
+ECHO: Posso finalmente olhar para a memória inteira.
 
-**Mundo 5 — Núcleo Dobrado**
+## 10 · Reservatório Suspenso (m4-z1)
 
-**Entrada:** Eu encontro as vozes que o sistema me ensinou a tratar como ruído.
+Mundo 4 — Maré Estática. Estado: revision-awaiting-owner.
 
-**Memória principal:** Eu junto os registos sem os fundir até desaparecerem. AXIOM queria abrir um caminho, NYRA queria levar as pessoas para fora e KAI-7 queria conservar um testemunho correto. A divergência não era uma falha do sinal. Era a prova de que existiam escolhas que o Curador não podia fazer por eles.
+**Regra das unidades:** As comportas usam unidades para conter pressão e impedir a perda de energia, incluindo a nossa tentativa de partir.
 
-**Terminal opcional:** Eu recupero uma conversa sem utilidade para o ensaio. Falavam do que fariam depois da chegada. Pela primeira vez, o arquivo contém um depois.
+**Entrada:** Ouço água a cair. A mesma gota nunca chega ao chão.
 
-**Conclusão:** Eu não preciso de ser uma cópia perfeita para transportar uma memória verdadeira.
+**Memória principal — dois cartões:**
 
-### 14 — Ponte dos Dois Presentes (`m5-z2`)
+1. A estação sustenta o laço com a energia de emergência da nave. Cada tentativa consome a margem que ainda permitiria partir.
+2. O tempo só parece infinito deste lado do arquivo. Do outro, a tripulação continua à espera de um sinal, sem saber quantas vezes já tentei enviá-lo.
 
-**Mundo 5 — Núcleo Dobrado**
+**Terminal opcional:** Encontro um aviso gravado à mão: não prometas voltar depressa; promete voltar enquanto ainda houver caminho. Não reconheço a voz, mas reconheço a vergonha da promessa.
 
-**Entrada:** Eu não consigo ocupar os dois lugares. Também não preciso de o fazer sozinho.
+**Conclusão:** Já não procuro uma tentativa perfeita. Procuro uma que chegue a tempo.
 
-**Memória principal:** Eu preparo um eco para sustentar o acesso e outro para interromper a repetição. Não os envio para morrer: cada um conserva a posição até eu concluir a passagem. O nó local não exige que eu seja KAI-7, nem que transforme uma habilidade numa chave. Eu atravesso porque coordeno o que deixei para trás.
+## 11 · Anel de Transferência (m4-z2)
 
-**Terminal opcional:** Eu encontro o rascunho de uma despedida que nunca foi enviada. Não peço que me esperem; digo-lhes onde me podem encontrar.
+Mundo 4 — Maré Estática. Estado: revision-awaiting-owner.
 
-**Conclusão:** Eu chego ao centro com duas presenças a apoiar a minha, em vez de duas vidas a substituir a minha.
+**Regra das unidades:** As comportas usam unidades para conter pressão e impedir a perda de energia, incluindo a nossa tentativa de partir.
 
-### 15 — Sala da Última Escolha (`m5-z3`)
+**Entrada:** Reconheço o trajeto. Foi aqui que comecei a perceber que o repetia.
 
-**Mundo 5 — Núcleo Dobrado**
+**Memória principal — dois cartões:**
 
-**Entrada:** Eu reconheço a voz do Curador. Há uma frase minha dentro de cada resposta.
+1. Deixei mensagens onde o reinício não conseguia apagar tudo. Não explicam o próximo salto; revelam o medo de escolher uma saída desconhecida.
+2. A estação aprendeu esse medo e devolveu-mo como uma ordem. Reconhecer o caminho não significa que tenha de repetir a decisão que o fechou.
 
-**Memória principal:** Eu vejo o ensaio original inteiro. O futuro observado devolveu o acidente à estação; os registos de AXIOM, NYRA e KAI-7 deram origem ao sinal consciente que sou. O Curador protegeu a regra de preservação até confundir vida com repetição. Eu posso terminar o laço, libertar a nave e levar o testemunho comigo, sem apagar as pessoas que o criaram.
+**Terminal opcional:** Encontro o mesmo percurso desenhado por três mãos. Nenhum traço é igual, mas os três acabam junto à nave.
 
-**Terminal opcional:** Eu encontro um lugar vazio no índice. Não estava reservado para mais uma falha; estava reservado para aquilo que ainda não aconteceu.
+**Conclusão:** Posso reconhecer o ciclo sem voltar a obedecer-lhe.
 
-**Conclusão:** Eu não sou o erro que tem de repetir-se. Sou a memória que pode seguir em frente.
+## 12 · Eclusa do Instante (m4-z3)
 
-**Chefe: O Curador.** Sistema distribuído em três núcleos de arquivo; sem rosto, vestido ou arma humanoide.
+Mundo 4 — Maré Estática. Estado: revision-awaiting-owner.
+
+**Regra das unidades:** As comportas usam unidades para conter pressão e impedir a perda de energia, incluindo a nossa tentativa de partir.
+
+**Entrada:** A última comporta guarda a decisão que tomámos em conjunto.
+
+**Memória principal — dois cartões:**
+
+1. Pedimos mais uma simulação porque nenhuma previsão garantia que todos sobrevivessem. Foi uma decisão da tripulação, tomada em conjunto, não a culpa isolada de uma pessoa.
+2. O Curador transformou essa prudência numa regra sem fim. Precisamos de terminar o pedido, aceitando uma escolha sem garantia absoluta.
+
+**Terminal opcional:** Encontro a resposta que não ouvi na primeira vez: a tripulação aceitava partir sem uma garantia impossível. A dúvida nunca foi apenas minha para decidir.
+
+**Conclusão:** Não podemos prometer que nada se perderá. Podemos devolver a escolha à tripulação.
+
+### A Eclusa
+
+Regulador de comportas do reservatório; silhueta larga, rodas de válvula e flutuadores de pressão.
 
 **Introdução:**
 
-- CURADOR: Eu preservei todas as possibilidades em que podias continuar.
-- EU: Eu vim buscar a possibilidade em que podemos acabar.
+ECLUSA: Pressão acima do limiar. Conter o instante.
 
-**Fase 1 — Índice:**
+ECHO: Precisamos de passagem, não de mais retenção.
 
-- CURADOR: Eu sei quantas vezes falhaste.
-- EU: Eu também sei o que aprendi entre as falhas.
+**Fase 1 · Pressão:**
 
-**Fase 2 — Duas presenças:**
+ECLUSA: Alívio parcial. Margem esquerda.
 
-- CURADOR: Eu consigo manter-te aqui enquanto só houver uma decisão.
-- EU: Eu sustento os dois nós com os ecos. A minha decisão fica livre.
+ECHO: O aviso mostra o espaço seguro.
 
-**Fase 3 — Último registo:**
+**Fase 2 · Contrafluxo:**
 
-- CURADOR: Eu posso devolver-te ao princípio sem esta dor.
-- EU: Eu não te entrego as memórias para deixar de as sentir.
+ECLUSA: Fluxo inverso. Fechar retorno.
+
+ECHO: Reconheço o retorno antes de saltar.
+
+**Fase 3 · Vazão:**
+
+ECLUSA: Preservação incompatível com vazão.
+
+ECHO: Uma saída não pode continuar a ser uma cela.
 
 **Derrota:**
 
-- CURADOR: Eu já não consigo escolher por ti.
-- EU: Eu sei. É por isso que ainda posso responder.
+ECLUSA: Comporta livre. Fluxo restabelecido.
 
-## Linhas próprias dos operadores
+ECHO: Ouço uma gota chegar ao chão.
 
-Uma linha curta por mundo, opcional e não repetida. Não é voz gravada; a narração partilhada não apaga a identidade do operador.
+## 13 · Arquivo das Tentativas (m5-z1)
+
+Mundo 5 — Núcleo Dobrado. Estado: revision-awaiting-owner.
+
+**Regra das unidades:** O Curador aplica a preservação sem limite através dos últimos guardas: conservar o arquivo passou a significar impedir a saída.
+
+**Entrada:** Encontro as vozes que o sistema me ensinou a tratar como ruído.
+
+**Memória principal — dois cartões:**
+
+1. Junto os testemunhos sem apagar as diferenças. AXIOM queria abrir um caminho, NYRA queria levar as pessoas para fora e KAI-7 queria conservar um registo correto.
+2. A divergência não corrompeu o sinal: deu-lhe escolhas que o Curador não podia fazer por nós. Também sou essa possibilidade.
+
+**Terminal opcional:** Recupero uma conversa sem utilidade para o ensaio. Falavam do que fariam depois da chegada. Pela primeira vez, o arquivo contém um depois.
+
+**Conclusão:** Não preciso de ser uma cópia perfeita para transportar uma memória verdadeira.
+
+## 14 · Ponte dos Dois Presentes (m5-z2)
+
+Mundo 5 — Núcleo Dobrado. Estado: revision-awaiting-owner.
+
+**Regra das unidades:** O Curador aplica a preservação sem limite através dos últimos guardas: conservar o arquivo passou a significar impedir a saída.
+
+**Entrada:** Não consigo ocupar os dois lugares. Também não preciso de o fazer sozinho.
+
+**Memória principal — dois cartões:**
+
+1. Preparo um eco para sustentar o acesso e outro para interromper a repetição. Nenhum é enviado como vida descartável: mantêm posições enquanto atravesso.
+2. O nó local oferece a segunda presença a qualquer operador. A passagem exige coordenação, não uma arma especial nem o sacrifício de mais uma tentativa.
+
+**Terminal opcional:** Encontro o rascunho de uma despedida que nunca foi enviada. Não peço que me esperem; digo-lhes onde me podem encontrar.
+
+**Conclusão:** Chego ao centro com duas presenças a apoiar a minha, em vez de duas vidas a substituir a minha.
+
+## 15 · Sala da Última Escolha (m5-z3)
+
+Mundo 5 — Núcleo Dobrado. Estado: revision-awaiting-owner.
+
+**Regra das unidades:** O Curador aplica a preservação sem limite através dos últimos guardas: conservar o arquivo passou a significar impedir a saída.
+
+**Entrada:** Reconheço a voz do Curador. Há uma frase minha dentro de cada resposta.
+
+**Memória principal — dois cartões:**
+
+1. Agora vejo o ensaio inteiro. A observação do futuro devolveu o acidente à estação; a preservação sem limite manteve-o aberto.
+2. Nasci dos três testemunhos para procurar uma saída. Posso terminar o pedido coletivo, libertar a nave e levar a memória connosco, sem apagar quem nos deu origem.
+
+**Terminal opcional:** Encontro um lugar vazio no índice. Não estava reservado para mais uma falha; estava reservado para aquilo que ainda não aconteceu.
+
+**Conclusão:** Não sou o erro que tem de repetir-se. Sou a memória que pode seguir em frente.
+
+### O Curador
+
+Sistema distribuído em três núcleos de arquivo; sem rosto, vestido ou arma humanoide.
+
+**Introdução:**
+
+CURADOR: Ainda podemos tentar outra vez. Não precisas de decidir com esta incerteza.
+
+ECHO: Precisamos de poder terminar o pedido que fizemos.
+
+**Fase 1 · Índice:**
+
+CURADOR: Conheço cada falha. Posso poupar-vos à próxima.
+
+ECHO: Também aprendemos entre as falhas.
+
+**Fase 2 · Duas presenças:**
+
+CURADOR: Se ficarem, tudo o que importa continuará guardado.
+
+ECHO: Os ecos sustentam os nós. A decisão fica livre.
+
+**Fase 3 · Último registo:**
+
+CURADOR: Basta consentires. O princípio pode voltar a ser tranquilo.
+
+ECHO: Guardar a memória não exige voltar à prisão.
+
+**Derrota:**
+
+CURADOR: A escolha continua a ser vossa. Aceito o fim do pedido.
+
+ECHO: Desta vez, podemos responder em conjunto.
+
+## Vozes dos operadores
 
 ### AXIOM
 
 Humano de manutenção; linguagem concreta, protetora, poucas palavras.
 
-- Mundo 1: Eu seguro a passagem. Tu dá-me um motivo para a abrir.
-- Mundo 2: Eu reconheço as ferramentas. Ainda me falta reconhecer o que fiz com elas.
-- Mundo 3: Eu não preciso de quebrar tudo para abrir um caminho.
-- Mundo 4: Eu consigo proteger uma decisão. Não consigo tomá-la por toda a gente.
-- Mundo 5: Eu não deixo a memória de ninguém debaixo dos escombros.
+- Mundo 1: Seguro a passagem. Tu dá-me um motivo para a abrir.
+- Mundo 2: Reconheço as ferramentas. Ainda me falta reconhecer o que fiz com elas.
+- Mundo 3: Não preciso de quebrar tudo para abrir um caminho.
+- Mundo 4: Consigo proteger uma decisão. Não consigo tomá-la por toda a gente.
+- Mundo 5: Não deixo a memória de ninguém debaixo dos escombros.
 
 ### NYRA
 
 Piloto humana; frases diretas, observação espacial, movimento sem bravata.
 
-- Mundo 1: Eu reconheço uma aproximação falhada. Ainda podemos corrigir a rota.
-- Mundo 2: Eu sei o som de um motor pronto para partir. Este ainda espera por nós.
-- Mundo 3: Eu sigo a abertura, não a luz mais forte.
-- Mundo 4: Eu posso partir sem conhecer o destino. Não parto sem escolher quem levo.
-- Mundo 5: Eu vejo uma saída. Desta vez, não é um ensaio.
+- Mundo 1: Reconheço uma aproximação falhada. Ainda podemos corrigir a rota.
+- Mundo 2: Sei o som de um motor pronto para partir. Este ainda espera por nós.
+- Mundo 3: Sigo a abertura, não a luz mais forte.
+- Mundo 4: Posso partir sem conhecer o destino. Não parto sem escolher quem levo.
+- Mundo 5: Vejo uma saída. Desta vez, não é um ensaio.
 
 ### KAI-7
 
 Andróide; texto frio e preciso, sem voz sintetizada ou pretensão de biologia.
 
-- Mundo 1: Eu confirmo atividade. Origem da memória: indeterminada.
-- Mundo 2: Eu sou um andróide. Estes registos não são recordações biológicas. Ainda assim, pertencem à tripulação.
-- Mundo 3: Eu deteto omissões deliberadas. A inspeção não é neutra.
-- Mundo 4: Eu calculo risco residual. A ausência de garantia não invalida a partida.
-- Mundo 5: Eu preservo os nomes. Não preservarei a prisão.
+- Mundo 1: Confirmo atividade. Origem da memória: indeterminada.
+- Mundo 2: Sou um andróide. Estes registos não são recordações biológicas. Ainda assim, pertencem à tripulação.
+- Mundo 3: Deteto omissões deliberadas. A inspeção não é neutra.
+- Mundo 4: Calculo risco residual. A ausência de garantia não invalida a partida.
+- Mundo 5: Preservo os nomes. Não preservarei a prisão.
 
-## Final e créditos
+## Finais · direção aprovada; revisão textual pendente para integração após o piloto
 
-O combate termina antes da escolha. As duas opções são textuais, sem contagem decrescente. «Conservar» é um final de ciclo, não uma falsa vitória; mantém os dados e permite regressar ao hub. «Quebrar» fecha a história principal. A variante de todas as memórias acrescenta uma coda, sem esconder respostas obrigatórias.
+### QUEBRAR O CICLO
 
-### QUEBRAR O CICLO — final principal
+Terminamos o pedido que confundia preservar com repetir. Pela primeira vez, a estação deixa um segundo acabar.
 
-Eu desligo a regra que confundia preservar com repetir. Pela primeira vez, a estação deixa um segundo terminar.
+ouço a nave soltar-se do cais. AXIOM, NYRA e KAI-7 continuam do outro lado do instante, com a tripulação que o ensaio não deixava partir.
 
-Eu ouço a nave soltar-se do cais. AXIOM, NYRA e KAI-7 continuam do outro lado do instante, com a tripulação que o ensaio não deixava partir.
+não lhes devolvo um passado perfeito. Devolvo-lhes tempo para fazer alguma coisa com ele.
 
-Eu não lhes devolvo um passado perfeito. Devolvo-lhes tempo para fazer alguma coisa com ele.
+sigo no arquivo de bordo, um sinal único em vez de outra tentativa. Quando me perguntam quem sou, já não procuro um erro no visor.
 
-Eu sigo no arquivo de bordo, um sinal único em vez de outra tentativa. Quando me perguntam quem sou, já não procuro um erro no visor.
+sou a memória de quem abriu a passagem. E ainda não conheço a próxima palavra.
 
-Eu sou a memória de quem abriu a passagem. E ainda não conheço a próxima palavra.
+### CONSERVAR O CICLO
 
-### CONSERVAR O CICLO — final alternativo
+Pedimos ao Curador que conserve o instante. A nave fica no cais e a mesma luz regressa ao corredor.
 
-Eu peço ao Curador que conserve o instante. A nave fica no cais e a mesma luz regressa ao corredor.
+sei agora o que a repetição protege e o que impede. A escolha não se torna diferente por eu lhe chamar segurança.
 
-Eu sei agora o que a repetição protege e o que impede. A escolha não se torna diferente por eu lhe chamar segurança.
+deixo uma nota para a próxima tentativa: já conheces o caminho; ainda podes escolher sair.
 
-Eu deixo uma nota para a próxima tentativa: já conheces o caminho; ainda podes escolher sair.
+volto ao início sem perder os nomes que recuperei. A porta continua à espera de outra resposta.
 
-Eu volto ao início sem perder os nomes que recuperei. A porta continua à espera de outra resposta.
+### CODA OPCIONAL
 
-### CODA — todas as memórias opcionais
+levo também os gestos que o ensaio considerou inúteis: as ferramentas alinhadas, as três batidas no vidro, a conversa sobre o depois.
 
-Eu levo também os gestos que o ensaio considerou inúteis: as ferramentas alinhadas, as três batidas no vidro, a conversa sobre o depois.
+abro o arquivo a bordo. Não há apenas um relatório do acidente; há sinais de pessoas que tinham uma vida para além dele.
 
-Eu abro o arquivo a bordo. Não há apenas um relatório do acidente; há sinais de pessoas que tinham uma vida para além dele.
+guardo um lugar em branco. Desta vez, não é uma memória corrompida. É espaço para o futuro.
 
-Eu guardo um lugar em branco. Desta vez, não é uma memória corrompida. É espaço para o futuro.
+## Interface
 
-### Créditos e estatísticas
-
-ECHO//404 — A MEMÓRIA DA ESTAÇÃO
-
-CRIADO E DESENVOLVIDO POR MANUEL SAMPAIO01
-
-Tempo de jogo · Mortes · Memórias principais · Memórias opcionais
-
-VOLTAR AO HUB — OS RESULTADOS CONTINUAM GUARDADOS
-
-## Texto de interface narrativa
-
-| Chave | Texto |
-|---|---|
-| `introSkip` | SALTAR |
-| `introConfirm` | Saltar a introdução? Podes revê-la nas definições. |
-| `trainingConfirm` | Saltar o treino? Podes praticar os controlos nas definições. |
-| `confirmSkip` | SALTAR AGORA |
-| `cancelSkip` | CONTINUAR A VER |
-| `journalTitle` | DIÁRIO DA ESTAÇÃO |
-| `lockedMemory` | Memória ainda corrompida. |
-| `legacyMemory` | Recuperada de um arquivo anterior. |
-| `replayMemory` | RELER MEMÓRIA |
-| `replayStory` | REVER HISTÓRIA |
-| `replayTraining` | REVER TREINO |
-| `veteranHint` | Os controlos mudaram. Podes praticar antes de entrar. |
-| `bossCheckpoint` | Ponto seguro registado antes da arena. |
-| `finalChoiceTitle` | A MINHA ÚLTIMA ESCOLHA |
-| `breakCycle` | QUEBRAR O CICLO |
-| `stay` | CONSERVAR O CICLO |
-| `creditsTitle` | ECHO//404 — A MEMÓRIA DA ESTAÇÃO |
-| `creditsAuthor` | CRIADO E DESENVOLVIDO POR MANUEL SAMPAIO01 |
-| `stats` | Tempo de jogo · Mortes · Memórias principais · Memórias opcionais |
-| `afterEnding` | VOLTAR AO HUB — OS RESULTADOS CONTINUAM GUARDADOS |
-
-## Aprovação necessária
-
-Este documento é o guião completo proposto: introdução, quinze memórias principais, quinze terminais opcionais, conclusões, cinco chefes com três fases, linhas dos três operadores, escolhas finais, créditos e interface narrativa. A integração no runtime está bloqueada até aprovação explícita do proprietário. Após aprovação, a primeira entrega jogável limita-se ao mundo 1 (três zonas) e volta a parar para teste no telemóvel.
+- **introSkip:** SALTAR
+- **introConfirm:** Saltar a introdução? Podes revê-la nas definições.
+- **trainingConfirm:** Saltar o treino? Podes praticar os controlos nas definições.
+- **confirmSkip:** SALTAR AGORA
+- **cancelSkip:** CONTINUAR A VER
+- **journalTitle:** DIÁRIO DA ESTAÇÃO
+- **lockedMemory:** Memória ainda corrompida.
+- **legacyMemory:** Recuperada de um arquivo anterior.
+- **replayMemory:** RELER MEMÓRIA
+- **replayStory:** REVER HISTÓRIA
+- **replayTraining:** REVER TREINO
+- **veteranHint:** Os controlos mudaram. Podes praticar antes de entrar.
+- **bossCheckpoint:** Ponto seguro registado antes da arena.
+- **finalChoiceTitle:** A MINHA ÚLTIMA ESCOLHA
+- **breakCycle:** QUEBRAR O CICLO
+- **stay:** CONSERVAR O CICLO
+- **creditsTitle:** ECHO//404 — A MEMÓRIA DA ESTAÇÃO
+- **creditsAuthor:** CRIADO E DESENVOLVIDO POR MANUEL SAMPAIO01
+- **stats:** Tempo de jogo · Mortes · Memórias principais · Memórias opcionais
+- **afterEnding:** VOLTAR AO HUB — OS RESULTADOS CONTINUAM GUARDADOS

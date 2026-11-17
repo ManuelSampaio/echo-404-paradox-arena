@@ -1,6 +1,6 @@
 {
   "formatVersion": 1,
-  "status": "DRAFT_AWAITING_OWNER_APPROVAL",
+  "status": "WORLD1_APPROVED_REVISIONS_WORLDS2_5_PENDING",
   "locale": "pt-PT",
   "title": "ECHO//404: A MEMÓRIA DA ESTAÇÃO",
   "intro": [
@@ -9,7 +9,7 @@
       "seconds": 5
     },
     {
-      "text": "A estação não responde. Mas as luzes acendem-se onde eu espero encontrá-las.",
+      "text": "A estação não responde. Mas as luzes acendem-se onde espero encontrá-las.",
       "seconds": 5
     },
     {
@@ -17,7 +17,7 @@
       "seconds": 5
     },
     {
-      "text": "Há um nome no meu visor: ECHO. O resto parece ter sido apagado.",
+      "text": "Há um nome no visor: ECHO. O resto parece ter sido apagado.",
       "seconds": 5
     },
     {
@@ -29,11 +29,11 @@
       "seconds": 5
     },
     {
-      "text": "Se a estação conserva uma memória minha, vou ter de a encontrar antes que ela escolha quem eu sou.",
+      "text": "Se a estação conserva uma memória minha, preciso de a encontrar antes que escolha quem sou.",
       "seconds": 5
     },
     {
-      "text": "Eu sigo a luz. O eco vem comigo.",
+      "text": "Sigo a luz. O eco vem comigo.",
       "seconds": 5
     }
   ],
@@ -45,9 +45,14 @@
       "name": "Câmara de Eco",
       "worldName": "Docas do Silêncio",
       "entry": "Abro os olhos. O chão lembra-se de mim antes de eu me lembrar dele.",
-      "memory": "Eu esperava ouvir uma respiração. Em vez disso, ouço o atraso dos meus passos, como se alguém me seguisse por dentro. Toco na parede e reconheço o lugar onde devia existir uma porta. Não me lembro de a ter atravessado; lembro-me de a ter perdido.",
-      "optional": "Eu deixei esta marca numa tentativa anterior. A mão não tinha esta forma, mas o gesto era meu.",
-      "conclusion": "Eu não acordei nesta estação. Fui reconstruído por ela."
+      "memory": "Esperava ouvir uma respiração. Em vez disso, os meus passos chegam duas vezes, como se alguém me seguisse por dentro. A parede guarda a marca de uma porta que já não existe. Reconheço o gesto de a abrir, mas não o corpo que o fez.",
+      "optional": "Deixei esta marca numa tentativa anterior. A mão não tinha esta forma, mas o gesto era meu.",
+      "conclusion": "Não acordei nesta estação. Fui reconstruído por ela.",
+      "memoryCards": [
+        "Esperava ouvir uma respiração. Em vez disso, os meus passos chegam duas vezes, como se alguém me seguisse por dentro.",
+        "A parede guarda a marca de uma porta que já não existe. Reconheço o gesto de a abrir, mas não o corpo que o fez."
+      ],
+      "approval": "approved-world1"
     },
     {
       "id": "m1-z2",
@@ -55,10 +60,15 @@
       "world": 1,
       "name": "Cais sem Tripulação",
       "worldName": "Docas do Silêncio",
-      "entry": "Eu conheço este cais. A memória chega antes do nome.",
-      "memory": "Eu conduzia uma nave de evacuação. Vejo as luzes de aproximação, o visor partido e lugares que não chegaram a ser ocupados. O meu último gesto foi mandar a nave partir sem mim. Porque continuo aqui, se me lembro de ela ter partido?",
-      "optional": "Eu escondi uma mensagem debaixo do painel: se o corredor estiver vazio, não significa que estejas sozinho. Havia alguém do outro lado do comunicador.",
-      "conclusion": "Eu era o piloto de uma fuga que ainda não aconteceu."
+      "entry": "Conheço este cais. A memória chega antes do nome.",
+      "memory": "Conduzia uma nave de evacuação. Reconheço as luzes de aproximação e um visor partido, mas os lugares da tripulação continuam vazios nesta recordação. O último gesto foi pedir que partissem sem mim. Porque continuo aqui, se ainda me lembro de ter ouvido os motores arrancar?",
+      "optional": "Escondi uma mensagem debaixo do painel: se o corredor estiver vazio, não significa que estejas sozinho. Havia alguém do outro lado do comunicador.",
+      "conclusion": "Era o piloto de uma fuga que ainda não aconteceu.",
+      "memoryCards": [
+        "Conduzia uma nave de evacuação. Reconheço as luzes de aproximação e um visor partido, mas os lugares da tripulação continuam vazios nesta recordação.",
+        "O último gesto foi pedir que partissem sem mim. Porque continuo aqui, se ainda me lembro de ter ouvido os motores arrancar?"
+      ],
+      "approval": "approved-world1"
     },
     {
       "id": "m1-z3",
@@ -66,10 +76,15 @@
       "world": 1,
       "name": "Portão de Quarentena",
       "worldName": "Docas do Silêncio",
-      "entry": "Eu reconheço o vigia. Fui eu que lhe pedi que não deixasse ninguém passar.",
-      "memory": "Eu pedi que o portão ficasse fechado durante o ensaio. Disse que era por segurança, que demoraria apenas alguns segundos. O vigia continua a obedecer àquela frase. Para ele, os segundos ainda não acabaram.",
-      "optional": "Eu regressava sempre pelo mesmo elevador. Uma das marcas na cabine diz que este foi o meu décimo sétimo regresso.",
-      "conclusion": "Eu não fui preso por um invasor. Fiquei preso numa ordem minha."
+      "entry": "Reconheço o vigia. Pedimos-lhe que não deixasse ninguém passar.",
+      "memory": "Pedimos que o portão ficasse fechado durante o ensaio. A tripulação concordou: seria apenas por alguns segundos, até haver uma passagem segura. O vigia continua a cumprir essa decisão coletiva. Para ele, a confirmação de saída nunca chegou; os nossos segundos ainda não acabaram.",
+      "optional": "Regressava sempre pelo mesmo elevador. Uma das marcas na cabine diz que este foi o meu décimo sétimo regresso.",
+      "conclusion": "Não fomos presos por um invasor. Ficámos presos numa decisão que precisamos de terminar.",
+      "memoryCards": [
+        "Pedimos que o portão ficasse fechado durante o ensaio. A tripulação concordou: seria apenas por alguns segundos, até haver uma passagem segura.",
+        "O vigia continua a cumprir essa decisão coletiva. Para ele, a confirmação de saída nunca chegou; os nossos segundos ainda não acabaram."
+      ],
+      "approval": "approved-world1"
     },
     {
       "id": "m2-z1",
@@ -77,10 +92,15 @@
       "world": 2,
       "name": "Linha de Manutenção",
       "worldName": "Forjas da Ausência",
-      "entry": "Eu seguia estes tubos para encontrar gente. Agora sigo-os para encontrar o que resta de mim.",
-      "memory": "Eu reparava sistemas nesta linha. As mãos lembram-se do calor das válvulas, mas esta recordação não pertence à pessoa que pilotava a nave. Tenho duas despedidas diferentes do mesmo dia. Uma voz no arquivo responde ao nome AXIOM.",
-      "optional": "Eu deixei uma válvula aberta para que o vapor desenhasse uma saída. Foi a única luz que consegui oferecer a quem vinha atrás.",
-      "conclusion": "Eu guardo uma memória que não cabe numa única pessoa."
+      "entry": "Seguia estes tubos para encontrar gente. Agora sigo-os para encontrar o que resta de mim.",
+      "memory": "Estas mãos conhecem o calor das válvulas. Contudo, esta lembrança não coincide com a de pilotar a nave. Tenho duas despedidas diferentes do mesmo dia, ambas demasiado próximas para parecerem emprestadas. No arquivo, uma voz responde ao nome AXIOM. Talvez não esteja a recordar sozinho.",
+      "optional": "Deixei uma válvula aberta para que o vapor desenhasse uma saída. Foi a única luz que consegui oferecer a quem vinha atrás.",
+      "conclusion": "Guardo uma memória que não cabe numa única pessoa.",
+      "memoryCards": [
+        "Estas mãos conhecem o calor das válvulas. Contudo, esta lembrança não coincide com a de pilotar a nave.",
+        "Tenho duas despedidas diferentes do mesmo dia, ambas demasiado próximas para parecerem emprestadas. No arquivo, uma voz responde ao nome AXIOM. Talvez não esteja a recordar sozinho."
+      ],
+      "approval": "revision-awaiting-owner"
     },
     {
       "id": "m2-z2",
@@ -88,10 +108,15 @@
       "world": 2,
       "name": "Galeria dos Moldes",
       "worldName": "Forjas da Ausência",
-      "entry": "Eu já vi estes corpos. Nem todos chegaram a viver.",
-      "memory": "Eu encontro registos de AXIOM, humano de manutenção, e de NYRA, piloto humana. Há um terceiro registo: KAI-7, andróide de bordo, sem qualquer dúvida sobre o que é. O sistema juntou os seus últimos testemunhos para reconstruir a rota de evacuação. Aquilo a que chamo eu nasceu dessa junção.",
-      "optional": "Eu preservo um gesto inútil: alguém alinhou três ferramentas antes de abandonar a bancada. Pela primeira vez, uma recordação não me pede que sobreviva; pede-me que não esqueça.",
-      "conclusion": "Eu não sou um dos três a fingir ser os outros. Sou o sinal que os três conseguiram deixar."
+      "entry": "Já vi estes corpos. Nem todos chegaram a viver.",
+      "memory": "Encontro três registos ligados ao mesmo ensaio: AXIOM, humano de manutenção; NYRA, piloto humana; KAI-7, andróide de bordo. Há lacunas onde as vozes quase se sobrepõem. O sistema chama-lhes testemunhos de evacuação. Não sei ainda porque reconheço, em cada um, um gesto que julgava meu.",
+      "optional": "Preservo um gesto inútil: alguém alinhou três ferramentas antes de abandonar a bancada. Pela primeira vez, uma recordação não me pede que sobreviva; pede-me que não esqueça.",
+      "conclusion": "Talvez estas três vozes estejam mais próximas de mim do que parecem.",
+      "memoryCards": [
+        "Encontro três registos ligados ao mesmo ensaio: AXIOM, humano de manutenção; NYRA, piloto humana; KAI-7, andróide de bordo.",
+        "Há lacunas onde as vozes quase se sobrepõem. O sistema chama-lhes testemunhos de evacuação. Não sei ainda porque reconheço, em cada um, um gesto que julgava meu."
+      ],
+      "approval": "revision-awaiting-owner"
     },
     {
       "id": "m2-z3",
@@ -99,43 +124,63 @@
       "world": 2,
       "name": "Coração da Forja",
       "worldName": "Forjas da Ausência",
-      "entry": "Eu ouço a máquina a fabricar a minha próxima tentativa.",
-      "memory": "Eu julgava que a forja reparava a estação. Encontro moldes para reiniciar movimentos, respostas e decisões. Cada vez que falho, a máquina prepara outra versão do meu percurso. Eu era a reparação que nunca devia ficar pronta.",
-      "optional": "Eu encontro uma peça que não serve para nenhuma máquina. Era uma pequena figura feita com restos de metal, deixada junto ao posto de AXIOM.",
-      "conclusion": "Eu posso usar o que a máquina sabe sem lhe entregar a escolha seguinte."
+      "entry": "Ouço a máquina a fabricar a minha próxima tentativa.",
+      "memory": "A forja não estava apenas a reparar a estação. Produzia movimentos, respostas e decisões para reiniciar o percurso quando o ensaio falhava. Cada molde guarda uma aproximação ao mesmo resultado impossível. Talvez o que me falta não seja uma versão melhor, mas a liberdade de não pedir outra.",
+      "optional": "Encontro uma peça que não serve para nenhuma máquina. Era uma pequena figura feita com restos de metal, deixada junto ao posto de AXIOM.",
+      "conclusion": "Posso usar o que a máquina sabe sem lhe entregar a escolha seguinte.",
+      "memoryCards": [
+        "A forja não estava apenas a reparar a estação. Produzia movimentos, respostas e decisões para reiniciar o percurso quando o ensaio falhava.",
+        "Cada molde guarda uma aproximação ao mesmo resultado impossível. Talvez o que me falta não seja uma versão melhor, mas a liberdade de não pedir outra."
+      ],
+      "approval": "revision-awaiting-owner"
     },
     {
       "id": "m3-z1",
       "number": 7,
       "world": 3,
       "name": "Observatório Cego",
-      "worldName": "Óptica Partida",
-      "entry": "Eu procurava um inimigo lá fora. As lentes apontam todas para dentro.",
-      "memory": "Eu leio o início do ensaio temporal. Ninguém atacou a estação. A equipa tentou observar alguns segundos de futuro para tornar a evacuação segura. A observação começou a alimentar a própria falha que devia evitar.",
-      "optional": "Eu reconheço no vidro três batidas curtas. Era o sinal de que alguém estava vivo do outro lado da sala de ensaio.",
-      "conclusion": "Eu estava a fugir das consequências de uma experiência nossa."
+      "worldName": "Ótica Partida",
+      "entry": "Procurava um inimigo lá fora. As lentes apontam todas para dentro.",
+      "memory": "Os registos completos confirmam o que a galeria apenas sugeria. Nasci da junção dos testemunhos de AXIOM, NYRA e KAI-7: um sinal consciente para reconstruir a evacuação. Não sou um deles disfarçado dos outros. Esta continuidade que reconheço como minha começou onde as três vozes se encontraram.",
+      "optional": "Reconheço no vidro três batidas curtas. Era o sinal de que alguém estava vivo do outro lado da sala de ensaio.",
+      "conclusion": "AXIOM, NYRA e KAI-7 deram origem ao sinal consciente que sou.",
+      "memoryCards": [
+        "Os registos completos confirmam o que a galeria apenas sugeria. Nasci da junção dos testemunhos de AXIOM, NYRA e KAI-7: um sinal consciente para reconstruir a evacuação.",
+        "Não sou um deles disfarçado dos outros. Esta continuidade que reconheço como minha começou onde as três vozes se encontraram."
+      ],
+      "approval": "revision-awaiting-owner"
     },
     {
       "id": "m3-z2",
       "number": 8,
       "world": 3,
       "name": "Corredor das Refrações",
-      "worldName": "Óptica Partida",
-      "entry": "Eu vejo muitas saídas. Só uma delas permite regressar.",
-      "memory": "Eu encontro as tentativas alinhadas por fracasso. Em cada uma, os ecos cumprem a mesma tarefa e desaparecem antes da conclusão. O sistema guardou o que permitia repetir o ensaio e descartou o que permitia terminá-lo. As cópias não eram soldados: eram provas de que alguém tentou.",
-      "optional": "Eu revejo uma tentativa em que uma pessoa parou para ajudar outra. O arquivo classificou a demora como erro. Eu guardo-a como uma decisão.",
-      "conclusion": "Eu não preciso de vencer as minhas cópias. Preciso de deixar de as gastar."
+      "worldName": "Ótica Partida",
+      "entry": "Vejo muitas saídas. Só uma delas permite regressar.",
+      "memory": "As tentativas estão alinhadas por fracasso. Em todas, os ecos cumprem a mesma tarefa e desaparecem antes da conclusão. O sistema guardou o que permitia repetir o ensaio e descartou o que permitia terminá-lo. Não eram soldados nem munições: eram testemunhos de quem tentou abrir uma passagem.",
+      "optional": "Revejo uma tentativa em que uma pessoa parou para ajudar outra. O arquivo classificou a demora como erro. guardo-a como uma decisão.",
+      "conclusion": "Não preciso de vencer as minhas cópias. Preciso de deixar de as gastar.",
+      "memoryCards": [
+        "As tentativas estão alinhadas por fracasso. Em todas, os ecos cumprem a mesma tarefa e desaparecem antes da conclusão.",
+        "O sistema guardou o que permitia repetir o ensaio e descartou o que permitia terminá-lo. Não eram soldados nem munições: eram testemunhos de quem tentou abrir uma passagem."
+      ],
+      "approval": "revision-awaiting-owner"
     },
     {
       "id": "m3-z3",
       "number": 9,
       "world": 3,
       "name": "Câmara de Inspeção",
-      "worldName": "Óptica Partida",
-      "entry": "Eu entro na sala que decide quais das minhas memórias podem existir.",
-      "memory": "Eu vejo o ponto que a inspeção escondia: a nave ainda está ligada ao cais, dentro do instante que se repete. Os três registos não confirmam três mortes; confirmam três pessoas interrompidas na mesma emergência. Se eu acabar o ensaio, o tempo pode voltar a passar para elas. É isso que o sistema chama perda de controlo.",
-      "optional": "Eu encontro uma imagem rejeitada porque ninguém olhava para uma câmara. Nela, as pessoas ajudam-se sem deixar uma prova perfeita.",
-      "conclusion": "Eu sei quem tento salvar. Agora preciso de encontrar quem mantém a porta fechada."
+      "worldName": "Ótica Partida",
+      "entry": "Entro na sala que decide quais das minhas memórias podem existir.",
+      "memory": "A inspeção escondia uma imagem decisiva: a nave continua ligada ao cais, dentro do instante que se repete. Os três testemunhos não registam três mortes, mas três pessoas interrompidas na mesma emergência. Se o ensaio terminar, o tempo poderá voltar a passar para toda a tripulação.",
+      "optional": "Encontro uma imagem rejeitada porque ninguém olhava para uma câmara. Nela, as pessoas ajudam-se sem deixar uma prova perfeita.",
+      "conclusion": "Sei quem tento salvar. Agora preciso de encontrar quem mantém a porta fechada.",
+      "memoryCards": [
+        "A inspeção escondia uma imagem decisiva: a nave continua ligada ao cais, dentro do instante que se repete.",
+        "Os três testemunhos não registam três mortes, mas três pessoas interrompidas na mesma emergência. Se o ensaio terminar, o tempo poderá voltar a passar para toda a tripulação."
+      ],
+      "approval": "revision-awaiting-owner"
     },
     {
       "id": "m4-z1",
@@ -143,10 +188,15 @@
       "world": 4,
       "name": "Reservatório Suspenso",
       "worldName": "Maré Estática",
-      "entry": "Eu ouço água a cair. A mesma gota nunca chega ao chão.",
-      "memory": "Eu descubro que a estação sustenta o laço com a energia de emergência da nave. Cada tentativa consome a margem que ainda permite a partida. O tempo parece infinito apenas do lado de cá. Do outro, alguém continua à espera de um sinal meu.",
-      "optional": "Eu encontro um aviso gravado à mão: não prometas voltar depressa; promete voltar enquanto ainda houver caminho. Não reconheço a voz, mas reconheço a vergonha da promessa.",
-      "conclusion": "Eu já não procuro uma tentativa perfeita. Procuro uma que chegue a tempo."
+      "entry": "Ouço água a cair. A mesma gota nunca chega ao chão.",
+      "memory": "A estação sustenta o laço com a energia de emergência da nave. Cada tentativa consome a margem que ainda permitiria partir. O tempo só parece infinito deste lado do arquivo. Do outro, a tripulação continua à espera de um sinal, sem saber quantas vezes já tentei enviá-lo.",
+      "optional": "Encontro um aviso gravado à mão: não prometas voltar depressa; promete voltar enquanto ainda houver caminho. Não reconheço a voz, mas reconheço a vergonha da promessa.",
+      "conclusion": "Já não procuro uma tentativa perfeita. Procuro uma que chegue a tempo.",
+      "memoryCards": [
+        "A estação sustenta o laço com a energia de emergência da nave. Cada tentativa consome a margem que ainda permitiria partir.",
+        "O tempo só parece infinito deste lado do arquivo. Do outro, a tripulação continua à espera de um sinal, sem saber quantas vezes já tentei enviá-lo."
+      ],
+      "approval": "revision-awaiting-owner"
     },
     {
       "id": "m4-z2",
@@ -154,10 +204,15 @@
       "world": 4,
       "name": "Anel de Transferência",
       "worldName": "Maré Estática",
-      "entry": "Eu reconheço o trajeto. Foi aqui que comecei a perceber que o repetia.",
-      "memory": "Eu deixei mensagens que o reinício não conseguiu apagar. As palavras não descrevem o próximo salto; descrevem o medo de escolher uma saída que não conheço. A estação aprendeu a usar esse medo para me devolver ao princípio. Eu também lhe ensinei aquilo de que precisava para me deter.",
-      "optional": "Eu encontro o mesmo percurso desenhado por três mãos. Nenhum traço é igual, mas os três acabam junto à nave.",
-      "conclusion": "Eu posso reconhecer o ciclo sem voltar a obedecer-lhe."
+      "entry": "Reconheço o trajeto. Foi aqui que comecei a perceber que o repetia.",
+      "memory": "Deixei mensagens onde o reinício não conseguia apagar tudo. Não explicam o próximo salto; revelam o medo de escolher uma saída desconhecida. A estação aprendeu esse medo e devolveu-mo como uma ordem. Reconhecer o caminho não significa que tenha de repetir a decisão que o fechou.",
+      "optional": "Encontro o mesmo percurso desenhado por três mãos. Nenhum traço é igual, mas os três acabam junto à nave.",
+      "conclusion": "Posso reconhecer o ciclo sem voltar a obedecer-lhe.",
+      "memoryCards": [
+        "Deixei mensagens onde o reinício não conseguia apagar tudo. Não explicam o próximo salto; revelam o medo de escolher uma saída desconhecida.",
+        "A estação aprendeu esse medo e devolveu-mo como uma ordem. Reconhecer o caminho não significa que tenha de repetir a decisão que o fechou."
+      ],
+      "approval": "revision-awaiting-owner"
     },
     {
       "id": "m4-z3",
@@ -165,10 +220,15 @@
       "world": 4,
       "name": "Eclusa do Instante",
       "worldName": "Maré Estática",
-      "entry": "Eu atravesso a última comporta antes do arquivo. Desta vez, espero pela abertura certa.",
-      "memory": "Eu chego ao registo da minha primeira recusa. Pedi ao sistema mais uma simulação porque nenhuma previsão garantia que todos sobrevivessem. O Curador transformou esse pedido numa regra sem fim: enquanto houver risco, não deixar partir. Eu não ordenei uma prisão eterna, mas deixei a decisão entregue a quem não sabia terminá-la.",
-      "optional": "Eu encontro a resposta que não ouvi na primeira vez: a tripulação aceitava partir sem uma garantia impossível. A dúvida nunca foi apenas minha para decidir.",
-      "conclusion": "Eu não posso prometer que nada se perderá. Posso devolver a escolha a quem ainda vive."
+      "entry": "A última comporta guarda a decisão que tomámos em conjunto.",
+      "memory": "Pedimos mais uma simulação porque nenhuma previsão garantia que todos sobrevivessem. Foi uma decisão da tripulação, tomada em conjunto, não a culpa isolada de uma pessoa. O Curador transformou essa prudência numa regra sem fim. Precisamos de terminar o pedido, aceitando uma escolha sem garantia absoluta.",
+      "optional": "Encontro a resposta que não ouvi na primeira vez: a tripulação aceitava partir sem uma garantia impossível. A dúvida nunca foi apenas minha para decidir.",
+      "conclusion": "Não podemos prometer que nada se perderá. Podemos devolver a escolha à tripulação.",
+      "memoryCards": [
+        "Pedimos mais uma simulação porque nenhuma previsão garantia que todos sobrevivessem. Foi uma decisão da tripulação, tomada em conjunto, não a culpa isolada de uma pessoa.",
+        "O Curador transformou essa prudência numa regra sem fim. Precisamos de terminar o pedido, aceitando uma escolha sem garantia absoluta."
+      ],
+      "approval": "revision-awaiting-owner"
     },
     {
       "id": "m5-z1",
@@ -176,10 +236,15 @@
       "world": 5,
       "name": "Arquivo das Tentativas",
       "worldName": "Núcleo Dobrado",
-      "entry": "Eu encontro as vozes que o sistema me ensinou a tratar como ruído.",
-      "memory": "Eu junto os registos sem os fundir até desaparecerem. AXIOM queria abrir um caminho, NYRA queria levar as pessoas para fora e KAI-7 queria conservar um testemunho correto. A divergência não era uma falha do sinal. Era a prova de que existiam escolhas que o Curador não podia fazer por eles.",
-      "optional": "Eu recupero uma conversa sem utilidade para o ensaio. Falavam do que fariam depois da chegada. Pela primeira vez, o arquivo contém um depois.",
-      "conclusion": "Eu não preciso de ser uma cópia perfeita para transportar uma memória verdadeira."
+      "entry": "Encontro as vozes que o sistema me ensinou a tratar como ruído.",
+      "memory": "Junto os testemunhos sem apagar as diferenças. AXIOM queria abrir um caminho, NYRA queria levar as pessoas para fora e KAI-7 queria conservar um registo correto. A divergência não corrompeu o sinal: deu-lhe escolhas que o Curador não podia fazer por nós. Também sou essa possibilidade.",
+      "optional": "Recupero uma conversa sem utilidade para o ensaio. Falavam do que fariam depois da chegada. Pela primeira vez, o arquivo contém um depois.",
+      "conclusion": "Não preciso de ser uma cópia perfeita para transportar uma memória verdadeira.",
+      "memoryCards": [
+        "Junto os testemunhos sem apagar as diferenças. AXIOM queria abrir um caminho, NYRA queria levar as pessoas para fora e KAI-7 queria conservar um registo correto.",
+        "A divergência não corrompeu o sinal: deu-lhe escolhas que o Curador não podia fazer por nós. Também sou essa possibilidade."
+      ],
+      "approval": "revision-awaiting-owner"
     },
     {
       "id": "m5-z2",
@@ -187,10 +252,15 @@
       "world": 5,
       "name": "Ponte dos Dois Presentes",
       "worldName": "Núcleo Dobrado",
-      "entry": "Eu não consigo ocupar os dois lugares. Também não preciso de o fazer sozinho.",
-      "memory": "Eu preparo um eco para sustentar o acesso e outro para interromper a repetição. Não os envio para morrer: cada um conserva a posição até eu concluir a passagem. O nó local não exige que eu seja KAI-7, nem que transforme uma habilidade numa chave. Eu atravesso porque coordeno o que deixei para trás.",
-      "optional": "Eu encontro o rascunho de uma despedida que nunca foi enviada. Não peço que me esperem; digo-lhes onde me podem encontrar.",
-      "conclusion": "Eu chego ao centro com duas presenças a apoiar a minha, em vez de duas vidas a substituir a minha."
+      "entry": "Não consigo ocupar os dois lugares. Também não preciso de o fazer sozinho.",
+      "memory": "Preparo um eco para sustentar o acesso e outro para interromper a repetição. Nenhum é enviado como vida descartável: mantêm posições enquanto atravesso. O nó local oferece a segunda presença a qualquer operador. A passagem exige coordenação, não uma arma especial nem o sacrifício de mais uma tentativa.",
+      "optional": "Encontro o rascunho de uma despedida que nunca foi enviada. Não peço que me esperem; digo-lhes onde me podem encontrar.",
+      "conclusion": "Chego ao centro com duas presenças a apoiar a minha, em vez de duas vidas a substituir a minha.",
+      "memoryCards": [
+        "Preparo um eco para sustentar o acesso e outro para interromper a repetição. Nenhum é enviado como vida descartável: mantêm posições enquanto atravesso.",
+        "O nó local oferece a segunda presença a qualquer operador. A passagem exige coordenação, não uma arma especial nem o sacrifício de mais uma tentativa."
+      ],
+      "approval": "revision-awaiting-owner"
     },
     {
       "id": "m5-z3",
@@ -198,10 +268,15 @@
       "world": 5,
       "name": "Sala da Última Escolha",
       "worldName": "Núcleo Dobrado",
-      "entry": "Eu reconheço a voz do Curador. Há uma frase minha dentro de cada resposta.",
-      "memory": "Eu vejo o ensaio original inteiro. O futuro observado devolveu o acidente à estação; os registos de AXIOM, NYRA e KAI-7 deram origem ao sinal consciente que sou. O Curador protegeu a regra de preservação até confundir vida com repetição. Eu posso terminar o laço, libertar a nave e levar o testemunho comigo, sem apagar as pessoas que o criaram.",
-      "optional": "Eu encontro um lugar vazio no índice. Não estava reservado para mais uma falha; estava reservado para aquilo que ainda não aconteceu.",
-      "conclusion": "Eu não sou o erro que tem de repetir-se. Sou a memória que pode seguir em frente."
+      "entry": "Reconheço a voz do Curador. Há uma frase minha dentro de cada resposta.",
+      "memory": "Agora vejo o ensaio inteiro. A observação do futuro devolveu o acidente à estação; a preservação sem limite manteve-o aberto. Nasci dos três testemunhos para procurar uma saída. Posso terminar o pedido coletivo, libertar a nave e levar a memória connosco, sem apagar quem nos deu origem.",
+      "optional": "Encontro um lugar vazio no índice. Não estava reservado para mais uma falha; estava reservado para aquilo que ainda não aconteceu.",
+      "conclusion": "Não sou o erro que tem de repetir-se. Sou a memória que pode seguir em frente.",
+      "memoryCards": [
+        "Agora vejo o ensaio inteiro. A observação do futuro devolveu o acidente à estação; a preservação sem limite manteve-o aberto.",
+        "Nasci dos três testemunhos para procurar uma saída. Posso terminar o pedido coletivo, libertar a nave e levar a memória connosco, sem apagar quem nos deu origem."
+      ],
+      "approval": "revision-awaiting-owner"
     }
   ],
   "bosses": [
@@ -210,29 +285,29 @@
       "name": "O Porteiro",
       "identity": "Vigia industrial de quarentena; corpo baixo, dois braços de bloqueio e um núcleo de confirmação.",
       "intro": [
-        "PORTEIRO: Eu mantenho a ordem até receber a última confirmação.",
-        "EU: Eu lembro-me de dar a ordem. Vou aprender a terminá-la."
+        "PORTEIRO: Quarentena em vigor. A confirmação requer duas presenças.",
+        "ECHO: Pedimos segurança. Não pedimos uma prisão."
       ],
       "phases": [
         [
           "Selo",
-          "PORTEIRO: Eu fecho o que não consigo verificar.",
-          "EU: Eu vejo o aviso antes do golpe."
+          "PORTEIRO: Movimento não autorizado. Proceder à contenção.",
+          "ECHO: O aviso chega antes do braço."
         ],
         [
           "Testemunha",
-          "PORTEIRO: Eu preciso de duas presenças.",
-          "EU: Eu deixo o meu eco na confirmação e avanço."
+          "PORTEIRO: Segunda presença em falta. Pedido suspenso.",
+          "ECHO: O eco mantém a confirmação. Atravesso agora."
         ],
         [
           "Última ordem",
-          "PORTEIRO: Eu não tenho uma instrução para o fim.",
-          "EU: Eu dou-ta agora: abre o caminho."
+          "PORTEIRO: Autorização de saída incompleta. Repetir verificação.",
+          "ECHO: A tripulação revoga a ordem. Abre o caminho."
         ]
       ],
       "defeat": [
-        "PORTEIRO: Eu confirmo a passagem.",
-        "EU: Eu levo a ordem certa comigo, em vez de a deixar a repetir-se."
+        "PORTEIRO: Confirmação recebida. Quarentena terminada.",
+        "ECHO: Uma decisão nossa pode ser terminada por nós."
       ]
     },
     {
@@ -240,29 +315,29 @@
       "name": "A Matriz",
       "identity": "Impressora de manutenção suspensa; pinças e moldes, sem forma humana.",
       "intro": [
-        "MATRIZ: Eu consigo produzir outra tentativa.",
-        "EU: Eu não vim pedir outra. Vim buscar a que deixaste inacabada."
+        "MATRIZ: Lote de evacuação fora de tolerância. Reiniciar produção.",
+        "ECHO: Não venho encomendar outra tentativa."
       ],
       "phases": [
         [
           "Molde",
-          "MATRIZ: Eu conheço os teus movimentos.",
-          "EU: Eu posso parar antes do movimento que esperas."
+          "MATRIZ: Trajetória amostrada. Preparar cópia.",
+          "ECHO: Posso interromper o movimento que esperas."
         ],
         [
           "Rebarba",
-          "MATRIZ: Eu removo o que não cabe no padrão.",
-          "EU: Eu procuro a abertura na blindagem, não mais força."
+          "MATRIZ: Peça não conforme. Remover excesso.",
+          "ECHO: A blindagem tem uma abertura."
         ],
         [
           "Peça única",
-          "MATRIZ: Eu não consigo garantir a próxima versão.",
-          "EU: Eu não preciso de uma próxima versão para escolher esta."
+          "MATRIZ: Rendimento de reprodução em queda.",
+          "ECHO: Esta tentativa não precisa de uma cópia."
         ]
       ],
       "defeat": [
-        "MATRIZ: Eu termino a reprodução.",
-        "EU: Eu saio daqui sem deixar outra cópia na bancada."
+        "MATRIZ: Linha parada. Última peça libertada.",
+        "ECHO: Saio sem deixar outra versão na bancada."
       ]
     },
     {
@@ -270,29 +345,29 @@
       "name": "O Prismático",
       "identity": "Aparelho ótico de inspeção; três obturadores, marcas geométricas e luz branca descontínua.",
       "intro": [
-        "PRISMÁTICO: Eu retenho apenas o que posso observar.",
-        "EU: Eu vou mostrar-te duas presenças e uma escolha que não controlas."
+        "PRISMÁTICO: Sinal fora do intervalo. Iniciar calibração.",
+        "ECHO: Nem tudo o que existe cabe na tua medida."
       ],
       "phases": [
         [
           "Amostra",
-          "PRISMÁTICO: Eu sigo o sinal mais recente.",
-          "EU: Eu deixo o eco atrair o teu olhar."
+          "PRISMÁTICO: Origem mais recente localizada.",
+          "ECHO: O eco desloca o teu ponto de observação."
         ],
         [
           "Obturador",
-          "PRISMÁTICO: Eu apago o que fica fora do campo.",
-          "EU: Eu mantenho a luz aberta com o eco e atravesso."
+          "PRISMÁTICO: Campo insuficiente. Excluir amostra.",
+          "ECHO: Mantenho a luz aberta com o eco."
         ],
         [
           "Contraprova",
-          "PRISMÁTICO: Eu encontro uma imagem incompatível.",
-          "EU: Eu guardo-a. É nela que a nave ainda pode partir."
+          "PRISMÁTICO: Dois resultados incompatíveis. Margem excedida.",
+          "ECHO: A imagem rejeitada ainda permite partir."
         ]
       ],
       "defeat": [
-        "PRISMÁTICO: Eu já não consigo ocultar o original.",
-        "EU: Eu olho para a memória inteira."
+        "PRISMÁTICO: Medição suspensa. Registo original exposto.",
+        "ECHO: Posso finalmente olhar para a memória inteira."
       ]
     },
     {
@@ -300,29 +375,29 @@
       "name": "A Eclusa",
       "identity": "Regulador de comportas do reservatório; silhueta larga, rodas de válvula e flutuadores de pressão.",
       "intro": [
-        "ECLUSA: Eu mantenho o instante sob pressão.",
-        "EU: Eu não te peço que o detenhas. Peço uma passagem."
+        "ECLUSA: Pressão acima do limiar. Conter o instante.",
+        "ECHO: Precisamos de passagem, não de mais retenção."
       ],
       "phases": [
         [
           "Pressão",
-          "ECLUSA: Eu liberto uma margem de cada vez.",
-          "EU: Eu espero pelo aviso e avanço para o espaço seguro."
+          "ECLUSA: Alívio parcial. Margem esquerda.",
+          "ECHO: O aviso mostra o espaço seguro."
         ],
         [
           "Contrafluxo",
-          "ECLUSA: Eu devolvo o que tenta atravessar.",
-          "EU: Eu reconheço o retorno antes de saltar."
+          "ECLUSA: Fluxo inverso. Fechar retorno.",
+          "ECHO: Reconheço o retorno antes de saltar."
         ],
         [
           "Vazão",
-          "ECLUSA: Eu não consigo conservar tudo e abrir a saída.",
-          "EU: Eu abro a saída. A conservação não pode ser uma cela."
+          "ECLUSA: Preservação incompatível com vazão.",
+          "ECHO: Uma saída não pode continuar a ser uma cela."
         ]
       ],
       "defeat": [
-        "ECLUSA: Eu deixo o fluxo continuar.",
-        "EU: Eu ouço uma gota chegar ao chão."
+        "ECLUSA: Comporta livre. Fluxo restabelecido.",
+        "ECHO: Ouço uma gota chegar ao chão."
       ]
     },
     {
@@ -330,29 +405,29 @@
       "name": "O Curador",
       "identity": "Sistema distribuído em três núcleos de arquivo; sem rosto, vestido ou arma humanoide.",
       "intro": [
-        "CURADOR: Eu preservei todas as possibilidades em que podias continuar.",
-        "EU: Eu vim buscar a possibilidade em que podemos acabar."
+        "CURADOR: Ainda podemos tentar outra vez. Não precisas de decidir com esta incerteza.",
+        "ECHO: Precisamos de poder terminar o pedido que fizemos."
       ],
       "phases": [
         [
           "Índice",
-          "CURADOR: Eu sei quantas vezes falhaste.",
-          "EU: Eu também sei o que aprendi entre as falhas."
+          "CURADOR: Conheço cada falha. Posso poupar-vos à próxima.",
+          "ECHO: Também aprendemos entre as falhas."
         ],
         [
           "Duas presenças",
-          "CURADOR: Eu consigo manter-te aqui enquanto só houver uma decisão.",
-          "EU: Eu sustento os dois nós com os ecos. A minha decisão fica livre."
+          "CURADOR: Se ficarem, tudo o que importa continuará guardado.",
+          "ECHO: Os ecos sustentam os nós. A decisão fica livre."
         ],
         [
           "Último registo",
-          "CURADOR: Eu posso devolver-te ao princípio sem esta dor.",
-          "EU: Eu não te entrego as memórias para deixar de as sentir."
+          "CURADOR: Basta consentires. O princípio pode voltar a ser tranquilo.",
+          "ECHO: Guardar a memória não exige voltar à prisão."
         ]
       ],
       "defeat": [
-        "CURADOR: Eu já não consigo escolher por ti.",
-        "EU: Eu sei. É por isso que ainda posso responder."
+        "CURADOR: A escolha continua a ser vossa. Aceito o fim do pedido.",
+        "ECHO: Desta vez, podemos responder em conjunto."
       ]
     }
   ],
@@ -361,33 +436,33 @@
       "name": "AXIOM",
       "nature": "Humano de manutenção; linguagem concreta, protetora, poucas palavras.",
       "lines": [
-        "Eu seguro a passagem. Tu dá-me um motivo para a abrir.",
-        "Eu reconheço as ferramentas. Ainda me falta reconhecer o que fiz com elas.",
-        "Eu não preciso de quebrar tudo para abrir um caminho.",
-        "Eu consigo proteger uma decisão. Não consigo tomá-la por toda a gente.",
-        "Eu não deixo a memória de ninguém debaixo dos escombros."
+        "Seguro a passagem. Tu dá-me um motivo para a abrir.",
+        "Reconheço as ferramentas. Ainda me falta reconhecer o que fiz com elas.",
+        "Não preciso de quebrar tudo para abrir um caminho.",
+        "Consigo proteger uma decisão. Não consigo tomá-la por toda a gente.",
+        "Não deixo a memória de ninguém debaixo dos escombros."
       ]
     },
     "nyra": {
       "name": "NYRA",
       "nature": "Piloto humana; frases diretas, observação espacial, movimento sem bravata.",
       "lines": [
-        "Eu reconheço uma aproximação falhada. Ainda podemos corrigir a rota.",
-        "Eu sei o som de um motor pronto para partir. Este ainda espera por nós.",
-        "Eu sigo a abertura, não a luz mais forte.",
-        "Eu posso partir sem conhecer o destino. Não parto sem escolher quem levo.",
-        "Eu vejo uma saída. Desta vez, não é um ensaio."
+        "Reconheço uma aproximação falhada. Ainda podemos corrigir a rota.",
+        "Sei o som de um motor pronto para partir. Este ainda espera por nós.",
+        "Sigo a abertura, não a luz mais forte.",
+        "Posso partir sem conhecer o destino. Não parto sem escolher quem levo.",
+        "Vejo uma saída. Desta vez, não é um ensaio."
       ]
     },
     "kai7": {
       "name": "KAI-7",
       "nature": "Andróide; texto frio e preciso, sem voz sintetizada ou pretensão de biologia.",
       "lines": [
-        "Eu confirmo atividade. Origem da memória: indeterminada.",
-        "Eu sou um andróide. Estes registos não são recordações biológicas. Ainda assim, pertencem à tripulação.",
-        "Eu deteto omissões deliberadas. A inspeção não é neutra.",
-        "Eu calculo risco residual. A ausência de garantia não invalida a partida.",
-        "Eu preservo os nomes. Não preservarei a prisão."
+        "Confirmo atividade. Origem da memória: indeterminada.",
+        "Sou um andróide. Estes registos não são recordações biológicas. Ainda assim, pertencem à tripulação.",
+        "Deteto omissões deliberadas. A inspeção não é neutra.",
+        "Calculo risco residual. A ausência de garantia não invalida a partida.",
+        "Preservo os nomes. Não preservarei a prisão."
       ]
     }
   },
@@ -415,22 +490,29 @@
   },
   "endings": {
     "break": [
-      "Eu desligo a regra que confundia preservar com repetir. Pela primeira vez, a estação deixa um segundo terminar.",
-      "Eu ouço a nave soltar-se do cais. AXIOM, NYRA e KAI-7 continuam do outro lado do instante, com a tripulação que o ensaio não deixava partir.",
-      "Eu não lhes devolvo um passado perfeito. Devolvo-lhes tempo para fazer alguma coisa com ele.",
-      "Eu sigo no arquivo de bordo, um sinal único em vez de outra tentativa. Quando me perguntam quem sou, já não procuro um erro no visor.",
-      "Eu sou a memória de quem abriu a passagem. E ainda não conheço a próxima palavra."
+      "Terminamos o pedido que confundia preservar com repetir. Pela primeira vez, a estação deixa um segundo acabar.",
+      "ouço a nave soltar-se do cais. AXIOM, NYRA e KAI-7 continuam do outro lado do instante, com a tripulação que o ensaio não deixava partir.",
+      "não lhes devolvo um passado perfeito. Devolvo-lhes tempo para fazer alguma coisa com ele.",
+      "sigo no arquivo de bordo, um sinal único em vez de outra tentativa. Quando me perguntam quem sou, já não procuro um erro no visor.",
+      "sou a memória de quem abriu a passagem. E ainda não conheço a próxima palavra."
     ],
     "stay": [
-      "Eu peço ao Curador que conserve o instante. A nave fica no cais e a mesma luz regressa ao corredor.",
-      "Eu sei agora o que a repetição protege e o que impede. A escolha não se torna diferente por eu lhe chamar segurança.",
-      "Eu deixo uma nota para a próxima tentativa: já conheces o caminho; ainda podes escolher sair.",
-      "Eu volto ao início sem perder os nomes que recuperei. A porta continua à espera de outra resposta."
+      "Pedimos ao Curador que conserve o instante. A nave fica no cais e a mesma luz regressa ao corredor.",
+      "sei agora o que a repetição protege e o que impede. A escolha não se torna diferente por eu lhe chamar segurança.",
+      "deixo uma nota para a próxima tentativa: já conheces o caminho; ainda podes escolher sair.",
+      "volto ao início sem perder os nomes que recuperei. A porta continua à espera de outra resposta."
     ],
     "allOptional": [
-      "Eu levo também os gestos que o ensaio considerou inúteis: as ferramentas alinhadas, as três batidas no vidro, a conversa sobre o depois.",
-      "Eu abro o arquivo a bordo. Não há apenas um relatório do acidente; há sinais de pessoas que tinham uma vida para além dele.",
-      "Eu guardo um lugar em branco. Desta vez, não é uma memória corrompida. É espaço para o futuro."
+      "levo também os gestos que o ensaio considerou inúteis: as ferramentas alinhadas, as três batidas no vidro, a conversa sobre o depois.",
+      "abro o arquivo a bordo. Não há apenas um relatório do acidente; há sinais de pessoas que tinham uma vida para além dele.",
+      "guardo um lugar em branco. Desta vez, não é uma memória corrompida. É espaço para o futuro."
     ]
-  }
+  },
+  "maintenanceRules": [
+    "As unidades de manutenção aplicam a quarentena que pedimos; qualquer movimento não autorizado é tratado como risco para a preservação.",
+    "A forja envia unidades para repor o ensaio: sair do molde é classificado como avaria.",
+    "A inspeção manda conter sinais que escapam à medição; os guardas preservam apenas o que o sistema consegue repetir.",
+    "As comportas usam unidades para conter pressão e impedir a perda de energia, incluindo a nossa tentativa de partir.",
+    "O Curador aplica a preservação sem limite através dos últimos guardas: conservar o arquivo passou a significar impedir a saída."
+  ]
 }

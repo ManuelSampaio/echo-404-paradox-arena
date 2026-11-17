@@ -1,0 +1,168 @@
+{
+  "formatVersion": 1,
+  "locale": "pt-PT",
+  "title": "ECHO//404: A MEMÓRIA DA ESTAÇÃO",
+  "intro": [
+    {
+      "text": "Abro os olhos. Não sei se tenho um corpo ou apenas a memória de um.",
+      "seconds": 5
+    },
+    {
+      "text": "A estação não responde. Mas as luzes acendem-se onde espero encontrá-las.",
+      "seconds": 5
+    },
+    {
+      "text": "Dou um passo. O som chega duas vezes. A segunda vez não vem de trás de mim.",
+      "seconds": 5
+    },
+    {
+      "text": "Há um nome no visor: ECHO. O resto parece ter sido apagado.",
+      "seconds": 5
+    },
+    {
+      "text": "Tento lembrar-me da última pessoa que vi. Encontro uma nave vazia e uma porta fechada.",
+      "seconds": 5
+    },
+    {
+      "text": "Algures, uma máquina repete que ainda há tempo. Não sei há quanto tempo a ouço.",
+      "seconds": 5
+    },
+    {
+      "text": "Se a estação conserva uma memória minha, preciso de a encontrar antes que escolha quem sou.",
+      "seconds": 5
+    },
+    {
+      "text": "Sigo a luz. O eco vem comigo.",
+      "seconds": 5
+    }
+  ],
+  "ui": {
+    "introSkip": "SALTAR",
+    "introConfirm": "Saltar a introdução? Podes revê-la nas definições.",
+    "trainingConfirm": "Saltar o treino? Podes praticar os controlos nas definições.",
+    "confirmSkip": "SALTAR AGORA",
+    "cancelSkip": "CONTINUAR A VER",
+    "journalTitle": "DIÁRIO DA ESTAÇÃO",
+    "lockedMemory": "Memória ainda corrompida.",
+    "legacyMemory": "Recuperada de um arquivo anterior.",
+    "replayMemory": "RELER MEMÓRIA",
+    "replayStory": "REVER HISTÓRIA",
+    "replayTraining": "REVER TREINO",
+    "veteranHint": "Os controlos mudaram. Podes praticar antes de entrar.",
+    "bossCheckpoint": "Ponto seguro registado antes da arena.",
+    "finalChoiceTitle": "A MINHA ÚLTIMA ESCOLHA",
+    "breakCycle": "QUEBRAR O CICLO",
+    "stay": "CONSERVAR O CICLO",
+    "creditsTitle": "ECHO//404 — A MEMÓRIA DA ESTAÇÃO",
+    "creditsAuthor": "CRIADO E DESENVOLVIDO POR MANUEL SAMPAIO01",
+    "stats": "Tempo de jogo · Mortes · Memórias principais · Memórias opcionais",
+    "afterEnding": "VOLTAR AO HUB — OS RESULTADOS CONTINUAM GUARDADOS"
+  },
+  "status": "APPROVED_WORLD1_PILOT",
+  "zones": [
+    {
+      "id": "m1-z1",
+      "number": 1,
+      "world": 1,
+      "name": "Câmara de Eco",
+      "worldName": "Docas do Silêncio",
+      "entry": "Abro os olhos. O chão lembra-se de mim antes de eu me lembrar dele.",
+      "memory": "Esperava ouvir uma respiração. Em vez disso, os meus passos chegam duas vezes, como se alguém me seguisse por dentro. A parede guarda a marca de uma porta que já não existe. Reconheço o gesto de a abrir, mas não o corpo que o fez.",
+      "optional": "Deixei esta marca numa tentativa anterior. A mão não tinha esta forma, mas o gesto era meu.",
+      "conclusion": "Não acordei nesta estação. Fui reconstruído por ela.",
+      "memoryCards": [
+        "Esperava ouvir uma respiração. Em vez disso, os meus passos chegam duas vezes, como se alguém me seguisse por dentro.",
+        "A parede guarda a marca de uma porta que já não existe. Reconheço o gesto de a abrir, mas não o corpo que o fez."
+      ],
+      "approval": "approved-world1"
+    },
+    {
+      "id": "m1-z2",
+      "number": 2,
+      "world": 1,
+      "name": "Cais sem Tripulação",
+      "worldName": "Docas do Silêncio",
+      "entry": "Conheço este cais. A memória chega antes do nome.",
+      "memory": "Conduzia uma nave de evacuação. Reconheço as luzes de aproximação e um visor partido, mas os lugares da tripulação continuam vazios nesta recordação. O último gesto foi pedir que partissem sem mim. Porque continuo aqui, se ainda me lembro de ter ouvido os motores arrancar?",
+      "optional": "Escondi uma mensagem debaixo do painel: se o corredor estiver vazio, não significa que estejas sozinho. Havia alguém do outro lado do comunicador.",
+      "conclusion": "Era o piloto de uma fuga que ainda não aconteceu.",
+      "memoryCards": [
+        "Conduzia uma nave de evacuação. Reconheço as luzes de aproximação e um visor partido, mas os lugares da tripulação continuam vazios nesta recordação.",
+        "O último gesto foi pedir que partissem sem mim. Porque continuo aqui, se ainda me lembro de ter ouvido os motores arrancar?"
+      ],
+      "approval": "approved-world1"
+    },
+    {
+      "id": "m1-z3",
+      "number": 3,
+      "world": 1,
+      "name": "Portão de Quarentena",
+      "worldName": "Docas do Silêncio",
+      "entry": "Reconheço o vigia. Pedimos-lhe que não deixasse ninguém passar.",
+      "memory": "Pedimos que o portão ficasse fechado durante o ensaio. A tripulação concordou: seria apenas por alguns segundos, até haver uma passagem segura. O vigia continua a cumprir essa decisão coletiva. Para ele, a confirmação de saída nunca chegou; os nossos segundos ainda não acabaram.",
+      "optional": "Regressava sempre pelo mesmo elevador. Uma das marcas na cabine diz que este foi o meu décimo sétimo regresso.",
+      "conclusion": "Não fomos presos por um invasor. Ficámos presos numa decisão que precisamos de terminar.",
+      "memoryCards": [
+        "Pedimos que o portão ficasse fechado durante o ensaio. A tripulação concordou: seria apenas por alguns segundos, até haver uma passagem segura.",
+        "O vigia continua a cumprir essa decisão coletiva. Para ele, a confirmação de saída nunca chegou; os nossos segundos ainda não acabaram."
+      ],
+      "approval": "approved-world1"
+    }
+  ],
+  "bosses": [
+    {
+      "zone": "m1-z3",
+      "name": "O Porteiro",
+      "identity": "Vigia industrial de quarentena; corpo baixo, dois braços de bloqueio e um núcleo de confirmação.",
+      "intro": [
+        "PORTEIRO: Quarentena em vigor. A confirmação requer duas presenças.",
+        "ECHO: Pedimos segurança. Não pedimos uma prisão."
+      ],
+      "phases": [
+        [
+          "Selo",
+          "PORTEIRO: Movimento não autorizado. Proceder à contenção.",
+          "ECHO: O aviso chega antes do braço."
+        ],
+        [
+          "Testemunha",
+          "PORTEIRO: Segunda presença em falta. Pedido suspenso.",
+          "ECHO: O eco mantém a confirmação. Atravesso agora."
+        ],
+        [
+          "Última ordem",
+          "PORTEIRO: Autorização de saída incompleta. Repetir verificação.",
+          "ECHO: A tripulação revoga a ordem. Abre o caminho."
+        ]
+      ],
+      "defeat": [
+        "PORTEIRO: Confirmação recebida. Quarentena terminada.",
+        "ECHO: Uma decisão nossa pode ser terminada por nós."
+      ]
+    }
+  ],
+  "maintenanceRule": "As unidades de manutenção aplicam a quarentena que pedimos; qualquer movimento não autorizado é tratado como risco para a preservação.",
+  "operators": {
+    "axiom": {
+      "name": "AXIOM",
+      "nature": "Humano de manutenção; linguagem concreta, protetora, poucas palavras.",
+      "lines": [
+        "Seguro a passagem. Tu dá-me um motivo para a abrir."
+      ]
+    },
+    "nyra": {
+      "name": "NYRA",
+      "nature": "Piloto humana; frases diretas, observação espacial, movimento sem bravata.",
+      "lines": [
+        "Reconheço uma aproximação falhada. Ainda podemos corrigir a rota."
+      ]
+    },
+    "kai7": {
+      "name": "KAI-7",
+      "nature": "Andróide; texto frio e preciso, sem voz sintetizada ou pretensão de biologia.",
+      "lines": [
+        "Confirmo atividade. Origem da memória: indeterminada."
+      ]
+    }
+  }
+}
