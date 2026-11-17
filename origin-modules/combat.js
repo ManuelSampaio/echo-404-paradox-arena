@@ -1,6 +1,6 @@
 /* Core pulse weapon: shared by all operators, including pure mode. No ammunition grind. */
 (()=>{window.OriginModules ||= {};window.OriginModules.combat={
- createCombat(){this.pulseCooldown=0;this.pulseShots=[];this.defeated=0;this.shotsFired=0;this.combatGraphics=this.add.graphics().setDepth(14);for(const e of this.enemies){e.hp=e.type==='sentry'?3:e.type==='drone'?1:2;e.stun=0;e.defeated=false;}},
+ createCombat(){const button=document.getElementById('pulseAction');if(button){button.disabled=false;button.classList.remove('recharging');button.querySelector('small').textContent='PULSO';}this.pulseCooldown=0;this.pulseShots=[];this.defeated=0;this.shotsFired=0;this.combatGraphics=this.add.graphics().setDepth(14);for(const e of this.enemies){e.hp=e.type==='sentry'?3:e.type==='drone'?1:2;e.stun=0;e.defeated=false;}},
  firePulse(){if(!this.running||this.pausedByUser||this.finished||this.training||this.pulseCooldown>0)return false;this.pulseCooldown=.42;this.shotsFired++;const p=this.player,x=p.x+this.facing*20,y=p.y-38;
   const targets=[...this.enemies.filter(e=>!e.defeated).map(e=>({x:e.x,y:e.y-35})),...(this.operation?.type==='sabotage'?this.relays||[]:[]).filter(r=>!r.done).map(r=>({x:r.x,y:r.y-35}))];
   const target=targets.filter(t=>(t.x-x)*this.facing>=-12&&Math.abs(t.y-y)<105&&Math.hypot(t.x-x,t.y-y)<500).sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y))[0];const dx=target?target.x-x:this.facing*500,dy=target?target.y-y:0,len=Math.hypot(dx,dy)||1;

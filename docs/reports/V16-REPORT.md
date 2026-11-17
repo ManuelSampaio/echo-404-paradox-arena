@@ -100,3 +100,7 @@ O objetivo agora é o teste humano dos 25 níveis, sobretudo mira/toque, defesa 
 ## Correção após verificação da publicação
 
 O deploy passou, mas o navegador recebeu ficheiros `assets/home.js` de uma edição anterior durante a transição, misturando HTML novo e JavaScript antigo. As entradas do Vite passaram a usar nomes com hash do conteúdo, tal como os chunks; foi acrescentada uma regressão no teste de build. Esta correção não altera mapas, combate ou dados guardados. A verificação do site publicado é necessária para confirmar a saída do estado misto.
+
+## Verificação no navegador publicado
+
+Após a correção dos nomes com hash, confirmados na publicação: as descrições novas dos 25 mapas, treino completo pelos botões/teclado, disparo contínuo visível e abertura da missão 25 com objetivo de relés em ordem e dois ecos. O deploy e todas as suites da main passaram. Foi ainda corrigida a reposição do texto/classe do PULSO ao mudar de missão durante a recarga, com regressão Phaser. Esta verificação é num navegador desktop remoto; iPhone/Safari físico, desempenho mobile e áudio após chamadas continuam não confirmados.
