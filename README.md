@@ -40,4 +40,4 @@ Ver `docs/reports/V16-REPORT.md`, `docs/TILED.md`, `docs/LICENSES.md`, `docs/MOB
 
 ## Não confirmado
 
-iPhone físico/Safari, FPS/GPU/memória em gama baixa, áudio após chamadas, Lighthouse, builds APK/AAB/iOS e duração humana de 2–4 minutos. Os alvos de estrelas são referências ajustáveis do bot, não medição humana. O lançamento local de Chromium foi bloqueado pelo ambiente nesta revisão; testes físicos/visuais de browser não são substituídos pelo Phaser automatizado.
+iPhone físico/Safari, FPS/GPU/memória em gama baixa, áudio após chamadas, Lighthouse, builds APK/AAB/iOS e duração humana de 2–4 minutos. Os alvos de estrelas são referências ajustáveis do bot, não medição humana. O Chromium local foi bloqueado pelo ambiente; num navegador desktop remoto, a publicação foi verificada com treino completo, disparo contínuo e abertura da missão 25. Isto não substitui teste num telefone físico.
