@@ -96,3 +96,7 @@ Não foram apagados testes para esconder falhas. As referências à edição est
 ## Riscos e decisões restantes
 
 O objetivo agora é o teste humano dos 25 níveis, sobretudo mira/toque, defesa com reforços e legibilidade portrait. Os saves continuam locais e não sincronizam entre dispositivos. Não há bloqueio funcional conhecido nos 75 percursos contínuos finais; isso não demonstra ausência de todos os bugs nem garante todas as estrelas. A remoção da edição antiga é da publicação atual, não uma reescrita do histórico Git. Novos ajustes de dificuldade devem usar os relatórios do proprietário.
+
+## Correção após verificação da publicação
+
+O deploy passou, mas o navegador recebeu ficheiros `assets/home.js` de uma edição anterior durante a transição, misturando HTML novo e JavaScript antigo. As entradas do Vite passaram a usar nomes com hash do conteúdo, tal como os chunks; foi acrescentada uma regressão no teste de build. Esta correção não altera mapas, combate ou dados guardados. A verificação do site publicado é necessária para confirmar a saída do estado misto.
