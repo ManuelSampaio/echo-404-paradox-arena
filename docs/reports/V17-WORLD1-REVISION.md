@@ -2,7 +2,9 @@
 
 17 de novembro de 2026. Substitui o relatório funcional do piloto inicial quanto ao visual, combate e resultados do bot. Apenas a pré-visualização foi atualizada; main/v16 continuam intactas. Mundos 2–5 não foram integrados.
 
-Teste: https://echo404-v17-memoria-piloto.buitanda-5186.chatgpt.site/ (acesso privado com a conta proprietária).
+Teste no GitHub Pages: https://manuelsampaio.github.io/echo-404-paradox-arena/v17/
+
+A v16 mantém a raiz. O piloto usa /v17/, com manifest e service worker limitados a esse caminho. Como partilham a origem, o histórico v14–v16 fica disponível por leitura; escritas continuam apenas em chaves v17. A pré-visualização privada anterior continua em https://echo404-v17-memoria-piloto.buitanda-5186.chatgpt.site/ e tem armazenamento separado.
 
 ## O que estava fraco e o que mudou
 
@@ -68,6 +70,6 @@ Capturas reais do renderer Canvas/Phaser, com enquadramento e posições prepara
 
 Não confirmados: ergonomia/precisão percebida, iPhone físico, FPS/GPU, som em chamadas, montagem dos controlos reais a 320 px, navegação offline através do acesso privado e primeira conclusão humana de 2–4 minutos. As capturas não provam estes pontos. Não foi produzido vídeo. Ainda se reutilizam os sprites de corpo anteriores, com rig visual de arma por cima.
 
-No telemóvel, abre o teste, confirma a versão pilot.2, ativa modo puro e testa primeiro a saída da nave. Na zona 2, atravessa o casco e observa as camadas; compara cada arma ao correr, no ar e virada para ambos os lados. No chefe, testa o aviso, a esquiva e o eco na segunda fase. Experimenta reduzir efeitos. Abre ?debug para hitboxes e COPIAR RELATÓRIO. Não apagues dados da v16; a pré-visualização continua numa origem separada.
+No telemóvel, abre o teste, confirma a versão pilot.2, ativa modo puro e testa primeiro a saída da nave. Na zona 2, atravessa o casco e observa as camadas; compara cada arma ao correr, no ar e virada para ambos os lados. No chefe, testa o aviso, a esquiva e o eco na segunda fase. Experimenta reduzir efeitos. Abre ?debug para hitboxes e COPIAR RELATÓRIO. Não apagues dados da v16; a pré-visualização privada tem origem separada; no Pages, o histórico existente é lido sem sobrescrita.
 
 Paragem nesta ronda. Mundos 2–5 e substituição da v16 dependem da aprovação do proprietário.

@@ -24,7 +24,9 @@
     "test:v17": "npm run art:v17 && node v17/tests/contracts.cjs && node v17/tests/phaser.cjs && node v17/tests/feedback.cjs",
     "test:bot:v17": "node v17/tests/bot.cjs",
     "art:v17": "node v17/scripts/create-art.cjs && node v17/scripts/raster-art.cjs",
-    "capture:v17": "npm run art:v17 && node v17/tests/captures.cjs"
+    "capture:v17": "npm run art:v17 && node v17/tests/captures.cjs",
+    "package:pages": "node scripts/package-pages.cjs",
+    "test:pages": "node tests/pages-pilot.cjs"
   },
   "devDependencies": {
     "@capacitor/cli": "8.6.2",

@@ -1,0 +1,9 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),{JSDOM}=require('jsdom');
+const base='https://manuelsampaio.github.io/echo-404-paradox-arena/';
+const html=fs.readFileSync('dist/v17/index.html','utf8'),dom=new JSDOM(html,{url:base+'v17/'});
+for(const node of dom.window.document.querySelectorAll('script[src],link[href],img[src]')){const ref=node.getAttribute('src')||node.getAttribute('href'),url=new URL(ref,dom.window.location.href);if(url.origin!==new URL(base).origin)continue;assert.ok(url.href.startsWith(base+'v17/'),'pilot resource stays below its deployed directory: '+ref);assert.ok(fs.existsSync('dist/'+url.pathname.slice(new URL(base).pathname.length)),ref);}
+assert.match(html,/Piloto/);assert.doesNotMatch(fs.readFileSync('dist/index.html','utf8'),/A Memória da Estação · Piloto/);
+const manifest=JSON.parse(fs.readFileSync('dist/v17/manifest.webmanifest'));for(const key of ['id','start_url','scope'])assert.ok(new URL(manifest[key],base+'v17/manifest.webmanifest').href.startsWith(base+'v17/'));
+// Neither worker may answer requests belonging to the other campaign.
+for(const [worker,scope,excluded]of [['dist/paradox-sw.js',base,base+'v17/index.html'],['dist/v17/sw.js',base+'v17/',base+'index.html']]){const handlers={};vm.runInNewContext(fs.readFileSync(worker,'utf8'),{self:{location:new URL(scope+(worker.endsWith('/sw.js')?'sw.js':'paradox-sw.js')),addEventListener:(k,f)=>handlers[k]=f},URL,Set,Request});let intercepted=false;handlers.fetch({request:{url:excluded,method:'GET',mode:'navigate'},respondWith:()=>intercepted=true});assert.equal(intercepted,false,'cross-campaign interception: '+worker);}
+assert.equal(fs.readFileSync('dist/v17/sw.js','utf8'),fs.readFileSync('dist-v17/sw.js','utf8'));dom.window.close();console.log('PASS Pages composition: /v17 resources, project base, manifest scope, v16 root and mutually excluded service workers');
