@@ -26,6 +26,7 @@ jobs:
       - run: npm test
       - run: npm run test:phaser
       - run: npm run test:v15
+      - run: npm run test:action
       - run: npm run test:bot
       - run: npm run build
       - run: npm run test:build

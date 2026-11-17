@@ -78,14 +78,14 @@
    fragments:[point(platforms[3]),point(anchor,45),point(platforms.at(-3))].map(p=>({...p,y:p.y-40})),secrets:[{x:spawn.x<500?900:170,y:base-40},point(platforms[5],-55),point(platforms.at(-2),55)].map((p,i)=>i?({...p,y:p.y-40}):p),
    checkpoints:[spawn,point(platforms[4]),point(anchor,-35),point(platforms[8]),point(platforms.at(-3))],enemies,vents,vent:{x:-1000,y:0,w:0,period:6},exit:{x:last.x+last.w-40,y:last.y},briefing:'Sobe a '+names[index]+'. Recolhe três fragmentos, fixa o eco na âncora e usa o elevador para continuar a ascensão.'};
  })];
- const KEY='echo404_origin_campaign_v15',LEGACY_KEY='echo404_origin_campaign_v14';
+ const VERSION='16.0.0',KEY='echo404_origin_campaign_v16',LEGACY_KEY='echo404_origin_campaign_v14';
  function load(storage){
-  const read=key=>{try{const p=JSON.parse(storage.getItem(key));return p&&p.levels&&typeof p.levels==='object'&&!Array.isArray(p.levels)?p:null;}catch(_){return null;}};
-  const old=read(LEGACY_KEY),current=read(KEY);const levels={...(old?.version===14?old.levels:{})};
+  const read=key=>{try{const p=JSON.parse(storage.getItem(key));if(!p||!p.levels||typeof p.levels!=='object'||Array.isArray(p.levels))return null;const clean={};for(const [id,r]of Object.entries(p.levels)){if(!r||typeof r!=='object'||Array.isArray(r))continue;const byOperator={};for(const operator of ['axiom','nyra','kai7']){const v=r.byOperator?.[operator];if(v&&typeof v==='object'&&!Array.isArray(v))byOperator[operator]={bestTime:Number.isFinite(v.bestTime)&&v.bestTime>0?v.bestTime:undefined,stars:[0,1,2].map(i=>v.stars?.[i]===true)};}clean[id]={...r,byOperator};}return {...p,levels:clean};}catch(_){return null;}};
+  const old=read(LEGACY_KEY),v15=read('echo404_origin_campaign_v15'),current=read(KEY);const levels={...(old?.version===14?old.levels:{}),...(v15?.version===15?v15.levels:{})};
   if(!levels.origin)try{const r=JSON.parse(storage.getItem('echo404_v93_origin_result'));if(r&&['OURO','PRATA','BRONZE'].includes(r.medal))levels.origin=r;}catch(_){}
-  for(const [id,r]of Object.entries(levels))levels[id]={...r,legacyMedal:r.medal,legacyBestTime:r.bestTime||r.time};
-  if(current?.version===15)for(const [id,r]of Object.entries(current.levels))levels[id]={...levels[id],...r};
-  return {version:15,levels};
+  for(const [id,r]of Object.entries(levels))levels[id]={...r,legacyV15:v15?.levels?.[id],legacyMedal:r.medal,legacyBestTime:r.bestTime||r.time,historical:true,stars:[false,false,false],byOperator:{}};
+  if(current?.version===16)for(const [id,r]of Object.entries(current.levels))levels[id]={...levels[id],...r};
+  return {version:16,levels};
  }
  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
  function pose(frames,time){
@@ -98,12 +98,14 @@
  function rank({deaths,secrets}){return deaths===0&&secrets>=2?'OURO':deaths<=3?'PRATA':'BRONZE';}
  function save(storage,result,index=0){
   try{const id=levels[index]?.id;if(!id)return false;let current;try{current=JSON.parse(storage.getItem(KEY));}catch(_){}
-   if(!current||current.version!==15||!current.levels)current={version:15,levels:{}};
-   const old=current.levels[id]||{},history=load(storage).levels[id]||{},ranks={OURO:3,PRATA:2,BRONZE:1};
-   const byOperator={...(old.byOperator||{})},previous=byOperator[result.operator]||{};if(result.pure){byOperator[result.operator]={bestTime:Math.min(previous.bestTime||Infinity,result.time),stars:(result.stars||[]).map((v,i)=>v||previous.stars?.[i]||false)};}
-   current.levels[id]={...old,...result,byOperator,medal:result.pure===false?old.medal:ranks[old.medal]>ranks[result.medal]?old.medal:result.medal,bestTime:result.pure===false?old.bestTime:Math.min(Number(old.bestTime||old.time)||Infinity,result.time),legacyMedal:history.legacyMedal,legacyBestTime:history.legacyBestTime,version:'15.0.0'};
+   if(!current||current.version!==16||!current.levels||typeof current.levels!=='object'||Array.isArray(current.levels))current={version:16,levels:{}};
+   const history=load(storage).levels[id]||{},old=history.historical?{}:history,ranks={OURO:3,PRATA:2,BRONZE:1};
+   const pure=result.pure!==false,byOperator={...(old.byOperator||{})},previous=byOperator[result.operator]||{};if(pure){byOperator[result.operator]={bestTime:Math.min(previous.bestTime||Infinity,result.time),stars:(result.stars||[]).map((v,i)=>v||previous.stars?.[i]||false)};}
+   const allStars=[0,1,2].map(i=>Object.values(byOperator).some(r=>r.stars?.[i]===true));
+   const latest={...result};
+   current.levels[id]={...old,...result,lastRun:latest,stars:allStars,pure:old.pure===true||pure,time:pure?Math.min(Number(old.bestTime)||Infinity,result.time):old.bestTime,byOperator,medal:result.pure===false?old.medal:ranks[old.medal]>ranks[result.medal]?old.medal:result.medal,bestTime:result.pure===false?old.bestTime:Math.min(Number(old.bestTime||old.time)||Infinity,result.time),legacyMedal:history.legacyMedal,legacyBestTime:history.legacyBestTime,historical:false,version:VERSION};
    storage.setItem(KEY,JSON.stringify(current));return true;
   }catch(_){return false;}
  }
- window.OriginPilot={data,levels,load,KEY,clamp,pose,groundedAt,rank,save};
+ window.OriginPilot={data,levels,load,KEY,VERSION,clamp,pose,groundedAt,rank,save};
 })();

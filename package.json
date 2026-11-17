@@ -1,6 +1,6 @@
 {
   "name": "echo-404-paradox-arena",
-  "version": "15.0.0",
+  "version": "16.0.0",
   "private": true,
   "scripts": {
     "test": "node tests/navigation.cjs && node tests/pilot.cjs && node tests/pilot-sound.cjs && node tests/operator-abilities.cjs && node tests/vertical-campaign.cjs && node tests/paradox-web.cjs",
@@ -18,7 +18,8 @@
     "cap:sync": "npm run build && cap sync",
     "cap:android": "cap add android",
     "cap:ios": "cap add ios",
-    "test:build": "node tests/build.cjs"
+    "test:build": "node tests/build.cjs",
+    "test:action": "node tests/save-resilience.cjs && node tests/action-maps.cjs && node tests/combat-phaser.cjs"
   },
   "devDependencies": {
     "@capacitor/cli": "8.6.2",

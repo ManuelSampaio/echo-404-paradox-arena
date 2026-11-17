@@ -15,5 +15,7 @@ import '../origin-modules/enemies.js';
 import '../origin-modules/hud.js';
 import '../origin-modules/training.js';
 import '../origin-modules/abilities.js';
+import '../origin-modules/combat.js';
+import '../origin-modules/operations.js';
 import '../origin-pilot.js';
 import '../paradox-register.js';

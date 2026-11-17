@@ -1,0 +1,40 @@
+// Real Phaser Arcade simulation with DOM/image adapters; no mocked physics.
+process.on('uncaughtException',e=>{console.error(e.stack);process.exit(1)});
+const {JSDOM}=require('jsdom');const native=require('@napi-rs/canvas'),fs=require('fs'),path=require('path');
+const assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..');
+(async()=>{
+ const images={};for(const name of ['patrols'])images[name]=await native.loadImage(root+'/assets/origin/'+name+'.png');
+ for(const name of ['axiom','nyra','kai7','platform','horizon'])images[name]=await native.loadImage(root+'/assets/operators/'+name+'.png');
+ const dom=new JSDOM(fs.readFileSync(root+'/origin-reborn.html','utf8').replace(/<script[\s\S]*?<\/script>/g,''),{url:'http://localhost/origin-reborn.html',pretendToBeVisual:true,runScripts:'outside-only'});
+ const w=dom.window;global.window=w;global.document=w.document;Object.defineProperty(global,'navigator',{value:w.navigator,configurable:true});for(const key of ['Element','HTMLElement','HTMLCanvasElement','HTMLVideoElement','HTMLImageElement','XMLHttpRequest','screen'])global[key]=w[key];global.ImageData=native.ImageData;global.self=w;global.requestAnimationFrame=w.requestAnimationFrame.bind(w);global.cancelAnimationFrame=w.cancelAnimationFrame.bind(w);
+ w.HTMLCanvasElement.prototype.getContext=function(type){if(type!=='2d')return null;if(!this._canvas)this._canvas=native.createCanvas(this.width||1,this.height||1);if(this._canvas.width!==this.width)this._canvas.width=this.width||1;if(this._canvas.height!==this.height)this._canvas.height=this.height||1;const ctx=this._canvas.getContext('2d');if(!ctx._patched){for(const method of ['drawImage','createPattern']){const fn=ctx[method].bind(ctx);ctx[method]=(img,...args)=>fn(img?._canvas||img,...args);}ctx._patched=true;}return ctx;};
+ w.HTMLCanvasElement.prototype.toDataURL=function(){return this._canvas?.toDataURL()||'';};
+ global.Image=w.Image=native.Image;w.CanvasRenderingContext2D=native.createCanvas(1,1).getContext('2d').constructor;w.focus=()=>{};w.ORIGIN_PILOT_NO_BOOT=true;
+ const Phaser=require(root+'/vendor/phaser-3.90.0.min.js');global.Phaser=w.Phaser=Phaser;console.log('loaded',Phaser.VERSION);w.eval(fs.readFileSync(root+'/origin-feel-config.js','utf8'));w.eval(fs.readFileSync(root+'/origin-pilot-data.js','utf8'));w.eval(fs.readFileSync(root+'/origin-abilities.js','utf8'));w.OriginMaps=w.OriginPilot.levels.map(l=>JSON.parse(fs.readFileSync(root+'/maps/'+l.id+'.json','utf8')));for(const f of ['origin-tiled.js','origin-maps.js','origin-balance.js','origin-devices.js','origin-modules/mechanisms.js','origin-session.js','origin-geometry.js','origin-modules/movement.js','origin-modules/echoes.js','origin-modules/devices.js','origin-modules/enemies.js','origin-modules/hud.js','origin-modules/training.js','origin-modules/abilities.js','origin-modules/combat.js','origin-modules/operations.js','origin-pilot.js'])w.eval(fs.readFileSync(root+'/'+f,'utf8'));
+ let ready;const created=new Promise(r=>ready=r);
+ class TestScene extends w.OriginPilotScene{preload(){for(const id of ['axiom','nyra','kai7'])if(!this.textures.exists('operator-'+id))this.textures.addSpriteSheet('operator-'+id,images[id],{frameWidth:72,frameHeight:88});if(!this.textures.exists('patrols'))this.textures.addSpriteSheet('patrols',images.patrols,{frameWidth:64,frameHeight:80});for(const name of ['platform','horizon'])if(!this.textures.exists(name))this.textures.addImage(name,images[name]);}create(){super.create();ready(this);}}
+ const game=new Phaser.Game({type:process.env.RENDER||process.env.RENDER_DIR?Phaser.CANVAS:Phaser.HEADLESS,width:960,height:540,banner:false,audio:{noAudio:true},physics:{default:'arcade',arcade:{gravity:{y:1700},fixedStep:true,fps:60}},scene:[TestScene]});
+ if(process.env.RENDER_DIR)fs.mkdirSync(process.env.RENDER_DIR,{recursive:true});
+ const scene=await Promise.race([created,new Promise((_,j)=>setTimeout(()=>j(Error('boot timeout')),3000))]);
+
+ game.loop.stop();let clock=0;
+ const tick=(n=1)=>{for(let i=0;i<n;i++)game.headlessStep(clock+=1000/60,1000/60);};
+ const place=(x,y)=>{scene.player.body.reset(x,y);scene.player.setVelocity(0,0);scene.control.clear();scene.invincible=100000;scene.dashTime=0;scene.dashCooldown=0;scene.jumpBuffer=0;scene.coyote=0;scene.player.body.setAllowGravity(true);};
+
+ scene.begin();tick(3);const enemy=scene.enemies[0];enemy.x=420;enemy.y=1320;enemy.min=420;enemy.max=420;enemy.hp=2;scene.player.body.reset(220,1320);scene.facing=1;scene.invincible=100;
+ w.document.getElementById('pulseAction').click();tick(24);assert.equal(enemy.hp,1,'real projectile damages enemy');assert.equal(scene.firePulse(),false,'cooldown enforced');tick(3);scene.control.press('fire');tick(24);assert.equal(enemy.defeated,true);assert.equal(scene.defeated,1);const health=scene.health;scene.player.body.reset(enemy.x,enemy.y);tick(10);assert.equal(scene.health,health,'disabled enemy cannot deal contact damage');
+ scene.respawn(true,'test');assert.equal(enemy.defeated,true,'defeated units remain disabled after death');
+ scene.pulseCooldown=0;scene.setPaused(true);assert.equal(scene.firePulse(),false);const cooldown=scene.pulseCooldown;tick(60);assert.equal(scene.pulseCooldown,cooldown);scene.setPaused(false);
+ // Separate fingers can hold movement and automatic pulse fire; cancellation releases only that finger.
+ const pointer=(button,type,id)=>{const e=new w.Event(type,{bubbles:true,cancelable:true});e.pointerId=id;button.dispatchEvent(e);};const left=w.document.querySelector('[data-hold="left"]'),fire=w.document.getElementById('pulseAction');pointer(left,'pointerdown',11);pointer(fire,'pointerdown',12);assert.ok(scene.control.down('left')&&scene.control.down('fire'));tick(60);pointer(fire,'pointercancel',12);assert.ok(scene.control.down('left'));assert.equal(scene.control.down('fire'),false);pointer(left,'pointercancel',11);assert.equal(scene.control.down('left'),false);
+ const restart=index=>{w.history.replaceState({},'', '/origin-reborn.html#nivel='+(index+1));scene.scene.restart();tick(3);scene.begin();tick(3);scene.invincible=100;};
+ restart(1);const relay=scene.relays[0];scene.player.body.reset(relay.x-110,relay.y);scene.facing=1;scene.control.hold('relay-fire','fire',true);tick(240);scene.control.clear();assert.equal(relay.done,true,'pulse destroys sabotage relay');assert.equal(scene.operationDone,false,'one relay is insufficient');
+ const sequence=w.OriginPilot.levels.findIndex(l=>l.operation.type==='sequence');restart(sequence);scene.activateRelay(scene.relays[1]);assert.equal(scene.relays[1].done,false,'ordered relay rejects out-of-order input');for(const r of scene.relays)scene.activateRelay(r);scene.updateOperation(0);assert.ok(scene.operationDone);
+ const defend=w.OriginPilot.levels.findIndex(l=>l.operation.type==='defend');restart(defend);const station=scene.relays[0];scene.player.body.reset(station.x,station.y);tick(3);assert.ok(scene.operationStarted);const time=scene.operationTimer;scene.setPaused(true);tick(120);assert.equal(scene.operationTimer,time,'defence clock freezes on pause');scene.setPaused(false);scene.player.body.reset(station.x+500,station.y);tick(60);assert.equal(scene.operationTimer,time,'defence requires staying in the zone');scene.player.body.reset(station.x,station.y);tick(900);assert.ok(scene.operationDone,'defence completes after active time in zone');
+ // Cover is resolved by swept segment intersection, independent of enemy target selection.
+ restart(0);const unit=scene.enemies[0];unit.x=400;unit.y=1320;unit.min=400;unit.max=400;scene.player.body.reset(200,1320);scene.facing=1;scene.data.platforms.push({id:'test-cover',x:280,y:1200,w:30,h:120});scene.firePulse();tick(25);assert.equal(unit.hp,2,'cover blocks pulse');scene.data.platforms.pop();
+ assert.equal(w.localStorage.getItem('echo404_origin_campaign_v14'),null);
+ console.log('PASS: actual Phaser pulse hits/cooldown/cover, persistent takedowns, independent auto-fire touch, sabotage, relay order and pause-safe defence');
+ game.destroy(true);dom.window.close();
+})().catch(e=>{console.error(e.stack);process.exit(1);});
