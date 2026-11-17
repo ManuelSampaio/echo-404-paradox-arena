@@ -1,0 +1,249 @@
+{
+  "version": "17.0.0-pilot.1",
+  "method": "Real Phaser, normal semantic inputs only, damage active, no abilities, no body repositioning or artificial immunity",
+  "rows": [
+    {
+      "zone": "m1-z1",
+      "operator": "nyra",
+      "weapon": "Pistolas duplas",
+      "pass": true,
+      "time": 20.7,
+      "deaths": 0,
+      "causes": [],
+      "fragments": 3,
+      "abilityUses": 0,
+      "weaponStats": {
+        "normal": 111,
+        "charged": 0,
+        "parries": 0,
+        "pulses": 22,
+        "sync": 0
+      },
+      "boss": null,
+      "recoveries": [],
+      "cause": null
+    },
+    {
+      "zone": "m1-z1",
+      "operator": "kai7",
+      "weapon": "Canhão de indução",
+      "pass": true,
+      "time": 21.7,
+      "deaths": 0,
+      "causes": [],
+      "fragments": 3,
+      "abilityUses": 0,
+      "weaponStats": {
+        "normal": 22,
+        "charged": 8,
+        "parries": 0,
+        "pulses": 23,
+        "sync": 21
+      },
+      "boss": null,
+      "recoveries": [],
+      "cause": null
+    },
+    {
+      "zone": "m1-z1",
+      "operator": "axiom",
+      "weapon": "Lâmina de plasma",
+      "pass": true,
+      "time": 21.5,
+      "deaths": 0,
+      "causes": [],
+      "fragments": 3,
+      "abilityUses": 0,
+      "weaponStats": {
+        "normal": 53,
+        "charged": 0,
+        "parries": 1,
+        "pulses": 23,
+        "sync": 0
+      },
+      "boss": null,
+      "recoveries": [],
+      "cause": null
+    },
+    {
+      "zone": "m1-z2",
+      "operator": "nyra",
+      "weapon": "Pistolas duplas",
+      "pass": true,
+      "time": 27,
+      "deaths": 0,
+      "causes": [],
+      "fragments": 3,
+      "abilityUses": 0,
+      "weaponStats": {
+        "normal": 143,
+        "charged": 0,
+        "parries": 0,
+        "pulses": 28,
+        "sync": 0
+      },
+      "boss": null,
+      "recoveries": [],
+      "cause": null
+    },
+    {
+      "zone": "m1-z2",
+      "operator": "kai7",
+      "weapon": "Canhão de indução",
+      "pass": true,
+      "time": 28.4,
+      "deaths": 0,
+      "causes": [],
+      "fragments": 3,
+      "abilityUses": 0,
+      "weaponStats": {
+        "normal": 26,
+        "charged": 12,
+        "parries": 0,
+        "pulses": 30,
+        "sync": 26
+      },
+      "boss": null,
+      "recoveries": [],
+      "cause": null
+    },
+    {
+      "zone": "m1-z2",
+      "operator": "axiom",
+      "weapon": "Lâmina de plasma",
+      "pass": true,
+      "time": 28.4,
+      "deaths": 0,
+      "causes": [],
+      "fragments": 3,
+      "abilityUses": 0,
+      "weaponStats": {
+        "normal": 70,
+        "charged": 0,
+        "parries": 2,
+        "pulses": 31,
+        "sync": 0
+      },
+      "boss": null,
+      "recoveries": [],
+      "cause": null
+    },
+    {
+      "zone": "m1-z3",
+      "operator": "nyra",
+      "weapon": "Pistolas duplas",
+      "pass": true,
+      "time": 44,
+      "deaths": 1,
+      "causes": [
+        {
+          "cause": "boss:projectile",
+          "time": 40.5,
+          "bossPhase": 3
+        }
+      ],
+      "fragments": 3,
+      "abilityUses": 0,
+      "weaponStats": {
+        "normal": 223,
+        "charged": 0,
+        "parries": 0,
+        "pulses": 44,
+        "sync": 0
+      },
+      "boss": {
+        "hp": 0,
+        "time": 19.8,
+        "phases": [
+          {
+            "phase": 2,
+            "time": 27.833333333333034
+          },
+          {
+            "phase": 3,
+            "time": 32.64999999999943
+          }
+        ],
+        "echoGateFrames": 504
+      },
+      "recoveries": [],
+      "cause": null
+    },
+    {
+      "zone": "m1-z3",
+      "operator": "kai7",
+      "weapon": "Canhão de indução",
+      "pass": true,
+      "time": 56.9,
+      "deaths": 1,
+      "causes": [
+        {
+          "cause": "boss:projectile",
+          "time": 53.3,
+          "bossPhase": 3
+        }
+      ],
+      "fragments": 3,
+      "abilityUses": 0,
+      "weaponStats": {
+        "normal": 53,
+        "charged": 21,
+        "parries": 0,
+        "pulses": 61,
+        "sync": 64
+      },
+      "boss": {
+        "hp": 0,
+        "time": 35.7,
+        "phases": [
+          {
+            "phase": 2,
+            "time": 35.866666666665914
+          },
+          {
+            "phase": 3,
+            "time": 42.09999999999889
+          }
+        ],
+        "echoGateFrames": 827
+      },
+      "recoveries": [],
+      "cause": null
+    },
+    {
+      "zone": "m1-z3",
+      "operator": "axiom",
+      "weapon": "Lâmina de plasma",
+      "pass": true,
+      "time": 48.1,
+      "deaths": 0,
+      "causes": [],
+      "fragments": 3,
+      "abilityUses": 0,
+      "weaponStats": {
+        "normal": 115,
+        "charged": 0,
+        "parries": 8,
+        "pulses": 51,
+        "sync": 0
+      },
+      "boss": {
+        "hp": 0,
+        "time": 25.9,
+        "phases": [
+          {
+            "phase": 2,
+            "time": 31.58333333333282
+          },
+          {
+            "phase": 3,
+            "time": 39.64999999999903
+          }
+        ],
+        "echoGateFrames": 685
+      },
+      "recoveries": [],
+      "cause": null
+    }
+  ]
+}
