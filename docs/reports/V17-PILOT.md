@@ -1,4 +1,6 @@
-# v17 — Piloto do Mundo 1
+# v17 — Piloto inicial do Mundo 1
+
+> Histórico da primeira entrega. Revisão atual: [Mundo 1 — revisão visual e combate](V17-WORLD1-REVISION.md).
 
 17 de novembro de 2026 · 17.0.0-pilot.1
 
