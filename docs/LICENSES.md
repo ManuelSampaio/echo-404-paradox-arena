@@ -28,3 +28,7 @@ As imagens da campanha têm geradores no repositório. A margem maskable pode se
 ## Piloto v17 — arte original
 
 Inventário completo: `v17/ASSET-LICENSES.md` e `v17/assets/manifest.json`. Gerador original `v17/scripts/create-art.cjs`: nove camadas de parallax (três por zona), atlas dos quatro papéis de inimigo, Porteiro industrial, KAI-7 mecânico e helpers. MIT do projeto. PNG gerados deterministicamente no build, sem assets ou samples de terceiros. Sons das armas/ambiente por osciladores Web Audio, MIT do projeto. Reutilizam-se apenas os operadores/plataformas e Phaser já licenciados no projeto; KAI-7 tem atlas próprio para o piloto.
+
+## v17 — revisão visual do Mundo 1
+
+Fundos e destroços: 13 desenhos pixel art SVG originais em `v17/art-source/`, licença MIT do projeto, autoria/assinatura MANUEL SAMPAIO01. Não usam assets de terceiros. O script de rasterização só converte os desenhos para PNG. Fontes, dimensões e hashes: `v17/ASSET-LICENSES.md` e `v17/assets/authored-manifest.json`. Efeitos e ambiente sonoro sintetizados pelo código do projeto, mesma licença.

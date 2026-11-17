@@ -1,0 +1,8 @@
+/* Rasterize the hand-authored pixel drawings, without procedural geometry. */
+const fs=require('fs'),path=require('path'),crypto=require('crypto'),{createCanvas,loadImage}=require('@napi-rs/canvas');
+(async()=>{
+ const source=path.resolve(__dirname,'../art-source'),out=path.resolve(__dirname,'../assets'),files=fs.readdirSync(source).filter(f=>f.endsWith('.svg')).sort(),authored=[];
+ for(const file of files){const input=fs.readFileSync(path.join(source,file)),image=await loadImage(input),canvas=createCanvas(image.width,image.height),ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;ctx.drawImage(image,0,0);const name=file.replace('.svg','.png'),bytes=canvas.toBuffer('image/png');fs.writeFileSync(path.join(out,name),bytes);authored.push({file:name,source:'v17/art-source/'+file,width:image.width,height:image.height,license:'MIT',author:'MANUEL SAMPAIO01',sha256:crypto.createHash('sha256').update(bytes).digest('hex')});}
+ for(let z=1;z<=3;z++){const canvas=createCanvas(480,270),ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;for(const layer of ['far','mid','near'])ctx.drawImage(await loadImage(path.join(out,`zone0${z}-${layer}.png`)),0,0,480,270);fs.writeFileSync(path.join(out,`zone0${z}-preview.png`),canvas.toBuffer('image/png'));}
+ fs.writeFileSync(path.join(out,'authored-manifest.json'),JSON.stringify({method:'Hand-authored SVG pixel drawings; rasterization only',license:'MIT',assets:authored},null,2)+'\n');console.log('Rasterized '+files.length+' original hand-authored pixel drawings and 3 previews');
+})().catch(e=>{console.error(e);process.exit(1)});

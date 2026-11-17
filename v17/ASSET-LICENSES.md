@@ -48,3 +48,21 @@ node v17/scripts/create-art.cjs
 Confirmado: geração local com dependências existentes, dimensões e frames inventariados, alfa em todas as camadas intermédias/próximas, reprodução determinística por hashes e inspeção visual das três composições, unidades, Porteiro e retrato KAI-7.
 
 Não confirmado por este lote: integração no runtime, legibilidade física num ecrã de 320px, FPS/GPU no iPhone, animações/configuração de hitboxes e comportamento de qualidade. Esses pontos pertencem aos testes do piloto.
+
+## Revisão visual do piloto — desenho por zona (17 de novembro de 2026)
+
+Os fundos e props desta revisão **substituem** a geometria procedural dos fundos listados acima. São desenhos pixel art originais, com coordenadas, contornos e danos desenhados explicitamente nos SVG de `v17/art-source/`. O script `raster-art.cjs` limita-se a rasterizar os desenhos e a compor as miniaturas; não gera geometrias, cores ou objetos aleatórios. Não foram usados assets externos ou elementos de franquias. Autor/detentor: **MANUEL SAMPAIO01**, licença **MIT do projeto**, texto em `LICENSE`.
+
+| Fonte original | PNG de runtime | Dimensões | Origem / conteúdo |
+|---|---|---|---|
+| `art-source/zone01-{far,mid,near}.svg` | `assets/zone01-{far,mid,near}.png` | 1024×576 × 3 | Interior da nave de evacuação: antepara com porta, bancos, armário médico, costelas, cablagem e casco rachado. `far` opaco; restantes transparentes. |
+| `art-source/zone02-{far,mid,near}.svg` | `assets/zone02-{far,mid,near}.png` | 1024×576 × 3 | Doca exterior: planeta, anel orbital partido, torres de atracação, nave fraturada distante e cabos de pórtico. Silhuetas distintas da cabine. |
+| `art-source/zone03-{far,mid,near}.svg` | `assets/zone03-{far,mid,near}.png` | 1024×576 × 3 | Quarentena: portão octogonal, dentes de bloqueio, pistões, medidores de pressão e válvulas. |
+| `art-source/entrance-hatch.svg` | `assets/entrance-hatch.png` | 256×256 | Escotilha aberta, soleira iluminada, seta de saída e painel rasgado; prop da saída da nave na zona 1. |
+| `art-source/wreck-tail.svg` | `assets/wreck-tail.png` | 640×384 | Cauda/reator exposto, células térmicas, cobertura dobrada e rasgo de impacto; zona 2. |
+| `art-source/wreck-hull.svg` | `assets/wreck-hull.png` | 1024×384 | Fuselagem aberta em corte, nervuras, assentos vazios, piso exposto, fissura diagonal e cablagem; zona 2. |
+| `art-source/wreck-cockpit.svg` | `assets/wreck-cockpit.png` | 640×384 | Proa tombada, vidro quebrado e trem de aterragem dobrado; zona 2. |
+
+Reprodução (a partir da raiz, **por esta ordem**): `node v17/scripts/create-art.cjs` e `node v17/scripts/raster-art.cjs`. O primeiro continua a gerar os atores e texturas auxiliares; o segundo instala os fundos desenhados à mão e props desta revisão. `assets/authored-manifest.json` associa cada PNG ao SVG original com dimensões, autor, licença e SHA-256. As três miniaturas são novamente compostas com as camadas revistas.
+
+Confirmado neste lote: rasterização com a dependência já existente, 13 fontes SVG originais, três fundos opacos com geometrias diferentes, alfa intermédio/próximo, props transparentes e inspeção visual local da composição. Não confirmado neste lote: integração, profundidade e percurso no runtime, iluminação/partículas, leitura física em 320 px ou desempenho mobile; esses pontos exigem validação da implementação do jogo.

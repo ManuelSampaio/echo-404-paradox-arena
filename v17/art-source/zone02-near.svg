@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="576" viewBox="0 0 256 144" shape-rendering="crispEdges">
+<!-- Original pixel drawing: MANUEL SAMPAIO01 / MIT. Coordinates and silhouettes authored by hand. -->
+<!-- Cables and a broken gantry, never a cabin silhouette. -->
+<path d="M0 0H21V6H29V15H23V19H12V30H0Z M256 0H237V12H227V16H237V40H256Z" fill="#060b12"/>
+<path d="M7 24V56H11V76L19 85V102 M244 35V72L238 78V111 M251 33V100H245V124" fill="none" stroke="#191e28" stroke-width="2"/>
+<path d="M0 144V130H34V135H62V144Z M185 144V140H219V129H256V144Z" fill="#070b12"/>
+<path d="M4 128H20V130H4Z M231 127H251V129H231Z" fill="#8c6c45"/>
+<path d="M24 0V18L28 23V38L34 44" fill="none" stroke="#44322f"/>
+</svg>

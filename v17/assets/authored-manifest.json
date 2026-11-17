@@ -1,0 +1,123 @@
+{
+  "method": "Hand-authored SVG pixel drawings; rasterization only",
+  "license": "MIT",
+  "assets": [
+    {
+      "file": "entrance-hatch.png",
+      "source": "v17/art-source/entrance-hatch.svg",
+      "width": 256,
+      "height": 256,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "70b4599dfccca3110a2911a3a4b0939371bc6272936ba0570af36c939c936043"
+    },
+    {
+      "file": "wreck-cockpit.png",
+      "source": "v17/art-source/wreck-cockpit.svg",
+      "width": 640,
+      "height": 384,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "b854a7bd8a7cdf76dc827ac0fe9085375725d91e75ce500aaf897ecae9692a57"
+    },
+    {
+      "file": "wreck-hull.png",
+      "source": "v17/art-source/wreck-hull.svg",
+      "width": 1024,
+      "height": 384,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "f593e62d0357a530f048e36ee371ca83b5662ae059f4a7656c1ae536a659a59f"
+    },
+    {
+      "file": "wreck-tail.png",
+      "source": "v17/art-source/wreck-tail.svg",
+      "width": 640,
+      "height": 384,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "68019faf11859778ddc1b5d8209224a10cc367902a3b2f0afd63d880a8dcb781"
+    },
+    {
+      "file": "zone01-far.png",
+      "source": "v17/art-source/zone01-far.svg",
+      "width": 1024,
+      "height": 576,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "5623a2517605e2e06e536f77abeb8e91958e0267b3137143e325d0d47f0c05e1"
+    },
+    {
+      "file": "zone01-mid.png",
+      "source": "v17/art-source/zone01-mid.svg",
+      "width": 1024,
+      "height": 576,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "df85ebf98ae98c236dce62ff2e48a64cde9cdb1a284ae80dfcfb9aaa721b3e9b"
+    },
+    {
+      "file": "zone01-near.png",
+      "source": "v17/art-source/zone01-near.svg",
+      "width": 1024,
+      "height": 576,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "a747db249033a3198045a58d59959e0e63a7e139da9df223b54575041768096d"
+    },
+    {
+      "file": "zone02-far.png",
+      "source": "v17/art-source/zone02-far.svg",
+      "width": 1024,
+      "height": 576,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "ae4ac4a1c31c022275ef6fb13e9f6d967195a5eabe8c371a1526fff285b61c1a"
+    },
+    {
+      "file": "zone02-mid.png",
+      "source": "v17/art-source/zone02-mid.svg",
+      "width": 1024,
+      "height": 576,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "88f86bc13f40c7d07bad795b8b3bcc10433d892a980c44a769f47f261931a5ae"
+    },
+    {
+      "file": "zone02-near.png",
+      "source": "v17/art-source/zone02-near.svg",
+      "width": 1024,
+      "height": 576,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "f832979aa315dd46800c3a7c084f43cd1e4a97e83ae31d52a9af4df5512867cb"
+    },
+    {
+      "file": "zone03-far.png",
+      "source": "v17/art-source/zone03-far.svg",
+      "width": 1024,
+      "height": 576,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "0c74988d460442b0913378e19428fc4fac0623a0061d8e499618cabbac4fb727"
+    },
+    {
+      "file": "zone03-mid.png",
+      "source": "v17/art-source/zone03-mid.svg",
+      "width": 1024,
+      "height": 576,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "1a4b6e5d8c42f708fdf63b90d1d6ae71d4981edf68c5333d8bd4fc267f18a61a"
+    },
+    {
+      "file": "zone03-near.png",
+      "source": "v17/art-source/zone03-near.svg",
+      "width": 1024,
+      "height": 576,
+      "license": "MIT",
+      "author": "MANUEL SAMPAIO01",
+      "sha256": "b9894dd74a100cdd2c6d06410498ddfacc42e7fa2218178e4eef8113c54aae6f"
+    }
+  ]
+}

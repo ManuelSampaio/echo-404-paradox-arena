@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="576" viewBox="0 0 256 144" shape-rendering="crispEdges">
+<!-- Original pixel drawing: MANUEL SAMPAIO01 / MIT. Coordinates and silhouettes authored by hand. -->
+<rect width="256" height="144" fill="#090e16"/>
+<!-- Interior: escape craft bay, sloping hull and repeated pressure ribs. -->
+<path d="M0 0H256V144H0Z M22 12V132H234V12Z" fill="#141f2a" fill-rule="evenodd"/>
+<path d="M22 12L52 30H204L234 12Z M22 132L52 114H204L234 132Z" fill="#1f2b35"/>
+<path d="M22 12L52 30V114L22 132Z M234 12L204 30V114L234 132Z" fill="#19232f"/>
+<path d="M0 27H22L52 43H204L234 27H256V31H234L204 47H52L22 31H0Z M0 112H22L52 98H204L234 112H256V116H234L204 102H52L22 116H0Z" fill="#283744"/>
+<rect x="66" y="42" width="124" height="65" fill="#070d15"/><path d="M66 42H190V48H72V107H66Z" fill="#34414a"/>
+<!-- cold square rear lock, amber floor arrow -->
+<path d="M97 51H159V107H97Z" fill="#182c38"/><path d="M106 56H150V105H106Z" fill="#223e4a"/>
+<path d="M126 56H130V103H126Z" fill="#74a7ac"/><path d="M106 58H110V105H106Z M146 58H150V105H146Z" fill="#2d5a67"/>
+<path d="M116 115H137V119H116Z M133 111L143 117L133 123V120H124V114H133Z" fill="#b79358"/>
+<!-- evacuation benches and medical storage -->
+<path d="M30 63H42V78H46V95H27V91H30Z M210 63H222V91H226V95H207V78H210Z" fill="#35434a"/>
+<path d="M33 65H39V77H33Z M213 65H219V77H213Z" fill="#72584a"/>
+<rect x="77" y="53" width="12" height="16" fill="#263541"/><path d="M81 56H85V66H81Z M78 59H88V63H78Z" fill="#a3b2a0"/>
+<path d="M42 12H48V132H42Z M208 12H214V132H208Z" fill="#0b131e"/>
+<path d="M8 20H13V40H8Z M243 20H248V40H243Z" fill="#7298a3"/>
+<!-- hull crack exposes warm smoke -->
+<path d="M171 11L180 16L177 22L186 26L181 31H168L172 24L166 19Z" fill="#03060c"/>
+<path d="M175 15L179 18L174 23L181 26L177 28" fill="none" stroke="#9c5d39" stroke-width="2"/>
+<path d="M25 124H55V126H25Z M201 124H231V126H201Z" fill="#876d45"/>
+</svg>
