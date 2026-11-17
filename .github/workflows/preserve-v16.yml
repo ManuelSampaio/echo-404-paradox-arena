@@ -1,0 +1,24 @@
+name: Preserve v16 stable tag
+on:
+  push:
+    branches: [chore/v16-stable-tag]
+permissions:
+  contents: write
+jobs:
+  preserve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Preserve the verified v16 source without moving existing tags
+        env:
+          STABLE_SHA: d154cbd28487b4297fbe6bdc7213920eaf8ddd02
+        run: |
+          test "$(git show "$STABLE_SHA:package.json" | node -p "JSON.parse(require('fs').readFileSync(0,'utf8')).version")" = '16.0.0'
+          if git show-ref --verify --quiet refs/tags/v16.0.0-stable; then
+            test "$(git rev-parse v16.0.0-stable^{commit})" = "$STABLE_SHA"
+          else
+            git tag v16.0.0-stable "$STABLE_SHA"
+            git push origin refs/tags/v16.0.0-stable
+          fi
