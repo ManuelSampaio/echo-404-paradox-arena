@@ -2,7 +2,7 @@ import {defineConfig} from 'vite';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-export default defineConfig({base:'./',publicDir:false,build:{outDir:'dist',emptyOutDir:true,rollupOptions:{input:{home:'index.html',boot:'origin-reborn.html'},output:{entryFileNames:'assets/[name].js',chunkFileNames:'assets/[name]-[hash].js',assetFileNames:'assets/[name][extname]'}}},plugins:[{name:'preserve-public-game-urls',closeBundle(){
+export default defineConfig({base:'./',publicDir:false,build:{outDir:'dist',emptyOutDir:true,rollupOptions:{input:{home:'index.html',boot:'origin-reborn.html'},output:{entryFileNames:'assets/[name]-[hash].js',chunkFileNames:'assets/[name]-[hash].js',assetFileNames:'assets/[name][extname]'}}},plugins:[{name:'preserve-public-game-urls',closeBundle(){
  // Publish current campaign resources and tiny legacy redirects only.
  const runtime=['paradox.webmanifest','paradox-register.js','paradox.css','origin-pilot.css','origin-session.js','origin-geometry.js','origin-feel-config.js','origin-pilot-data.js','origin-tiled.js','origin-maps.js','origin-balance.js','origin-devices.js','origin-abilities.js','origin-home.js','origin-pilot.js'];
  for(const name of runtime)fs.copyFileSync(name,path.join('dist',name));

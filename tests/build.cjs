@@ -9,3 +9,6 @@ assert.ok(!fs.existsSync('dist/v14-stable'),'comparison build is retired');
 for(const old of ['game.js','storage.js','levels.js','awakening.js','paradox-game.js'])assert.ok(!fs.existsSync('dist/'+old),'old runtime is not published: '+old);
 for(const html of ['classic.html','campaign-v12.html','origin-v97.html']){const text=fs.readFileSync('dist/'+html,'utf8');assert.ok(text.includes('location.replace'));assert.ok(!text.includes('game.js'));}
 console.log('PASS: only current campaign runtime is published; old entries redirect, no stable edition');
+
+for(const html of ['index.html','origin-reborn.html']){const text=fs.readFileSync('dist/'+html,'utf8');assert.match(text,/assets\/(home|boot)-[a-zA-Z0-9_-]+\.js/, 'entry modules must have content hashes to avoid stale Pages/CDN entries');}
+console.log('PASS: content-hashed entry modules prevent old/new release mixing');
