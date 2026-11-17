@@ -98,10 +98,12 @@
  function rank({deaths,secrets}){return deaths===0&&secrets>=2?'OURO':deaths<=3?'PRATA':'BRONZE';}
  function save(storage,result,index=0){
   try{const id=levels[index]?.id;if(!id)return false;let current;try{current=JSON.parse(storage.getItem(KEY));}catch(_){}
-   if(!current||current.version!==15||!current.levels)current={version:15,levels:{}};
+   if(!current||current.version!==15||!current.levels||typeof current.levels!=='object'||Array.isArray(current.levels))current={version:15,levels:{}};
    const old=current.levels[id]||{},history=load(storage).levels[id]||{},ranks={OURO:3,PRATA:2,BRONZE:1};
-   const byOperator={...(old.byOperator||{})},previous=byOperator[result.operator]||{};if(result.pure){byOperator[result.operator]={bestTime:Math.min(previous.bestTime||Infinity,result.time),stars:(result.stars||[]).map((v,i)=>v||previous.stars?.[i]||false)};}
-   current.levels[id]={...old,...result,byOperator,medal:result.pure===false?old.medal:ranks[old.medal]>ranks[result.medal]?old.medal:result.medal,bestTime:result.pure===false?old.bestTime:Math.min(Number(old.bestTime||old.time)||Infinity,result.time),legacyMedal:history.legacyMedal,legacyBestTime:history.legacyBestTime,version:'15.0.0'};
+   const pure=result.pure!==false,byOperator={...(old.byOperator||{})},previous=byOperator[result.operator]||{};if(pure){byOperator[result.operator]={bestTime:Math.min(previous.bestTime||Infinity,result.time),stars:(result.stars||[]).map((v,i)=>v||previous.stars?.[i]||false)};}
+   const allStars=[0,1,2].map(i=>Object.values(byOperator).some(r=>r.stars?.[i]===true));
+   const latest={...result};
+   current.levels[id]={...old,...result,lastRun:latest,stars:allStars,pure:old.pure===true||pure,time:pure?Math.min(Number(old.bestTime)||Infinity,result.time):old.bestTime,byOperator,medal:result.pure===false?old.medal:ranks[old.medal]>ranks[result.medal]?old.medal:result.medal,bestTime:result.pure===false?old.bestTime:Math.min(Number(old.bestTime||old.time)||Infinity,result.time),legacyMedal:history.legacyMedal,legacyBestTime:history.legacyBestTime,version:'15.0.0'};
    storage.setItem(KEY,JSON.stringify(current));return true;
   }catch(_){return false;}
  }
