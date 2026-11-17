@@ -9,3 +9,10 @@ for(const operator of ['axiom','nyra','kai7']){D.save(s,{operator,pure:true,time
 assert.equal(m.get('echo404_origin_campaign_v14'),legacy);
 const blocked={getItem(){throw Error('blocked')},setItem(){throw Error('quota')}};assert.doesNotThrow(()=>new S.Session(blocked,'origin','axiom').flush());assert.equal(D.save(blocked,{time:1},0),false);
 console.log('PASS: corrupt reports/settings/economy/ghosts, quota failures, pure aggregates and immutable legacy data');
+// Genuine v15 serializer output is retained as history; current saves never rewrite it.
+const v15={};v15.window=v15;vm.runInNewContext(fs.readFileSync('tests/fixtures/v15-pilot-data.js','utf8'),v15);
+for(let i=0;i<25;i++)v15.OriginPilot.save(s,{operator:'axiom',pure:true,time:70+i,stars:[true,true,true],medal:'OURO'},i);
+const snapshot=new Map(m);for(let i=0;i<25;i++){const history=D.load(s).levels[D.levels[i].id];assert.ok(history.legacyV15);D.save(s,{operator:'nyra',pure:true,time:130+i,stars:[true,false,true],medal:'PRATA'},i);}
+for(const [k,v]of snapshot)if(!k.endsWith('_v16'))assert.equal(m.get(k),v,'old bytes unchanged: '+k);
+assert.equal(D.VERSION,require('../package.json').version);assert.equal(JSON.parse(m.get(D.KEY)).version,16);
+console.log('PASS: genuine v15 results migrate by read only for all 25 IDs; current package version and historical bytes retained');
