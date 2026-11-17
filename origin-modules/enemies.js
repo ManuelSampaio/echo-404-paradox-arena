@@ -2,7 +2,7 @@
 (()=>{window.OriginModules ||= {};window.OriginModules.enemies={
   patrols(dt){const data=this.data,feel=OriginFeel,{clamp,pose,groundedAt,rank,save}=OriginPilot,$=id=>document.getElementById(id);
    this.aimLines.clear();const p=this.player;
-   for(const enemy of this.enemies){const dx=p.x-enemy.x,dy=(p.y-36)-(enemy.y-38),near=Math.abs(dx)<(enemy.type==='sentry'?450:330)&&Math.abs(dy)<100;
+   for(const enemy of this.enemies){if(enemy.defeated)continue;if(enemy.stun>0){enemy.sprite.setTint(0xd8ffff);continue;}enemy.sprite.clearTint();const dx=p.x-enemy.x,dy=(p.y-36)-(enemy.y-38),near=Math.abs(dx)<(enemy.type==='sentry'?450:330)&&Math.abs(dy)<100;
     const facing=enemy.type==='sentry'||enemy.alert>.6||dx*enemy.dir>-25;
     const blocked=data.platforms.some(s=>OriginGeometry.segmentRect(enemy.x,enemy.y-44,p.x,p.y-35,{x:s.x,y:s.y,width:s.w,height:s.h}));
     const sees=near&&facing&&!blocked;enemy.alert=clamp(enemy.alert+dt*(sees?2:-.6),0,1);enemy.cooldown=Math.max(0,enemy.cooldown-dt);
