@@ -12,3 +12,5 @@ console.log('PASS: only current campaign runtime is published; old entries redir
 
 for(const html of ['index.html','origin-reborn.html']){const text=fs.readFileSync('dist/'+html,'utf8');assert.match(text,/assets\/(home|boot)-[a-zA-Z0-9_-]+\.js/, 'entry modules must have content hashes to avoid stale Pages/CDN entries');}
 console.log('PASS: content-hashed entry modules prevent old/new release mixing');
+
+for(const html of ['index.html','origin-reborn.html'])assert.match(fs.readFileSync('dist/'+html,'utf8'),/assets\/(home|boot)-[a-zA-Z0-9_-]+\.css/,'styles must also have content hashes');
