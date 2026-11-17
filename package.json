@@ -19,7 +19,11 @@
     "cap:android": "cap add android",
     "cap:ios": "cap add ios",
     "test:build": "node tests/build.cjs",
-    "test:action": "node tests/save-resilience.cjs && node tests/action-maps.cjs && node tests/combat-phaser.cjs"
+    "test:action": "node tests/save-resilience.cjs && node tests/action-maps.cjs && node tests/combat-phaser.cjs",
+    "build:v17": "npm run art:v17 && vite build --config v17/vite.config.mjs",
+    "test:v17": "npm run art:v17 && node v17/tests/contracts.cjs && node v17/tests/phaser.cjs",
+    "test:bot:v17": "node v17/tests/bot.cjs",
+    "art:v17": "node v17/scripts/create-art.cjs"
   },
   "devDependencies": {
     "@capacitor/cli": "8.6.2",

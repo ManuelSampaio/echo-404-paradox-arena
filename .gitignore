@@ -3,3 +3,5 @@ node_modules/
 dist/
 android/
 ios/
+dist-v17/
+v17/assets/*.png
