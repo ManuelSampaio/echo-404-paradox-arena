@@ -1,0 +1,583 @@
+{
+  "type": "map",
+  "orientation": "orthogonal",
+  "version": "1.10",
+  "tiledversion": "1.11.2",
+  "width": 129,
+  "height": 50,
+  "tilewidth": 32,
+  "tileheight": 32,
+  "infinite": false,
+  "tilesets": [],
+  "properties": [
+    {
+      "name": "json:level",
+      "type": "string",
+      "value": "{\"id\":\"m1-z3\",\"index\":2,\"name\":\"PORTÃO DE QUARENTENA\",\"world\":1,\"worldName\":\"DOCAS DO SILÊNCIO\",\"kind\":\"orbital\",\"color\":\"#b9d8d3\",\"difficulty\":3,\"width\":4100,\"height\":1600,\"route\":[\"floor\",\"room-1\",\"room-2\",\"anchor\",\"lift\",\"room-4\",\"room-5\",\"arena\"],\"targetTime\":240,\"operation\":{\"type\":\"boss\",\"title\":\"PORTÃO DE QUARENTENA\"},\"boss\":{\"x\":3520,\"y\":850,\"sensor\":{\"id\":\"quarantine-seal\",\"x\":2910,\"y\":850,\"w\":80},\"checkpoint\":{\"x\":2860,\"y\":848}},\"art\":3,\"briefing\":\"A tripulação pediu quarentena. O Porteiro exige duas presenças na segunda fase.\"}"
+    }
+  ],
+  "layers": [
+    {
+      "id": 1,
+      "name": "platforms",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 1,
+          "name": "floor",
+          "x": 0,
+          "y": 700,
+          "width": 650,
+          "height": 160,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"floor\",\"x\":0,\"y\":700,\"w\":650,\"h\":160}"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "room-1",
+          "x": 670,
+          "y": 790,
+          "width": 460,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"room-1\",\"x\":670,\"y\":790,\"w\":460,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "room-2",
+          "x": 1020,
+          "y": 870,
+          "width": 480,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"room-2\",\"x\":1020,\"y\":870,\"w\":480,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "anchor",
+          "x": 1430,
+          "y": 960,
+          "width": 340,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"anchor\",\"x\":1430,\"y\":960,\"w\":340,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "name": "room-4",
+          "x": 1900,
+          "y": 660,
+          "width": 440,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"room-4\",\"x\":1900,\"y\":660,\"w\":440,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "name": "room-5",
+          "x": 2220,
+          "y": 760,
+          "width": 560,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"room-5\",\"x\":2220,\"y\":760,\"w\":560,\"h\":24}"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "name": "arena",
+          "x": 2800,
+          "y": 850,
+          "width": 1100,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"arena\",\"x\":2800,\"y\":850,\"w\":1100,\"h\":24}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "spawn",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 8,
+          "name": "spawn",
+          "x": 160,
+          "y": 698,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":160,\"y\":698}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "anchor",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 9,
+          "name": "anchor",
+          "x": 1600,
+          "y": 960,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":1600,\"y\":960,\"radius\":55}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "lift",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 10,
+          "name": "lift",
+          "x": 1855,
+          "y": 1100,
+          "width": 180,
+          "height": 24,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":1855,\"y\":1100,\"top\":740,\"bottom\":1100,\"w\":180,\"h\":24}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "fragments",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 11,
+          "name": "fragments",
+          "x": 900,
+          "y": 748,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":900,\"y\":748}"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "fragments",
+          "x": 1600,
+          "y": 918,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":1600,\"y\":918}"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "fragments",
+          "x": 2500,
+          "y": 718,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":2500,\"y\":718}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "secrets",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 14,
+          "name": "secrets",
+          "x": 1935,
+          "y": 618,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":1935,\"y\":618}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "checkpoints",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 15,
+          "name": "checkpoints",
+          "x": 160,
+          "y": 698,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":160,\"y\":698}"
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "name": "checkpoints",
+          "x": 1600,
+          "y": 958,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":1600,\"y\":958}"
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "name": "checkpoints",
+          "x": 2500,
+          "y": 758,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":2500,\"y\":758}"
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "name": "checkpoints",
+          "x": 2860,
+          "y": 848,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":2860,\"y\":848}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "enemies",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 19,
+          "name": "unit-0",
+          "x": 960,
+          "y": 790,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"unit-0\",\"role\":\"mole\",\"type\":\"scout\",\"x\":960,\"y\":790,\"min\":705,\"max\":1095}"
+            }
+          ]
+        },
+        {
+          "id": 20,
+          "name": "unit-1",
+          "x": 2500,
+          "y": 760,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"unit-1\",\"role\":\"blindado\",\"type\":\"scout\",\"x\":2500,\"y\":760,\"min\":2255,\"max\":2745}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "exit",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 21,
+          "name": "exit",
+          "x": 3845,
+          "y": 850,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":3845,\"y\":850}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "vent",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 22,
+          "name": "vent",
+          "x": -1000,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"x\":-1000,\"y\":0,\"w\":0,\"period\":8}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "vents",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": []
+    },
+    {
+      "id": 12,
+      "name": "relays",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": []
+    },
+    {
+      "id": 13,
+      "name": "terminals",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 23,
+          "name": "m1-z3-terminal",
+          "x": 1260,
+          "y": 868,
+          "width": 0,
+          "height": 0,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "json:value",
+              "type": "string",
+              "value": "{\"id\":\"m1-z3-terminal\",\"x\":1260,\"y\":868}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "sensors",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": []
+    },
+    {
+      "id": 15,
+      "name": "devices",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": []
+    },
+    {
+      "id": 16,
+      "name": "powerups",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "x": 0,
+      "y": 0,
+      "objects": []
+    }
+  ]
+}

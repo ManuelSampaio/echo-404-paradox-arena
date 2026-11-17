@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="576" viewBox="0 0 256 144" shape-rendering="crispEdges">
+<!-- Original pixel drawing: MANUEL SAMPAIO01 / MIT. Coordinates and silhouettes authored by hand. -->
+<!-- Near hydraulic column edges and short grille, preserving central readability. -->
+<path d="M0 0H14V144H0Z M242 0H256V144H242Z" fill="#050c12"/>
+<path d="M14 0H58V5H33V11H14Z M198 0H242V11H223V5H198Z" fill="#09151b"/>
+<path d="M14 136H48V144H14Z M208 136H242V144H208Z" fill="#071017"/>
+<path d="M3 13H7V38H3Z M249 105H253V130H249Z" fill="#526b61"/>
+<path d="M16 141H21V143H16Z M26 141H31V143H26Z M36 141H41V143H36Z M215 141H220V143H215Z M225 141H230V143H225Z M235 141H240V143H235Z" fill="#a58e59"/>
+</svg>

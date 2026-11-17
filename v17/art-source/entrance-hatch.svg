@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 64 64" shape-rendering="crispEdges">
+<!-- Original pixel drawing: MANUEL SAMPAIO01 / MIT. Coordinates and silhouettes authored by hand. -->
+<path d="M0 0H51L64 13V64H0Z" fill="#131d28"/>
+<path d="M7 6H44L54 16V60H7Z" fill="#42535c"/>
+<path d="M13 11H39L48 20V60H13Z" fill="#060c14"/>
+<path d="M17 15H36L43 22V60H17Z" fill="#18333e"/>
+<path d="M18 18H23V54H18Z M36 24H41V54H36Z" fill="#527b82"/>
+<path d="M11 58H50V61H11Z M8 61H58V64H8Z" fill="#c4ab72"/>
+<path d="M44 11L51 16L48 23L56 28L52 35H46L48 29L43 24L46 18Z" fill="#060a10"/>
+<path d="M50 36H54V39H50Z M8 18H11V31H8Z" fill="#d6a459"/>
+<path d="M3 4H7V7H3Z M3 50H7V53H3Z M57 51H61V54H57Z" fill="#728189"/>
+<path d="M23 45H35V48H23Z M30 41L38 46L30 51V48H26V44H30Z" fill="#d1bf83"/>
+<path d="M2 56H8V59H2Z M2 60H6V63H2Z M58 12H62V15H58Z M54 8H58V11H54Z" fill="#554c3e"/>
+<path d="M15 13V57 M42 23V55" fill="none" stroke="#b8b994"/>
+<path d="M2 34H7V45H2Z" fill="#0a141d"/><path d="M3 36H6V38H3Z" fill="#85aca6"/>
+</svg>

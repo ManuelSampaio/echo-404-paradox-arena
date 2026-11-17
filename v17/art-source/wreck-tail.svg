@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="384" viewBox="0 0 160 96" shape-rendering="crispEdges">
+<!-- Original pixel drawing: MANUEL SAMPAIO01 / MIT. Coordinates and silhouettes authored by hand. -->
+<!-- Engine section torn open toward the right. -->
+<path d="M0 43L14 31H41L55 18H87L106 31L129 34L143 45L160 51L151 61L159 69L147 77L150 88H29L17 79H0Z" fill="#293b46"/>
+<path d="M17 39H46L59 25H84L100 36H124L133 45H46L34 51H17Z" fill="#627b83"/>
+<path d="M18 54H128V77H18Z" fill="#14232e"/>
+<path d="M42 49H48V85H42Z M63 44H69V85H63Z M84 43H90V85H84Z M105 44H111V85H105Z" fill="#394e57"/>
+<path d="M132 40L143 45L137 53L149 60L139 65L148 73L138 81L150 88H128L131 77L123 68L130 60L124 51Z" fill="#090f17"/>
+<path d="M130 50L139 54L133 61L141 67 M132 75L141 78L137 84" stroke="#9c6946" fill="none" stroke-width="2"/>
+<path d="M2 47H16V75H2Z" fill="#080f18"/><path d="M4 51H10V70H4Z" fill="#496d79"/>
+<path d="M28 30L22 11H50L65 24H47L42 31Z" fill="#344c59"/>
+<path d="M25 10H49L64 23H56L45 15H27Z" fill="#789199"/>
+<path d="M35 80H119V84H35Z" fill="#8f7a54"/>
+<path d="M121 44L113 53L120 58L112 66 M126 78L117 75L123 69" fill="none" stroke="#080c12" stroke-width="2"/>
+<path d="M145 51L158 46 M147 64L160 67 M145 77L157 80" stroke="#71503b" fill="none"/>
+<path d="M73 34H88V37H73Z M92 34H97V37H92Z" fill="#d4c390"/>
+<path d="M9 49H12V71H9Z M52 24H55V26H52Z M76 27H78V29H76Z M115 39H117V41H115Z M33 78H35V80H33Z" fill="#b2b49b"/>
+<path d="M48 52H57V72H48Z M71 51H80V72H71Z M93 52H102V72H93Z" fill="#0b1722"/>
+<path d="M51 55H54V67H51Z M74 54H77V67H74Z M96 55H99V67H96Z" fill="#80523b"/>
+<path d="M133 42V31H143 M135 86V94H147" fill="none" stroke="#605347"/>
+</svg>

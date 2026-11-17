@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="576" viewBox="0 0 256 144" shape-rendering="crispEdges">
+<!-- Original pixel drawing: MANUEL SAMPAIO01 / MIT. Coordinates and silhouettes authored by hand. -->
+<!-- Close framing: torn ceiling plate and dock floor strips -->
+<path d="M0 0H115V6H78V11H63V16H30V22H0Z M202 0H256V28L245 21H234V14H216V8H202Z" fill="#060b12"/>
+<path d="M0 144V132H21V138H76V144Z M172 144V139H216V130H256V144Z" fill="#060b12"/>
+<path d="M10 129H18V131H10Z M225 127H241V129H225Z" fill="#bea06b"/>
+<path d="M93 6V23H99V31 M107 0V16H111V21" stroke="#392b29" stroke-width="2" fill="none"/>
+</svg>

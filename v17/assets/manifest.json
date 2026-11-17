@@ -1,0 +1,193 @@
+{
+  "generator": "v17/scripts/create-art.cjs",
+  "license": "MIT",
+  "copyright": "2026 MANUEL SAMPAIO01",
+  "files": [
+    {
+      "file": "zone01-far.png",
+      "width": 1024,
+      "height": 576,
+      "bytes": 15739
+    },
+    {
+      "file": "zone01-mid.png",
+      "width": 1024,
+      "height": 576,
+      "bytes": 7906
+    },
+    {
+      "file": "zone01-near.png",
+      "width": 1024,
+      "height": 576,
+      "bytes": 9611
+    },
+    {
+      "file": "zone01-preview.png",
+      "width": 480,
+      "height": 270,
+      "bytes": 19147
+    },
+    {
+      "file": "zone02-far.png",
+      "width": 1024,
+      "height": 576,
+      "bytes": 44676
+    },
+    {
+      "file": "zone02-mid.png",
+      "width": 1024,
+      "height": 576,
+      "bytes": 19931
+    },
+    {
+      "file": "zone02-near.png",
+      "width": 1024,
+      "height": 576,
+      "bytes": 7538
+    },
+    {
+      "file": "zone02-preview.png",
+      "width": 480,
+      "height": 270,
+      "bytes": 36467
+    },
+    {
+      "file": "zone03-far.png",
+      "width": 1024,
+      "height": 576,
+      "bytes": 5726
+    },
+    {
+      "file": "zone03-mid.png",
+      "width": 1024,
+      "height": 576,
+      "bytes": 15294
+    },
+    {
+      "file": "zone03-near.png",
+      "width": 1024,
+      "height": 576,
+      "bytes": 4211
+    },
+    {
+      "file": "zone03-preview.png",
+      "width": 480,
+      "height": 270,
+      "bytes": 16590
+    },
+    {
+      "file": "units.png",
+      "width": 384,
+      "height": 96,
+      "bytes": 10027
+    },
+    {
+      "file": "role-icons.png",
+      "width": 256,
+      "height": 64,
+      "bytes": 2538
+    },
+    {
+      "file": "porteiro.png",
+      "width": 640,
+      "height": 160,
+      "bytes": 16015
+    },
+    {
+      "file": "porteiro-static.png",
+      "width": 160,
+      "height": 160,
+      "bytes": 2981
+    },
+    {
+      "file": "kai7.png",
+      "width": 1296,
+      "height": 88,
+      "bytes": 19189
+    },
+    {
+      "file": "kai7-portrait.png",
+      "width": 180,
+      "height": 180,
+      "bytes": 16207
+    },
+    {
+      "file": "platform.png",
+      "width": 128,
+      "height": 48,
+      "bytes": 747
+    },
+    {
+      "file": "terminal.png",
+      "width": 64,
+      "height": 96,
+      "bytes": 908
+    },
+    {
+      "file": "memory.png",
+      "width": 32,
+      "height": 32,
+      "bytes": 1313
+    },
+    {
+      "file": "steam.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 12148
+    }
+  ],
+  "atlases": {
+    "units.png": {
+      "frameWidth": 96,
+      "frameHeight": 96,
+      "frames": [
+        "mole",
+        "blindado",
+        "atirador",
+        "elite"
+      ]
+    },
+    "role-icons.png": {
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frames": [
+        "mole",
+        "blindado",
+        "atirador",
+        "elite"
+      ]
+    },
+    "porteiro.png": {
+      "frameWidth": 160,
+      "frameHeight": 160,
+      "frames": [
+        "closed",
+        "warning",
+        "exposed",
+        "defeated"
+      ]
+    },
+    "kai7.png": {
+      "frameWidth": 72,
+      "frameHeight": 88,
+      "frames": 18,
+      "idle": [
+        0,
+        3
+      ],
+      "run": [
+        4,
+        11
+      ],
+      "air": [
+        12,
+        13
+      ],
+      "dash": [
+        14,
+        15
+      ],
+      "hurt": 16
+    }
+  }
+}

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="576" viewBox="0 0 256 144" shape-rendering="crispEdges">
+<!-- Original pixel drawing: MANUEL SAMPAIO01 / MIT. Coordinates and silhouettes authored by hand. -->
+<rect width="256" height="144" fill="#090f13"/>
+<!-- Quarantine is a massive octagonal pressure door, no spacecraft outline. -->
+<path d="M39 0H217L248 32V112L217 144H39L8 112V32Z" fill="#1a2a2d"/>
+<path d="M49 9H207L237 39V105L207 135H49L19 105V39Z" fill="#2b4141"/>
+<path d="M58 18H198L224 44V100L198 126H58L32 100V44Z" fill="#101d23"/>
+<path d="M67 28H189L213 51V94L189 116H67L43 94V51Z" fill="#203439"/>
+<path d="M77 37H179L201 58V87L179 108H77L55 87V58Z" fill="#14272e"/>
+<path d="M124 37H132V108H124Z" fill="#061119"/>
+<path d="M121 37H124V108H121Z M132 37H135V108H132Z" fill="#718f86"/>
+<path d="M75 63H115V84H75Z M141 63H181V84H141Z" fill="#293e40"/>
+<path d="M83 68H106V71H83Z M83 76H106V79H83Z M150 68H173V71H150Z M150 76H173V79H150Z" fill="#12272e"/>
+<!-- pressure lock teeth and mandated preservation markings -->
+<path d="M43 47H55V57H43Z M43 87H55V97H43Z M201 47H213V57H201Z M201 87H213V97H201Z" fill="#8b7954"/>
+<path d="M70 22H94V25H70Z M162 22H186V25H162Z M70 119H94V122H70Z M162 119H186V122H162Z" fill="#405d5d"/>
+<path d="M113 10H143V21H113Z" fill="#122125"/><path d="M118 13H121V18H118Z M125 13H128V18H125Z M132 13H135V18H132Z" fill="#a58d53"/>
+<path d="M0 0H5V144H0Z M251 0H256V144H251Z" fill="#0e2229"/>
+<path d="M21 35H25V108H21Z M231 35H235V108H231Z" fill="#557f7b"/>
+<path d="M0 132H256V144H0Z" fill="#0b171f"/>
+</svg>

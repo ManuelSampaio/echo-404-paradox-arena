@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="576" viewBox="0 0 256 144" shape-rendering="crispEdges">
+<!-- Original pixel drawing: MANUEL SAMPAIO01 / MIT. Coordinates and silhouettes authored by hand. -->
+<!-- Asymmetric cabin ribs, exposed wiring and storage bays -->
+<path d="M0 0H53L39 13V38L29 48V112L43 125V144H0Z M256 0H228V18L238 28V120L224 135V144H256Z" fill="#121e29"/>
+<path d="M0 16H32V19H0Z M0 52H22V55H0Z M0 106H22V109H0Z M0 132H31V135H0Z" fill="#40505b"/>
+<path d="M3 60H21V92H3Z M238 48H253V102H238Z" fill="#26313b"/>
+<path d="M6 64H18V67H6Z M6 71H18V74H6Z M6 78H18V81H6Z M6 85H18V88H6Z" fill="#111a23"/>
+<path d="M240 53H251V58H240Z M240 62H251V67H240Z" fill="#786344"/>
+<path d="M46 0V16H60V28H72 M195 0V15H213V28" stroke="#664d3e" stroke-width="2" fill="none"/>
+<path d="M80 0V14L86 20V27 M84 0V11L90 18V34" stroke="#304b57" stroke-width="1" fill="none"/>
+<rect x="27" y="49" width="3" height="49" fill="#5b7882"/><rect x="229" y="30" width="3" height="85" fill="#4c646c"/>
+<path d="M35 10H46V12H35Z M231 119H240V121H231Z" fill="#d6b576"/>
+</svg>

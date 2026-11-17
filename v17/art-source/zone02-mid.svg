@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="576" viewBox="0 0 256 144" shape-rendering="crispEdges">
+<!-- Original pixel drawing: MANUEL SAMPAIO01 / MIT. Coordinates and silhouettes authored by hand. -->
+<!-- Distant split freighter, diagonal impact and open cargo ribs. -->
+<path d="M34 90L48 77H91L99 83H119L124 89L116 97H85L77 103H48Z" fill="#283843"/>
+<path d="M125 84L145 70H174L188 79L212 85L224 96L211 105H169L153 97H137Z" fill="#354752"/>
+<path d="M131 86L144 76H171L181 82H166L153 86Z" fill="#65828a"/>
+<path d="M91 77L98 83L93 88L102 92L94 97H85L90 90L84 86Z M125 84L134 88L128 95L138 100L126 102L119 96L124 90L118 86Z" fill="#080e16"/>
+<path d="M47 84H78V95H47Z" fill="#101e2a"/><path d="M53 85V95 M65 85V95 M76 85V95" stroke="#4b626b" stroke-width="2"/>
+<path d="M159 89H194V98H159Z" fill="#172c38"/><path d="M164 91H171V94H164Z M176 91H184V94H176Z M189 91H194V94H189Z" fill="#8bb4b2"/>
+<path d="M99 81L111 78L119 81L115 86 M97 95L111 99L120 95" fill="none" stroke="#765442" stroke-width="1"/>
+<path d="M16 0V44H30V48H43V53H50 M232 0V40H220V48H209V53" stroke="#263542" stroke-width="3" fill="none"/>
+<path d="M31 45V68H35V74 M218 46V63H214V74" stroke="#68503f" stroke-width="1" fill="none"/>
+<rect x="0" y="135" width="256" height="9" fill="#1d2932"/>
+<path d="M0 134H42V136H0Z M61 134H105V136H61Z M154 134H193V136H154Z M213 134H256V136H213Z" fill="#605641"/>
+</svg>

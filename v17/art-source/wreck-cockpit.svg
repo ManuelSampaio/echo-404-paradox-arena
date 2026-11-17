@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="384" viewBox="0 0 160 96" shape-rendering="crispEdges">
+<!-- Original pixel drawing: MANUEL SAMPAIO01 / MIT. Coordinates and silhouettes authored by hand. -->
+<!-- Nose grounded hard: shattered angled glass, bent landing strut. -->
+<path d="M3 31H48L63 20H91L116 36L146 43L160 60L150 74H26L9 65L15 56L0 48L9 40Z" fill="#344b56"/>
+<path d="M45 30L65 23H88L109 36L136 45H112L96 38H66L54 43H29Z" fill="#7c959a"/>
+<path d="M68 28H88L108 40L133 47L140 54H111L94 45H64Z" fill="#0d202d"/>
+<path d="M71 29H85L97 37H78Z M99 39L108 43L127 48H109Z" fill="#4b8490"/>
+<path d="M83 28L79 36L91 40L86 45 M107 42L112 46L107 51" stroke="#b3c5bb" fill="none"/>
+<path d="M17 44H52V66H17Z" fill="#0b1822"/><path d="M24 48H45V62H24Z" fill="#2b414b"/>
+<path d="M6 32L17 39L11 47L23 54L15 63L27 71L22 75H8L12 67L1 58L10 50L1 43Z" fill="#060e17"/>
+<path d="M14 42L20 46L16 52 M17 61L25 66" stroke="#b4784e" stroke-width="2" fill="none"/>
+<path d="M91 67H149V72H91Z" fill="#657a7f"/>
+<path d="M51 74H60L67 84H80V89H62L55 81H51Z M120 74H130V82H144V88H122V82H120Z" fill="#44545c"/>
+<path d="M128 52L140 56L132 61L145 65 M116 60L123 64L119 67" fill="none" stroke="#111b24" stroke-width="2"/>
+<path d="M34 33H47V36H34Z M143 58H149V61H143Z" fill="#d2bc83"/>
+</svg>
