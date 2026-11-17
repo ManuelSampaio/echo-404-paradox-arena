@@ -1,10 +1,10 @@
 import './prelude.js';
 import '../origin-feel-config.js';import '../origin-pilot-data.js';import '../origin-abilities.js';import '../origin-geometry.js';import '../origin-session.js';import '../origin-devices.js';
 import '../origin-modules/movement.js';import '../origin-modules/echoes.js';import '../origin-modules/devices.js';import '../origin-modules/enemies.js';import '../origin-modules/hud.js';import '../origin-modules/training.js';import '../origin-modules/abilities.js';import '../origin-modules/mechanisms.js';import '../origin-modules/combat.js';import '../origin-modules/operations.js';import '../origin-pilot.js';
-import './content/config.js';import './content/storage.js';import './content/maps.js';
+import './content/config.js';import './content/scenarios.js';import './content/storage.js';import './content/maps.js';
 import story from './content/story.pt-PT.json' with {type:'json'};
 import z1 from './maps/m1-z1.json' with {type:'json'};import z2 from './maps/m1-z2.json' with {type:'json'};import z3 from './maps/m1-z3.json' with {type:'json'};
-import './weapons.js';import './enemies.js';import './ui.js';import './training.js';import './game.js';
+import './scenery.js';import './weapons.js';import './enemies.js';import './ui.js';import './training.js';import './game.js';
 window.V17Story=story;window.V17BaseMaps=[z1,z2,z3];OriginPilot.levels=V17BaseMaps.map(V17Map.adapt);OriginPilot.data=OriginPilot.levels[0];
 window.v17Game=new Phaser.Game({type:Phaser.AUTO,parent:'gameMount',width:960,height:540,backgroundColor:'#090f16',antialias:true,banner:false,physics:{default:'arcade',arcade:{gravity:{y:1700},fixedStep:true,fps:60}},scale:{mode:Phaser.Scale.RESIZE,autoCenter:Phaser.Scale.CENTER_BOTH},scene:[V17Scene],audio:{noAudio:true},render:{powerPreference:'low-power'}});
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).then(r=>r.update()).catch(()=>{});
