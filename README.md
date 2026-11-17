@@ -1,51 +1,43 @@
-# ECHO//404 — v15.0.0
+# ECHO//404 — v16.0.0 · SINAL DE REBELIÃO
 
-Criado e desenvolvido por **MANUEL SAMPAIO01**. Campanha de 25 níveis de plataformas, pensada para telemóvel na vertical, com AXIOM, NYRA e KAI-7. Todos os níveis ficam desbloqueados.
+Criado e desenvolvido por **MANUEL SAMPAIO01**. 25 missões desbloqueadas, três operadores, ecos e combate de energia. Ficção científica original: sem personagens, nomes, músicas ou assets de Star Wars.
 
-## Jogar e comparar
+## Jogar
 
-- Campanha: `origin-reborn.html`; nível direto: `origin-reborn.html#nivel=25`.
-- Testar e copiar relatório: `origin-reborn.html?debug#nivel=1`.
-- Comparar: `v14-stable/`; a tag `v14.2.0-stable` preserva a fonte original.
-- A comparação lê resultados antigos e escreve apenas no prefixo `echo404_stable_compare:`.
+Abrir `origin-reborn.html`; escolher qualquer missão, ou usar `#nivel=25`. A central organiza os 25 IDs originais em cinco mundos. Só a campanha atual é publicada; antigas entradas redirecionam e `/v14-stable/` foi retirado. O histórico Git e a tag original permanecem.
 
-O treino inicial de seis passos é obrigatório na primeira utilização e pode ser repetido. Direções à esquerda, CURTO/ALTO/IMPULSO/ECO e habilidade à direita. Teclado: A/D ou setas, Espaço, Shift, E, Q. No quinto mundo, o botão contextual NÓ fornece um segundo eco a qualquer operador, sem exigir habilidade.
+Direções à esquerda. CURTO/ALTO, ECO, IMPULSO, habilidade e PULSO à direita. Mantém PULSO para disparar repetidamente; mira assistida para alvos à frente, recarga de 0,42s, sem munições pagas. Inimigos podem ser desativados: drone 1 impacto, patrulha/caçador 2, sentinela 3. Paredes bloqueiam tiros; pulsos podem intercetar projéteis. No teclado: A/D, Espaço, Shift, E, Q e **F**. O combate é uma mecânica base, disponível também em modo puro.
 
-## Cinco mundos
+Missões de sabotagem exigem disparar nos relés; recolha/ativação faz-se por contacto; sequência exige ordem; defesa exige permanecer junto ao transmissor, com reforços avisados. Assalto exige desativar a quota indicada. A missão 1 conserva o percurso de aprendizagem. As restantes combinam corredores, descidas, ilhas, salas e terraços, sem se limitarem à subida de placas. Os cinco mundos continuam a ensinar âncora/elevador, botões, lasers, janelas temporais e dois ecos. O NÓ fornece o segundo eco a todos os operadores.
 
-1. SINAL: âncora e elevador, patrulhas simples.
-2. CIRCUITO: botões e portas; dois primeiros exercícios com memória, depois ocupação contínua.
-3. REFRAÇÃO: lasers com aviso e desativação por eco.
-4. ÓRBITA: plataformas móveis, eco e janela periódica de sensor (8 de 12 segundos).
-5. CONVERGÊNCIA: dois sensores ligados por AND à porta, com segundo eco local.
+## Progresso e resultados
 
-Os mapas mudam entre ziguezagues, salas empilhadas, ilhas, plataformas orbitais e terraços largos. A geometria base e as ameaças são verificadas em Phaser real. Os elementos móveis acrescentam rotas/apoios; nem todos os saltos exigem usá-los.
+A v16 lê v14/v15 como histórico, sem escrever nessas chaves. Novas conclusões: `echo404_origin_campaign_v16`; definições/economia/relatórios/ghosts têm sufixo v16. Preferências anteriores de operador, som, treino e efeitos são lidas. Resultados e tempos antigos não são usados como recordes da geometria nova. Medalhas históricas continuam visíveis.
 
-## Resultados e dados
+Estrelas: três fragmentos, tempo abaixo do alvo, zero mortes. Memórias são opcionais. Recuperar pelo menu conta como morte. Partidas assistidas não apagam nem melhoram as conquistas puras; a última sessão fica separada do agregado. Modo puro desliga power-ups, upgrades e ghost. Dados inválidos de relatórios, economia e ghosts são tratados sem bloquear a missão. Tudo fica neste dispositivo, sem contas ou analytics remoto.
 
-Modo puro é o padrão: sem power-ups, upgrades ou ghost visível. Estrelas independentes: três fragmentos, tempo abaixo do alvo, zero mortes. Recuperar pelo menu conta como morte. Os resultados assistidos não substituem estrelas, medalhas ou recordes puros. Os valores-alvo ficam em `origin-balance.js`; são referências do bot, não tempos humanos já calibrados.
+Relatório: `origin-reborn.html?debug#nivel=1` → RELATÓRIO LOCAL → COPIAR RELATÓRIO. Inclui tentativas, mortes, causas, tempos, conclusões e inimigos desativados. Máximo 300 sessões.
 
-Os dados v14, clássicos, medalhas, tempos e preferências antigos nunca são escritos pela nova campanha. Migração por leitura. Novos resultados: `echo404_origin_campaign_v15`; preferências: `echo404_origin_settings_v15`; preferências migradas por leitura: `echo404_origin_operator_v15`, `echo404_origin_sound_v15`, `echo404_origin_training_v15`; relatórios: `echo404_origin_tests_v15` (últimas 300 sessões); economia: `echo404_origin_economy_v15`; ghosts: `echo404_origin_ghost_v15:{id}:{operador}`. Sem contas, analytics remoto ou sincronização entre dispositivos. Falhas de quota são tratadas sem apagar dados antigos.
+## Desenvolvimento e validação
 
-Assistido: abrandamento de ameaças, íman e escudo extra; fragmentos por primeira conclusão nível/operador permitem reduzir recargas em passos de 2%, até 10%. Ghost do melhor tempo puro por operador. Sem pagamentos ou anúncios.
+Node 22, `npm ci`, `npm run dev`. `npm run maps:export` valida os mapas Tiled sem mudar geometria; build Vite com base relativa para Pages. `maps/*.json` é a fonte da geometria. `scripts/author-action-maps.cjs` existe apenas para reautoria intencional, nunca é executado no build. `origin-pilot.js` coordena módulos de movimento, ecos, dispositivos, inimigos, HUD, treino, habilidades, combate e operações.
 
-## Desenvolvimento
+```sh
+npm test
+npm run test:phaser
+npm run test:v15
+npm run test:action
+npm run test:bot
+npm run build
+npm run test:build
+```
 
-`npm ci`, `npm run dev`. Usar Vite: os imports JSON de Tiled são processados pelo bundler. `npm run maps:export` valida os JSON e atualiza as entradas. `npm run build` gera `dist/`, com base relativa e as URLs antigas preservadas. GitHub Actions valida e publica o build em Pages.
+`test:v15` é o nome conservado da suite de migração/cache/manifest; também há migração v15→v16 em `test:action`. O bot usa comandos legais, dano ativo, recolha natural, pulsos, relés e nós locais, sem habilidades/teletransporte/imunidade artificial. Pode morrer e recuperar. Os testes isolados de geometria usam posicionamento/imunidade para avaliar saltos; não se confundem com o bot contínuo.
 
-- `npm test`: sintaxe, navegação, áudio, persistência e cache.
-- `npm run test:phaser`: física real, treino, habilidades, percursos isolados e lifecycle.
-- `npm run test:v15`: migração de gravações v14 produzidas pela implementação estável, estrelas, sensores, mapas e manifest.
-- `npm run test:bot`: 25 × 3 partidas contínuas, comandos normais, dano ativo, sem habilidades, teletransporte ou imunidade artificial; grava `docs/reports/bot-results.json`.
+GitHub Actions executa as suites antes de publicar `dist`. A distribuição contém apenas a campanha atual, recursos necessários e redirecionamentos. Phaser local, Web Audio sintetizado e assets do projeto; sem API paga ou CDN de runtime. Capacitor continua apenas preparado/documentado, sem publicação nativa.
 
-Os testes isolados usam posicionamento/imunidade para verificar geometria. O bot contínuo não usa esses atalhos; pode morrer e continuar normalmente a partir de checkpoints. As conclusões não equivalem a 75 partidas sem morrer. Consultar os resultados por nível/operador.
+Ver `docs/reports/V16-REPORT.md`, `docs/TILED.md`, `docs/LICENSES.md`, `docs/MOBILE-PUBLISHING.md`.
 
-## Arquitetura
+## Não confirmado
 
-`origin-pilot.js` coordena a cena. `origin-modules/` separa movimento, ecos, elevador, dispositivos, inimigos, HUD, treino e habilidades. Os módulos são registados na cena e importados por entradas ES modules em `src/`, preservando compatibilidade com o harness Node. `origin-tiled.js` adapta object layers dos 25 JSON em `maps/`. `origin-devices.js` contém a lógica independente dos sensores/links. `origin-session.js` gere dados novos e relatórios. Phaser 3.90.0 é local, MIT. Web Audio mantém os sons sintetizados; não foi necessário introduzir Howler.
-
-## Limites de validação
-
-Não confirmado: iPhone real, FPS/GPU/memória em gama baixa, recuperação de áudio em chamadas, Lighthouse, APK/AAB/iOS e duração humana de primeira conclusão de 2–4 minutos. A opção de reduzir efeitos desliga partículas/shake/scanlines; o backdrop blur foi removido preventivamente, sem alegar uma medição GPU real.
-
-Ver `docs/TILED.md`, `docs/LICENSES.md`, `docs/MOBILE-PUBLISHING.md` e `docs/reports/`.
+iPhone físico/Safari, FPS/GPU/memória em gama baixa, áudio após chamadas, Lighthouse, builds APK/AAB/iOS e duração humana de 2–4 minutos. Os alvos de estrelas são referências ajustáveis do bot, não medição humana. O lançamento local de Chromium foi bloqueado pelo ambiente nesta revisão; testes físicos/visuais de browser não são substituídos pelo Phaser automatizado.

@@ -8,3 +8,5 @@ invalid(m=>{const p=m.properties[0];const v=JSON.parse(p.value);v.links[0].senso
 invalid(m=>m.layers.find(l=>l.name==='spawn').objects.push({...m.layers.find(l=>l.name==='spawn').objects[0],id:999}));
 invalid(m=>{const p=m.properties[0],v=JSON.parse(p.value);v.route.push('missing');p.value=JSON.stringify(v)});
 console.log('PASS: 25 distinct action rooms/IDs, six objective types, horizontal/descending routes, echo nodes and negative Tiled graph fixtures');
+
+invalid(m=>{const p=m.properties[0],v=JSON.parse(p.value);v.operation.type="unknown";p.value=JSON.stringify(v)});
